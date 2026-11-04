@@ -115,8 +115,7 @@ class SyntheticInjectionStudy:
                 start_date=ev_start.strftime("%Y-%m-%d"),
                 peak_date=ev_peak.strftime("%Y-%m-%d"),
                 end_date=ev_end.strftime("%Y-%m-%d"),
-                peak_multiplier=multiplier,
-                affected_signals=[primary_sig],
+                multiplier=multiplier,
                 is_decoy=is_decoy,
                 description=f"Injected {chosen_type} at {target_geo} (Multiplier: {multiplier}x, Growth: {growth_days}d)",
             )
@@ -163,6 +162,16 @@ class SyntheticInjectionStudy:
             growth_span = max((peak_dt - start_dt).days, 1)
             decay_span = max((end_dt - peak_dt).days, 1)
 
+            # Determine affected signals from scenario
+            if "heat" in ev.scenario_type:
+                signals = ["absence_heat", "clinical_heat"]
+            elif "resp" in ev.scenario_type:
+                signals = ["clinical_resp"]
+            elif "infectious" in ev.scenario_type:
+                signals = ["clinical_gi", "clinical_fever"]
+            else:
+                signals = ["clinical_resp"]
+
             curr = start_dt
             while curr <= end_dt:
                 d_str = curr.strftime("%Y-%m-%d")
@@ -172,9 +181,9 @@ class SyntheticInjectionStudy:
                     frac = 1.0 - ((curr - peak_dt).days / decay_span)
                 frac = max(0.0, min(1.0, frac))
 
-                surge_factor = 1.0 + (ev.peak_multiplier - 1.0) * frac
+                surge_factor = 1.0 + (ev.multiplier - 1.0) * frac
 
-                for sig in ev.affected_signals:
+                for sig in signals:
                     k = (ev.target_geo_id, d_str, sig)
                     if k in idx_map:
                         row_idx = idx_map[k]

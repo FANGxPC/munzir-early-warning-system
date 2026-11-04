@@ -107,3 +107,4 @@ class BaselineBenchmarkEngine:
         df["alert_ears_c2"] = df["obs_date"].map(ears_map).fillna(False)
 
         return df
+

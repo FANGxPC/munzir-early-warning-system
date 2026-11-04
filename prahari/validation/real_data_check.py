@@ -57,11 +57,8 @@ class RealDataSanityChecker:
                 for i in range(14, len(vals)):
                     hist_window = vals[i-14:i]
                     today_val = vals[i]
-                    res = self.l1_detector.evaluate_series(
-                        counts=hist_window + [today_val],
-                        method="ears_c2"
-                    )
-                    if res.is_aberrant:
+                    mean, thresh, z, p = self.l1_detector.ears.detect_c2(hist_window + [today_val])
+                    if z > 2.5:
                         l1_alerts_count += 1
 
         # Run L3 cluster scan across districts
@@ -70,7 +67,8 @@ class RealDataSanityChecker:
         if not dist_slice.empty:
             sample_dates = dist_slice["obs_date"].unique()[-7:]
             sample_df = dist_slice[dist_slice["obs_date"].isin(sample_dates)]
-            clusters = self.l3_scanner.scan(sample_df, primary_signal=env_df["signal_type"].iloc[0])
+            sig_name = env_df["signal_type"].iloc[0]
+            clusters = self.l3_scanner.scan(sample_df, current_date_str=str(sample_dates[-1]), signal_type=sig_name)
             clusters_found = len(clusters)
 
         return {

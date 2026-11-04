@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api
+.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact
 
 PYTHON := ./bin/py
 
@@ -70,6 +70,18 @@ serve:
 
 test-api:
 	$(PYTHON) -m pytest tests/test_api_*.py -v
+
+validate:
+	$(PYTHON) -m prahari validate --seed $(or $(SEED),42) --n-injections 100 --out-dir validation
+
+test-validation:
+	$(PYTHON) -m pytest tests/test_validation.py -v
+
+impact:
+	$(PYTHON) -m prahari impact --workforce 50000 --export-policy
+
+test-impact:
+	$(PYTHON) -m pytest tests/test_impact_model.py tests/test_api_impact.py -v
 
 run-daily:
 	$(PYTHON) -m prahari run-daily --region uae

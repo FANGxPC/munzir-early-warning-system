@@ -37,6 +37,16 @@ from prahari.api.employer_service import EmployerSafetyService
 from prahari.api.health_service import get_health_service
 from prahari.api.demo_service import get_demo_service
 from prahari.api.audit import get_audit_service
+from prahari.impact.models import (
+    ImpactCalculatorRequest,
+    ImpactEstimate,
+    SensitivityMatrix,
+    DistrictPolicyEvidence,
+    PolicyReportSummary,
+    AssumptionParameter,
+)
+from prahari.impact.calculator import HealthResilienceImpactCalculator
+from prahari.impact.policy_report import DistrictPolicyEvidenceGenerator
 
 # Directories
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -64,6 +74,8 @@ employer_service = EmployerSafetyService()
 health_service = get_health_service()
 demo_service = get_demo_service()
 audit_service = get_audit_service()
+impact_calculator = HealthResilienceImpactCalculator()
+policy_generator = DistrictPolicyEvidenceGenerator(random_seed=42)
 
 
 # Middleware for View Audit Logging
@@ -319,7 +331,70 @@ def get_audit_logs(
     return AuditLogsResponse(total_records=len(logs), records=logs)
 
 
-# --- 9. Web Single Page Application (Static UI) ---
+# --- 9. Health & Resilience Impact Model & Policy Evidence ---
+
+@app.get("/api/v1/impact/assumptions", response_model=Dict[str, AssumptionParameter])
+def get_impact_assumptions(
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> Dict[str, AssumptionParameter]:
+    """Returns the traceable registry of all operational, clinical, and economic assumptions with citations."""
+    return impact_calculator.get_assumptions_audit()
+
+
+@app.post("/api/v1/impact/calculate", response_model=ImpactEstimate)
+def calculate_resilience_impact(
+    request: Optional[ImpactCalculatorRequest] = None,
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> ImpactEstimate:
+    """
+    Computes expected lost workdays averted, severe incidents prevented,
+    false alarm response costs, and net economic benefits across Low/Central/High scenarios.
+    All results are explicitly marked as modelled estimates.
+    """
+    return impact_calculator.calculate(request=request)
+
+
+@app.get("/api/v1/impact/sensitivity", response_model=SensitivityMatrix)
+def get_impact_sensitivity_matrix(
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> SensitivityMatrix:
+    """Returns 2D sensitivity matrix varying lead time (1-5 days) and preventability (30-85%)."""
+    return impact_calculator.compute_sensitivity_matrix()
+
+
+@app.get("/api/v1/impact/policy-report", response_model=DistrictPolicyEvidence)
+def get_district_policy_evidence(
+    month: str = Query("July 2024", description="Reporting month"),
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> DistrictPolicyEvidence:
+    """
+    Generates privacy-preserving, aggregate exposure burden reports for municipal regulators.
+    Protected via small-cell suppression (k<=10) and Laplace Differential Privacy (epsilon=1.0).
+    """
+    return policy_generator.generate_policy_evidence_report(month_name=month)
+
+
+@app.get("/api/v1/impact/policy-report/summary", response_model=PolicyReportSummary)
+def get_policy_report_summary(
+    month: str = Query("July 2024", description="Reporting month"),
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> PolicyReportSummary:
+    """Returns executive policy summary of extreme exposure hours and recommended inspections."""
+    evidence = policy_generator.generate_policy_evidence_report(month_name=month)
+    return policy_generator.generate_summary(evidence=evidence)
+
+
+@app.get("/api/v1/impact/policy-report/markdown", response_class=HTMLResponse)
+def get_policy_report_markdown(
+    month: str = Query("July 2024", description="Reporting month"),
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> str:
+    """Returns downloadable / printable Markdown policy brief."""
+    evidence = policy_generator.generate_policy_evidence_report(month_name=month)
+    return policy_generator.export_markdown_brief(evidence)
+
+
+# --- 10. Web Single Page Application (Static UI) ---
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 

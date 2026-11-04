@@ -150,3 +150,4 @@ class RollingOriginBacktest:
             "fixed_alerts": fixed_alerts,
             "injection_catalog": injection_catalog,
         }
+

@@ -610,6 +610,73 @@ def cmd_serve(args: argparse.Namespace) -> None:
     uvicorn.run("prahari.api.app:app", host=args.host, port=args.port, reload=args.reload)
 
 
+def cmd_validate(args: argparse.Namespace) -> None:
+    """Run operational validation, benchmark against baselines, and export report.html."""
+    from prahari.validation.orchestrator import ValidationOrchestrator
+    print("=" * 75)
+    print("PRAHARI Operational Validation & Benchmarking Engine (Phase 6)")
+    print(f"Seed: {args.seed} | Injections: {args.n_injections} | Region: {args.region}")
+    print("=" * 75)
+    orchestrator = ValidationOrchestrator(seed=args.seed, output_dir=args.out_dir, region_key=args.region)
+    report_path = orchestrator.run_validation_pipeline(
+        n_injections=args.n_injections,
+        start_date=args.start_date,
+        end_date=args.end_date,
+    )
+    print("\n[+] Operational Validation Complete!")
+    print(f"[+] Publication-grade validation report generated at: {report_path.resolve()}")
+    print("=" * 75)
+
+
+def cmd_impact(args: argparse.Namespace) -> None:
+    """Run Phase 7 Health & Resilience Impact Model and display scenario bounds."""
+    from prahari.impact.models import (
+        WorkforceAssumptions,
+        EconomicAssumptions,
+    )
+    from prahari.impact.calculator import HealthResilienceImpactCalculator
+    from prahari.impact.policy_report import DistrictPolicyEvidenceGenerator
+
+    print("=" * 75)
+    print("PRAHARI Health & Resilience Impact Model (Phase 7)")
+    print("Translating validated detection performance into quantifiable averted burden")
+    print("=" * 75)
+
+    calc = HealthResilienceImpactCalculator(
+        workforce=WorkforceAssumptions(workforce_size=args.workforce),
+        economic=EconomicAssumptions(cost_per_lost_workday_aed=args.workday_cost),
+    )
+    result = calc.calculate()
+    central = result.central_estimate
+    scenarios = result.scenarios
+
+    print("\n[+] Modelled Epidemiological & Economic Impact Projections:")
+    print(f"  • Monitored Workforce:         {args.workforce:,} outdoor workers")
+    print(f"  • Validated Fusion Lead Time:  +{result.assumptions_audit['validated_lead_time_days'].value} days ahead of peak")
+    print(f"  • Expected Cases Prevented:    {central.cases_prevented:,.1f} heat incidents")
+    print(f"  • Lost Workdays Averted:       {central.lost_workdays_averted:,.1f} days/season")
+    print(f"  • Severe Incidents Avoided:    {central.severe_incidents_averted:,.1f} heat stroke/ICU admissions")
+    print(f"  • Gross Economic Savings:      AED {central.gross_economic_benefit_aed:,.2f}")
+    print(f"  • False Alarm Response Cost:   AED {central.false_alarm_response_cost_aed:,.2f} ({central.alert_fatigue_overhead_pct:.2f}% overhead)")
+    print(f"  • Net Economic Benefit:        AED {central.net_economic_benefit_aed:,.2f}")
+    print(f"  • Benefit-to-Cost Ratio (BCR): {central.benefit_cost_ratio:.1f}x ROI")
+
+    print("\nScenario Uncertainty Bounds:")
+    print(f"  • Conservative Lower: AED {scenarios.low_conservative.net_economic_benefit_aed:,.2f} ({scenarios.low_conservative.lost_workdays_averted:,.0f} workdays)")
+    print(f"  • Central Expected:   AED {scenarios.central_expected.net_economic_benefit_aed:,.2f} ({scenarios.central_expected.lost_workdays_averted:,.0f} workdays)")
+    print(f"  • Optimistic Upper:   AED {scenarios.high_optimistic.net_economic_benefit_aed:,.2f} ({scenarios.high_optimistic.lost_workdays_averted:,.0f} workdays)")
+
+    if args.export_policy:
+        gen = DistrictPolicyEvidenceGenerator(random_seed=42)
+        report = gen.generate_policy_evidence_report()
+        md = gen.export_markdown_brief(report)
+        out_path = Path("prahari_policy_brief.md")
+        out_path.write_text(md, encoding="utf-8")
+        print(f"\n[+] Regulatory Policy Evidence Brief exported to: {out_path.resolve()}")
+
+    print("=" * 75)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="PRAHARI - Population & Workforce Health Early Warning Platform CLI"
@@ -697,6 +764,23 @@ def main() -> None:
     p_serve.add_argument("--port", type=int, default=8000, help="Port binding (default: 8000)")
     p_serve.add_argument("--reload", action="store_true", default=False, help="Enable auto-reload")
     p_serve.set_defaults(func=cmd_serve)
+
+    # validate
+    p_val = subparsers.add_parser("validate", help="Run Phase 6 operational validation and generate report.html")
+    p_val.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
+    p_val.add_argument("--n-injections", type=int, default=100, help="Number of synthetic outbreak events (default: 100)")
+    p_val.add_argument("--start-date", type=str, default="2026-01-01", help="Evaluation start date YYYY-MM-DD")
+    p_val.add_argument("--end-date", type=str, default="2026-06-30", help="Evaluation end date YYYY-MM-DD")
+    p_val.add_argument("--region", type=str, default="uae", help="Regional profile")
+    p_val.add_argument("--out-dir", type=str, default="validation", help="Output directory for validation report")
+    p_val.set_defaults(func=cmd_validate)
+
+    # impact
+    p_impact = subparsers.add_parser("impact", help="Run Phase 7 Health & Resilience Impact Model")
+    p_impact.add_argument("--workforce", type=int, default=50000, help="Monitored workforce size (default: 50,000)")
+    p_impact.add_argument("--workday-cost", type=float, default=450.0, help="Cost per lost workday in AED (default: 450)")
+    p_impact.add_argument("--export-policy", action="store_true", default=False, help="Export regulatory policy evidence brief as Markdown")
+    p_impact.set_defaults(func=cmd_impact)
 
     args = parser.parse_args()
     args.func(args)

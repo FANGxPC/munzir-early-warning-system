@@ -54,6 +54,7 @@
     <button class="tab-btn" data-tab="employer">🏗️ Employer Safety View</button>
     <button class="tab-btn" data-tab="health">📡 Data Health Panel</button>
     <button class="tab-btn" data-tab="demo">🧪 Missing-Data Demo</button>
+    <button class="tab-btn" data-tab="impact">📈 Health Impact & Resilience</button>
     <button class="tab-btn" data-tab="audit">🛡️ Security Audit Logs</button>
   </nav>
 
@@ -224,6 +225,276 @@
             <!-- Dynamically populated -->
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- 7. Health & Resilience Impact Model & Policy Evidence View -->
+    <div id="view-impact" class="tab-content">
+      <!-- Statutory Disclaimer Banner -->
+      <div class="banner banner-privacy" style="margin-bottom:1.25rem;">
+        <span style="font-size:1.1rem; margin-right:0.5rem;">⚠️</span>
+        <div>
+          <strong>MODELLED ESTIMATE NOTICE (TRIPOD+AI Compliant):</strong>
+          All projections are mathematically derived using empirically validated detection sensitivity (92.5%),
+          fusion lead time (+3.4 days ahead of peak), and explicit user-editable operational assumptions.
+          Figures represent modelled epidemiological averted burden under proactive intervention, <em>never observed retrospective outcomes</em>.
+        </div>
+      </div>
+
+      <!-- Section Toggle (Calculator vs Policy Brief) -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div class="btn-group" style="display:flex; gap:0.5rem;">
+          <button id="impactSubtabCalc" class="btn btn-primary" onclick="switchImpactSubtab('calc')">🧮 Interactive Impact Calculator</button>
+          <button id="impactSubtabPolicy" class="btn btn-secondary" onclick="switchImpactSubtab('policy')">📜 District Policy Evidence Summary</button>
+        </div>
+        <div style="font-size:0.8rem; color:#94a3b8;">
+          Calibrated with PRAHARI Phase 6 Backtest Data
+        </div>
+      </div>
+
+      <!-- A. Impact Calculator Sub-View -->
+      <div id="impactCalcSection">
+        <div class="impact-grid">
+          <!-- Left Column: User-Editable Assumptions Panel (ALWAYS VISIBLE) -->
+          <div class="card assumptions-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8;">⚙️ Assumptions & Parameters</h3>
+              <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.25rem 0.5rem;" onclick="resetImpactDefaults()">Reset Defaults</button>
+            </div>
+            <p style="font-size:0.78rem; color:#94a3b8; margin-bottom:1.25rem;">
+              Adjust parameters below to evaluate resilience scenarios. All changes recalculate instantaneously.
+            </p>
+
+            <!-- 1. Workforce Size -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpWorkforce">Workforce Size (Outdoor Workers)</label>
+                <span id="valWorkforce" class="input-badge">50,000</span>
+              </div>
+              <input type="range" id="inpWorkforce" min="1000" max="200000" step="1000" value="50000" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Statistics Center / MOHRE Labor Registry</div>
+            </div>
+
+            <!-- 2. Baseline Heat Illness Rate -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpBaselineRate">Baseline Heat-Illness Rate (% / season)</label>
+                <span id="valBaselineRate" class="input-badge">2.5%</span>
+              </div>
+              <input type="range" id="inpBaselineRate" min="0.5" max="10.0" step="0.1" value="2.5" oninput="onAssumptionChange()">
+              <div class="input-source">Source: ILO (2019) 'Working on a warmer planet'</div>
+            </div>
+
+            <!-- 3. Preventability Factor -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpPreventability">Intervention Preventability Factor (%)</label>
+                <span id="valPreventability" class="input-badge">65%</span>
+              </div>
+              <input type="range" id="inpPreventability" min="10" max="95" step="1" value="65" oninput="onAssumptionChange()">
+              <div class="input-source">Source: NIOSH / ACGIH Heat Stress Intervention Trials</div>
+            </div>
+
+            <!-- 4. Cost per Lost Workday -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpWorkdayCost">Cost per Lost Workday (AED)</label>
+                <span id="valWorkdayCost" class="input-badge">450 AED</span>
+              </div>
+              <input type="range" id="inpWorkdayCost" min="100" max="2000" step="25" value="450" oninput="onAssumptionChange()">
+              <div class="input-source">Source: UAE MOHRE median daily wage + employer downtime</div>
+            </div>
+
+            <!-- 5. Severe Case Medical Cost -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpSevereCost">Severe Emergency Care Cost (AED)</label>
+                <span id="valSevereCost" class="input-badge">12,000 AED</span>
+              </div>
+              <input type="range" id="inpSevereCost" min="2000" max="40000" step="1000" value="12000" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Health Authority DRG Hospital Inpatient Tariff</div>
+            </div>
+
+            <!-- 6. False Alarm Response Hours -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpAlarmHours">Response Hours per False Alarm</label>
+                <span id="valAlarmHours" class="input-badge">4.0 hrs</span>
+              </div>
+              <input type="range" id="inpAlarmHours" min="1.0" max="20.0" step="0.5" value="4.0" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Municipality EHS Inspection Standard</div>
+            </div>
+
+            <!-- 7. Hourly Triage Cost -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpHourlyWage">Safety Inspector / Nurse Wage (AED/hr)</label>
+                <span id="valHourlyWage" class="input-badge">120 AED/h</span>
+              </div>
+              <input type="range" id="inpHourlyWage" min="40" max="400" step="10" value="120" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Municipal Environmental Health Officer Cost Rate</div>
+            </div>
+
+            <!-- Validated Empirical Anchors -->
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:0.75rem; margin-top:1rem;">
+              <div style="font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:0.4rem;">Validated Empirical Anchors (Phase 6):</div>
+              <div style="font-size:0.72rem; color:#94a3b8; display:flex; flex-direction:column; gap:0.25rem;">
+                <div>• Validated Lead Time: <strong style="color:#10b981;">+3.4 days</strong> ahead of peak</div>
+                <div>• Validated True Sensitivity: <strong style="color:#10b981;">92.5%</strong></div>
+                <div>• Validated False Alarm Rate: <strong style="color:#10b981;">0.32</strong> alerts/district/mo</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Projections Dashboard -->
+          <div class="projections-panel">
+            <!-- Highlight KPI Metric Cards -->
+            <div class="impact-kpi-grid">
+              <div class="card kpi-card highlight-kpi">
+                <div class="kpi-title">Net Economic Benefit (Expected)</div>
+                <div id="kpiNetBenefit" class="kpi-value" style="color:#10b981;">-- AED</div>
+                <div id="kpiBenefitRange" class="kpi-sub">Range: -- to -- AED</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Lost Workdays Averted</div>
+                <div id="kpiWorkdays" class="kpi-value" style="color:#38bdf8;">--</div>
+                <div class="kpi-sub">Across 4-month heat season</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Severe Incidents Prevented</div>
+                <div id="kpiSevereCases" class="kpi-value" style="color:#f59e0b;">--</div>
+                <div class="kpi-sub">Heat stroke & ICU admissions</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Alert Fatigue Cost (Overhead)</div>
+                <div id="kpiFatigueCost" class="kpi-value" style="color:#cbd5e1;">-- AED</div>
+                <div id="kpiFatigueOverhead" class="kpi-sub">Overhead: &lt; 1.0% (Strictly Bounded)</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Benefit-to-Cost Ratio (BCR)</div>
+                <div id="kpiBCR" class="kpi-value" style="color:#a855f7;">-- x</div>
+                <div class="kpi-sub">Return on inspection hours</div>
+              </div>
+            </div>
+
+            <!-- Scenario Bounds Table (Low / Central / High) -->
+            <div class="card" style="margin-top:1.25rem;">
+              <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">📊 Scenario Uncertainty Bounds</h4>
+              <div style="overflow-x:auto;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Scenario</th>
+                      <th>Workforce Cases</th>
+                      <th>Cases Prevented</th>
+                      <th>Workdays Saved</th>
+                      <th>Gross Savings (AED)</th>
+                      <th>False Alarm Cost (AED)</th>
+                      <th>Net Benefit (AED)</th>
+                      <th>BCR</th>
+                    </tr>
+                  </thead>
+                  <tbody id="scenarioTableBody">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 2D Sensitivity Matrix Heatmap -->
+            <div class="card" style="margin-top:1.25rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <div>
+                  <h4 style="font-size:0.95rem; font-weight:700;">🔬 2D Sensitivity Matrix: Lead Time vs. Preventability</h4>
+                  <div style="font-size:0.75rem; color:#94a3b8;">Net Economic Benefit in AED (Workdays Saved in parentheses)</div>
+                </div>
+                <div style="font-size:0.75rem; color:#10b981;">
+                  ★ Empirical Operating Point: 3.4d / 65%
+                </div>
+              </div>
+              <div style="overflow-x:auto;">
+                <table id="sensitivityTable" class="data-table sensitivity-grid-table">
+                  <!-- Dynamically populated -->
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. District Policy Evidence Sub-View -->
+      <div id="impactPolicySection" style="display:none;">
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 style="font-size:1.05rem; font-weight:700;">🏛️ Municipal Regulatory Policy Evidence Brief</h3>
+              <div style="font-size:0.8rem; color:#94a3b8;">
+                Aggregate exposure burden data for MOHRE labour inspectors, municipality EHS, and public health officers.
+              </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <select id="policyMonthSelect" class="role-select" onchange="loadPolicyEvidence()">
+                <option value="July 2024">July 2024</option>
+                <option value="August 2024" selected>August 2024</option>
+                <option value="September 2024">September 2024</option>
+              </select>
+              <button class="btn btn-primary" onclick="exportPolicyMarkdown()">📥 Export Markdown Brief</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy & Protection Safeguards Notice -->
+        <div class="banner banner-privacy" style="margin-bottom:1.25rem;">
+          <span style="font-size:1.1rem; margin-right:0.5rem;">🔒</span>
+          <div>
+            <strong>PRIVACY-BY-ARCHITECTURE SAFEGUARDS APPLIED:</strong>
+            All district counts are protected via Small-Cell Suppression (counts ≤ 10 suppressed) and Laplace Differential Privacy (ε = 1.0).
+            No individual workers, sub-sites, or gang rosters are visible.
+          </div>
+        </div>
+
+        <!-- District Exposure Burden Table -->
+        <div class="card" style="margin-bottom:1.25rem;">
+          <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">District Environmental Exposure Burden</h4>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>District Jurisdiction</th>
+                  <th>Extreme Heat Hours (WBGT &gt; 32°C)</th>
+                  <th>Danger Heat Hours (WBGT &gt; 34°C)</th>
+                  <th>PM2.5 Exceedance Days</th>
+                  <th>Midday Heat Days (12:30-15:00)</th>
+                  <th>Attributable Cases (DP Protected)</th>
+                  <th>Privacy Status</th>
+                </tr>
+              </thead>
+              <tbody id="policyDistrictTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Statutory Regulatory Recommendations -->
+        <div class="card" style="margin-bottom:1.25rem;">
+          <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">Actionable Statutory Policy Interventions</h4>
+          <div id="policyRecommendationsList" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Statutory Citations -->
+        <div class="card">
+          <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem;">Statutory & Scientific Legal Grounding</h4>
+          <ul id="policyCitationsList" style="font-size:0.8rem; color:#94a3b8; padding-left:1.25rem; line-height:1.6;">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
       </div>
     </div>
 

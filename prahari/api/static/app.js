@@ -101,6 +101,7 @@ function loadCurrentView() {
   else if (state.activeTab === "employer") loadEmployerSafetyView();
   else if (state.activeTab === "health") loadDataHealthView();
   else if (state.activeTab === "audit") loadAuditLogs();
+  else if (state.activeTab === "impact") loadImpactView();
 }
 
 // --- 1. Situation Map View ---
@@ -694,4 +695,308 @@ async function loadAuditLogs() {
     tbody.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;">${err.message}</td></tr>`;
   }
 }
+
+// --- 9. Health & Resilience Impact Model & Policy Evidence ---
+
+function switchImpactSubtab(subtab) {
+  const btnCalc = document.getElementById("impactSubtabCalc");
+  const btnPolicy = document.getElementById("impactSubtabPolicy");
+  const secCalc = document.getElementById("impactCalcSection");
+  const secPolicy = document.getElementById("impactPolicySection");
+
+  if (!btnCalc || !btnPolicy || !secCalc || !secPolicy) return;
+
+  if (subtab === "calc") {
+    btnCalc.className = "btn btn-primary";
+    btnPolicy.className = "btn btn-secondary";
+    secCalc.style.display = "block";
+    secPolicy.style.display = "none";
+    recalculateImpact();
+  } else {
+    btnCalc.className = "btn btn-secondary";
+    btnPolicy.className = "btn btn-primary";
+    secCalc.style.display = "none";
+    secPolicy.style.display = "block";
+    loadPolicyEvidence();
+  }
+}
+
+function loadImpactView() {
+  onAssumptionChange();
+}
+
+function onAssumptionChange() {
+  // 1. Update live value badges
+  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
+  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5);
+  const prev = parseInt(document.getElementById("inpPreventability")?.value || 65);
+  const costWorkday = parseInt(document.getElementById("inpWorkdayCost")?.value || 450);
+  const costSevere = parseInt(document.getElementById("inpSevereCost")?.value || 12000);
+  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
+  const hourlyWage = parseInt(document.getElementById("inpHourlyWage")?.value || 120);
+
+  if (document.getElementById("valWorkforce")) document.getElementById("valWorkforce").textContent = wf.toLocaleString();
+  if (document.getElementById("valBaselineRate")) document.getElementById("valBaselineRate").textContent = baseRate.toFixed(1) + "%";
+  if (document.getElementById("valPreventability")) document.getElementById("valPreventability").textContent = prev + "%";
+  if (document.getElementById("valWorkdayCost")) document.getElementById("valWorkdayCost").textContent = costWorkday.toLocaleString() + " AED";
+  if (document.getElementById("valSevereCost")) document.getElementById("valSevereCost").textContent = costSevere.toLocaleString() + " AED";
+  if (document.getElementById("valAlarmHours")) document.getElementById("valAlarmHours").textContent = alarmHours.toFixed(1) + " hrs";
+  if (document.getElementById("valHourlyWage")) document.getElementById("valHourlyWage").textContent = hourlyWage.toLocaleString() + " AED/h";
+
+  // 2. Trigger instant recalculation
+  recalculateImpact();
+}
+
+async function recalculateImpact() {
+  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
+  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5) / 100.0;
+  const prev = parseFloat(document.getElementById("inpPreventability")?.value || 65) / 100.0;
+  const costWorkday = parseFloat(document.getElementById("inpWorkdayCost")?.value || 450);
+  const costSevere = parseFloat(document.getElementById("inpSevereCost")?.value || 12000);
+  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
+  const hourlyWage = parseFloat(document.getElementById("inpHourlyWage")?.value || 120);
+
+  const payload = {
+    workforce: {
+      workforce_size: wf,
+      baseline_heat_illness_rate: baseRate,
+    },
+    clinical: {
+      preventability_coefficient: prev,
+    },
+    economic: {
+      cost_per_lost_workday_aed: costWorkday,
+      severe_case_medical_cost_aed: costSevere,
+      response_hours_per_false_alarm: alarmHours,
+      hourly_inspector_cost_aed: hourlyWage,
+    },
+  };
+
+  try {
+    const data = await apiFetch("/api/v1/impact/calculate", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    const central = data.central_estimate;
+    const scen = data.scenarios;
+
+    // Update KPI Highlight Cards
+    if (document.getElementById("kpiNetBenefit")) {
+      document.getElementById("kpiNetBenefit").textContent = `AED ${central.net_economic_benefit_aed.toLocaleString()}`;
+    }
+    if (document.getElementById("kpiBenefitRange")) {
+      document.getElementById("kpiBenefitRange").textContent = `Range: AED ${scen.low_conservative.net_economic_benefit_aed.toLocaleString()} to ${scen.high_optimistic.net_economic_benefit_aed.toLocaleString()}`;
+    }
+    if (document.getElementById("kpiWorkdays")) {
+      document.getElementById("kpiWorkdays").textContent = `${central.lost_workdays_averted.toLocaleString()} days`;
+    }
+    if (document.getElementById("kpiSevereCases")) {
+      document.getElementById("kpiSevereCases").textContent = `${central.severe_incidents_averted} cases`;
+    }
+    if (document.getElementById("kpiFatigueCost")) {
+      document.getElementById("kpiFatigueCost").textContent = `AED ${central.false_alarm_response_cost_aed.toLocaleString()}`;
+    }
+    if (document.getElementById("kpiFatigueOverhead")) {
+      document.getElementById("kpiFatigueOverhead").textContent = `Overhead: ${central.alert_fatigue_overhead_pct.toFixed(2)}% (< 5% bounded)`;
+    }
+    if (document.getElementById("kpiBCR")) {
+      document.getElementById("kpiBCR").textContent = `${central.benefit_cost_ratio.toFixed(1)}x ROI`;
+    }
+
+    // Populate Scenario Uncertainty Bounds Table
+    const scenBody = document.getElementById("scenarioTableBody");
+    if (scenBody) {
+      scenBody.innerHTML = `
+        <tr>
+          <td><strong style="color:#94a3b8;">Conservative Lower Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">1.8% rate, 40% prev</span></td>
+          <td>${scen.low_conservative.total_baseline_cases.toLocaleString()}</td>
+          <td>${scen.low_conservative.cases_prevented.toLocaleString()}</td>
+          <td><strong style="color:#38bdf8;">${scen.low_conservative.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td>AED ${scen.low_conservative.gross_economic_benefit_aed.toLocaleString()}</td>
+          <td style="color:#f87171;">AED ${scen.low_conservative.false_alarm_response_cost_aed.toLocaleString()}</td>
+          <td><strong style="color:#10b981;">AED ${scen.low_conservative.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><span class="badge badge-gray">${scen.low_conservative.benefit_cost_ratio.toFixed(1)}x</span></td>
+        </tr>
+        <tr style="background:#0f2942; border-left:3px solid #0284c7;">
+          <td><strong style="color:#38bdf8;">★ Central Expected (Baseline)</strong><br><span style="font-size:0.7rem;color:#94a3b8;">2.5% rate, 65% prev (+3.4d lead)</span></td>
+          <td>${central.total_baseline_cases.toLocaleString()}</td>
+          <td>${central.cases_prevented.toLocaleString()}</td>
+          <td><strong style="color:#38bdf8;">${central.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td>AED ${central.gross_economic_benefit_aed.toLocaleString()}</td>
+          <td style="color:#f87171;">AED ${central.false_alarm_response_cost_aed.toLocaleString()}</td>
+          <td><strong style="color:#10b981; font-size:1.05rem;">AED ${central.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><span class="badge badge-normal">${central.benefit_cost_ratio.toFixed(1)}x</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:#a855f7;">Optimistic Upper Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">3.2% rate, 82% prev</span></td>
+          <td>${scen.high_optimistic.total_baseline_cases.toLocaleString()}</td>
+          <td>${scen.high_optimistic.cases_prevented.toLocaleString()}</td>
+          <td><strong style="color:#38bdf8;">${scen.high_optimistic.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td>AED ${scen.high_optimistic.gross_economic_benefit_aed.toLocaleString()}</td>
+          <td style="color:#f87171;">AED ${scen.high_optimistic.false_alarm_response_cost_aed.toLocaleString()}</td>
+          <td><strong style="color:#10b981;">AED ${scen.high_optimistic.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><span class="badge badge-watch">${scen.high_optimistic.benefit_cost_ratio.toFixed(1)}x</span></td>
+        </tr>
+      `;
+    }
+
+    // Populate 2D Sensitivity Heatmap Table
+    const sensTable = document.getElementById("sensitivityTable");
+    if (sensTable && data.sensitivity) {
+      const s = data.sensitivity;
+      let headerHtml = "<thead><tr><th style='text-align:left;'>Lead Time (Days) \\ Preventability</th>";
+      s.preventability_steps.forEach(p => {
+        headerHtml += `<th>${p}%</th>`;
+      });
+      headerHtml += "</tr></thead><tbody>";
+
+      let bodyHtml = "";
+      s.grid.forEach((row, rowIdx) => {
+        const lt = s.lead_time_steps[rowIdx];
+        const isOperatingRow = Math.abs(lt - 3.4) < 0.05;
+        bodyHtml += `<tr ${isOperatingRow ? "style='background:#0f2744;'" : ""}>`;
+        bodyHtml += `<td style='text-align:left;font-weight:700;'>${lt.toFixed(1)} days ${isOperatingRow ? "★" : ""}</td>`;
+
+        row.forEach(cell => {
+          const isOperatingPoint = isOperatingRow && Math.abs(cell.preventability_pct - 65.0) < 0.1;
+          const bgOpacity = Math.min(0.85, Math.max(0.15, cell.net_benefit_aed / (central.net_economic_benefit_aed * 1.5)));
+          const cellStyle = isOperatingPoint
+            ? "border:2px solid #38bdf8; background:#0369a1; font-weight:800; color:#fff;"
+            : `background:rgba(16, 185, 129, ${bgOpacity.toFixed(2)}); color:#fff;`;
+
+          bodyHtml += `
+            <td class="heat-cell" style="${cellStyle}">
+              AED ${(cell.net_benefit_aed / 1000.0).toFixed(0)}k<br>
+              <span style="font-size:0.7rem;opacity:0.85;">(${cell.workdays_averted.toFixed(0)}d)</span>
+            </td>
+          `;
+        });
+        bodyHtml += "</tr>";
+      });
+
+      bodyHtml += "</tbody>";
+      sensTable.innerHTML = headerHtml + bodyHtml;
+    }
+
+  } catch (err) {
+    console.error("Impact calculation failed:", err);
+  }
+}
+
+function resetImpactDefaults() {
+  const elWf = document.getElementById("inpWorkforce");
+  const elBr = document.getElementById("inpBaselineRate");
+  const elPr = document.getElementById("inpPreventability");
+  const elWc = document.getElementById("inpWorkdayCost");
+  const elSc = document.getElementById("inpSevereCost");
+  const elAh = document.getElementById("inpAlarmHours");
+  const elHw = document.getElementById("inpHourlyWage");
+
+  if (elWf) elWf.value = 50000;
+  if (elBr) elBr.value = 2.5;
+  if (elPr) elPr.value = 65;
+  if (elWc) elWc.value = 450;
+  if (elSc) elSc.value = 12000;
+  if (elAh) elAh.value = 4.0;
+  if (elHw) elHw.value = 120;
+
+  onAssumptionChange();
+}
+
+// --- 10. District Policy Evidence View ---
+async function loadPolicyEvidence() {
+  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  const distTableBody = document.getElementById("policyDistrictTableBody");
+  const recList = document.getElementById("policyRecommendationsList");
+  const citList = document.getElementById("policyCitationsList");
+
+  if (!distTableBody || !recList || !citList) return;
+
+  distTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#94a3b8;">Loading aggregate policy data...</td></tr>`;
+
+  try {
+    const data = await apiFetch(`/api/v1/impact/policy-report?month=${encodeURIComponent(month)}`);
+
+    // 1. Populate District Exposure Burden Table
+    distTableBody.innerHTML = "";
+    data.districts.forEach(d => {
+      const isSuppressed = d.attributable_heat_stress_cases_suppressed === 0;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${d.district_name}</strong><br><span style="font-size:0.7rem;color:#64748b;">${d.district_id}</span></td>
+        <td><strong style="color:#f59e0b;">${d.extreme_wbgt_hours_gt_32c}h</strong></td>
+        <td><strong style="color:#ef4444;">${d.danger_wbgt_hours_gt_34c}h</strong></td>
+        <td>${d.pm25_exceedance_days} days</td>
+        <td>${d.midday_high_heat_days} days</td>
+        <td>
+          ${isSuppressed
+            ? '<span class="badge badge-gray" title="Small-cell suppression applied (<=10)">≤ 10 (Suppressed)</span>'
+            : `<strong style="color:#38bdf8;">${d.attributable_heat_stress_cases_suppressed} cases</strong>`
+          }
+        </td>
+        <td><span class="badge badge-normal">DP Laplace ε=1.0</span></td>
+      `;
+      distTableBody.appendChild(tr);
+    });
+
+    // 2. Populate Actionable Statutory Policy Interventions
+    recList.innerHTML = "";
+    data.policy_recommendations.forEach(r => {
+      let badgeClass = "badge-priority-moderate";
+      if (r.priority_level === "CRITICAL_HIGH") badgeClass = "badge-priority-critical";
+      else if (r.priority_level === "ELEVATED") badgeClass = "badge-priority-elevated";
+
+      const card = document.createElement("div");
+      card.className = "policy-card";
+      card.innerHTML = `
+        <div class="policy-card-header">
+          <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc;">${r.action_title}</h4>
+          <span class="badge ${badgeClass}">${r.priority_level}</span>
+        </div>
+        <div style="font-size:0.75rem; color:#38bdf8; font-weight:600;">Domain: ${r.policy_domain}</div>
+        <div style="font-size:0.75rem; color:#94a3b8;">Target Jurisdictions: <strong>${r.target_districts.join(", ")}</strong></div>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">${r.statutory_justification}</p>
+        <div style="font-size:0.75rem; color:#10b981; margin-top:0.25rem;">
+          🛡️ Protection Impact: ${r.expected_workforce_protection}
+        </div>
+      `;
+      recList.appendChild(card);
+    });
+
+    // 3. Populate Statutory & Scientific Citations
+    citList.innerHTML = "";
+    data.statutory_citations.forEach(c => {
+      const li = document.createElement("li");
+      li.textContent = c;
+      citList.appendChild(li);
+    });
+
+  } catch (err) {
+    distTableBody.innerHTML = `<tr><td colspan="7" style="color:#ef4444;text-align:center;">Failed to load policy data: ${err.message}</td></tr>`;
+  }
+}
+
+async function exportPolicyMarkdown() {
+  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  try {
+    const text = await apiFetch(`/api/v1/impact/policy-report/markdown?month=${encodeURIComponent(month)}`, {
+      headers: { "Accept": "text/markdown" },
+    });
+    
+    // Create download trigger
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `prahari_policy_brief_${month.toLowerCase().replace(" ", "_")}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert("Export failed: " + err.message);
+  }
+}
+
 
