@@ -1,0 +1,31 @@
+id: infectious_cluster_alert
+name: Point-Source Epidemic Cluster Emergency Response
+trigger:
+  type: infectious_cluster
+  severity: alert
+  site_type: facility
+proportionality_tier: field_response
+responsible:
+  lead: District Surveillance Officer (Rapid Response Team Leader)
+  accountable: Public Health Authority Director
+  consult: Municipal Health & Hygiene Inspectorate, Public Health Reference Laboratory
+  inform: Regional Hospital Epidemiologist, Facility Executive Management
+actions:
+  - "Deploy Rapid Response Team (RRT) for on-site field investigation: perform cohort case-control questionnaire and food history mapping"
+  - "Issue emergency temporary closure order for suspect facility commercial kitchen / caterer pending bacteriological clearance"
+  - "Take immediate bacteriological and chemical swab samples from food contact surfaces, water distribution mains, and greywater systems"
+  - "Set up on-site oral rehydration and medical stabilization post to prevent severe dehydration and hospital transfer bottleneck"
+  - "Issue formal epidemiological outbreak notification to central communicable disease registry"
+escalate_to_alert_if: "Already at peak tier; de-escalate when 2 incubation periods (~96 hours) pass with zero novel onset cases"
+evidence_required:
+  - clinic_gi_exceedance
+  - lab_pathogen_positivity
+  - l3_cluster_active
+  - l2_unexplained_excess
+assumptions:
+  - Clustering indicates substantial transmission or heavy contamination of shared sustenance infrastructure
+  - Pathogen incubation period is estimated at 12-48 hours based on symptom onset clustering
+references:
+  - "CDC Principles of Epidemiology in Public Health Practice: Investigating an Outbreak (Self-Study Course SS1978)"
+  - "WHO Outbreak Surveillance and Response in Humanitarian Emergencies"
+  - "IHR (2005) Event Information Site Guidance for Acute Public Health Events"

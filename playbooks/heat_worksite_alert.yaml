@@ -1,0 +1,31 @@
+id: heat_worksite_alert
+name: Worksite Extreme Heat Emergency Alert (Severe Thermal Danger)
+trigger:
+  type: heat_cluster
+  severity: alert
+  site_type: outdoor
+proportionality_tier: field_response
+responsible:
+  lead: Site Safety Officer
+  accountable: General Contractor Project Director
+  consult: Ministry of Human Resources / Factory Inspectorate
+  inform: District Emergency Medical Services (EMS), District Health Officer
+actions:
+  - "Mandate 15-minute rest in air-conditioned or chilled-shade shelters for every 45 minutes of moderate work; 30-minute rest for heavy work"
+  - "Immediately halt unshaded high-exertion structural steel, asphalt paving, and roofing operations"
+  - "Deploy designated on-site paramedical first-aid team with active ice immersion tubs"
+  - "Conduct physiological buddy checks: check urine hydration charts and core temperature anomalies"
+  - "Establish direct emergency hotline to local trauma / heat stroke receiving hospital"
+escalate_to_alert_if: "Already at peak tier; de-escalate to Warning if WBGT drops below 30°C for 48 consecutive hours with zero incident admissions"
+evidence_required:
+  - wbgt_max
+  - heat_absence_exceedance
+  - workplace_first_aid_incidents
+  - l3_cluster_active
+assumptions:
+  - WBGT values reflect outdoor ambient exposures; unshaded radiant metallic surfaces may experience +3°C to +5°C higher effective thermal load
+  - High humidity significantly reduces evaporative cooling efficiency
+references:
+  - "ACGIH Threshold Limit Values for Chemical Substances and Physical Agents - Heat Stress and Strain (2023)"
+  - "NIOSH Criteria for a Recommended Standard: Occupational Exposure to Heat and Hot Environments (DHHS/NIOSH Pub 2016-106)"
+  - "ISO 7243:2017 Hot environments — Estimation of heat stress using the WBGT index"

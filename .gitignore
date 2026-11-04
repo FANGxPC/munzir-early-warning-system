@@ -1,0 +1,26 @@
+# Virtual environment and local vendor libs
+venv_libs/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Data landing (bronze lakehouse & cache)
+data/
+*.parquet
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+

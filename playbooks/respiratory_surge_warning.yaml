@@ -1,0 +1,31 @@
+id: respiratory_surge_warning
+name: Public & Workforce Ambient Air Pollution Surge Warning
+trigger:
+  type: respiratory_surge
+  severity: warning
+  site_type: district
+proportionality_tier: targeted_preventive
+responsible:
+  lead: District Health Officer
+  accountable: Director of Public Health Surveillance
+  consult: Environment & Protected Areas Authority / Pollution Control Liaison
+  inform: Primary Care Clinic Directors, Public Advisory Liaison, Industrial Safety Officers
+actions:
+  - "Issue targeted public health advisory for vulnerable cohorts (asthma, COPD, pediatric, elderly, outdoor laborers)"
+  - "Advise outdoor industrial employers to provide fitted particulate filtering respirators (N95 / FFP2) to outdoor workers"
+  - "Direct community primary care clinics and emergency departments to verify nebulizer inventory and bronchodilator stocks"
+  - "Request municipal pollution control liaison inspect nearby dust generation sources (unpaved haul roads, quarrying, construction earthworks)"
+  - "Advise residential schools and athletic centers to curtail strenuous outdoor sports activities"
+escalate_to_alert_if: "PM2.5 daily mean exceeds 150 µg/m³ for 2+ consecutive days OR hospital respiratory bed occupancy crosses 85%"
+evidence_required:
+  - pm25
+  - pm10
+  - clinic_resp_exceedance
+  - pharmacy_inhaler_sales
+assumptions:
+  - PM2.5 elevation is regional / atmospheric (dust storm / inversion layer) rather than a single point-source industrial emission
+  - Pharmacy sales reflect syndromic over-the-counter purchases without clinical diagnosis verification
+references:
+  - "WHO Global Air Quality Guidelines: Particulate Matter (PM2.5 and PM10) (2021)"
+  - "US EPA Air Quality Index (AQI) Health and Reporting Guidance (40 CFR Part 58)"
+  - "Global Initiative for Asthma (GINA) Management of Acute Exacerbations (2023)"

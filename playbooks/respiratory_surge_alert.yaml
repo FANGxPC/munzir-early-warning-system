@@ -1,0 +1,32 @@
+id: respiratory_surge_alert
+name: Acute Epidemic Respiratory Outbreak / Toxic Particulate Emergency
+trigger:
+  type: respiratory_surge
+  severity: alert
+  site_type: district
+proportionality_tier: field_response
+responsible:
+  lead: District Health Officer
+  accountable: Director General of Health Authority
+  consult: Rapid Response Epidemiologic Investigation Team, Environmental Protection Authority
+  inform: Hospital Emergency Departments, Disaster Management Committee, Media Liaison
+actions:
+  - "Issue general population air pollution emergency broadcast advising all non-essential personnel to stay indoors with sealed windows"
+  - "Activate hospital surge capacity plans: open secondary respiratory observation triage units and mobilize reserve ventilators"
+  - "Mandate temporary suspension of high-dust construction and earthmoving activities across the affected district"
+  - "Deploy mobile syndromic screening van to heavily affected residential labor accommodations"
+  - "Initiate multiplex PCR pathogen panel testing on representative clinic samples to rule out novel viral co-circulation (Influenza/RSV/SARS-CoV-2)"
+escalate_to_alert_if: "Already at peak tier; maintain until PM2.5 drops below 75 µg/m³ and clinic emergency visits stabilize to baseline for 72 hours"
+evidence_required:
+  - pm25
+  - clinic_resp_exceedance
+  - emergency_admissions
+  - lab_pathogen_positivity
+  - l3_cluster_active
+assumptions:
+  - Clinical surge may reflect combined toxicologic particulate irritation compounded by viral transmission in dense housing
+  - Emergency admissions may experience 24-48 hour reporting lag from peripheral private hospitals
+references:
+  - "CDC Guidelines for Environmental Infection Control in Health-Care Facilities"
+  - "WHO Clinical Management of Severe Acute Respiratory Infection (SARI)"
+  - "State Disaster Management Authority Epidemic Response Protocol"

@@ -1,0 +1,31 @@
+id: heat_worksite_warning
+name: Worksite Heat-Health Warning (Moderate Thermal Hazard)
+trigger:
+  type: heat_cluster
+  severity: warning
+  site_type: outdoor
+proportionality_tier: targeted_preventive
+responsible:
+  lead: Site Safety Officer
+  accountable: Construction Project Director / Employer Management
+  consult: District Occupational Health Officer / Factory Inspectorate
+  inform: Employer HR (Aggregate Only), District Surveillance Officer
+actions:
+  - "Enforce mandatory hydration breaks (min 250ml electrolyte/water every 30 minutes)"
+  - "Activate shaded rest stations equipped with misters and high-velocity fans"
+  - "Institute two-person buddy checks to monitor for heat exhaustion symptoms"
+  - "Reschedule non-urgent heavy roof, asphalt, or steel fixing work to early morning hours"
+  - "Brief site supervisors on OSHA heat-illness triage protocols"
+escalate_to_alert_if: "WBGT forecast above 32°C for 2+ consecutive days OR new emergency heat exhaustion / syncope cases recorded on site"
+evidence_required:
+  - wbgt_trend
+  - heat_absence_rate
+  - incident_count
+assumptions:
+  - WBGT derived from atmospheric physical modeling, not certified on-site black globe sensor
+  - Absence reporting reflects employer clinic records and may lag by 12-24 hours
+  - Worker acclimatization assumed incomplete during initial seasonal heat dome surge
+references:
+  - "OSHA Technical Manual (OTM) Section III: Chapter 4 - Heat Stress (2022)"
+  - "WHO / WMO Heat-Health Action Plans Guidance (2015)"
+  - "UAE Ministry of Human Resources and Emiratisation (MoHRE) Midday Work Break Regulations"
