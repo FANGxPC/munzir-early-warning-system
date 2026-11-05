@@ -66,3 +66,4 @@ echo "[+] PRAHARI Successfully Deployed to Azure!"
 echo "[+] Public URL: https://${APP_FQDN}"
 echo "[+] Cost Safety: Scale-to-Zero Active (0 replicas when idle = \$0.00 credit burn)"
 echo "================================================================================"
+

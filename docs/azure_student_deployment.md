@@ -91,3 +91,4 @@ Once deployed to Azure, verify all features from the web browser:
 - [ ] **Health Impact Calculator:** Adjust workforce sliders in "Health Impact & Resilience" to show instantaneous live recalculation.
 - [ ] **Regulatory Policy Brief:** Click "Export Markdown Brief" to download the privacy-preserving policy summary.
 - [ ] **Scale-to-Zero Verification:** Close the browser tab. Within 5 minutes, Azure Container Apps scales active replicas down to 0, completely stopping credit consumption.
+

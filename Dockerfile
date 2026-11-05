@@ -45,3 +45,4 @@ EXPOSE 8000
 
 # Launch FastAPI with production uvicorn worker
 CMD ["python3", "-m", "uvicorn", "prahari.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+
