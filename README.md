@@ -121,51 +121,68 @@
 - [x] **Statutory Legal Grounding:** Explicitly grounded in UAE Ministerial Resolution No. 44 of 2022, Federal Decree-Law No. 33 of 2021, and Dubai Municipality Code of Construction Safety Practice.
 - [x] **REST API & Web UI Integration:** Endpoints (`/api/v1/impact/*`) and real-time interactive UI controls with zero-latency slider recalculation.
 
+### Phase 8 — Responsible AI, Safety & Governance Documentation Pack: COMPLETE
+- [x] **Multi-Signal Fusion Model Card (`docs/model_card.md`):** Complete model reporting following Mitchell et al. (2019) detailing intended uses, prohibited uses, Brier score calibration (0.012), TreeSHAP feature attribution groups, and disaggregated subgroup equity across Urban (91.8%), Industrial (93.5%), and Rural (90.0%) sectors.
+- [x] **Datasheets for All 5 Ingestion Feeds (`docs/datasheets/`):** Detailed provenance, licensing, refresh cycles, known biases, and preprocessing hygiene for Open-Meteo, OpenAQ, Clinical Syndromic, Occupational Workplace, and Community Pharmacy/Lab feeds.
+- [x] **TRIPOD+AI & DECIDE-AI Alignment (`docs/tripod_decide_ai.md`):** 27-item prediction model reporting compliance and clinical operational shadow-mode pilot framework.
+- [x] **Operational Safety Controls Register (`docs/safety_controls.md`):** 7 active safety barriers including multi-signal corroboration, alert caps, DQ gating, fenced zero-hallucination LLM guardrail, and human-in-the-loop triage.
+- [x] **Fail-Safe Fallback to CDC EARS-Only Mode (`prahari/governance/safety_monitor.py`):** Automatic runtime fail-safe rollback to deterministic CDC EARS C2 baseline aberration detection if ML models experience failure or calibration drift.
+- [x] **Data Protection Impact Assessment (DPIA) & Misuse Prevention (`docs/dpia.md`):** Aligned with UAE Federal Decree-Law No. 45 of 2021 (PDPL) and GDPR, enforcing small-cell suppression ($k \le 10$), Laplace Differential Privacy ($\epsilon=1.0$), minimum cohort size $N \ge 50$, rate-only views, and employer clinical lockouts.
+- [x] **Enterprise Security & Cloud Reference Architecture (`docs/security_architecture.md`):** Azure Key Vault for zero hardcoded credentials, passwordless Managed Identity, TLS 1.3, private endpoints, and least-privilege Entra ID app roles.
+- [x] **Plain-Language Known Limitations Disclosure (`docs/limitations.md`):** Transparent disclosure of synthetic outcomes, modelled WBGT physics, district-level geolocation fallback, and reporting delays.
+- [x] **Automated Governance Scorecard CLI (`prahari governance`):** Verifies all 7 Responsible AI claims linking directly to governance documents and passing automated tests.
+
 ---
 
 ## Quickstart Commands
 
 ```bash
-# 1. Run full unit & integration test suite (92 passing tests across all 7 phases)
+# 1. Run full unit & integration test suite (104 passing tests across all 8 phases)
 make test
 
-# 2. Run Phase 7 Health & Resilience Impact Model & export policy brief
+# 2. Run Phase 8 Responsible AI & Governance Scorecard
+make governance
+
+# 3. Run Phase 8 governance unit tests
+make test-governance
+
+# 4. Run Phase 7 Health & Resilience Impact Model & export policy brief
 make impact
 
-# 3. Run Phase 7 impact unit & API integration tests
+# 5. Run Phase 7 impact unit & API integration tests
 make test-impact
 
-# 4. Run operational validation study and export report.html
+# 6. Run operational validation study and export report.html
 make validate SEED=42
 
-# 5. Launch PRAHARI web application and role-based REST API
+# 7. Launch PRAHARI web application and role-based REST API
 make serve
 
-# 6. Run Phase 6 validation unit & integration tests
+# 8. Run Phase 6 validation unit & integration tests
 make test-validation
 
-# 7. Run Phase 5 API & RBAC privacy boundary tests
+# 9. Run Phase 5 API & RBAC privacy boundary tests
 make test-api
 
-# 8. Generate decision-ready Evidence Card (<2s SLA)
+# 10. Generate decision-ready Evidence Card (<2s SLA)
 make evidence-card
 
-# 9. List operational action playbooks and RACI matrix
+# 11. List operational action playbooks and RACI matrix
 make playbooks
 
-# 10. Run Phase 4 decision support unit tests
+# 12. Run Phase 4 decision support unit tests
 make test-decision
 
-# 11. Run Phase 3 detection verification tests
+# 13. Run Phase 3 detection verification tests
 make test-detection
 
-# 12. Run Phase 2 privacy verification tests
+# 14. Run Phase 2 privacy verification tests
 make test-privacy
 
-# 13. Reproduce 3 years of bronze lakehouse data
+# 15. Reproduce 3 years of bronze lakehouse data
 make backfill
 
-# 14. Execute Bronze -> Silver Harmonisation pipeline
+# 16. Execute Bronze -> Silver Harmonisation pipeline
 make harmonise
 ```
 

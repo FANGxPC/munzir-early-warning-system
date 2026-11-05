@@ -677,6 +677,34 @@ def cmd_impact(args: argparse.Namespace) -> None:
     print("=" * 75)
 
 
+def cmd_governance(args: argparse.Namespace) -> None:
+    """Evaluate and display PRAHARI Responsible AI & Governance Scorecard."""
+    from prahari.governance.safety_monitor import GovernanceSafetyMonitor
+
+    print("=" * 84)
+    print("PRAHARI Responsible AI, Safety Controls & Governance Scorecard (Phase 8)")
+    print("Evaluating Model Cards, Datasheets, TRIPOD+AI, DPIA, and Runtime Guardrails")
+    print("=" * 84)
+
+    monitor = GovernanceSafetyMonitor()
+    scorecard = monitor.generate_scorecard()
+
+    print(f"\n[+] Overall Status:    {scorecard.overall_status}")
+    print(f"[+] Controls Verified: {scorecard.controls_passed} / {scorecard.total_controls_checked} ({scorecard.compliance_score_pct}%)")
+    print(f"[+] Audit Timestamp:   {scorecard.timestamp}\n")
+
+    print(f"{'ID':<8} {'Control Name':<42} {'Layer':<22} {'Status'}")
+    print("-" * 84)
+    for c in scorecard.controls:
+        status_str = "✔ PASSED" if c.status == "PASSED" else "✖ FAILED"
+        print(f"{c.control_id:<8} {c.name:<42} {c.enforcement_layer:<22} {status_str}")
+        print(f"         Doc:  {c.governance_doc_link}")
+        print(f"         Test: {c.automated_test_link}")
+        print()
+
+    print("=" * 84)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="PRAHARI - Population & Workforce Health Early Warning Platform CLI"
@@ -781,6 +809,10 @@ def main() -> None:
     p_impact.add_argument("--workday-cost", type=float, default=450.0, help="Cost per lost workday in AED (default: 450)")
     p_impact.add_argument("--export-policy", action="store_true", default=False, help="Export regulatory policy evidence brief as Markdown")
     p_impact.set_defaults(func=cmd_impact)
+
+    # governance
+    p_gov = subparsers.add_parser("governance", help="Run Phase 8 Responsible AI & Governance Scorecard")
+    p_gov.set_defaults(func=cmd_governance)
 
     args = parser.parse_args()
     args.func(args)

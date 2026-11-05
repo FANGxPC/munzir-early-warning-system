@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact
+.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance
 
 PYTHON := ./bin/py
 
@@ -82,6 +82,12 @@ impact:
 
 test-impact:
 	$(PYTHON) -m pytest tests/test_impact_model.py tests/test_api_impact.py -v
+
+governance:
+	$(PYTHON) -m prahari governance
+
+test-governance:
+	$(PYTHON) -m pytest tests/test_responsible_ai_governance.py -v
 
 run-daily:
 	$(PYTHON) -m prahari run-daily --region uae
