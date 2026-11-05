@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance
+.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop
 
 PYTHON := ./bin/py
 
@@ -88,6 +88,15 @@ governance:
 
 test-governance:
 	$(PYTHON) -m pytest tests/test_responsible_ai_governance.py -v
+
+fhir-export:
+	$(PYTHON) -m prahari fhir-export --out fhir_surveillance_bundle.json
+
+drift-check:
+	$(PYTHON) -m prahari drift-check
+
+test-interop:
+	$(PYTHON) -m pytest tests/test_interop.py -v
 
 run-daily:
 	$(PYTHON) -m prahari run-daily --region uae

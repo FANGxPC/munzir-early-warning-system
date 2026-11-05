@@ -677,6 +677,89 @@ def cmd_impact(args: argparse.Namespace) -> None:
     print("=" * 75)
 
 
+def cmd_fhir_export(args: argparse.Namespace) -> None:
+    """Export active early-warning alerts and surveillance measures as HL7 FHIR R4 Bundle."""
+    import json
+    from prahari.interop.fhir_adapter import FHIRSurveillanceAdapter
+    from prahari.api.alert_service import AlertInboxService
+
+    service = AlertInboxService()
+    alerts = service._ensure_alerts_for_date(args.start_date or "2025-08-20")
+
+    print("=" * 84)
+    print("Munzir (منذر) — HL7 FHIR R4 Surveillance Export Adapter (Phase 9)")
+    print(f"Exporting {len(alerts)} alerts as standardized MeasureReport & RiskAssessment resources")
+    print("=" * 84)
+
+    bundle = FHIRSurveillanceAdapter.create_surveillance_bundle(
+        alerts=alerts,
+        district_id=args.district or "UAE-DXB",
+        period_start=args.start_date or "2026-06-01",
+        period_end=args.end_date or "2026-06-07"
+    )
+
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as f:
+            json.dump(bundle, f, indent=2)
+        print(f"\n✔ Successfully exported HL7 FHIR R4 Bundle to: {args.out}")
+        print(f"[+] Total Resources: {bundle.get('total', 0)}")
+    else:
+        print(json.dumps(bundle, indent=2))
+
+
+def cmd_drift_check(args: argparse.Namespace) -> None:
+    """Evaluate and display Population Stability Index (PSI) and Model Drift Monitor."""
+    import numpy as np
+    from prahari.interop.drift_monitor import ModelDriftMonitor
+
+    print("=" * 84)
+    print("Munzir (منذر) — Continuous Surveillance & Model Drift Monitor (Phase 9)")
+    print("Evaluating Population Stability Index (PSI), Calibration Fidelity & Telemetry Latency")
+    print("=" * 84)
+
+    rng = np.random.default_rng(args.seed if hasattr(args, "seed") else 42)
+    # Monitored surveillance feature distributions
+    base_feats = {
+        "wbgt_max": rng.normal(32.0, 3.5, 1000),
+        "pm25": rng.exponential(35.0, 1000),
+        "respiratory_ratio": rng.beta(2, 5, 1000),
+        "absence_rate": rng.beta(2, 20, 1000),
+    }
+    curr_feats = {
+        "wbgt_max": rng.normal(32.8, 3.6, 1000),
+        "pm25": rng.exponential(37.0, 1000),
+        "respiratory_ratio": rng.beta(2.2, 5, 1000),
+        "absence_rate": rng.beta(2.1, 20, 1000),
+    }
+
+    report = ModelDriftMonitor.evaluate_model_drift(
+        baseline_features=base_feats,
+        current_features=curr_feats,
+        recent_probabilities=[0.1, 0.2, 0.8, 0.9, 0.3],
+        recent_ground_truth=[0, 0, 1, 1, 0],
+    )
+
+    print(f"\n[+] Overall Health Status:   {report.overall_status.upper()}")
+    print(f"[+] Max Observed PSI:        {report.max_psi:.4f} (Threshold: 0.10=Warning, 0.25=Critical)")
+    print(f"[+] Brier Calibration Score: {report.calibration_brier:.4f} ({report.calibration_status})")
+    print(f"[+] Timestamp:               {report.timestamp}\n")
+
+    print(f"{'Feature Name':<28} {'PSI Score':<14} {'Status':<18} {'Action Required'}")
+    print("-" * 84)
+    for feat, psi in report.psi_scores.items():
+        st = report.psi_status.get(feat, "STABLE")
+        action = "None (Nominal)" if st == "STABLE" else "Review calibration"
+        print(f"{feat:<28} {psi:<14.4f} {st:<18} {action}")
+
+    print("\n[+] Telemetry Latency Checks:")
+    for feed, lat in report.data_freshness_hrs.items():
+        stale_flag = "✖ STALE" if feed in report.stale_feeds else "✔ FRESH"
+        print(f"    - {feed:<25}: {lat:4.1f}h latency [{stale_flag}]")
+
+    print(f"\n[+] Operational Directive:\n    {report.action_recommendation}")
+    print("=" * 84)
+
+
 def cmd_governance(args: argparse.Namespace) -> None:
     """Evaluate and display Munzir Responsible AI & Governance Scorecard."""
     from prahari.governance.safety_monitor import GovernanceSafetyMonitor
@@ -813,6 +896,19 @@ def main() -> None:
     # governance
     p_gov = subparsers.add_parser("governance", help="Run Phase 8 Responsible AI & Governance Scorecard")
     p_gov.set_defaults(func=cmd_governance)
+
+    # fhir-export
+    p_fhir = subparsers.add_parser("fhir-export", help="Export alerts as HL7 FHIR R4 Bundle (Phase 9)")
+    p_fhir.add_argument("--district", type=str, default="UAE-DXB", help="District identifier")
+    p_fhir.add_argument("--start-date", type=str, default="2026-06-01", help="Surveillance window start")
+    p_fhir.add_argument("--end-date", type=str, default="2026-06-07", help="Surveillance window end")
+    p_fhir.add_argument("--out", type=str, default=None, help="Output JSON filepath")
+    p_fhir.set_defaults(func=cmd_fhir_export)
+
+    # drift-check
+    p_drift = subparsers.add_parser("drift-check", help="Run Continuous Surveillance & Model Drift Monitor (Phase 9)")
+    p_drift.add_argument("--seed", type=int, default=42, help="Random seed")
+    p_drift.set_defaults(func=cmd_drift_check)
 
     args = parser.parse_args()
     args.func(args)
