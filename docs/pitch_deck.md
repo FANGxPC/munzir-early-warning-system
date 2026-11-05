@@ -171,3 +171,4 @@ We are ready to transition Munzir into the field for Summer 2025/2026:
 * **Target Partners:** Dubai Health Authority (DHA) + Ministry of Human Resources & Emiratisation (MOHRE) + 4 Infrastructure Employers.
 * **The Commitment:** Protect 50,000 frontline workers and demonstrate that **calibrated early-warning saves lives, workdays, and public health capital**.
 * **Call to Action:** *Join us in pioneering the next generation of climate-resilient workforce health.*
+
