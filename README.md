@@ -1,4 +1,4 @@
-# Munzir (منذر) — Population & Workforce Health Early Warning Platform
+# Munzir — Population & Workforce Health Early Warning Platform
 *(Formerly codenamed PRAHARI)*
 
 > **Calibrated, explainable, privacy-preserving early warning system that tells public health and occupational safety officers *what is rising, where, why, how sure we are, and what proportionate action to take*.**
