@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munzir (منذر) | Population & Workforce Health Early Warning Platform</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Top Header with Role Switcher -->
+  <header>
+    <div class="brand">
+      <div class="brand-badge">MUNZIR</div>
+      <div>
+        <div class="brand-title">Munzir (منذر) — Health Early Warning Platform</div>
+        <div class="brand-subtitle">Dubai & Northern Emirates Surveillance Engine (formerly PRAHARI)</div>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Simulated Entra ID Role Switcher -->
+      <div class="role-switcher-box">
+        <span class="role-label">Entra Role:</span>
+        <select id="roleSelect" class="role-select">
+          <option value="surveillance_officer">Surveillance Officer (DHA Lead)</option>
+          <option value="occupational_health">Occupational Health (MOHRE)</option>
+          <option value="employer_safety">Employer Site Safety (Authorized)</option>
+          <option value="regulator">Health & Safety Regulator</option>
+          <option value="public">Public Portal (DP Laplace ε=1.0)</option>
+          <option value="auditor">Inspector General / Auditor</option>
+        </select>
+      </div>
+
+      <!-- Date selector -->
+      <div class="role-switcher-box">
+        <span class="role-label">Sim Date:</span>
+        <input type="date" id="simDateInput" style="background:transparent; color:#f8fafc; border:none; outline:none; font-size:0.85rem; font-weight:600; cursor:pointer;" value="2025-08-20">
+      </div>
+
+      <div id="activeRoleBadge" class="badge badge-watch" style="font-size:0.75rem;">
+        SURVEILLANCE OFFICER
+      </div>
+      <div id="employerSiteIndicator" class="badge badge-gray" style="display:none; font-size:0.75rem;">
+        Site: SITE-JA-01
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-tab="map">🗺️ Situation Map</button>
+    <button class="tab-btn" data-tab="inbox">🚨 Alert Inbox</button>
+    <button class="tab-btn" data-tab="employer">🏗️ Employer Safety View</button>
+    <button class="tab-btn" data-tab="health">📡 Data Health Panel</button>
+    <button class="tab-btn" data-tab="demo">🧪 Missing-Data Demo</button>
+    <button class="tab-btn" data-tab="impact">📈 Health Impact & Resilience</button>
+    <button class="tab-btn" data-tab="audit">🛡️ Security Audit Logs</button>
+  </nav>
+
+  <!-- Main View Container -->
+  <main>
+
+    <!-- 1. Situation Map View -->
+    <div id="view-map" class="tab-content active">
+      <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none;"></div>
+      
+      <div class="map-layout">
+        <!-- Map Canvas -->
+        <div class="map-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700;">Dubai Health Risk & Hexagonal Cell Map</h2>
+              <div style="font-size:0.8rem; color:#94a3b8;">H3 Resolution 7 Detection Grid (~5.16 km² cells) with Space-Time Scan</div>
+            </div>
+            <!-- Accessible Risk Legend -->
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <span class="badge badge-normal">NORMAL</span>
+              <span class="badge badge-watch">WATCH</span>
+              <span class="badge badge-warning">WARNING</span>
+              <span class="badge badge-alert">ALERT</span>
+            </div>
+          </div>
+
+          <div id="situationSvgMap" class="map-svg-container"></div>
+
+          <div style="margin-top:0.75rem; display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8;">
+            <span>Legend: Solid = Exact Worksite (● / ■) | Striped Hatch = District Aggregated Estimate (Hatched)</span>
+            <span>Cluster Scan: Red Dashed Circle = Active L3 Space-Time Permutation Cluster (p &lt; 0.05)</span>
+          </div>
+        </div>
+
+        <!-- Location Sidebar -->
+        <div class="map-card" style="max-height:580px; overflow-y:auto;">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem;">Monitored Jurisdictions & Sites</h3>
+          <div id="mapGeoList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Alert Inbox View -->
+    <div id="view-inbox" class="tab-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div>
+          <h2 style="font-size:1.25rem; font-weight:700;">Decision-Ready Alert Inbox</h2>
+          <div style="font-size:0.8rem; color:#94a3b8;">Multi-Signal Corroborated Alerts with Calibrated Outbreak Probabilities & Conformal Bands</div>
+        </div>
+        <div style="display:flex; gap:0.75rem;">
+          <span id="inboxCountBadge" class="badge badge-warning" style="font-size:0.8rem;">Loading...</span>
+          <span id="inboxPpvBadge" class="badge badge-normal" style="font-size:0.8rem;">Operational PPV: --</span>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Alert ID & Syndrome</th>
+              <th>Location</th>
+              <th>Calibrated Prob (90% Band)</th>
+              <th>Data Quality</th>
+              <th>Primary RACI Owner</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="alertsTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. Employer Safety View -->
+    <div id="view-employer" class="tab-content">
+      <div id="employerDashboardContainer">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+
+    <!-- 4. Data Health Panel -->
+    <div id="view-health" class="tab-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div>
+          <h2 style="font-size:1.25rem; font-weight:700;">Ingestion Stream Freshness & Telemetry Health</h2>
+          <div style="font-size:0.8rem; color:#94a3b8;">Continuous Quality Gating and Ingestion Latency Monitoring</div>
+        </div>
+        <div style="display:flex; gap:0.75rem; align-items:center;">
+          <span style="font-size:0.85rem; color:#94a3b8;">Composite Platform DQ:</span>
+          <span id="compositeDqScore" style="font-size:1.25rem; font-weight:700; color:#10b981;">--</span>
+          <span id="dqGatingBadge" class="badge badge-normal">STREAMS HEALTHY</span>
+        </div>
+      </div>
+
+      <div id="healthFeedsContainer" class="kpi-grid">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+
+    <!-- 5. Interactive Missing-Data Demo Widget -->
+    <div id="view-demo" class="tab-content">
+      <div class="demo-box">
+        <div class="demo-title">
+          <span>🧪</span> Live Evaluator Control: Simulated Stream Dropouts & Graceful Degradation
+        </div>
+        <p style="font-size:0.875rem; color:#cbd5e1; line-height:1.5;">
+          This demo control allows hackathon judges to simulate sudden data stream dropouts (e.g. clinic network outage, weather station failure).
+          Watch how Munzir automatically widens conformal prediction uncertainty bands, activates L5 quality gating, and downgrades alerts to avoid alert fatigue.
+        </p>
+
+        <div class="toggle-group">
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleClinical" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>Clinical Syndromic EHR Feed</b> (MoHAP Stream)</span>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleWeather" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>Weather / WBGT Telemetry</b> (Open-Meteo)</span>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleAirQuality" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>Air Quality Telemetry</b> (OpenAQ PM2.5)</span>
+          </label>
+        </div>
+
+        <div id="demoToggleResult" style="display:none; margin-top:1.25rem; background:rgba(15,23,42,0.7); padding:1rem; border-radius:6px;"></div>
+      </div>
+    </div>
+
+    <!-- 6. Security Audit Logs View -->
+    <div id="view-audit" class="tab-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div>
+          <h2 style="font-size:1.25rem; font-weight:700;">Immutable Security & View Audit Trail</h2>
+          <div style="font-size:0.8rem; color:#94a3b8;">Non-repudiation logging in Gold Lakehouse Parquet (data/gold/audit/view_audit_log.parquet)</div>
+        </div>
+        <button class="btn btn-secondary" onclick="loadAuditLogs()">Refresh Audit Trail</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp (UTC)</th>
+              <th>Entra ID Role</th>
+              <th>User ID</th>
+              <th>Accessed Endpoint</th>
+              <th>Stated Operational Purpose</th>
+              <th>HTTP Status</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 7. Health & Resilience Impact Model & Policy Evidence View -->
+    <div id="view-impact" class="tab-content">
+      <!-- Statutory Disclaimer Banner -->
+      <div class="banner banner-privacy" style="margin-bottom:1.25rem;">
+        <span style="font-size:1.1rem; margin-right:0.5rem;">⚠️</span>
+        <div>
+          <strong>MODELLED ESTIMATE NOTICE (TRIPOD+AI Compliant):</strong>
+          All projections are mathematically derived using empirically validated detection sensitivity (92.5%),
+          fusion lead time (+3.4 days ahead of peak), and explicit user-editable operational assumptions.
+          Figures represent modelled epidemiological averted burden under proactive intervention, <em>never observed retrospective outcomes</em>.
+        </div>
+      </div>
+
+      <!-- Section Toggle (Calculator vs Policy Brief) -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <div class="btn-group" style="display:flex; gap:0.5rem;">
+          <button id="impactSubtabCalc" class="btn btn-primary" onclick="switchImpactSubtab('calc')">🧮 Interactive Impact Calculator</button>
+          <button id="impactSubtabPolicy" class="btn btn-secondary" onclick="switchImpactSubtab('policy')">📜 District Policy Evidence Summary</button>
+        </div>
+        <div style="font-size:0.8rem; color:#94a3b8;">
+          Calibrated with Munzir Phase 6 Backtest Data
+        </div>
+      </div>
+
+      <!-- A. Impact Calculator Sub-View -->
+      <div id="impactCalcSection">
+        <div class="impact-grid">
+          <!-- Left Column: User-Editable Assumptions Panel (ALWAYS VISIBLE) -->
+          <div class="card assumptions-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8;">⚙️ Assumptions & Parameters</h3>
+              <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.25rem 0.5rem;" onclick="resetImpactDefaults()">Reset Defaults</button>
+            </div>
+            <p style="font-size:0.78rem; color:#94a3b8; margin-bottom:1.25rem;">
+              Adjust parameters below to evaluate resilience scenarios. All changes recalculate instantaneously.
+            </p>
+
+            <!-- 1. Workforce Size -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpWorkforce">Workforce Size (Outdoor Workers)</label>
+                <span id="valWorkforce" class="input-badge">50,000</span>
+              </div>
+              <input type="range" id="inpWorkforce" min="1000" max="200000" step="1000" value="50000" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Statistics Center / MOHRE Labor Registry</div>
+            </div>
+
+            <!-- 2. Baseline Heat Illness Rate -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpBaselineRate">Baseline Heat-Illness Rate (% / season)</label>
+                <span id="valBaselineRate" class="input-badge">2.5%</span>
+              </div>
+              <input type="range" id="inpBaselineRate" min="0.5" max="10.0" step="0.1" value="2.5" oninput="onAssumptionChange()">
+              <div class="input-source">Source: ILO (2019) 'Working on a warmer planet'</div>
+            </div>
+
+            <!-- 3. Preventability Factor -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpPreventability">Intervention Preventability Factor (%)</label>
+                <span id="valPreventability" class="input-badge">65%</span>
+              </div>
+              <input type="range" id="inpPreventability" min="10" max="95" step="1" value="65" oninput="onAssumptionChange()">
+              <div class="input-source">Source: NIOSH / ACGIH Heat Stress Intervention Trials</div>
+            </div>
+
+            <!-- 4. Cost per Lost Workday -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpWorkdayCost">Cost per Lost Workday (AED)</label>
+                <span id="valWorkdayCost" class="input-badge">450 AED</span>
+              </div>
+              <input type="range" id="inpWorkdayCost" min="100" max="2000" step="25" value="450" oninput="onAssumptionChange()">
+              <div class="input-source">Source: UAE MOHRE median daily wage + employer downtime</div>
+            </div>
+
+            <!-- 5. Severe Case Medical Cost -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpSevereCost">Severe Emergency Care Cost (AED)</label>
+                <span id="valSevereCost" class="input-badge">12,000 AED</span>
+              </div>
+              <input type="range" id="inpSevereCost" min="2000" max="40000" step="1000" value="12000" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Health Authority DRG Hospital Inpatient Tariff</div>
+            </div>
+
+            <!-- 6. False Alarm Response Hours -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpAlarmHours">Response Hours per False Alarm</label>
+                <span id="valAlarmHours" class="input-badge">4.0 hrs</span>
+              </div>
+              <input type="range" id="inpAlarmHours" min="1.0" max="20.0" step="0.5" value="4.0" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Dubai Municipality EHS Inspection Standard</div>
+            </div>
+
+            <!-- 7. Hourly Triage Cost -->
+            <div class="input-group">
+              <div class="input-header">
+                <label for="inpHourlyWage">Safety Inspector / Nurse Wage (AED/hr)</label>
+                <span id="valHourlyWage" class="input-badge">120 AED/h</span>
+              </div>
+              <input type="range" id="inpHourlyWage" min="40" max="400" step="10" value="120" oninput="onAssumptionChange()">
+              <div class="input-source">Source: Municipal Environmental Health Officer Cost Rate</div>
+            </div>
+
+            <!-- Validated Empirical Anchors -->
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:0.75rem; margin-top:1rem;">
+              <div style="font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:0.4rem;">Validated Empirical Anchors (Phase 6):</div>
+              <div style="font-size:0.72rem; color:#94a3b8; display:flex; flex-direction:column; gap:0.25rem;">
+                <div>• Validated Lead Time: <strong style="color:#10b981;">+3.4 days</strong> ahead of peak</div>
+                <div>• Validated True Sensitivity: <strong style="color:#10b981;">92.5%</strong></div>
+                <div>• Validated False Alarm Rate: <strong style="color:#10b981;">0.32</strong> alerts/district/mo</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Projections Dashboard -->
+          <div class="projections-panel">
+            <!-- Highlight KPI Metric Cards -->
+            <div class="impact-kpi-grid">
+              <div class="card kpi-card highlight-kpi">
+                <div class="kpi-title">Net Economic Benefit (Expected)</div>
+                <div id="kpiNetBenefit" class="kpi-value" style="color:#10b981;">-- AED</div>
+                <div id="kpiBenefitRange" class="kpi-sub">Range: -- to -- AED</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Lost Workdays Averted</div>
+                <div id="kpiWorkdays" class="kpi-value" style="color:#38bdf8;">--</div>
+                <div class="kpi-sub">Across 4-month heat season</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Severe Incidents Prevented</div>
+                <div id="kpiSevereCases" class="kpi-value" style="color:#f59e0b;">--</div>
+                <div class="kpi-sub">Heat stroke & ICU admissions</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Alert Fatigue Cost (Overhead)</div>
+                <div id="kpiFatigueCost" class="kpi-value" style="color:#cbd5e1;">-- AED</div>
+                <div id="kpiFatigueOverhead" class="kpi-sub">Overhead: &lt; 1.0% (Strictly Bounded)</div>
+              </div>
+
+              <div class="card kpi-card">
+                <div class="kpi-title">Benefit-to-Cost Ratio (BCR)</div>
+                <div id="kpiBCR" class="kpi-value" style="color:#a855f7;">-- x</div>
+                <div class="kpi-sub">Return on inspection hours</div>
+              </div>
+            </div>
+
+            <!-- Scenario Bounds Table (Low / Central / High) -->
+            <div class="card" style="margin-top:1.25rem;">
+              <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">📊 Scenario Uncertainty Bounds</h4>
+              <div style="overflow-x:auto;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Scenario</th>
+                      <th>Workforce Cases</th>
+                      <th>Cases Prevented</th>
+                      <th>Workdays Saved</th>
+                      <th>Gross Savings (AED)</th>
+                      <th>False Alarm Cost (AED)</th>
+                      <th>Net Benefit (AED)</th>
+                      <th>BCR</th>
+                    </tr>
+                  </thead>
+                  <tbody id="scenarioTableBody">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 2D Sensitivity Matrix Heatmap -->
+            <div class="card" style="margin-top:1.25rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <div>
+                  <h4 style="font-size:0.95rem; font-weight:700;">🔬 2D Sensitivity Matrix: Lead Time vs. Preventability</h4>
+                  <div style="font-size:0.75rem; color:#94a3b8;">Net Economic Benefit in AED (Workdays Saved in parentheses)</div>
+                </div>
+                <div style="font-size:0.75rem; color:#10b981;">
+                  ★ Empirical Operating Point: 3.4d / 65%
+                </div>
+              </div>
+              <div style="overflow-x:auto;">
+                <table id="sensitivityTable" class="data-table sensitivity-grid-table">
+                  <!-- Dynamically populated -->
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. District Policy Evidence Sub-View -->
+      <div id="impactPolicySection" style="display:none;">
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 style="font-size:1.05rem; font-weight:700;">🏛️ Municipal Regulatory Policy Evidence Brief</h3>
+              <div style="font-size:0.8rem; color:#94a3b8;">
+                Aggregate exposure burden data for MOHRE labour inspectors, municipality EHS, and public health officers.
+              </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <select id="policyMonthSelect" class="role-select" onchange="loadPolicyEvidence()">
+                <option value="July 2024">July 2024</option>
+                <option value="August 2024" selected>August 2024</option>
+                <option value="September 2024">September 2024</option>
+              </select>
+              <button class="btn btn-primary" onclick="exportPolicyMarkdown()">📥 Export Markdown Brief</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy & Protection Safeguards Notice -->
+        <div class="banner banner-privacy" style="margin-bottom:1.25rem;">
+          <span style="font-size:1.1rem; margin-right:0.5rem;">🔒</span>
+          <div>
+            <strong>PRIVACY-BY-ARCHITECTURE SAFEGUARDS APPLIED:</strong>
+            All district counts are protected via Small-Cell Suppression (counts ≤ 10 suppressed) and Laplace Differential Privacy (ε = 1.0).
+            No individual workers, sub-sites, or gang rosters are visible.
+          </div>
+        </div>
+
+        <!-- District Exposure Burden Table -->
+        <div class="card" style="margin-bottom:1.25rem;">
+          <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">District Environmental Exposure Burden</h4>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>District Jurisdiction</th>
+                  <th>Extreme Heat Hours (WBGT &gt; 32°C)</th>
+                  <th>Danger Heat Hours (WBGT &gt; 34°C)</th>
+                  <th>PM2.5 Exceedance Days</th>
+                  <th>Midday Heat Days (12:30-15:00)</th>
+                  <th>Attributable Cases (DP Protected)</th>
+                  <th>Privacy Status</th>
+                </tr>
+              </thead>
+              <tbody id="policyDistrictTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Statutory Regulatory Recommendations -->
+        <div class="card" style="margin-bottom:1.25rem;">
+          <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:0.75rem;">Actionable Statutory Policy Interventions</h4>
+          <div id="policyRecommendationsList" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Statutory Citations -->
+        <div class="card">
+          <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem;">Statutory & Scientific Legal Grounding</h4>
+          <ul id="policyCitationsList" style="font-size:0.8rem; color:#94a3b8; padding-left:1.25rem; line-height:1.6;">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Evidence Card Modal -->
+  <div id="evidenceCardModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size:1.15rem; font-weight:700;">Munzir Decision Support Evidence Card</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="evidenceCardContent" class="modal-body">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Human Triage Modal -->
+  <div id="acknowledgeModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:550px;">
+      <div class="modal-header">
+        <h3 id="ackAlertTitle" style="font-size:1.15rem; font-weight:700;">Triage Alert</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ackAlertId">
+        
+        <div style="margin-bottom:1rem;">
+          <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Operational Comment</label>
+          <input type="text" id="ackComment" placeholder="Enter incident response log or investigation findings..." style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff;">
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Mandatory Dismissal Reason (Required if Dismissing)</label>
+          <select id="ackDismissReason" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff;">
+            <option value="">Select reason if dismissing...</option>
+            <option value="benign_local_event">Benign Local Event (False Positive)</option>
+            <option value="data_artefact_backlog">Data Artefact / Reporting Backlog Dump</option>
+            <option value="already_managed_duplicate">Already Managed Duplicate Incident</option>
+            <option value="false_positive_noise">Statistical Noise (Below Field Threshold)</option>
+            <option value="other">Other Operational Reason</option>
+          </select>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+          <button class="btn btn-secondary" onclick="submitAcknowledgement('ACKNOWLEDGED')">Mark Acknowledged</button>
+          <button class="btn btn-success" onclick="submitAcknowledgement('ACTED')">Confirm Action Taken (Field Response)</button>
+          <button class="btn btn-danger" onclick="submitAcknowledgement('DISMISSED')">Dismiss with Reason</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+

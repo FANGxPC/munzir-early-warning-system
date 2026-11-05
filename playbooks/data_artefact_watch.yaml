@@ -1,0 +1,28 @@
+id: data_artefact_watch
+name: Data Feed Quality Artefact / Reporting Backlog Surveillance
+trigger:
+  type: data_artefact
+  severity: watch
+  site_type: district
+proportionality_tier: monitor
+responsible:
+  lead: Data Quality Officer
+  accountable: Health Informatics Director
+  consult: Facility Electronic Health Record (EHR) Administrator
+  inform: District Surveillance Officer
+actions:
+  - "Verify electronic data interchange (EDI) ingest queue status for the reporting facility"
+  - "Contact hospital IT / clinic administrator to confirm whether recent spike represents batch entry of accumulated offline records"
+  - "Suppress automatic public health dispatch: do not alert Rapid Response Teams or issue public advisories"
+  - "Recalculate moving baseline applying event date (date of clinical presentation) rather than ingestion date"
+  - "Log data quality incident ticket for interface latency resolution"
+escalate_to_alert_if: "DO NOT ESCALATE; if investigation confirms genuine sudden onset cluster rather than reporting dump, reclassify to clinical syndrome tier"
+evidence_required:
+  - dq_source_latency_hrs
+  - dq_completeness_score
+assumptions:
+  - Spike in reported case count coincided with high source transmission latency (>= 48 hours)
+  - No corresponding surge in ambient environmental risk or over-the-counter pharmacy proxy indicators
+references:
+  - "CDC Technical Guidelines for Public Health Syndromic Surveillance Systems (EHR Data Quality Dimensions)"
+  - "ISO 8000-61:2016 Data quality — Part 61: Data quality management: Process reference model"

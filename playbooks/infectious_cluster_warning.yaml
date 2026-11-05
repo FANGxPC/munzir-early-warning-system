@@ -1,0 +1,31 @@
+id: infectious_cluster_warning
+name: Localized Point-Source Enteric / Syndromic Cluster Warning
+trigger:
+  type: infectious_cluster
+  severity: warning
+  site_type: facility
+proportionality_tier: targeted_preventive
+responsible:
+  lead: District Surveillance Officer (Rapid Response Team)
+  accountable: Chief Medical Officer / Public Health Authority
+  consult: Facility Occupational Health Nurse, Municipal Food Safety Inspectorate
+  inform: Facility General Manager, Site Safety Officer
+actions:
+  - "Conduct active syndromic case finding at facility: interview nurse for symptom onset timelines and common canteen exposures"
+  - "Instruct facility occupational health nurse to collect stool / vomit specimens for microbiological and norovirus PCR testing"
+  - "Inspect central facility water storage tanks, ice machines, and commercial food preparation areas"
+  - "Enforce mandatory chlorine-based disinfection of shared sanitary facilities, canteens, and drinking fountains"
+  - "Implement isolation protocol for symptomatic staff: exclude from food handling and shared barracks until 48 hours symptom-free"
+escalate_to_alert_if: "Secondary cases appear outside initial cohort OR laboratory identifies enteric pathogen (e.g. Salmonella, Shigella, Norovirus GII) with attack rate > 10%"
+evidence_required:
+  - clinic_gi_exceedance
+  - clinical_fever_exceedance
+  - lab_pathogen_positivity
+  - l3_cluster_active
+assumptions:
+  - Epidemiological curve indicates common point-source exposure (e.g. catered lunch, contaminated storage cistern) rather than airborne vector
+  - Self-treatment with OTC anti-diarrheal medication may undercount mild cases
+references:
+  - "WHO Guidelines for the Investigation of Foodborne Disease Outbreaks (2008)"
+  - "CDC Standard Foodborne and Waterborne Disease Outbreak Investigation Protocols"
+  - "Dubai Municipality Food Safety Department Outbreak Response Standard Operating Procedures"
