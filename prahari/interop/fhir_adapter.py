@@ -276,3 +276,4 @@ class FHIRSurveillanceAdapter:
             "entry": entries
         }
         return bundle
+

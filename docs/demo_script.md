@@ -125,3 +125,4 @@
   > *"Munzir is completely packaged, containerized, and deployed with zero idle cost on Azure for Students. It exports standard HL7 FHIR R4 MeasureReports ready for DHA NABIDH and Malaffi integration.*  
   > *Our ask today is simple: a **12-week operational shadow-mode pilot** across one district health office and 4 infrastructure employers this summer. Let us prove that with Munzir, we can predict, protect, and prevent before the heat strikes.*  
   > *Thank you, and we welcome your questions."*
+

@@ -151,3 +151,4 @@ class SFTPCSVAdapter:
             ])
 
         return output.getvalue()
+

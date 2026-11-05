@@ -123,3 +123,4 @@ To prevent algorithmic degradation in changing climate or epidemiological condit
 
 3. **Data Freshness Alarms:**
    Telemetry feeds with latency $> 48$ hours trigger automated data quality degradation flags, visually capping jurisdictional alert severity at **Warning** to prevent false alarms.
+

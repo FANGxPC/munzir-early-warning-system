@@ -99,3 +99,4 @@ Thanks to Munzir's modern lakehouse architecture and serverless inference tier, 
 - Expand to the Kingdom of Saudi Arabia (Riyadh & NEOM mega-projects) and Qatar.
 - Adapt exposure-response baseline parameters for extreme desert microclimates.
 - Scale to 500,000+ monitored industrial workers and AED 12M+ Annual Recurring Revenue (ARR).
+
