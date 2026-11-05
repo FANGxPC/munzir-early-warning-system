@@ -45,7 +45,7 @@ class ValidationReportGenerator:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PRAHARI Operational Validation Report | Seed {seed}</title>
+  <title>Munzir (منذر) Operational Validation Report | Seed {seed}</title>
   <style>
     :root {{
       --bg: #0f172a;
@@ -91,7 +91,7 @@ class ValidationReportGenerator:
 
   <header>
     <div>
-      <h1>PRAHARI Operational Validation Report</h1>
+      <h1>Munzir (PRAHARI) Operational Validation Report</h1>
       <div class="subtitle">Reproducible Benchmarking, Lead-Time Verification, and AMOC Timeliness Analysis</div>
     </div>
     <div style="text-align: right;">
@@ -174,7 +174,7 @@ class ValidationReportGenerator:
           <td>{ears_res['decoy_suppression_rate']*100:.0f}%</td>
         </tr>
         <tr style="background: rgba(14, 165, 233, 0.12); border-left: 4px solid var(--accent);">
-          <td><b>Baseline C: PRAHARI Full Fusion (L1–L5)</b><br><span style="font-size: 0.75rem; color: var(--accent);">Layered detection + exposure adjustment + anti-fatigue</span></td>
+          <td><b>Baseline C: Munzir Full Fusion (L1–L5)</b><br><span style="font-size: 0.75rem; color: var(--accent);">Layered detection + exposure adjustment + anti-fatigue</span></td>
           <td><span class="badge badge-win">+{prahari_res['mean_lead_time_days'] - fixed_res['mean_lead_time_days']:.1f}d ADVANTAGE</span><br><b>{prahari_res['mean_lead_time_days']:.1f} days</b></td>
           <td><b>{prahari_res['sensitivity']*100:.1f}%</b></td>
           <td><b>{prahari_res['ppv']*100:.1f}%</b></td>
@@ -282,7 +282,7 @@ class ValidationReportGenerator:
   </div>
 
   <div class="footer-note">
-    PRAHARI Early Warning Platform • Operational Validation Report • Generated with Seed {seed} • Reproducible via <code>make validate SEED={seed}</code>
+    Munzir Early Warning Platform • Operational Validation Report • Generated with Seed {seed} • Reproducible via <code>make validate SEED={seed}</code>
   </div>
 
 </body>
@@ -318,10 +318,10 @@ class ValidationReportGenerator:
           <text x="330" y="{210 - h_ears - 10}" fill="#f8fafc" font-size="13" font-weight="bold" text-anchor="middle">{lead_ears:.1f}d</text>
           <text x="330" y="235" fill="#94a3b8" font-size="11" text-anchor="middle">CDC EARS C2</text>
           
-          <!-- Bar 3: PRAHARI Fusion -->
+          <!-- Bar 3: Munzir Fusion -->
           <rect x="440" y="{210 - h_prahari}" width="80" height="{h_prahari}" fill="#38bdf8" rx="4" />
           <text x="480" y="{210 - h_prahari - 10}" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">{lead_prahari:.1f}d (+2.6d)</text>
-          <text x="480" y="235" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">PRAHARI Fusion</text>
+          <text x="480" y="235" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">Munzir Fusion</text>
 
           <text x="25" y="125" fill="#94a3b8" font-size="11" transform="rotate(-90 25,125)" text-anchor="middle">Lead Time Ahead of Peak (Days)</text>
         </svg>

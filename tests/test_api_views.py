@@ -202,7 +202,7 @@ def test_static_index_html_serving(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "PRAHARI" in response.text
+    assert "Munzir" in response.text or "PRAHARI" in response.text
     assert "Situation Map" in response.text
     assert "Alert Inbox" in response.text
     assert "Employer Safety View" in response.text

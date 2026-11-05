@@ -9,7 +9,7 @@
 ## 1. Motivation
 - **Purpose:** Provide hourly, spatially resolved meteorological observations and numerical weather predictions (temperature, relative humidity, wind speed, direct solar radiation) required to calculate the Wet Bulb Globe Temperature (WBGT) and environmental heat-stress indices.
 - **Created by:** Open-Meteo GmbH (open-source meteorological platform utilizing ECMWF, DWD ICON, and NOAA GFS models).
-- **Funded by:** Open-Meteo community and commercial API subscriptions; utilized in PRAHARI under non-commercial open data terms.
+- **Funded by:** Open-Meteo community and commercial API subscriptions; utilized in Munzir under non-commercial open data terms.
 
 ---
 

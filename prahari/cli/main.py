@@ -1,5 +1,5 @@
 """
-Unified CLI for PRAHARI Early Warning System.
+Unified CLI for Munzir Early Warning System.
 Provides commands for historical data backfill, daily ingestion runs,
 NLP classifier training, data quality checks, and bronze store inspection.
 """
@@ -35,7 +35,7 @@ from prahari.decision import (
 def cmd_train_nlp(args: argparse.Namespace) -> None:
     """Train the incident narrative text classifier and report evaluation metrics."""
     print("=" * 60)
-    print("PRAHARI NLP Incident Narrative Classifier Training")
+    print("Munzir NLP Incident Narrative Classifier Training")
     print("=" * 60)
     classifier = IncidentClassifier()
     metrics = classifier.train()
@@ -61,7 +61,7 @@ def cmd_backfill(args: argparse.Namespace) -> None:
     seed = args.seed
 
     print("=" * 70)
-    print(f"PRAHARI Historical Bronze Lakehouse Backfill ({years} Year(s))")
+    print(f"Munzir Historical Bronze Lakehouse Backfill ({years} Year(s))")
     print(f"Region: {region_key.upper()} | Seed: {seed}")
     print("=" * 70)
 
@@ -183,7 +183,7 @@ def cmd_run_daily(args: argparse.Namespace) -> None:
     region_key = args.region
 
     print("=" * 60)
-    print(f"PRAHARI Daily Ingestion Timer Run ({date_str})")
+    print(f"Munzir Daily Ingestion Timer Run ({date_str})")
     print(f"Region: {region_key.upper()}")
     print("=" * 60)
 
@@ -250,7 +250,7 @@ def cmd_harmonise(args: argparse.Namespace) -> None:
     region_key = args.region
 
     print("=" * 70)
-    print(f"PRAHARI Harmonisation Pipeline (Bronze -> Silver)")
+    print(f"Munzir Harmonisation Pipeline (Bronze -> Silver)")
     print(f"Region: {region_key.upper()}")
     print("=" * 70)
 
@@ -281,7 +281,7 @@ def cmd_inspect_silver(args: argparse.Namespace) -> None:
     stats = store.get_summary_stats()
 
     print("=" * 60)
-    print("PRAHARI Silver Harmonised Lakehouse Inspection")
+    print("Munzir Silver Harmonised Lakehouse Inspection")
     print("=" * 60)
     print(f"Total Observations:             {stats['total_observations']:,}")
     print(f"Suppressed Cells (k<=10):       {stats['suppressed_cells']:,}")
@@ -301,7 +301,7 @@ def cmd_dp_release(args: argparse.Namespace) -> None:
     """Generate Differential Privacy aggregate release with epsilon budget tracking."""
     epsilon = args.epsilon
     print("=" * 60)
-    print(f"PRAHARI Differential Privacy Release (Epsilon = {epsilon})")
+    print(f"Munzir Differential Privacy Release (Epsilon = {epsilon})")
     print("=" * 60)
 
     store = SilverStore()
@@ -338,7 +338,7 @@ def cmd_inspect(args: argparse.Namespace) -> None:
     stats = store.get_summary_stats()
 
     print("=" * 60)
-    print("PRAHARI Bronze Lakehouse Inspection")
+    print("Munzir Bronze Lakehouse Inspection")
     print("=" * 60)
     print(f"Total Observations:    {stats['total_observations']:,}")
     print(f"Date Span:             {stats['min_date']} to {stats['max_date']} ({stats['date_count']} days)")
@@ -356,7 +356,7 @@ def cmd_inspect(args: argparse.Namespace) -> None:
 def cmd_train_fusion(args: argparse.Namespace) -> None:
     """Train the L4 LightGBM fusion model and calibrate with Isotonic Regression."""
     print("=" * 65)
-    print("PRAHARI L4 Multi-Signal Machine Learning Fusion Training")
+    print("Munzir L4 Multi-Signal Machine Learning Fusion Training")
     print("=" * 65)
     pipeline = DetectionPipeline()
     metrics = pipeline.train_fusion(
@@ -378,7 +378,7 @@ def cmd_train_fusion(args: argparse.Namespace) -> None:
 def cmd_detect(args: argparse.Namespace) -> None:
     """Run L1-L5 detection pipeline across a date range or specific date."""
     print("=" * 70)
-    print("PRAHARI Layered Outbreak Detection Pipeline (L1-L5)")
+    print("Munzir Layered Outbreak Detection Pipeline (L1-L5)")
     print("=" * 70)
     pipeline = DetectionPipeline()
 
@@ -433,7 +433,7 @@ def cmd_playbooks(args: argparse.Namespace) -> None:
     playbooks = engine.list_playbooks()
 
     print("=" * 75)
-    print("PRAHARI Operational Action Playbook Library")
+    print("Munzir Operational Action Playbook Library")
     print(f"Total Playbooks Registered: {len(playbooks)}")
     print("=" * 75)
     for pb in playbooks:
@@ -456,7 +456,7 @@ def cmd_playbooks(args: argparse.Namespace) -> None:
 def cmd_evidence_card(args: argparse.Namespace) -> None:
     """Generate and display an Evidence Card for an active alert or date."""
     print("=" * 75)
-    print("PRAHARI Decision Support Evidence Card Generator")
+    print("Munzir Decision Support Evidence Card Generator")
     print("=" * 75)
 
     pipeline = DetectionPipeline()
@@ -550,7 +550,7 @@ def cmd_acknowledge(args: argparse.Namespace) -> None:
     action_type = args.action
 
     print("=" * 65)
-    print(f"PRAHARI Human-in-the-Loop Workflow: {action_type.upper()}")
+    print(f"Munzir Human-in-the-Loop Workflow: {action_type.upper()}")
     print("=" * 65)
 
     if action_type == "acknowledge":
@@ -600,10 +600,10 @@ def cmd_acknowledge(args: argparse.Namespace) -> None:
 
 
 def cmd_serve(args: argparse.Namespace) -> None:
-    """Start PRAHARI role-based API and interactive web application."""
+    """Start Munzir role-based API and interactive web application."""
     import uvicorn
     print("=" * 75)
-    print("PRAHARI Population & Occupational Health Surveillance Server")
+    print("Munzir Population & Occupational Health Surveillance Server")
     print(f"Starting server on http://{args.host}:{args.port}")
     print("Serving interactive UI and role-based REST APIs")
     print("=" * 75)
@@ -614,7 +614,7 @@ def cmd_validate(args: argparse.Namespace) -> None:
     """Run operational validation, benchmark against baselines, and export report.html."""
     from prahari.validation.orchestrator import ValidationOrchestrator
     print("=" * 75)
-    print("PRAHARI Operational Validation & Benchmarking Engine (Phase 6)")
+    print("Munzir Operational Validation & Benchmarking Engine (Phase 6)")
     print(f"Seed: {args.seed} | Injections: {args.n_injections} | Region: {args.region}")
     print("=" * 75)
     orchestrator = ValidationOrchestrator(seed=args.seed, output_dir=args.out_dir, region_key=args.region)
@@ -638,7 +638,7 @@ def cmd_impact(args: argparse.Namespace) -> None:
     from prahari.impact.policy_report import DistrictPolicyEvidenceGenerator
 
     print("=" * 75)
-    print("PRAHARI Health & Resilience Impact Model (Phase 7)")
+    print("Munzir Health & Resilience Impact Model (Phase 7)")
     print("Translating validated detection performance into quantifiable averted burden")
     print("=" * 75)
 
@@ -678,11 +678,11 @@ def cmd_impact(args: argparse.Namespace) -> None:
 
 
 def cmd_governance(args: argparse.Namespace) -> None:
-    """Evaluate and display PRAHARI Responsible AI & Governance Scorecard."""
+    """Evaluate and display Munzir Responsible AI & Governance Scorecard."""
     from prahari.governance.safety_monitor import GovernanceSafetyMonitor
 
     print("=" * 84)
-    print("PRAHARI Responsible AI, Safety Controls & Governance Scorecard (Phase 8)")
+    print("Munzir Responsible AI, Safety Controls & Governance Scorecard (Phase 8)")
     print("Evaluating Model Cards, Datasheets, TRIPOD+AI, DPIA, and Runtime Guardrails")
     print("=" * 84)
 
@@ -707,7 +707,7 @@ def cmd_governance(args: argparse.Namespace) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="PRAHARI - Population & Workforce Health Early Warning Platform CLI"
+        description="Munzir - Population & Workforce Health Early Warning Platform CLI"
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 

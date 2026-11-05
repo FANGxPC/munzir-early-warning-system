@@ -1,6 +1,6 @@
-# PRAHARI Canonical Data Model (Silver/Gold)
+# Munzir Canonical Data Model (Silver/Gold)
 
-The PRAHARI analytics layer operates exclusively on pre-aggregated, privacy-preserving observation records.
+The Munzir analytics layer operates exclusively on pre-aggregated, privacy-preserving observation records.
 
 ## 1. Signal Observation Table (`signal_observation`)
 

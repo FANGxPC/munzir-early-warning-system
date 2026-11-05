@@ -247,7 +247,7 @@ class DistrictPolicyEvidenceGenerator:
     def export_markdown_brief(self, evidence: DistrictPolicyEvidence) -> str:
         """Generates publication-quality Markdown brief suitable for executive policy distribution."""
         lines = [
-            f"# PRAHARI Regulatory Policy Evidence Brief: {evidence.jurisdiction}",
+            f"# Munzir (منذر) Regulatory Policy Evidence Brief: {evidence.jurisdiction}",
             f"**Reporting Period:** {evidence.reporting_period} | **Monitored Workforce:** {evidence.total_monitored_workforce:,} workers",
             "",
             "> **NOTICE:** All data are aggregated under Differential Privacy (Laplace $\\epsilon=1.0$) and small-cell suppression ($k \\le 10$). "

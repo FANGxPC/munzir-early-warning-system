@@ -9,7 +9,7 @@
 ## 1. Motivation
 - **Purpose:** Monitor daily counts of syndromic emergency department and ambulatory health facility presentations (respiratory, gastrointestinal, systemic febrile, acute heat distress) to detect community outbreaks before laboratory confirmation.
 - **Created by:** Simulated health authority telemetry (DHA/MoHAP canonical format) calibrated against published epidemiological surveillance distributions.
-- **Funded by:** PRAHARI public health surveillance initiative.
+- **Funded by:** Munzir public health surveillance initiative.
 
 ---
 

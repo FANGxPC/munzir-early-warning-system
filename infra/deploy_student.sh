@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# PRAHARI - One-Command Azure for Students Deployment Script
+# Munzir (منذر) - One-Command Azure for Students Deployment Script
 # Deploys serverless Container App with scale-to-zero (Cost = $0.00 / month)
 # ==============================================================================
 
 set -euo pipefail
 
 # Configuration Defaults
-RESOURCE_GROUP="${RESOURCE_GROUP:-rg-prahari-student}"
+RESOURCE_GROUP="${RESOURCE_GROUP:-rg-munzir-student}"
 LOCATION="${LOCATION:-eastus}" # Or 'uaenorth' (Dubai)
-APP_NAME="${APP_NAME:-prahari-live}"
+APP_NAME="${APP_NAME:-munzir-live}"
 
 echo "================================================================================"
-echo "PRAHARI Early Warning Platform - Azure for Students Deployment"
+echo "Munzir Early Warning Platform - Azure for Students Deployment"
 echo "Target Resource Group: ${RESOURCE_GROUP}"
 echo "Location:              ${LOCATION}"
 echo "Container App Name:    ${APP_NAME}"

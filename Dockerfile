@@ -1,4 +1,4 @@
-# PRAHARI - Lightweight, Production Container for Azure Container Apps & App Service
+# Munzir (منذر) - Lightweight, Production Container for Azure Container Apps & App Service
 # Optimized for Azure for Students ($0 Scale-to-Zero Free Tier, <200MB RAM)
 
 FROM python:3.10-slim AS builder

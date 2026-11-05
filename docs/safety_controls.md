@@ -1,4 +1,4 @@
-# PRAHARI Operational Safety Controls & Safeguards Register
+# Munzir Operational Safety Controls & Safeguards Register
 
 **Document Version:** 1.0  
 **Last Updated:** November 2026  
@@ -8,7 +8,7 @@
 
 ## 1. Safety Architecture Overview
 
-PRAHARI operates a multi-layered safety barrier architecture designed to prevent alert fatigue, eliminate hallucinated decision recommendations, guarantee fail-safe continuity during telemetric outages, and preserve civil liberties.
+Munzir operates a multi-layered safety barrier architecture designed to prevent alert fatigue, eliminate hallucinated decision recommendations, guarantee fail-safe continuity during telemetric outages, and preserve civil liberties.
 
 ```
 Incoming Telemetry

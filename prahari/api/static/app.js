@@ -1,5 +1,5 @@
 /**
- * PRAHARI Front-End Web Application
+ * Munzir (منذر) Front-End Web Application
  * Accessible, Responsive, Multi-Role Single Page App
  */
 

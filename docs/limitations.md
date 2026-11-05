@@ -1,4 +1,4 @@
-# PRAHARI Known Limitations & Technical Boundary Statement
+# Munzir Known Limitations & Technical Boundary Statement
 
 **Document Version:** 1.0  
 **Last Updated:** November 2026  
@@ -19,7 +19,7 @@
   - Localized microclimates inside enclosed, unventilated industrial sheds or boiler rooms.
   - Radiant heat amplification from heavy diesel machinery operating in close proximity.
   - Personal protective equipment (PPE) thermal burdens (e.g. non-breathable fire-retardant coveralls or full-body chemical suits).
-- **Mitigation:** Actions playbooks instruct worksite safety officers to treat PRAHARI alerts as triggers for on-site calibrated handheld heat bulb verification.
+- **Mitigation:** Actions playbooks instruct worksite safety officers to treat Munzir alerts as triggers for on-site calibrated handheld heat bulb verification.
 
 ---
 
@@ -43,5 +43,5 @@
 ## 5. Particulate Sensor Drift & Desert Atmospheric Conditions
 - **Context:** Ground-level particulate sensors in the Gulf region are subjected to extreme heat ($>45^\circ\text{C}$), high ambient humidity, and periodic coarse mineral dust storms.
 - **Limitation:** Low-cost optical particle counters (OPCs) can experience optical chamber dust fouling or hygroscopic particulate swelling during humid marine incursions, leading to transient particulate overestimation.
-- **Mitigation:** PRAHARI computes the $\text{PM}_{2.5} / \text{PM}_{10}$ ratio and corroborates ground sensors against CAMS atmospheric model forecasts to filter out optical sensor saturation.
+- **Mitigation:** Munzir computes the $\text{PM}_{2.5} / \text{PM}_{10}$ ratio and corroborates ground sensors against CAMS atmospheric model forecasts to filter out optical sensor saturation.
 

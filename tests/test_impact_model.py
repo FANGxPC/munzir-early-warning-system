@@ -146,7 +146,7 @@ def test_district_policy_evidence_generator():
 
     # Verify Markdown export
     md = gen.export_markdown_brief(report)
-    assert "# PRAHARI Regulatory Policy Evidence Brief" in md
+    assert "Regulatory Policy Evidence Brief" in md
     assert "MOHRE Statutory Midday Work Ban" in md
     assert "Differential Privacy" in md
 

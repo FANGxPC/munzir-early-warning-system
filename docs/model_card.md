@@ -1,4 +1,4 @@
-# Model Card: PRAHARI L4 Multi-Signal Calibrated Fusion Model
+# Model Card: Munzir L4 Multi-Signal Calibrated Fusion Model
 
 **Model Version:** 1.0.0  
 **Model Date:** November 2026  
@@ -9,7 +9,7 @@
 
 ## 1. Model Overview & Architecture
 
-PRAHARI L4 is a machine learning fusion classifier that combines multivariate physiological, environmental, occupational, and syndromic telemetry into a calibrated risk score:
+Munzir L4 is a machine learning fusion classifier that combines multivariate physiological, environmental, occupational, and syndromic telemetry into a calibrated risk score:
 
 $$P(\text{Outbreak Surge in } t + [1..4] \text{ days} \mid \mathbf{X}_{t})$$
 
@@ -63,7 +63,7 @@ $$P(\text{Outbreak Surge in } t + [1..4] \text{ days} \mid \mathbf{X}_{t})$$
 
 Evaluated side-by-side against standard epidemiological surveillance baselines:
 
-| Metric | Baseline A (Fixed $3\sigma$ Threshold) | Baseline B (CDC EARS C2 Clinical) | **PRAHARI L4 Fusion** |
+| Metric | Baseline A (Fixed $3\sigma$ Threshold) | Baseline B (CDC EARS C2 Clinical) | **Munzir L4 Fusion** |
 |---|---|---|---|
 | **Mean Lead Time Ahead of Peak** | 0.8 days | 1.4 days | **3.4 days (+2.6d advantage)** |
 | **Detection Sensitivity (Recall)** | 71.2% | 83.5% | **92.5%** |

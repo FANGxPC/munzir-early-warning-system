@@ -1,6 +1,6 @@
-# PRAHARI Design Principles & Architecture Manifesto
+# Munzir Design Principles & Architecture Manifesto
 
-PRAHARI (Population & Workforce Health Early Warning System) is built on foundational engineering and epidemiological principles designed to guarantee actionability, fairness, and safety.
+Munzir (Population & Workforce Health Early Warning System) is built on foundational engineering and epidemiological principles designed to guarantee actionability, fairness, and safety.
 
 ## 1. Aggregate-First (Zero Person-Level Identifiers)
 - No person-level identifiers (names, patient IDs, national IDs, employee badges, phone numbers, exact residential addresses) are ever collected, stored, or processed in the analytics tier.

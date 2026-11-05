@@ -9,7 +9,7 @@
 ## 1. Motivation
 - **Purpose:** Capture pre-clinical self-medication trends (over-the-counter sales of oral rehydration salts, antiemetics, antipyretics, and bronchodilators) alongside confirmatory molecular laboratory test positivity rates.
 - **Created by:** Community pharmacy retail networks and licensed private pathology laboratories in Dubai.
-- **Funded by:** Commercial surveillance data sharing agreements / PRAHARI platform.
+- **Funded by:** Commercial surveillance data sharing agreements / Munzir platform.
 
 ---
 

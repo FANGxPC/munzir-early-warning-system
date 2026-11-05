@@ -1,11 +1,11 @@
-// PRAHARI - Infrastructure as Code (Bicep) for Azure for Students
+// Munzir (منذر) - Infrastructure as Code (Bicep) for Azure for Students
 // Deploys Serverless Azure Container App with Scale-to-Zero ($0.00 idle cost)
 
 @description('Location for all resources')
 param location string = resourceGroup().location
 
 @description('Prefix for resource names')
-param appPrefix string = 'prahari'
+param appPrefix string = 'munzir'
 
 @description('Container image tag to deploy')
 param containerImage string = 'mcr.microsoft.com/azuredocs/aci-helloworld:latest'

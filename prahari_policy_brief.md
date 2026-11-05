@@ -1,4 +1,4 @@
-# PRAHARI Regulatory Policy Evidence Brief: Dubai Emirate, UAE
+# Munzir (منذر) Regulatory Policy Evidence Brief: Dubai Emirate, UAE
 **Reporting Period:** July 2024 | **Monitored Workforce:** 50,000 workers
 
 > **NOTICE:** All data are aggregated under Differential Privacy (Laplace $\epsilon=1.0$) and small-cell suppression ($k \le 10$). Figures represent exposure-attributable modelled estimates to justify municipal resources and statutory enforcement.

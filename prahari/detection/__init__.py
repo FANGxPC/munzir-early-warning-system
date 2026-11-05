@@ -3,7 +3,7 @@ from .l1_aberration import L1AberrationDetector, EARSDetector, FarringtonDetecto
 from .l2_exposure import L2ExposureBaselineModel, L2ResidualResult
 from .l3_spacetime import ProspectiveSpaceTimeScan, L3ClusterResult
 from .l4_fusion import L4FusionModel, FusionFeatureExtractor, FusionPrediction
-from .l5_policy import L5AlertPolicyEngine, PrahariAlert, AlertSeverity
+from .l5_policy import L5AlertPolicyEngine, PrahariAlert, MunzirAlert, AlertSeverity
 from .pipeline import DetectionPipeline
 
 __all__ = [
@@ -20,6 +20,7 @@ __all__ = [
     "FusionPrediction",
     "L5AlertPolicyEngine",
     "PrahariAlert",
+    "MunzirAlert",
     "AlertSeverity",
     "DetectionPipeline",
 ]

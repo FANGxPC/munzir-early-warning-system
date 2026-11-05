@@ -1,18 +1,18 @@
 # Azure for Students Deployment & Cost Optimization Guide
 
-**Platform:** PRAHARI Early Warning Platform  
+**Platform:** Munzir Early Warning Platform  
 **Target Subscription:** Azure for Students ($100 credit, 12 months free services)  
 **Monthly Operating Cost:** **$0.00 / month** (within free tier allowance)
 
 ---
 
-## 1. Executive Summary: Is PRAHARI Ready for Azure for Students?
+## 1. Executive Summary: Is Munzir Ready for Azure for Students?
 
-**YES, PRAHARI is 100% ready and specifically adapted for Azure for Students deployment.**
+**YES, Munzir is 100% ready and specifically adapted for Azure for Students deployment.**
 
-Unlike traditional enterprise health platforms that demand expensive, continuous infrastructure (e.g. 24/7 dedicated PostgreSQL servers, GPU inference nodes, and multi-tenant Kubernetes clusters that burn through a $100 student credit in 3 weeks), PRAHARI was engineered from day one with **credit-preservation guardrails**:
+Unlike traditional enterprise health platforms that demand expensive, continuous infrastructure (e.g. 24/7 dedicated PostgreSQL servers, GPU inference nodes, and multi-tenant Kubernetes clusters that burn through a $100 student credit in 3 weeks), Munzir was engineered from day one with **credit-preservation guardrails**:
 
-| Architecture Attribute | Typical Cloud Trap | PRAHARI Student-Safe Design | Azure Cost Impact |
+| Architecture Attribute | Typical Cloud Trap | Munzir Student-Safe Design | Azure Cost Impact |
 |---|---|---|---|
 | **Database & Lakehouse** | Continuous Azure PostgreSQL Flexible Server ($25–$50/mo) | **Self-Contained Parquet Lakehouse** (<50 MB total on disk) | **$0.00** (Included in container / 5 GB free Blob) |
 | **Compute & Serving** | App Service Always-On / AKS Cluster ($70+/mo) | **Azure Container Apps with Scale-to-Zero** (`minReplicas: 0`) | **$0.00** (Within free 180,000 vCPU-sec/month) |
@@ -27,11 +27,11 @@ Azure for Students grants users $100 in initial credits plus 12 months of free s
 
 1. **Azure Container Apps:**
    - **Monthly Free Allowance:** 180,000 vCPU-seconds + 360,000 GiB-seconds + 2 million HTTP requests free per month.
-   - **PRAHARI Usage:** Configured at 0.5 vCPU and 1.0 GiB RAM with `minReplicas: 0`. It only runs when an evaluator or judge opens the URL. During a 7-minute live pitch or 100 interactive evaluation sessions, PRAHARI consumes < 1,500 vCPU-seconds (<1% of the free monthly grant).
+   - **Munzir Usage:** Configured at 0.5 vCPU and 1.0 GiB RAM with `minReplicas: 0`. It only runs when an evaluator or judge opens the URL. During a 7-minute live pitch or 100 interactive evaluation sessions, Munzir consumes < 1,500 vCPU-seconds (<1% of the free monthly grant).
 2. **Azure Static Web Apps / Container Ingress:**
    - Standard TLS/SSL certificates and custom domain ingress are completely free.
 3. **Azure Blob Storage (Optional Cloud Offload):**
-   - 5 GB LRS storage free for 12 months (PRAHARI's 3-year lakehouse uses ~48 MB).
+   - 5 GB LRS storage free for 12 months (Munzir's 3-year lakehouse uses ~48 MB).
 
 ---
 

@@ -8,13 +8,13 @@
 
 ## Part 1: TRIPOD+AI Prediction Model Reporting Checklist
 
-PRAHARI adheres to the TRIPOD+AI reporting guidelines for clinical and population health prediction models utilizing machine learning:
+Munzir adheres to the TRIPOD+AI reporting guidelines for clinical and population health prediction models utilizing machine learning:
 
-| Item # | TRIPOD+AI Domain | Guideline Requirement | PRAHARI Operational Implementation | Evidence / Document Reference |
+| Item # | TRIPOD+AI Domain | Guideline Requirement | Munzir Operational Implementation | Evidence / Document Reference |
 |---|---|---|---|---|
-| **1** | **Title** | Identify the study as developing or validating a prediction model using ML. | *PRAHARI: Calibrated Multi-Signal Early Warning and Spatial Cluster Surveillance System.* | `README.md`, `docs/model_card.md` |
+| **1** | **Title** | Identify the study as developing or validating a prediction model using ML. | *Munzir: Calibrated Multi-Signal Early Warning and Spatial Cluster Surveillance System.* | `README.md`, `docs/model_card.md` |
 | **2** | **Abstract** | Structured summary of objectives, design, setting, participants, predictors, outcome, validation, results, and limitations. | Included in executive summary and Model Card Section 1–5. | `docs/model_card.md` |
-| **3a** | **Background** | Clinical and public health rationale for the prediction model. | Explains the shift from retrospective syndromic surveillance to prospective exposure-aware early warning. | `PRAHARI_Prototype_Implementation_Plan.md` |
+| **3a** | **Background** | Clinical and public health rationale for the prediction model. | Explains the shift from retrospective syndromic surveillance to prospective exposure-aware early warning. | `Munzir_Prototype_Implementation_Plan.md` |
 | **3b** | **Objectives** | Explicit statement of intended use and target decision makers. | Surveillance officers (DHA), labor inspectors (MOHRE), and site safety managers. | `docs/model_card.md`, `playbooks/` |
 | **4** | **Data Source** | Describe data sources, origin, collection procedures, and dates. | Open-Meteo, OpenAQ, DHA syndromic simulator, MOHRE workplace absence registry (2024–2026). | `docs/datasheets/` |
 | **5** | **Participants / Units** | Describe the target population, geographic coverage, and eligibility. | Monitored districts across Dubai and Northern Emirates; minimum worksite cohort $N \ge 50$. | `prahari/api/employer_service.py` |
@@ -35,7 +35,7 @@ PRAHARI adheres to the TRIPOD+AI reporting guidelines for clinical and populatio
 
 ## Part 2: DECIDE-AI Operational Clinical Evaluation Framework
 
-PRAHARI positions its early-stage deployment within the **DECIDE-AI Stage 2 Framework** (Small-scale live clinical and operational safety evaluation):
+Munzir positions its early-stage deployment within the **DECIDE-AI Stage 2 Framework** (Small-scale live clinical and operational safety evaluation):
 
 ### 1. Stage of AI System (Stage 2: Operational Shadow Mode)
 - **Deployment Mode:** 12-week prospective shadow-mode pilot alongside current municipal practice.

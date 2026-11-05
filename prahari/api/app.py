@@ -1,5 +1,5 @@
 """
-FastAPI Application for the PRAHARI Early-Warning Platform.
+FastAPI Application for the Munzir (منذر) Early-Warning Platform.
 Serves role-based REST APIs and responsive Single Page Application UI.
 Enforces Entra ID app roles, differential privacy, and occupational privacy boundaries.
 """
@@ -53,7 +53,7 @@ STATIC_DIR = Path(__file__).resolve().parent / "static"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
-    title="PRAHARI Health Early-Warning Platform",
+    title="Munzir (منذر) Health Early-Warning Platform",
     description="Role-based, privacy-preserving population and occupational health surveillance engine.",
     version="1.0.0",
 )
@@ -401,8 +401,8 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 def serve_index() -> HTMLResponse:
-    """Serves the PRAHARI Front-End Single Page Application."""
+    """Serves the Munzir Front-End Single Page Application."""
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
         return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
-    return HTMLResponse("<h1>PRAHARI Health Early-Warning Platform</h1><p>UI loading...</p>")
+    return HTMLResponse("<h1>Munzir Health Early-Warning Platform</h1><p>UI loading...</p>")

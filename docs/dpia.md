@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary & Processing Context
 
-PRAHARI is a multi-signal population and occupational health surveillance engine designed to detect emergent environmental illness surges, localized communicable clusters, and hazardous occupational exposure spikes with advance lead time.
+Munzir is a multi-signal population and occupational health surveillance engine designed to detect emergent environmental illness surges, localized communicable clusters, and hazardous occupational exposure spikes with advance lead time.
 
 The system processes **zero direct personal identifiable information (PII)** and operates under a strict **privacy-by-design** and **privacy-by-default** mandate.
 

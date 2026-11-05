@@ -38,6 +38,10 @@ class PrahariAlert:
     is_suppressed_decoy: bool = False
 
 
+# Munzir (منذر) Brand Alias
+MunzirAlert = PrahariAlert
+
+
 class L5AlertPolicyEngine:
     """
     Evaluates calibrated probabilities against multi-signal corroboration,

@@ -1,4 +1,4 @@
-# PRAHARI Enterprise Security & Cloud Reference Architecture
+# Munzir Enterprise Security & Cloud Reference Architecture
 
 **Document Version:** 1.0  
 **Last Updated:** November 2026  
@@ -9,7 +9,7 @@
 
 ## 1. Cloud Architecture Overview
 
-PRAHARI is deployed on Microsoft Azure using a cloud-native, serverless, and containerized architecture designed for high availability, zero-trust network boundaries, and automatic scale-to-zero when idle.
+Munzir is deployed on Microsoft Azure using a cloud-native, serverless, and containerized architecture designed for high availability, zero-trust network boundaries, and automatic scale-to-zero when idle.
 
 ```
                            [External Traffic (HTTPS TLS 1.3)]
@@ -62,7 +62,7 @@ PRAHARI is deployed on Microsoft Azure using a cloud-native, serverless, and con
 
 ### 4. Least-Privilege Entra ID Role-Based Access Control (RBAC)
 
-PRAHARI maps user identity tokens directly to discrete Entra ID Application Roles:
+Munzir maps user identity tokens directly to discrete Entra ID Application Roles:
 
 | Entra ID App Role | Permitted Operational Scope | Prohibited Actions (Enforced at API Gateway) |
 |---|---|---|

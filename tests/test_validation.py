@@ -210,7 +210,7 @@ def test_validation_orchestrator_end_to_end_and_report():
     content = report_file.read_text(encoding="utf-8")
 
     # Verify key sections in the generated HTML report
-    assert "PRAHARI Operational Validation Report" in content
+    assert "Operational Validation Report" in content
     assert "Side-by-Side Baseline Comparison" in content
     assert "Activity Monitoring Operating Characteristic" in content
     assert "Probability Calibration (Reliability Diagram)" in content

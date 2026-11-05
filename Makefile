@@ -3,7 +3,7 @@
 PYTHON := ./bin/py
 
 help:
-	@echo "PRAHARI Early Warning Platform - Automation"
+	@echo "Munzir (منذر) Early Warning Platform - Automation"
 	@echo "====================================================="
 	@echo "  make backfill          : Reproduce 3+ years of bronze lakehouse data"
 	@echo "  make backfill-quick    : Reproduce 1 year of bronze lakehouse data"
@@ -21,7 +21,7 @@ help:
 	@echo "  make playbooks         : List registered action playbooks and RACI matrix"
 	@echo "  make evidence-card     : Generate and display decision-ready Evidence Card (<2s)"
 	@echo "  make test-decision     : Run Phase 4 decision support unit tests"
-	@echo "  make serve             : Launch PRAHARI web application and role-based API"
+	@echo "  make serve             : Launch Munzir web application and role-based API"
 	@echo "  make test-api          : Run Phase 5 RBAC, privacy boundary & API unit tests"
 	@echo "  make test              : Run full unit test suite"
 	@echo "  make clean             : Clean local test caches"

@@ -104,6 +104,6 @@ def test_api_get_policy_report_markdown():
     response = client.get("/api/v1/impact/policy-report/markdown", headers={"X-Role": "regulator"})
     assert response.status_code == 200
     text = response.text
-    assert "# PRAHARI Regulatory Policy Evidence Brief" in text
+    assert "Regulatory Policy Evidence Brief" in text
     assert "District Exposure Burden Summary" in text
 
