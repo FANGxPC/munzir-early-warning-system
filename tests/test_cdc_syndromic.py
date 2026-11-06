@@ -99,3 +99,4 @@ def test_cdc_syndromic_environmental_coupling():
 
     # Heatwave should induce higher or equal heat emergency visits
     assert heat_ext_val >= heat_mod_val
+

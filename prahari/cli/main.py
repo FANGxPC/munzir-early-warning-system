@@ -311,6 +311,42 @@ def cmd_ingest_real(args: argparse.Namespace) -> None:
     print("=" * 70)
 
 
+def cmd_clinical_profile(args: argparse.Namespace) -> None:
+    """Evaluate clinical pharmacological vulnerability using openFDA and DailyMed."""
+    from prahari.ingestion.openfda import ClinicalVulnerabilityEngine
+    engine = ClinicalVulnerabilityEngine()
+    hazard = args.hazard
+    sev = args.severity
+    env = {}
+    if args.wbgt is not None:
+        env["wbgt_max"] = args.wbgt
+    if args.pm25 is not None:
+        env["pm25"] = args.pm25
+
+    profile = engine.evaluate_vulnerability_profile(
+        alert_type=f"{hazard}_cluster",
+        severity=sev,
+        environmental_metrics=env,
+    )
+    print("=" * 70)
+    print("Munzir Clinical Pharmacological Vulnerability Profile (openFDA / DailyMed)")
+    print("=" * 70)
+    print(f"Hazard:                        {profile['environmental_hazard_type']}")
+    print(f"Severity:                      {sev.upper()}")
+    print(f"Vulnerability Tier:            {profile['vulnerability_tier']}")
+    print(f"Pharmacological Index (PVI):   {profile['pharmacological_vulnerability_index']}x baseline susceptibility")
+    print(f"Estimated Cohort Vulnerable:   {profile['estimated_affected_workforce_pct']}% of workforce")
+    print(f"\nIdentified High-Risk Medication Classes ({profile['evaluated_drug_classes_count']}):")
+    for d in profile["high_risk_drug_classes"]:
+        print(f"  • {d['class_name']} ({', '.join(d['representative_drugs'][:3])})")
+        print(f"    Mechanism: {d['physiological_mechanism'][:90]}...")
+        print(f"    Prevalence: ~{d['estimated_workforce_prevalence_pct']}% | FDA Warnings: {', '.join(d['adverse_reaction_terms'][:3])}")
+    print("\nActionable Clinical Directives:")
+    for a in profile["clinical_directives"]:
+        print(f"  [!] {a}")
+    print("=" * 70)
+
+
 def cmd_harmonise(args: argparse.Namespace) -> None:
     """Run Bronze-to-Silver Harmonisation with spatial H3 mapping and suppression."""
     start_time = time.time()
@@ -876,6 +912,14 @@ def main() -> None:
     p_ingest_real.add_argument("--end-date", type=str, default=None, help="End date YYYY-MM-DD")
     p_ingest_real.add_argument("--region", type=str, default="uae", choices=["uae", "tamilnadu"], help="Regional profile")
     p_ingest_real.set_defaults(func=cmd_ingest_real)
+
+    # clinical-profile
+    p_clin = subparsers.add_parser("clinical-profile", help="Evaluate clinical medication vulnerability from openFDA")
+    p_clin.add_argument("--hazard", type=str, default="heat", choices=["heat", "respiratory"], help="Hazard type")
+    p_clin.add_argument("--severity", type=str, default="warning", choices=["watch", "warning", "alert"], help="Alert severity")
+    p_clin.add_argument("--wbgt", type=float, default=32.5, help="WBGT temperature in Celsius")
+    p_clin.add_argument("--pm25", type=float, default=None, help="PM2.5 concentration in ug/m3")
+    p_clin.set_defaults(func=cmd_clinical_profile)
 
     # run-daily
     p_daily = subparsers.add_parser("run-daily", help="Run single day ingestion timer pipeline")

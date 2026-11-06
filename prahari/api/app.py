@@ -57,6 +57,7 @@ from prahari.models.canonical import (
     SentinelNodeStatus,
 )
 from prahari.ingestion.sentinel_ingest import SentinelIngestionEngine
+from prahari.ingestion.openfda import ClinicalVulnerabilityEngine
 import numpy as np
 
 # Directories
@@ -577,6 +578,34 @@ def silence_sentinel_test_buzzer(node_id: str) -> JSONResponse:
     """Silences the test buzzer on node."""
     res = sentinel_engine.clear_test_alert_level(node_id)
     return JSONResponse(content={"status": "buzzer_silenced", **res})
+
+
+clinical_engine = ClinicalVulnerabilityEngine()
+
+
+@app.get("/api/v1/clinical/vulnerability-profile", response_class=JSONResponse)
+def get_clinical_vulnerability_profile(
+    hazard: str = "heat",
+    severity: str = "warning",
+    wbgt: Optional[float] = None,
+    pm25: Optional[float] = None,
+) -> JSONResponse:
+    """
+    Returns clinical pharmacological vulnerability evaluation derived from
+    openFDA Drug Label warnings and DailyMed thermoregulatory risk classes.
+    """
+    env_metrics = {}
+    if wbgt is not None:
+        env_metrics["wbgt_max"] = wbgt
+    if pm25 is not None:
+        env_metrics["pm25"] = pm25
+
+    profile = clinical_engine.evaluate_vulnerability_profile(
+        alert_type=f"{hazard}_cluster",
+        severity=severity,
+        environmental_metrics=env_metrics,
+    )
+    return JSONResponse(content=profile)
 
 
 # --- 10. Web Single Page Application (Static UI) ---

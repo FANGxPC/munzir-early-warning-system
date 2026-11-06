@@ -163,3 +163,4 @@ class CDCSyndromicIngestor:
             )
 
         return observations
+

@@ -176,7 +176,15 @@
               <input type="checkbox" id="toggleClinical" checked>
               <span class="slider"></span>
             </div>
-            <span><b>Clinical Syndromic EHR Feed</b> (MoHAP Stream)</span>
+            <span><b>Clinical Syndromic Stream</b> (CDC NSSP / MoHAP)</span>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleSentinel" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>Sentinel Micro-Weather Mesh</b> (ESP32 On-Site)</span>
           </label>
 
           <label class="toggle-label">
@@ -184,7 +192,7 @@
               <input type="checkbox" id="toggleWeather" checked>
               <span class="slider"></span>
             </div>
-            <span><b>Weather / WBGT Telemetry</b> (Open-Meteo)</span>
+            <span><b>Regional Weather / WBGT</b> (Open-Meteo)</span>
           </label>
 
           <label class="toggle-label">
@@ -193,6 +201,22 @@
               <span class="slider"></span>
             </div>
             <span><b>Air Quality Telemetry</b> (OpenAQ PM2.5)</span>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleOsha" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>OSHA Severe Injury Reports</b> (US DOL / Workplace)</span>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-switch">
+              <input type="checkbox" id="toggleOpenFda" checked>
+              <span class="slider"></span>
+            </div>
+            <span><b>Pharmacological Vulnerability</b> (openFDA / DailyMed)</span>
           </label>
         </div>
 

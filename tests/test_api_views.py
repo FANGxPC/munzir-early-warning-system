@@ -207,3 +207,38 @@ def test_static_index_html_serving(client):
     assert "Alert Inbox" in response.text
     assert "Employer Safety View" in response.text
 
+
+def test_clinical_vulnerability_profile_endpoint(client):
+    """
+    GET /api/v1/clinical/vulnerability-profile returns real openFDA / DailyMed
+    pharmacological susceptibility metrics and high-risk drug classes.
+    """
+    response = client.get("/api/v1/clinical/vulnerability-profile")
+    assert response.status_code == 200
+    data = response.json()
+    assert "pharmacological_vulnerability_index" in data
+    assert data["pharmacological_vulnerability_index"] >= 1.0
+    assert data["vulnerability_tier"] in ["MODERATE", "HIGH", "CRITICAL"]
+    classes = data.get("high_risk_drug_classes") or data.get("high_risk_classes")
+    assert len(classes) >= 4
+    first_class = classes[0]
+    assert "class_name" in first_class
+    assert "physiological_mechanism" in first_class
+    assert "clinical_mitigation_action" in first_class or "clinical_guidance" in first_class
+
+
+def test_data_health_feeds_coverage(client):
+    """
+    GET /api/v1/health/feeds returns complete real-time ingestion streams:
+    CDC NSSP, Open-Meteo, OpenAQ, OSHA, openFDA, and Sentinel IoT mesh.
+    """
+    response = client.get("/api/v1/health/feeds")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["composite_dq_score"] > 0.0
+    assert len(data["feeds"]) >= 7
+    feed_keys = [f["feed_key"] for f in data["feeds"]]
+    for expected in ["sentinel", "weather", "air_quality", "clinical", "osha", "openfda", "pharmacy"]:
+        assert expected in feed_keys, f"Missing expected feed {expected}"
+
+

@@ -64,6 +64,24 @@ class MissingDataDemoService:
                     f"Composite DQ decreased to {after_dq:.2f}. Conformal interval widened to [{after_ci[0]:.2f}, {after_ci[1]:.2f}]. "
                     "Respiratory cross-attribution weight shifted to clinical syndromic feed. Suppressed False Alarm."
                 )
+            elif feed == "sentinel":
+                impact = (
+                    "Sentinel ESP32 on-site micro-weather mesh disconnected: Real-time on-site WBGT telemetry offline. "
+                    f"Composite DQ decreased to {after_dq:.2f}. Conformal interval widened to [{after_ci[0]:.2f}, {after_ci[1]:.2f}]. "
+                    "System automatically fell back to regional Open-Meteo spatial interpolation grid."
+                )
+            elif feed == "osha":
+                impact = (
+                    "OSHA Severe Injury feed disconnected: Live workplace incident surveillance offline. "
+                    f"Composite DQ decreased to {after_dq:.2f}. Conformal interval widened to [{after_ci[0]:.2f}, {after_ci[1]:.2f}]. "
+                    "Worksite heat/fall correlation defaulted to regional proxy baselines."
+                )
+            elif feed == "openfda":
+                impact = (
+                    "openFDA / DailyMed feed disconnected: Pharmacological vulnerability index (PVI) offline. "
+                    f"Composite DQ decreased to {after_dq:.2f}. Conformal interval widened to [{after_ci[0]:.2f}, {after_ci[1]:.2f}]. "
+                    "Clinical susceptibility engine fell back to standard population heat guidelines."
+                )
             else:
                 impact = f"Feed '{feed}' disabled: Composite DQ score updated to {after_dq:.2f}. Conformal interval widened to [{after_ci[0]:.2f}, {after_ci[1]:.2f}]. Suppressed False Alarm."
 

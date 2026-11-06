@@ -373,6 +373,38 @@ async function viewEvidenceCard(alertId) {
         </div>
       </div>
 
+      <!-- Clinical Pharmacological Vulnerability (openFDA / DailyMed) -->
+      ${card.clinical_vulnerability ? `
+      <div class="kpi-card" style="margin-bottom:1.5rem; border-left:4px solid #ec4899;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="kpi-title" style="color:#f472b6; margin-bottom:0;">Clinical Pharmacological Susceptibility (openFDA / DailyMed SPL)</div>
+          <span class="badge ${card.clinical_vulnerability.vulnerability_tier === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}">
+            PVI: ${(card.clinical_vulnerability.pharmacological_vulnerability_index || 0).toFixed(2)} (${card.clinical_vulnerability.vulnerability_tier})
+          </span>
+        </div>
+        <p style="font-size:0.75rem; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
+          Source: ${card.clinical_vulnerability.regulatory_source || 'US FDA Structured Product Labeling (SPL) Adverse Reactions'} — Medication classes impairing worker thermoregulation and respiratory clearance under thermal/PM2.5 stress.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          ${(card.clinical_vulnerability.high_risk_classes || card.clinical_vulnerability.high_risk_drug_classes || []).slice(0, 4).map(c => {
+            const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
+            const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
+            return `
+            <div style="background:#0b1120; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #1e293b;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:#f472b6; font-weight:700;">${c.class_name}</span>
+                <span class="badge ${lvl === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem; padding:2px 6px;">${lvl}</span>
+              </div>
+              <div style="color:#94a3b8; font-size:0.75rem; margin-top:3px;"><b>Rx Classes:</b> ${(c.representative_drugs || []).slice(0, 3).join(", ")}</div>
+              <div style="color:#cbd5e1; font-size:0.72rem; margin-top:3px; line-height:1.4;">${c.physiological_mechanism}</div>
+              <div style="color:#38bdf8; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
+            </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+      ` : ''}
+
       <!-- RACI Matrix Table -->
       <div class="kpi-card" style="margin-bottom:1.5rem;">
         <div class="kpi-title">RACI Governance Stakeholder Mapping</div>
@@ -622,8 +654,11 @@ async function loadDataHealthView() {
 function setupDemoToggles() {
   const toggles = [
     { id: "toggleClinical", feed: "clinical" },
+    { id: "toggleSentinel", feed: "sentinel" },
     { id: "toggleWeather", feed: "weather" },
     { id: "toggleAirQuality", feed: "air_quality" },
+    { id: "toggleOsha", feed: "osha" },
+    { id: "toggleOpenFda", feed: "openfda" },
   ];
 
   toggles.forEach(t => {

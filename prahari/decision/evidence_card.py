@@ -17,6 +17,7 @@ from prahari.decision.raci import RACIRoleMatrix, RACIAssignment
 from prahari.decision.playbook_engine import PlaybookEngine, Playbook
 from prahari.decision.acknowledgement import AcknowledgementManager, AlertStatus
 from prahari.decision.narrative import NarrativeGenerator
+from prahari.ingestion.openfda import ClinicalVulnerabilityEngine
 
 
 @dataclass
@@ -52,6 +53,7 @@ class EvidenceCard:
     citations: List[str]
     similar_past_incidents: List[Dict[str, Any]]
     narrative_summary: str
+    clinical_vulnerability: Dict[str, Any] = field(default_factory=dict)
     status: str = "pending"
     generated_at: str = field(default_factory=lambda: datetime.now().isoformat())
     generation_time_ms: float = 0.0
@@ -73,6 +75,7 @@ class EvidenceCardGenerator:
     ):
         self.playbook_engine = playbook_engine or PlaybookEngine()
         self.ack_manager = ack_manager or AcknowledgementManager()
+        self.clinical_engine = ClinicalVulnerabilityEngine()
         self.region_config = get_region_config(region_key)
 
         # Index geo names and levels
@@ -240,7 +243,14 @@ class EvidenceCardGenerator:
             candidate_llm_text=candidate_llm_text,
         )
 
-        # 5. Fetch Operational Status
+        # 5. Evaluate Clinical Medication Vulnerability (openFDA & DailyMed)
+        clinical_profile = self.clinical_engine.evaluate_vulnerability_profile(
+            alert_type=alert.alert_type,
+            severity=alert.severity.value,
+            environmental_metrics=env_context,
+        )
+
+        # 6. Fetch Operational Status
         current_status = self.ack_manager.get_status(alert.alert_id).value
 
         # Past similar incidents
@@ -287,6 +297,7 @@ class EvidenceCardGenerator:
             citations=playbook.references,
             similar_past_incidents=past_incidents,
             narrative_summary=narrative,
+            clinical_vulnerability=clinical_profile,
             status=current_status,
             generation_time_ms=t_elapsed_ms,
         )

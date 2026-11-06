@@ -36,6 +36,9 @@ backfill-quick:
 ingest-real:
 	$(PYTHON) -m prahari ingest-real --region uae
 
+clinical-profile:
+	$(PYTHON) -m prahari clinical-profile --hazard heat --severity alert --wbgt 34.0
+
 harmonise:
 	$(PYTHON) -m prahari harmonise --region uae
 

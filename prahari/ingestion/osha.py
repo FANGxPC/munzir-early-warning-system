@@ -217,3 +217,4 @@ class OSHAIncidentIngestor:
             )
 
         return incidents, observations
+
