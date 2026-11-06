@@ -565,6 +565,20 @@ def acknowledge_sentinel_button(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
+@app.post("/api/v1/sentinel/test-buzzer/{node_id}", response_class=JSONResponse)
+def trigger_sentinel_test_buzzer(node_id: str) -> JSONResponse:
+    """Manually forces Alert level on node to sound the buzzer for demo testing."""
+    res = sentinel_engine.set_test_alert_level(node_id, level="Alert", duration_seconds=120)
+    return JSONResponse(content={"status": "buzzer_triggered", **res})
+
+
+@app.post("/api/v1/sentinel/silence-buzzer/{node_id}", response_class=JSONResponse)
+def silence_sentinel_test_buzzer(node_id: str) -> JSONResponse:
+    """Silences the test buzzer on node."""
+    res = sentinel_engine.clear_test_alert_level(node_id)
+    return JSONResponse(content={"status": "buzzer_silenced", **res})
+
+
 # --- 10. Web Single Page Application (Static UI) ---
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")

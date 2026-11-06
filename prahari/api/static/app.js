@@ -1083,9 +1083,14 @@ async function loadSentinelView(isSilent = false) {
           <td>${lvlBadge}</td>
           <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
           <td>
-            <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
-              ⚡ Test Reading
-            </button>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
+                ${isBuzzerActive ? '🔕 Silence' : '🔊 Test Buzzer'}
+              </button>
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
+                ⚡ Test Reading
+              </button>
+            </div>
           </td>
         </tr>
       `;
@@ -1273,11 +1278,100 @@ async function simulateNodeUpload(nodeId) {
   }
 }
 
+// --- UI Demo Buzzer Sound & Hardware Trigger ---
+let isBuzzerActive = false;
+let audioCtx = null;
+let buzzerInterval = null;
+
+function playUiBuzzerSound() {
+  stopUiBuzzerSound();
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    buzzerInterval = setInterval(() => {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime); // 880 Hz buzzer tone
+      gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12); // 120ms burst
+    }, 250);
+  } catch (e) {
+    console.warn("AudioContext error:", e);
+  }
+}
+
+function stopUiBuzzerSound() {
+  if (buzzerInterval) {
+    clearInterval(buzzerInterval);
+    buzzerInterval = null;
+  }
+  if (audioCtx) {
+    try { audioCtx.close(); } catch (e) {}
+    audioCtx = null;
+  }
+}
+
+async function toggleTestBuzzer(nodeId = "SENT-001") {
+  const btn = document.getElementById(`buzzerBtn_${nodeId}`) || document.getElementById("globalBuzzerBtn");
+
+  if (!isBuzzerActive) {
+    // Turn ON
+    isBuzzerActive = true;
+    if (btn) {
+      btn.textContent = "🔕 Silence";
+      btn.style.background = "#475569";
+    }
+    const globalBtn = document.getElementById("globalBuzzerBtn");
+    if (globalBtn) {
+      globalBtn.textContent = "🔕 Silence Alarm";
+      globalBtn.style.background = "#475569";
+    }
+
+    // 1. Play real audible buzzer through laptop/browser speakers immediately
+    playUiBuzzerSound();
+
+    // 2. Dispatch API call to force Alert level on hardware node
+    try {
+      await apiFetch(`/api/v1/sentinel/test-buzzer/${nodeId}`, { method: "POST" });
+    } catch (err) {
+      console.warn("Hardware buzzer call:", err);
+    }
+    loadSentinelView(true);
+
+  } else {
+    // Turn OFF
+    isBuzzerActive = false;
+    stopUiBuzzerSound();
+
+    if (btn) {
+      btn.textContent = "🔊 Test Buzzer";
+      btn.style.background = "#dc2626";
+    }
+    const globalBtn = document.getElementById("globalBuzzerBtn");
+    if (globalBtn) {
+      globalBtn.textContent = "🔊 Test Buzzer Alarm";
+      globalBtn.style.background = "#dc2626";
+    }
+
+    try {
+      await apiFetch(`/api/v1/sentinel/silence-buzzer/${nodeId}`, { method: "POST" });
+    } catch (err) {
+      console.warn("Hardware silence call:", err);
+    }
+    loadSentinelView(true);
+  }
+}
+
 // Live auto-refresh: Polls every 3 seconds when Sentinel tab is active
 setInterval(() => {
   if (state.activeTab === "sentinel") {
     loadSentinelView(true);
   }
 }, 3000);
+
 
 

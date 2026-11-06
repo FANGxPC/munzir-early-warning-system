@@ -63,17 +63,6 @@ volatile bool buttonPressedFlag = false;
 unsigned long lastButtonInterrupt = 0;
 
 String currentAlertLevel = "None"; // None, Watch, Warning, Alert
-float lastObservedGlobeTemp = 0.0;
-
-// --- Universal Buzzer Drivers (Supports BOTH Active & Passive Piezo Buzzers) ---
-void buzzerBeepOn() {
-  tone(PIN_BUZZER, 2400); // 2.4 kHz audible oscillation
-}
-
-void buzzerBeepOff() {
-  noTone(PIN_BUZZER);
-  digitalWrite(PIN_BUZZER, LOW);
-}
 
 // --- BOOT Button Interrupt Service Routine ---
 void IRAM_ATTR handleButtonInterrupt() {
@@ -108,27 +97,31 @@ void updateBuzzerPattern() {
   unsigned long now = millis();
 
   if (isOfflineMode) {
-    buzzerBeepOff();
+    // Silent in offline fail-safe
+    digitalWrite(PIN_BUZZER, LOW);
     return;
   }
 
-  // Trigger alarm if server level is Alert/Warning, OR if globe probe exceeds 35°C (demo hand-warming test!)
-  bool hazardActive = (currentAlertLevel == "Alert") || (currentAlertLevel == "Warning") || (lastObservedGlobeTemp > 35.0);
-
-  if (hazardActive) {
-    // Fast Alarm: 4 beeps per second (125ms ON / 125ms OFF)
+  if (currentAlertLevel == "Alert") {
+    // Emergency Hazard Alert: Fast alarm (250ms cycle: 125ms ON / 125ms OFF)
     bool beepState = (now % 250) < 125;
-    if (beepState) buzzerBeepOn(); else buzzerBeepOff();
+    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
+
+  } else if (currentAlertLevel == "Warning") {
+    // Preventive Warning: Double chirp every second [100ms ON, 100ms OFF, 100ms ON, 700ms OFF]
+    unsigned long cycle = now % 1000;
+    bool beepState = (cycle < 100) || (cycle >= 200 && cycle < 300);
+    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
 
   } else if (currentAlertLevel == "Watch") {
     // Active Watch: Single soft chirp every 2 seconds (80ms ON)
     unsigned long cycle = now % 2000;
     bool beepState = (cycle < 80);
-    if (beepState) buzzerBeepOn(); else buzzerBeepOff();
+    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
 
   } else {
-    // Normal / Baseline: Completely silent
-    buzzerBeepOff();
+    // Normal / Baseline (<28°C): Completely silent
+    digitalWrite(PIN_BUZZER, LOW);
   }
 }
 
@@ -172,7 +165,6 @@ void uploadTelemetry() {
 
   bool dhtOk = (!isnan(airTemp) && !isnan(humidity) && airTemp > -10.0 && airTemp < 65.0 && humidity >= 0 && humidity <= 100);
   bool globeOk = (!isnan(globeTemp) && globeTemp > -10.0 && globeTemp < 85.0 && globeTemp != -127.0 && globeTemp != 85.0);
-  lastObservedGlobeTemp = globeOk ? globeTemp : 0.0;
 
   float wbgtEst = 0.0;
   if (dhtOk) {
@@ -311,10 +303,10 @@ void sendButtonAck() {
   if (code == 200) {
     Serial.println("[Ack] Confirmed by central server.");
     // Audio feedback: Two quick chirps
-    buzzerBeepOn();  delay(80);
-    buzzerBeepOff(); delay(60);
-    buzzerBeepOn();  delay(80);
-    buzzerBeepOff();
+    digitalWrite(PIN_BUZZER, HIGH); delay(80);
+    digitalWrite(PIN_BUZZER, LOW);  delay(60);
+    digitalWrite(PIN_BUZZER, HIGH); delay(80);
+    digitalWrite(PIN_BUZZER, LOW);
   }
   http.end();
 }
@@ -329,12 +321,12 @@ void setup() {
 
   // Configure Buzzer Pin
   pinMode(PIN_BUZZER, OUTPUT);
-  buzzerBeepOff();
+  digitalWrite(PIN_BUZZER, LOW);
 
-  // Power-on test beep (confirms buzzer is connected)
-  buzzerBeepOn();
-  delay(150);
-  buzzerBeepOff();
+  // Power-on test chirp (confirms buzzer is connected)
+  digitalWrite(PIN_BUZZER, HIGH);
+  delay(120);
+  digitalWrite(PIN_BUZZER, LOW);
 
   // Configure on-board BOOT button
   pinMode(PIN_BOOT_BUTTON, INPUT_PULLUP);
