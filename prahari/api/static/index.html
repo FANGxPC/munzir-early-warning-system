@@ -546,7 +546,10 @@
       <div class="card" style="margin-bottom:1.25rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
           <h3 style="font-size:1rem; font-weight:700;">📡 Live Node Fleet Telemetry</h3>
-          <span style="font-size:0.75rem; color:#94a3b8;">Updates every 60s from physical hardware</span>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.65rem;" onclick="loadSentinelView(false)">🔄 Refresh</button>
+            <span style="font-size:0.75rem; color:#94a3b8;">Auto-refreshes every 3s</span>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="data-table">

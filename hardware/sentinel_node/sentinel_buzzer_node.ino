@@ -38,7 +38,7 @@
 // Node & Security Parameters
 #define NODE_ID           "SENT-001"
 #define SENTINEL_API_KEY  "munzir_sentinel_secret_2026"
-#define UPLOAD_INTERVAL_MS 60000   // Telemetry sample rate: 60 seconds
+#define UPLOAD_INTERVAL_MS 5000    // Telemetry sample rate: 5 seconds (responsive live updates)
 
 // =============================================================
 // 2. PIN ASSIGNMENTS

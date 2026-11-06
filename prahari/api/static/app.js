@@ -1002,12 +1002,14 @@ async function exportPolicyMarkdown() {
 
 // --- 8. Munzir Sentinel Hardware Integration View ---
 
-async function loadSentinelView() {
+async function loadSentinelView(isSilent = false) {
   const tbody = document.getElementById("sentinelNodesTableBody");
   const compContainer = document.getElementById("microclimateComparisonContent");
   if (!tbody) return;
 
-  tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+  if (!isSilent) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+  }
 
   try {
     const nodes = await apiFetch("/api/v1/sentinel/nodes");
@@ -1270,5 +1272,12 @@ async function simulateNodeUpload(nodeId) {
     alert("Telemetry test failed: " + err.message);
   }
 }
+
+// Live auto-refresh: Polls every 3 seconds when Sentinel tab is active
+setInterval(() => {
+  if (state.activeTab === "sentinel") {
+    loadSentinelView(true);
+  }
+}, 3000);
 
 
