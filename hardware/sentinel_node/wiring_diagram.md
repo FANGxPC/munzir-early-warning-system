@@ -63,3 +63,4 @@ DS18B20 DATA ────►┤ [GPIO 18]   [GPIO 25]├─► [220Ω] ──►
 2. **Resistor check:** Ensure a 4.7 kΩ resistor bridges DS18B20 Data (GPIO 18) and 3.3V.
 3. **Data USB Cable:** Ensure your micro-USB cable carries data lines (D+/D-) rather than power-only charging.
 4. **Matte-Black Globe:** Spray ping-pong ball with flat/matte black paint to approximate standard black globe radiative absorption ($0.95$ emissivity).
+

@@ -313,3 +313,4 @@ def test_api_sentinel_upload_uncommissioned_returns_404():
     res = client.post("/api/v1/sentinel/upload", json=up_payload)
     assert res.status_code == 404
     assert "not commissioned" in res.json()["detail"]
+

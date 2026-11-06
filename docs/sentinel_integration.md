@@ -141,3 +141,4 @@ When an on-site operator presses the physical **BOOT button** on the ESP32:
 1. **Estimated vs. Direct Natural Wet-Bulb:** Stull's equation is a psychrometric approximation. It serves as an on-site screening indicator, not an ISO 7243 calibrated reference standard.
 2. **Small-Globe Approximation:** A matte-black ping-pong ball (40mm) responds faster to radiative changes than a standard 150mm Vernon black globe, resulting in minor thermal inertia differences.
 3. **Demo-Grade Transport Security:** The prototype utilizes a shared API key (`X-Sentinel-Key`). Enterprise production deployments will utilize Azure IoT Hub with per-device X.509 certificates and TPM 2.0 security.
+

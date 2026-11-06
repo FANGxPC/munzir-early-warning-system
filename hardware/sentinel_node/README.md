@@ -50,3 +50,4 @@ Open **Arduino IDE** $\to$ **Tools** $\to$ **Manage Libraries...** and install:
 6. Click **📱 Use This Device's Location** to grab browser GPS, or set coordinates.
 7. Click **✔ Complete Commissioning**.
 8. Within 60 seconds, the node table will update, showing the live measured WBGT, sensors status, and driving the on-board RGB LED to match the platform's alert level!
+

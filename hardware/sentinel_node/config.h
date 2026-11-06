@@ -40,3 +40,4 @@
 #define INDOOR_MODE_DEFAULT  false
 
 #endif // SENTINEL_CONFIG_H
+

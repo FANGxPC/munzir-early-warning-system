@@ -407,3 +407,4 @@ class SentinelIngestionEngine:
             f.write(json.dumps(ack_record) + "\n")
 
         return ack_record
+
