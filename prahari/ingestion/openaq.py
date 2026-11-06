@@ -110,7 +110,8 @@ class OpenAQClient:
         end_dt = datetime.strptime(end_date, "%Y-%m-%d")
         total_days = (end_dt - start_dt).days + 1
 
-        seed = int(abs(hash(station_id))) % 100000
+        import hashlib
+        seed = int(hashlib.md5(station_id.encode("utf-8")).hexdigest()[:8], 16) % 100000
         rng = np.random.RandomState(seed)
 
         records = []

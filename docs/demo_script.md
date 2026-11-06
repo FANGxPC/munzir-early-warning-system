@@ -22,8 +22,9 @@
 04:25 - 04:55  Decoy Filtering: Reporting Backlog Suppression
 04:55 - 05:40  Validation Harness: Empirical Proof & AMOC Curve (report.html)
 05:40 - 06:15  Impact Calculator: $1.86M Net Benefit & Live Sliders
-06:15 - 06:40  Responsible AI: 7/7 Passing Guardrails & Zero-PII Guarantee
-06:40 - 07:00  The Ask: 12-Week Shadow-Mode Pilot
+06:15 - 07:15  Live Hardware Demo: Munzir Sentinel (ESP32 On-Site WBGT Node & On-Board LED)
+07:15 - 07:40  Responsible AI: 7/7 Passing Guardrails & Zero-PII Guarantee
+07:40 - 08:00  The Ask: 12-Week Shadow-Mode Pilot
 ```
 
 ---
@@ -111,7 +112,24 @@
 
 ---
 
-### Segment 9 (06:15 – 06:40): Responsible AI & Safety Guardrails (7/7 Passing)
+### Segment 8b (06:15 – 07:15): Live Hardware Demo — Munzir Sentinel Node
+* **Visual:** Switch to the **🔧 Sentinel Hardware** tab on the dashboard, with the physical ESP32 node placed on the presenter table (or `make sentinel-replay` running as backup).
+* **Click Action:** Show `SENT-001` running with on-site WBGT of 33.2°C vs. Open-Meteo regional model of 31.8°C (+1.4°C microclimate delta).
+* **Demonstration Action:** 
+  1. Warm the matte-black globe / DHT22 slightly (or run a test reading via `⚡ Test Reading`).
+  2. Point to the physical ESP32 on-board RGB LED transitioning from solid green $\to$ double orange blink (*Warning*).
+  3. Press the physical **BOOT button** on the ESP32: show the cyan confirmation flash and the non-repudiation on-site acknowledgement entry appearing live in the platform log.
+  4. Toggle the hotspot off (or simulate network disconnect): observe the node entering fail-safe blue-blip offline mode while the dashboard flags a graceful Data Quality degradation.
+* **Spoken Pitch:**
+  > *"Now, here is something unique: software alone cannot feel radiant heat off asphalt and structural steel. That is why we built **Munzir Sentinel** — an ultra-low-cost, shade-mounted ESP32 hardware node.*  
+  > *It reads ambient air temperature, relative humidity, and black-globe radiant temperature every 60 seconds, re-deriving true on-site WBGT.*  
+  > *Notice the dashboard: while the regional Open-Meteo satellite model predicts 31.8°C, our on-site Sentinel catches a **33.2°C microclimate hotspot** right at the steel yard!*  
+  > *In the upload response, Munzir returns the active alert level, driving this physical RGB LED on the device: green for normal, orange for warning, fast-red for stop-work.*  
+  > *When frontline workers press this physical BOOT button, it logs an on-site acknowledgement. And if the network drops, the node blinks a blue-blip fail-safe pattern while Munzir widens its conformal uncertainty intervals without hallucinating."*
+
+---
+
+### Segment 9 (07:15 – 07:40): Responsible AI & Safety Guardrails (7/7 Passing)
 * **Visual:** Switch to Slide 9 showing the Governance Scorecard and Model Card links.
 * **Spoken Pitch:**
   > *"We built Munzir with Responsible AI at its core. Our codebase includes Mitchell-compliant Model Cards, Gebru Datasheets for all 5 feeds, a full UAE PDPL DPIA, and 7 automated runtime safety controls.*  
@@ -119,7 +137,7 @@
 
 ---
 
-### Segment 10 (06:40 – 07:00): The Ask — 12-Week Shadow-Mode Pilot
+### Segment 10 (07:40 – 08:00): The Ask — 12-Week Shadow-Mode Pilot
 * **Visual:** Slide 10: "From Hackathon to Impact" — Pilot timeline and partner logos.
 * **Spoken Pitch:**
   > *"Munzir is completely packaged, containerized, and deployed with zero idle cost on Azure for Students. It exports standard HL7 FHIR R4 MeasureReports ready for DHA NABIDH and Malaffi integration.*  

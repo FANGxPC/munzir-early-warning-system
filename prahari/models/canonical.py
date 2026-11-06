@@ -223,3 +223,76 @@ class WorkplaceRateView(BaseModel):
                 if k.lower() in FORBIDDEN_IDENTIFIER_FIELDS:
                     raise ValueError(f"Privacy violation: Forbidden identifier field '{k}' in workplace rate view!")
         return data
+
+
+# --- Sentinel On-Site Hardware Models ---
+
+class SentinelUpload(BaseModel):
+    """
+    Inbound telemetry payload from an ESP32 Sentinel node.
+    Strictly forbids personal identifiers or unexpected metadata.
+    """
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: str = Field(..., description="Unique node identifier, e.g. SENT-001")
+    seq: int = Field(..., ge=0, description="Monotonic sequence number for gap detection")
+    ts: str = Field(..., description="ISO 8601 UTC timestamp of the reading")
+    air_temp_c: Optional[float] = Field(None, description="DHT22 air temperature in °C")
+    rh_pct: Optional[float] = Field(None, description="DHT22 relative humidity in %")
+    globe_temp_c: Optional[float] = Field(None, description="DS18B20 black globe temperature in °C")
+    wbgt_est_c: Optional[float] = Field(None, description="Node-computed estimated WBGT in °C")
+    ok: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Hardware health flags: {dht: bool, globe: bool, rssi: int}"
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def check_forbidden_fields(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            for k in data.keys():
+                if k.lower() in FORBIDDEN_IDENTIFIER_FIELDS:
+                    raise ValueError(f"Privacy violation: Prohibited personal identifier '{k}' in Sentinel payload!")
+        return data
+
+
+class SentinelUploadResponse(BaseModel):
+    """Reply returned to ESP32 in upload HTTP response driving on-board LED."""
+    node_id: str
+    level: str = Field("None", description="Current alert level: None, Watch, Warning, Alert")
+    valid_until: str = Field(..., description="ISO 8601 UTC timestamp when level expires")
+    rederived_wbgt: Optional[float] = Field(None, description="Server re-derived WBGT in °C")
+
+
+class SentinelCommission(BaseModel):
+    """Node commissioning record — maps physical device to verified site & geolocation."""
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: str = Field(..., description="Unique node identifier, e.g. SENT-001")
+    site_id: str = Field(..., description="Linked worksite ID, e.g. SITE-JA-01")
+    latitude: float = Field(..., ge=-90.0, le=90.0)
+    longitude: float = Field(..., ge=-180.0, le=180.0)
+    accuracy_m: float = Field(default=10.0, ge=0.0, description="Browser geolocation accuracy (metres)")
+    method: str = Field(default="browser_geolocation", description="Fix method: browser_geolocation, survey, manual")
+    indoor_mode: bool = Field(default=False, description="True = indoor formula (no radiant term)")
+
+
+class SentinelNodeStatus(BaseModel):
+    """Runtime operational and health status of a commissioned Sentinel node."""
+    node_id: str
+    site_id: str
+    district_id: str
+    is_online: bool = True
+    last_seen_utc: Optional[str] = None
+    last_wbgt: Optional[float] = None
+    last_air_temp: Optional[float] = None
+    last_rh: Optional[float] = None
+    last_globe_temp: Optional[float] = None
+    sensor_health: Dict[str, bool] = Field(default_factory=dict)
+    location_confidence: str = "exact"
+    h3_index: Optional[str] = None
+    current_level: str = "None"
+    readings_today: int = 0
+    gaps_today: int = 0
+    indoor_mode: bool = False
+

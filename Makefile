@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop
+.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay
 
 PYTHON := ./bin/py
 
@@ -97,6 +97,12 @@ drift-check:
 
 test-interop:
 	$(PYTHON) -m pytest tests/test_interop.py -v
+
+test-sentinel:
+	$(PYTHON) -m pytest tests/test_sentinel.py -v
+
+sentinel-replay:
+	$(PYTHON) hardware/replay/replay_trace.py --api-url http://localhost:8000
 
 run-daily:
 	$(PYTHON) -m prahari run-daily --region uae

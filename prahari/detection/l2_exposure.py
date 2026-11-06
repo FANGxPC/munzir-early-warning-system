@@ -108,7 +108,15 @@ class L2ExposureBaselineModel:
         else:
             full_df["pm25_excess"] = 0.0
 
-        if "wbgt_max" in full_df.columns:
+        # 1b. WBGT exposure: prefer on-site Sentinel hardware WBGT if available, fallback to modelled
+        if "wbgt_onsite" in full_df.columns and full_df["wbgt_onsite"].notna().sum() > 0:
+            effective_wbgt = full_df["wbgt_onsite"].fillna(full_df.get("wbgt_max", 26.0)).fillna(26.0)
+            full_df["wbgt_lag0"] = effective_wbgt
+            full_df["wbgt_lag1"] = full_df["wbgt_lag0"].shift(1).fillna(26.0)
+            full_df["wbgt_lag2"] = full_df["wbgt_lag0"].shift(2).fillna(26.0)
+            full_df["wbgt_3d_max"] = np.maximum(full_df["wbgt_lag0"], np.maximum(full_df["wbgt_lag1"], full_df["wbgt_lag2"]))
+            full_df["wbgt_excess"] = np.maximum(0.0, full_df["wbgt_3d_max"] - 28.0)
+        elif "wbgt_max" in full_df.columns:
             full_df["wbgt_lag0"] = full_df["wbgt_max"].fillna(26.0)
             full_df["wbgt_lag1"] = full_df["wbgt_lag0"].shift(1).fillna(26.0)
             full_df["wbgt_lag2"] = full_df["wbgt_lag0"].shift(2).fillna(26.0)

@@ -42,6 +42,32 @@ SIGNAL_TYPES = [
     "workplace_incident",
 ]
 
+# --- Sentinel On-Site Hardware Node Configuration ---
+SENTINEL_SIGNAL_TYPES = [
+    "wbgt_onsite",        # Estimated on-site WBGT from ESP32 sensors
+    "air_temp_onsite",    # DHT22 air temperature reading
+    "rh_onsite",          # DHT22 relative humidity reading
+    "globe_temp_onsite",  # DS18B20 black globe temperature
+]
+
+# Sentinel node operational timing and thresholds
+SENTINEL_UPLOAD_INTERVAL_SECS = 60         # Expected once per minute
+SENTINEL_OFFLINE_THRESHOLD_SECS = 180      # 3 missed uploads = offline
+SENTINEL_VALID_UNTIL_BUFFER_SECS = 360     # 6 minutes validity window
+SENTINEL_MAX_NODES_PER_SITE = 5            # Limit per worksite
+
+# Sensor sanity bounds (reject physical anomalies or sensor errors)
+SENTINEL_BOUNDS = {
+    "air_temp_c":   (-10.0, 65.0),    # °C — DHT22 operating range
+    "rh_pct":       (0.0, 100.0),     # % — physically bounded
+    "globe_temp_c": (-10.0, 85.0),    # °C — black globe solar heating
+    "wbgt_est_c":   (-5.0, 50.0),     # °C — derived WBGT bound
+}
+
+# Location commissioning accuracy thresholds (metres)
+SENTINEL_LOCATION_EXACT_THRESHOLD_M = 50.0
+SENTINEL_LOCATION_INFERRED_THRESHOLD_M = 1000.0
+
 # Regional Profiles
 REGIONAL_PROFILES: Dict[str, Dict[str, Any]] = {
     "uae": {
