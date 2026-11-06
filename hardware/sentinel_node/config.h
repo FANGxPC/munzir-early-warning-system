@@ -12,7 +12,7 @@
 // 2. Munzir Central Platform API URL
 // For local testing: "http://<YOUR_LAPTOP_IP>:8000"
 // For live Azure Container App: "https://munzir.agreeablestone-12345.uaenorth.azurecontainerapps.io"
-#define MUNZIR_API_BASE   "http://192.168.1.100:8000"
+#define MUNZIR_API_BASE   "http://192.168.149.27:8000"
 #define SENTINEL_API_KEY  "munzir_sentinel_secret_2026"
 
 // 3. Hardware Identity

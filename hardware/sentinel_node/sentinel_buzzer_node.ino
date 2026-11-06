@@ -33,7 +33,7 @@
 // =============================================================
 #define WIFI_SSID         "Your_WiFi_Name"         // Must be 2.4 GHz Wi-Fi or Phone Hotspot
 #define WIFI_PASSWORD     "Your_WiFi_Password"     // Wi-Fi password
-#define MUNZIR_API_BASE   "http://192.168.1.100:8000" // Your laptop IP running `make serve`
+#define MUNZIR_API_BASE   "http://192.168.149.27:8000" // Your laptop IP running `make serve`
 
 // Node & Security Parameters
 #define NODE_ID           "SENT-001"
@@ -358,3 +358,4 @@ void loop() {
 
   delay(20);
 }
+
