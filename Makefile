@@ -66,7 +66,7 @@ test-decision:
 	$(PYTHON) -m pytest tests/test_playbook_engine.py tests/test_evidence_card.py tests/test_acknowledgement.py tests/test_narrative.py -v
 
 serve:
-	$(PYTHON) -m prahari serve --host 0.0.0.0 --port 8000
+	$(PYTHON) -m prahari serve --host 0.0.0.0 --port 8000 --reload
 
 test-api:
 	$(PYTHON) -m pytest tests/test_api_*.py -v
