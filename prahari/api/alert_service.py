@@ -231,15 +231,16 @@ class AlertInboxService:
             )
 
         # Validation: Mandatory reason if dismissed
+        unproc_code = getattr(status, "HTTP_422_UNPROCESSABLE_CONTENT", 422)
         if target_status == AlertStatus.DISMISSED:
             if not request.dismissal_reason:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=unproc_code,
                     detail=f"Mandatory dismissal_reason required when dismissing alert. Allowed: {DISMISS_REASONS}"
                 )
             if request.dismissal_reason not in DISMISS_REASONS:
                 raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    status_code=unproc_code,
                     detail=f"Invalid dismissal_reason '{request.dismissal_reason}'. Allowed: {DISMISS_REASONS}"
                 )
 
