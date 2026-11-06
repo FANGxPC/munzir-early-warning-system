@@ -324,7 +324,22 @@ class SentinelIngestionEngine:
 
         # 7. Update node state & reading history
         status.is_online = True
-        status.last_seen_utc = upload.ts
+
+        # Determine last seen timestamp:
+        # Microcontrollers without an RTC or NTP clock often send pseudo timestamps (e.g. uptime starting at 00:00:xx).
+        # If upload.ts is wildly out of sync with current server time (> 3600s difference),
+        # use current server UTC reception time so the device is not falsely marked offline.
+        now_dt = datetime.now(timezone.utc)
+        try:
+            ts_str = upload.ts.replace("Z", "+00:00")
+            upload_dt = datetime.fromisoformat(ts_str)
+            if abs((now_dt - upload_dt).total_seconds()) > 3600:
+                status.last_seen_utc = now_dt.isoformat()
+            else:
+                status.last_seen_utc = upload.ts
+        except Exception:
+            status.last_seen_utc = now_dt.isoformat()
+
         status.last_wbgt = wbgt
         status.last_air_temp = air_t
         status.last_rh = rh
