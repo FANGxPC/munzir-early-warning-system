@@ -8,6 +8,7 @@ and human-interpretable SHAP feature contribution groups.
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
+import warnings
 import joblib
 import numpy as np
 import pandas as pd
@@ -286,7 +287,9 @@ class L4FusionModel:
         # Compute SHAP values
         assert self.explainer is not None
         try:
-            shap_vals = self.explainer.shap_values(df_x)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                shap_vals = self.explainer.shap_values(df_x)
             if hasattr(shap_vals, "values"):
                 shap_vals = shap_vals.values
             if isinstance(shap_vals, list):

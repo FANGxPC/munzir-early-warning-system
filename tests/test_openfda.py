@@ -100,3 +100,4 @@ def test_clinical_vulnerability_api_endpoint():
     assert data["vulnerability_tier"] == "CRITICAL"
     assert len(data["high_risk_drug_classes"]) >= 5
     assert len(data["clinical_directives"]) >= 3
+

@@ -763,13 +763,13 @@ function loadImpactView() {
 
 function onAssumptionChange() {
   // 1. Update live value badges
-  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
-  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5);
-  const prev = parseInt(document.getElementById("inpPreventability")?.value || 65);
-  const costWorkday = parseInt(document.getElementById("inpWorkdayCost")?.value || 450);
-  const costSevere = parseInt(document.getElementById("inpSevereCost")?.value || 12000);
-  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
-  const hourlyWage = parseInt(document.getElementById("inpHourlyWage")?.value || 120);
+  const wf = parseInt((document.getElementById("inpWorkforce") || {}).value || 50000);
+  const baseRate = parseFloat((document.getElementById("inpBaselineRate") || {}).value || 2.5);
+  const prev = parseInt((document.getElementById("inpPreventability") || {}).value || 65);
+  const costWorkday = parseInt((document.getElementById("inpWorkdayCost") || {}).value || 450);
+  const costSevere = parseInt((document.getElementById("inpSevereCost") || {}).value || 12000);
+  const alarmHours = parseFloat((document.getElementById("inpAlarmHours") || {}).value || 4.0);
+  const hourlyWage = parseInt((document.getElementById("inpHourlyWage") || {}).value || 120);
 
   if (document.getElementById("valWorkforce")) document.getElementById("valWorkforce").textContent = wf.toLocaleString();
   if (document.getElementById("valBaselineRate")) document.getElementById("valBaselineRate").textContent = baseRate.toFixed(1) + "%";
@@ -784,13 +784,13 @@ function onAssumptionChange() {
 }
 
 async function recalculateImpact() {
-  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
-  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5) / 100.0;
-  const prev = parseFloat(document.getElementById("inpPreventability")?.value || 65) / 100.0;
-  const costWorkday = parseFloat(document.getElementById("inpWorkdayCost")?.value || 450);
-  const costSevere = parseFloat(document.getElementById("inpSevereCost")?.value || 12000);
-  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
-  const hourlyWage = parseFloat(document.getElementById("inpHourlyWage")?.value || 120);
+  const wf = parseInt((document.getElementById("inpWorkforce") || {}).value || 50000);
+  const baseRate = parseFloat((document.getElementById("inpBaselineRate") || {}).value || 2.5) / 100.0;
+  const prev = parseFloat((document.getElementById("inpPreventability") || {}).value || 65) / 100.0;
+  const costWorkday = parseFloat((document.getElementById("inpWorkdayCost") || {}).value || 450);
+  const costSevere = parseFloat((document.getElementById("inpSevereCost") || {}).value || 12000);
+  const alarmHours = parseFloat((document.getElementById("inpAlarmHours") || {}).value || 4.0);
+  const hourlyWage = parseFloat((document.getElementById("inpHourlyWage") || {}).value || 120);
 
   const payload = {
     workforce: {
@@ -942,7 +942,7 @@ function resetImpactDefaults() {
 
 // --- 10. District Policy Evidence View ---
 async function loadPolicyEvidence() {
-  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  const month = (document.getElementById("policyMonthSelect") || {}).value || "August 2024";
   const distTableBody = document.getElementById("policyDistrictTableBody");
   const recList = document.getElementById("policyRecommendationsList");
   const citList = document.getElementById("policyCitationsList");
@@ -1014,7 +1014,7 @@ async function loadPolicyEvidence() {
 }
 
 async function exportPolicyMarkdown() {
-  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  const month = (document.getElementById("policyMonthSelect") || {}).value || "August 2024";
   try {
     const text = await apiFetch(`/api/v1/impact/policy-report/markdown?month=${encodeURIComponent(month)}`, {
       headers: { "Accept": "text/markdown" },
@@ -1089,8 +1089,8 @@ async function loadSentinelView(isSilent = false) {
       else if (node.current_level === "Alert") lvlBadge = `<span class="badge badge-alert">ALERT</span>`;
 
       // Sensors
-      const dhtOk = node.sensor_health?.dht ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">✔ DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;">✖ DHT</span>`;
-      const globeOk = node.sensor_health?.globe ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">✔ Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;">✖ Globe</span>`;
+      const dhtOk = (node.sensor_health && node.sensor_health.dht) ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">✔ DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;">✖ DHT</span>`;
+      const globeOk = (node.sensor_health && node.sensor_health.globe) ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">✔ Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;">✖ Globe</span>`;
 
       // Loc Confidence
       let locBadge = `<span class="badge badge-normal" style="font-size:0.65rem;">EXACT</span>`;

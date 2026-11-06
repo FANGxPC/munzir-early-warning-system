@@ -46,6 +46,7 @@
 #define PIN_DHT22         4       // DHT22 data pin
 #define PIN_DS18B20       18      // DS18B20 1-Wire data pin
 #define PIN_BUZZER        25      // Buzzer positive (+) pin
+#define BUZZER_IS_PASSIVE true    // Set to true for Passive buzzers (PWM tone), false for Active buzzers (DC HIGH)
 #define PIN_BOOT_BUTTON   0       // Built-in ESP32 BOOT button
 
 // =============================================================
@@ -93,9 +94,20 @@ float computeEstimatedWbgt(float tAir, float rh, float tGlobe) {
 }
 
 // --- Universal Buzzer Driver (Supports both Active & Passive Buzzers) ---
+bool currentBuzzerHardwareState = false;
+
 void soundBuzzer(bool on) {
+  if (on == currentBuzzerHardwareState) {
+    return; // Critical: prevents re-initializing tone() / LEDC hardware timer every 20ms loop!
+  }
+  currentBuzzerHardwareState = on;
+
   if (on) {
+#if BUZZER_IS_PASSIVE
     tone(PIN_BUZZER, 2000);
+#else
+    digitalWrite(PIN_BUZZER, HIGH);
+#endif
   } else {
     noTone(PIN_BUZZER);
     digitalWrite(PIN_BUZZER, LOW);

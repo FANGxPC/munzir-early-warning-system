@@ -8,6 +8,7 @@ Implements:
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional, Tuple
 import math
+import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -172,25 +173,27 @@ class FarringtonDetector:
         # 1. Step 1: Initial GLM fit (Poisson)
         formula = f"{value_col} ~ t + sin_harmonic + cos_harmonic"
         try:
-            model = smf.glm(formula=formula, data=past_df, family=sm.families.Poisson()).fit()
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                model = smf.glm(formula=formula, data=past_df, family=sm.families.Poisson()).fit()
 
-            # 2. Step 2: Compute Anscombe residuals to down-weight past outbreaks
-            fitted_vals = np.maximum(model.fittedvalues.values, 0.01)
-            y_vals = past_df[value_col].values
-            anscombe_residuals = (3.0 / 2.0) * (y_vals ** (2.0 / 3.0) - fitted_vals ** (2.0 / 3.0)) / (fitted_vals ** (1.0 / 6.0))
+                # 2. Step 2: Compute Anscombe residuals to down-weight past outbreaks
+                fitted_vals = np.maximum(model.fittedvalues.values, 0.01)
+                y_vals = past_df[value_col].values
+                anscombe_residuals = (3.0 / 2.0) * (y_vals ** (2.0 / 3.0) - fitted_vals ** (2.0 / 3.0)) / (fitted_vals ** (1.0 / 6.0))
 
-            # Anscombe threshold: 2.58 (standard Farrington threshold)
-            weights = np.ones(len(past_df))
-            outbreak_mask = anscombe_residuals > 2.58
-            weights[outbreak_mask] = (2.58 / anscombe_residuals[outbreak_mask]) ** 2
+                # Anscombe threshold: 2.58 (standard Farrington threshold)
+                weights = np.ones(len(past_df))
+                outbreak_mask = anscombe_residuals > 2.58
+                weights[outbreak_mask] = (2.58 / anscombe_residuals[outbreak_mask]) ** 2
 
-            # 3. Step 3: Re-fit quasi-Poisson with outbreak down-weighting
-            refit_model = smf.glm(
-                formula=formula,
-                data=past_df,
-                family=sm.families.Poisson(),
-                freq_weights=weights,
-            ).fit()
+                # 3. Step 3: Re-fit quasi-Poisson with outbreak down-weighting
+                refit_model = smf.glm(
+                    formula=formula,
+                    data=past_df,
+                    family=sm.families.Poisson(),
+                    freq_weights=weights,
+                ).fit()
 
             # Predict for current observation
             pred_df = pd.DataFrame({
