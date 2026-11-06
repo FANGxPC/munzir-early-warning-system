@@ -156,9 +156,19 @@ class IncidentClassifier:
     def train(self, corpus: Optional[List[Tuple[str, str]]] = None) -> Dict[str, Any]:
         """
         Train the classifier on incident narratives and save pipeline.
+        Combines baseline safety corpus with authentic OSHA Severe Injury Reports.
         Returns evaluation metrics dictionary (accuracy, macro F1, classification report).
         """
-        data = corpus or DEFAULT_TRAINING_CORPUS
+        if corpus is not None:
+            data = corpus
+        else:
+            osha_corpus = []
+            try:
+                from prahari.ingestion.osha import OSHAIncidentIngestor
+                osha_corpus = OSHAIncidentIngestor().get_training_corpus()
+            except Exception as e:
+                pass
+            data = list(DEFAULT_TRAINING_CORPUS) + osha_corpus
 
         # Sanitize all narratives before training
         texts = [sanitize_incident_narrative(item[0]) for item in data]

@@ -511,8 +511,9 @@
               Real-time microclimate shade nodes (ESP32 + DHT22 + DS18B20 Globe) measuring local WBGT and driving on-board LED alerts
             </div>
           </div>
-          <div style="display:flex; gap:0.5rem;">
-            <button class="btn btn-secondary" onclick="loadSentinelView()">🔄 Refresh Nodes</button>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button class="btn btn-primary" style="background:#dc2626; border-color:#ef4444; font-weight:700;" onclick="toggleTestBuzzer('SENT-001')" id="globalBuzzerBtn">🔊 Test Hardware Buzzer</button>
+            <button class="btn btn-secondary" onclick="loadSentinelView()">🔄 Refresh</button>
             <button class="btn btn-primary" onclick="openCommissionModal()">➕ Commission New Node</button>
           </div>
         </div>
@@ -546,7 +547,10 @@
       <div class="card" style="margin-bottom:1.25rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
           <h3 style="font-size:1rem; font-weight:700;">📡 Live Node Fleet Telemetry</h3>
-          <span style="font-size:0.75rem; color:#94a3b8;">Updates every 60s from physical hardware</span>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.65rem;" onclick="loadSentinelView(false)">🔄 Refresh</button>
+            <span style="font-size:0.75rem; color:#94a3b8;">Auto-refreshes every 3s</span>
+          </div>
         </div>
         <div style="overflow-x:auto;">
           <table class="data-table">
@@ -718,7 +722,7 @@
     </div>
   </div>
 
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=20261107_hw_only"></script>
 </body>
 </html>
 

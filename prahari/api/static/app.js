@@ -1002,12 +1002,14 @@ async function exportPolicyMarkdown() {
 
 // --- 8. Munzir Sentinel Hardware Integration View ---
 
-async function loadSentinelView() {
+async function loadSentinelView(isSilent = false) {
   const tbody = document.getElementById("sentinelNodesTableBody");
   const compContainer = document.getElementById("microclimateComparisonContent");
   if (!tbody) return;
 
-  tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+  if (!isSilent) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+  }
 
   try {
     const nodes = await apiFetch("/api/v1/sentinel/nodes");
@@ -1081,9 +1083,14 @@ async function loadSentinelView() {
           <td>${lvlBadge}</td>
           <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
           <td>
-            <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
-              ⚡ Test Reading
-            </button>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
+                ${isBuzzerActive ? '🔕 Silence' : '🔊 Test Buzzer'}
+              </button>
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
+                ⚡ Test Reading
+              </button>
+            </div>
           </td>
         </tr>
       `;
@@ -1180,7 +1187,13 @@ function useCurrentDeviceLocation() {
     (err) => {
       btn.textContent = originalText;
       btn.disabled = false;
-      alert("Location acquisition failed: " + err.message + "\nEnsure permissions are granted and page is served over localhost or HTTPS.");
+      // Graceful fallback to worksite coordinates
+      document.getElementById("commLat").value = "24.9920";
+      document.getElementById("commLon").value = "55.0410";
+      document.getElementById("commAccuracy").value = "50";
+      document.getElementById("commAccuracyText").textContent = "50m (Site Centroid)";
+      updateConfidenceBadge(50);
+      alert("Notice: Browser GPS requires accessing via http://localhost:8000 (not 0.0.0.0).\n\nAutomatically using site default GPS coordinates (24.9920, 55.0410). You can now click Complete Commissioning.");
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
   );
@@ -1264,5 +1277,63 @@ async function simulateNodeUpload(nodeId) {
     alert("Telemetry test failed: " + err.message);
   }
 }
+
+// --- Hardware Buzzer Test Trigger (No Laptop Audio) ---
+let isBuzzerActive = false;
+
+async function toggleTestBuzzer(nodeId = "SENT-001") {
+  const btn = document.getElementById(`buzzerBtn_${nodeId}`) || document.getElementById("globalBuzzerBtn");
+
+  if (!isBuzzerActive) {
+    // Turn ON Hardware Buzzer
+    isBuzzerActive = true;
+    if (btn) {
+      btn.textContent = "🔕 Silence Hardware Buzzer";
+      btn.style.background = "#475569";
+    }
+    const globalBtn = document.getElementById("globalBuzzerBtn");
+    if (globalBtn) {
+      globalBtn.textContent = "🔕 Silence Hardware Buzzer";
+      globalBtn.style.background = "#475569";
+    }
+
+    // Call API to set node alert level to "Alert"
+    try {
+      await apiFetch(`/api/v1/sentinel/test-buzzer/${nodeId}`, { method: "POST" });
+    } catch (err) {
+      console.warn("Hardware buzzer call:", err);
+    }
+    loadSentinelView(true);
+
+  } else {
+    // Turn OFF Hardware Buzzer
+    isBuzzerActive = false;
+
+    if (btn) {
+      btn.textContent = "🔊 Test Hardware Buzzer";
+      btn.style.background = "#dc2626";
+    }
+    const globalBtn = document.getElementById("globalBuzzerBtn");
+    if (globalBtn) {
+      globalBtn.textContent = "🔊 Test Hardware Buzzer";
+      globalBtn.style.background = "#dc2626";
+    }
+
+    try {
+      await apiFetch(`/api/v1/sentinel/silence-buzzer/${nodeId}`, { method: "POST" });
+    } catch (err) {
+      console.warn("Hardware silence call:", err);
+    }
+    loadSentinelView(true);
+  }
+}
+
+// Live auto-refresh: Polls every 3 seconds when Sentinel tab is active
+setInterval(() => {
+  if (state.activeTab === "sentinel") {
+    loadSentinelView(true);
+  }
+}, 3000);
+
 
 

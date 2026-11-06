@@ -154,6 +154,7 @@ void ensureWiFiConnected() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\n[WiFi] Connected! IP: " + WiFi.localIP().toString());
+    configTime(0, 0, "pool.ntp.org", "time.google.com");
   } else {
     Serial.println("\n[WiFi] Connection timeout. Operating in offline mode.");
     isOfflineMode = true;
@@ -196,8 +197,14 @@ void uploadTelemetry() {
   
   // Format current ISO timestamp
   char tsBuffer[32];
-  snprintf(tsBuffer, sizeof(tsBuffer), "2026-11-06T%02d:%02d:%02dZ", 
-           (int)((millis()/3600000)%24), (int)((millis()/60000)%60), (int)((millis()/1000)%60));
+  time_t nowSecs = time(nullptr);
+  if (nowSecs > 100000000) {
+    struct tm *utc = gmtime(&nowSecs);
+    strftime(tsBuffer, sizeof(tsBuffer), "%Y-%m-%dT%H:%M:%SZ", utc);
+  } else {
+    snprintf(tsBuffer, sizeof(tsBuffer), "2026-11-06T%02d:%02d:%02dZ",
+             (int)((millis() / 3600000) % 24), (int)((millis() / 60000) % 60), (int)((millis() / 1000) % 60));
+  }
   doc["ts"] = tsBuffer;
 
   if (dhtOk) {

@@ -34,13 +34,25 @@ class RealDataSanityChecker:
         """
         df_obs = self.silver_store.read_observations(start_date=start_date, end_date=end_date)
         if df_obs.empty:
+            try:
+                from prahari.storage.bronze_store import BronzeStore
+                df_bronze = BronzeStore().read_observations(start_date=start_date, end_date=end_date)
+                if not df_bronze.empty:
+                    df_obs = df_bronze
+            except Exception:
+                pass
+
+        if df_obs.empty:
             return {
                 "status": "warning",
-                "message": "No silver environmental observations in date range; using baseline check.",
-                "real_heatwaves_detected": 2,
-                "real_particulate_episodes_detected": 1,
-                "l1_ears_pass": True,
-                "l3_cluster_pass": True,
+                "message": f"No environmental observations found in lakehouse for {start_date} to {end_date}.",
+                "records_evaluated": 0,
+                "l1_aberrant_days_found": 0,
+                "l3_clusters_identified": 0,
+                "qualitative_finding": (
+                    "No observations landed for requested window. Ingestion pipeline must be executed "
+                    "for this date range to populate lakehouse partitions."
+                ),
             }
 
         # Filter to physical environmental signals

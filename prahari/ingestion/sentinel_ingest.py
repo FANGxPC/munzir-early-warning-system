@@ -263,6 +263,13 @@ class SentinelIngestionEngine:
 
         # 5. Determine Alert Level & valid_until window
         level = self._resolve_alert_level(wbgt=wbgt, site_id=commission.site_id)
+        if hasattr(self, "_test_level_override") and upload.node_id in self._test_level_override:
+            override_level, expiry = self._test_level_override[upload.node_id]
+            if datetime.now(timezone.utc) < expiry:
+                level = override_level
+            else:
+                del self._test_level_override[upload.node_id]
+
         now_dt = datetime.now(timezone.utc)
         valid_until_dt = now_dt + timedelta(seconds=SENTINEL_VALID_UNTIL_BUFFER_SECS)
         valid_until_iso = valid_until_dt.isoformat()
@@ -324,7 +331,22 @@ class SentinelIngestionEngine:
 
         # 7. Update node state & reading history
         status.is_online = True
-        status.last_seen_utc = upload.ts
+
+        # Determine last seen timestamp:
+        # Microcontrollers without an RTC or NTP clock often send pseudo timestamps (e.g. uptime starting at 00:00:xx).
+        # If upload.ts is wildly out of sync with current server time (> 3600s difference),
+        # use current server UTC reception time so the device is not falsely marked offline.
+        now_dt = datetime.now(timezone.utc)
+        try:
+            ts_str = upload.ts.replace("Z", "+00:00")
+            upload_dt = datetime.fromisoformat(ts_str)
+            if abs((now_dt - upload_dt).total_seconds()) > 3600:
+                status.last_seen_utc = now_dt.isoformat()
+            else:
+                status.last_seen_utc = upload.ts
+        except Exception:
+            status.last_seen_utc = now_dt.isoformat()
+
         status.last_wbgt = wbgt
         status.last_air_temp = air_t
         status.last_rh = rh
@@ -407,4 +429,23 @@ class SentinelIngestionEngine:
             f.write(json.dumps(ack_record) + "\n")
 
         return ack_record
+
+    def set_test_alert_level(self, node_id: str, level: str = "Alert", duration_seconds: int = 120) -> Dict[str, Any]:
+        """Manually sets node alert level for live hardware buzzer demo testing."""
+        if not hasattr(self, "_test_level_override"):
+            self._test_level_override = {}
+        expiry = datetime.now(timezone.utc) + timedelta(seconds=duration_seconds)
+        self._test_level_override[node_id] = (level, expiry)
+        if node_id in self._node_state:
+            self._node_state[node_id].current_level = level
+        return {"node_id": node_id, "forced_level": level, "expires_at": expiry.isoformat()}
+
+    def clear_test_alert_level(self, node_id: str) -> Dict[str, Any]:
+        """Silences test buzzer override."""
+        if hasattr(self, "_test_level_override") and node_id in self._test_level_override:
+            del self._test_level_override[node_id]
+        if node_id in self._node_state:
+            self._node_state[node_id].current_level = "None"
+        return {"node_id": node_id, "forced_level": "None"}
+
 
