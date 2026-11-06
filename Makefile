@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay
+.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay
 
 PYTHON := ./bin/py
 
@@ -7,6 +7,7 @@ help:
 	@echo "====================================================="
 	@echo "  make backfill          : Reproduce 3+ years of bronze lakehouse data"
 	@echo "  make backfill-quick    : Reproduce 1 year of bronze lakehouse data"
+	@echo "  make ingest-real       : Ingest authentic OSHA Severe Injuries & CDC NSSP feeds"
 	@echo "  make run-daily         : Run daily ingestion timer step (simulates Azure Function)"
 	@echo "  make train-nlp         : Train incident text classifier (OSHA narratives)"
 	@echo "  make inspect           : Inspect Bronze storage statistics and sample rows"
@@ -31,6 +32,9 @@ backfill:
 
 backfill-quick:
 	$(PYTHON) -m prahari backfill --years 1.0 --region uae --seed 42
+
+ingest-real:
+	$(PYTHON) -m prahari ingest-real --region uae
 
 harmonise:
 	$(PYTHON) -m prahari harmonise --region uae
@@ -66,7 +70,7 @@ test-decision:
 	$(PYTHON) -m pytest tests/test_playbook_engine.py tests/test_evidence_card.py tests/test_acknowledgement.py tests/test_narrative.py -v
 
 serve:
-	$(PYTHON) -m prahari serve --host 0.0.0.0 --port 8000 --reload
+	$(PYTHON) -m prahari serve --host 0.0.0.0 --port 8000
 
 test-api:
 	$(PYTHON) -m pytest tests/test_api_*.py -v

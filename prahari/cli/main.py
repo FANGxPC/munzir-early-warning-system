@@ -17,6 +17,8 @@ from prahari.storage.bronze_store import BronzeStore
 from prahari.storage.silver_store import SilverStore
 from prahari.ingestion.open_meteo import OpenMeteoClient, ingest_environmental_data
 from prahari.ingestion.openaq import OpenAQClient, ingest_openaq_stations
+from prahari.ingestion.osha import OSHAIncidentIngestor
+from prahari.ingestion.cdc_syndromic import CDCSyndromicIngestor
 from prahari.simulator.generator import HealthWorkplaceSimulator
 from prahari.ingestion.data_quality import DataQualityScorer
 from prahari.nlp.classifier import IncidentClassifier
@@ -139,20 +141,40 @@ def cmd_backfill(args: argparse.Namespace) -> None:
 
     print(f"\n  [+] Total environmental observations gathered: {len(env_observations):,} (Open-Meteo + OpenAQ)")
 
-    # 2. Run Health & Workplace Multi-Signal Simulator
-    print("\n[Step 2/4] Generating Health & Workplace Syndromic Feeds (Simulator)...")
+    # 2. Ingest Multi-Signal Health & Workplace Streams (Simulator + Real OSHA + CDC NSSP)
+    print("\n[Step 2/4] Gathering Health & Workplace Streams (Simulator + Real OSHA + CDC NSSP)...")
     simulator = HealthWorkplaceSimulator(region_key=region_key, seed=seed)
     synth_observations, incidents, ground_truth = simulator.simulate(
         start_date=start_date_str,
         end_date=end_date_str,
         env_observations=env_observations,
     )
+
+    # Ingest Real OSHA Severe Injury Reports
+    osha_ingestor = OSHAIncidentIngestor(bronze_store=store)
+    real_incidents, real_inc_obs = osha_ingestor.ingest(
+        start_date=start_date_str,
+        end_date=end_date_str,
+        write_to_store=False,
+    )
+
+    # Ingest Real CDC NSSP Syndromic Streams
+    cdc_ingestor = CDCSyndromicIngestor(region_key=region_key, bronze_store=store, seed=seed)
+    cdc_obs = cdc_ingestor.ingest_syndromic_streams(
+        start_date=start_date_str,
+        end_date=end_date_str,
+        env_observations=env_observations,
+        write_to_store=False,
+    )
+
+    all_incidents = incidents + real_incidents
     print(f"  [+] Total health & workplace observations: {len(synth_observations):,}")
-    print(f"  [+] Total workplace safety incidents:     {len(incidents):,}")
+    print(f"  [+] Total workplace safety incidents:     {len(all_incidents):,} ({len(real_incidents):,} from real OSHA)")
+    print(f"  [+] Real CDC NSSP syndromic observations: {len(cdc_obs):,}")
     print(f"  [+] Ground truth outbreak events:         {len(ground_truth):,}")
 
     # Combine all observations
-    all_observations = env_observations + synth_observations
+    all_observations = env_observations + synth_observations + real_inc_obs + cdc_obs
 
     # 3. Data Quality Scoring
     print("\n[Step 3/4] Computing Data Quality (Completeness, Latency, Staleness)...")
@@ -162,7 +184,7 @@ def cmd_backfill(args: argparse.Namespace) -> None:
     # 4. Land Data in Bronze Parquet Lakehouse
     print("\n[Step 4/4] Writing Parquet Tables to Bronze Lakehouse Partition Store...")
     n_written = store.write_observations(all_observations)
-    n_incidents = store.write_incidents(incidents)
+    n_incidents = store.write_incidents(all_incidents)
     n_truth = store.write_ground_truth(ground_truth)
     n_dq = store.write_data_quality(dq_metrics)
 
@@ -242,6 +264,51 @@ def cmd_run_daily(args: argparse.Namespace) -> None:
     print(f"    - DQ metrics recorded: {len(dq_metrics)}")
     print("    - Status: HEALTHY | Application Insights Telemetry: 200 OK")
     print("=" * 60)
+
+
+def cmd_ingest_real(args: argparse.Namespace) -> None:
+    """Ingest authentic OSHA Severe Injuries and CDC NSSP syndromic feeds into Bronze."""
+    start_time = time.time()
+    region_key = args.region
+    start_date = args.start_date
+    end_date = args.end_date
+
+    print("=" * 70)
+    print("Munzir Real-World Data Ingestion Pipeline")
+    print("Data Sources: OSHA Severe Injury Reports (DOL) & CDC NSSP Syndromic Feeds")
+    print(f"Region: {region_key.upper()}")
+    print("=" * 70)
+
+    store = BronzeStore()
+
+    # 1. Ingest OSHA Severe Injury Reports
+    print("\n[1/2] Ingesting OSHA Severe Injury Reports (Federal Safety Inspection Data)...")
+    osha_ingestor = OSHAIncidentIngestor(bronze_store=store)
+    incidents, inc_obs = osha_ingestor.ingest(
+        start_date=start_date,
+        end_date=end_date,
+        write_to_store=True,
+    )
+    print(f"  [+] Real OSHA Incident Reports landed:     {len(incidents):,}")
+    print(f"  [+] Workplace Incident Observations landed: {len(inc_obs):,}")
+
+    # 2. Ingest CDC NSSP Syndromic Streams
+    print("\n[2/2] Ingesting CDC NSSP & WHO Syndromic Streams (Heat & Respiratory)...")
+    cdc_ingestor = CDCSyndromicIngestor(region_key=region_key, bronze_store=store)
+    s_date = start_date or "2024-01-01"
+    e_date = end_date or datetime.now().strftime("%Y-%m-%d")
+    cdc_obs = cdc_ingestor.ingest_syndromic_streams(
+        start_date=s_date,
+        end_date=e_date,
+        write_to_store=True,
+    )
+    print(f"  [+] Real CDC NSSP Observations landed:      {len(cdc_obs):,}")
+
+    elapsed = time.time() - start_time
+    print("=" * 70)
+    print(f"SUCCESS: Real-world ingestion completed in {elapsed:.2f} seconds.")
+    print(f"Bronze Store: {store.base_dir}")
+    print("=" * 70)
 
 
 def cmd_harmonise(args: argparse.Namespace) -> None:
@@ -802,6 +869,13 @@ def main() -> None:
     p_backfill.add_argument("--region", type=str, default="uae", choices=["uae", "tamilnadu"], help="Regional profile")
     p_backfill.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
     p_backfill.set_defaults(func=cmd_backfill)
+
+    # ingest-real
+    p_ingest_real = subparsers.add_parser("ingest-real", help="Ingest authentic OSHA Severe Injuries and CDC NSSP syndromic feeds")
+    p_ingest_real.add_argument("--start-date", type=str, default=None, help="Start date YYYY-MM-DD")
+    p_ingest_real.add_argument("--end-date", type=str, default=None, help="End date YYYY-MM-DD")
+    p_ingest_real.add_argument("--region", type=str, default="uae", choices=["uae", "tamilnadu"], help="Regional profile")
+    p_ingest_real.set_defaults(func=cmd_ingest_real)
 
     # run-daily
     p_daily = subparsers.add_parser("run-daily", help="Run single day ingestion timer pipeline")

@@ -17,7 +17,7 @@ AADHAAR_REGEX = re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}\b")
 
 # Honorifics + Names pattern
 NAME_REGEX = re.compile(
-    r"\b(Mr\.|Mrs\.|Ms\.|Dr\.|Worker|Operator|Employee|Foreman|Engineer|Technician)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b"
+    r"\b(Mr\.|Mrs\.|Ms\.|Dr\.|[Ww]orker|[Oo]perator|[Ee]mployee|[Ff]oreman|[Ee]ngineer|[Tt]echnician|[Ll]aborer|[Cc]arpenter|[Mm]ason|[Ee]lectrician|[Dd]river|[Mm]echanic|[Ww]elder)\s+([A-Z][a-zA-Z'-]+(?:\s+[A-Z][a-zA-Z'-]+){0,2})\b"
 )
 
 # Address and apartment patterns

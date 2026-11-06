@@ -8,7 +8,8 @@ __pycache__/
 .pytest_cache/
 
 # Data landing (bronze lakehouse & cache)
-data/
+/data/
+!prahari/ingestion/data/
 *.parquet
 
 # Distribution / packaging

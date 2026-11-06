@@ -31,8 +31,8 @@
 // =============================================================
 // 1. NETWORK & BACKEND CONFIGURATION (EDIT THESE 3 LINES)
 // =============================================================
-#define WIFI_SSID         "Your_WiFi_Name"         // Must be 2.4 GHz Wi-Fi or Phone Hotspot
-#define WIFI_PASSWORD     "Your_WiFi_Password"     // Wi-Fi password
+#define WIFI_SSID         "MOTO E13"         // Must be 2.4 GHz Wi-Fi or Phone Hotspot
+#define WIFI_PASSWORD     "1234567890"     // Wi-Fi password
 #define MUNZIR_API_BASE   "http://192.168.149.27:8000" // Your laptop IP running `make serve`
 
 // Node & Security Parameters
