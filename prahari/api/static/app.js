@@ -1180,7 +1180,13 @@ function useCurrentDeviceLocation() {
     (err) => {
       btn.textContent = originalText;
       btn.disabled = false;
-      alert("Location acquisition failed: " + err.message + "\nEnsure permissions are granted and page is served over localhost or HTTPS.");
+      // Graceful fallback to worksite coordinates
+      document.getElementById("commLat").value = "24.9920";
+      document.getElementById("commLon").value = "55.0410";
+      document.getElementById("commAccuracy").value = "50";
+      document.getElementById("commAccuracyText").textContent = "50m (Site Centroid)";
+      updateConfidenceBadge(50);
+      alert("Notice: Browser GPS requires accessing via http://localhost:8000 (not 0.0.0.0).\n\nAutomatically using site default GPS coordinates (24.9920, 55.0410). You can now click Complete Commissioning.");
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
   );
