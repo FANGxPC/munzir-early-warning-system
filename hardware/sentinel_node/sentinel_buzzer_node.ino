@@ -92,36 +92,45 @@ float computeEstimatedWbgt(float tAir, float rh, float tGlobe) {
   return 0.7 * tnw + 0.2 * tGlobe + 0.1 * tAir;
 }
 
+// --- Universal Buzzer Driver (Supports both Active & Passive Buzzers) ---
+void soundBuzzer(bool on) {
+  if (on) {
+    tone(PIN_BUZZER, 2000);
+  } else {
+    noTone(PIN_BUZZER);
+    digitalWrite(PIN_BUZZER, LOW);
+  }
+}
+
 // --- Buzzer Pattern Player (Non-Blocking) ---
 void updateBuzzerPattern() {
   unsigned long now = millis();
 
   if (isOfflineMode) {
-    // Silent in offline fail-safe
-    digitalWrite(PIN_BUZZER, LOW);
+    soundBuzzer(false);
     return;
   }
 
   if (currentAlertLevel == "Alert") {
-    // Emergency Hazard Alert: Fast alarm (250ms cycle: 125ms ON / 125ms OFF)
+    // Fast Emergency Alarm: 4 beeps per second (125ms ON / 125ms OFF)
     bool beepState = (now % 250) < 125;
-    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
+    soundBuzzer(beepState);
 
   } else if (currentAlertLevel == "Warning") {
     // Preventive Warning: Double chirp every second [100ms ON, 100ms OFF, 100ms ON, 700ms OFF]
     unsigned long cycle = now % 1000;
     bool beepState = (cycle < 100) || (cycle >= 200 && cycle < 300);
-    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
+    soundBuzzer(beepState);
 
   } else if (currentAlertLevel == "Watch") {
     // Active Watch: Single soft chirp every 2 seconds (80ms ON)
     unsigned long cycle = now % 2000;
     bool beepState = (cycle < 80);
-    digitalWrite(PIN_BUZZER, beepState ? HIGH : LOW);
+    soundBuzzer(beepState);
 
   } else {
-    // Normal / Baseline (<28°C): Completely silent
-    digitalWrite(PIN_BUZZER, LOW);
+    // Normal / Baseline: Completely silent
+    soundBuzzer(false);
   }
 }
 
@@ -303,10 +312,10 @@ void sendButtonAck() {
   if (code == 200) {
     Serial.println("[Ack] Confirmed by central server.");
     // Audio feedback: Two quick chirps
-    digitalWrite(PIN_BUZZER, HIGH); delay(80);
-    digitalWrite(PIN_BUZZER, LOW);  delay(60);
-    digitalWrite(PIN_BUZZER, HIGH); delay(80);
-    digitalWrite(PIN_BUZZER, LOW);
+    soundBuzzer(true);  delay(80);
+    soundBuzzer(false); delay(60);
+    soundBuzzer(true);  delay(80);
+    soundBuzzer(false);
   }
   http.end();
 }
@@ -321,12 +330,12 @@ void setup() {
 
   // Configure Buzzer Pin
   pinMode(PIN_BUZZER, OUTPUT);
-  digitalWrite(PIN_BUZZER, LOW);
+  soundBuzzer(false);
 
   // Power-on test chirp (confirms buzzer is connected)
-  digitalWrite(PIN_BUZZER, HIGH);
-  delay(120);
-  digitalWrite(PIN_BUZZER, LOW);
+  soundBuzzer(true);
+  delay(150);
+  soundBuzzer(false);
 
   // Configure on-board BOOT button
   pinMode(PIN_BOOT_BUTTON, INPUT_PULLUP);
