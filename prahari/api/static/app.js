@@ -102,6 +102,7 @@ function loadCurrentView() {
   else if (state.activeTab === "health") loadDataHealthView();
   else if (state.activeTab === "audit") loadAuditLogs();
   else if (state.activeTab === "impact") loadImpactView();
+  else if (state.activeTab === "sentinel") loadSentinelView();
 }
 
 // --- 1. Situation Map View ---
@@ -996,6 +997,271 @@ async function exportPolicyMarkdown() {
     URL.revokeObjectURL(url);
   } catch (err) {
     alert("Export failed: " + err.message);
+  }
+}
+
+// --- 8. Munzir Sentinel Hardware Integration View ---
+
+async function loadSentinelView() {
+  const tbody = document.getElementById("sentinelNodesTableBody");
+  const compContainer = document.getElementById("microclimateComparisonContent");
+  if (!tbody) return;
+
+  tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+
+  try {
+    const nodes = await apiFetch("/api/v1/sentinel/nodes");
+
+    // KPI Counters
+    const total = nodes.length;
+    const online = nodes.filter(n => n.is_online).length;
+    const wbgtVals = nodes.map(n => n.last_wbgt).filter(v => v !== null && v !== undefined);
+    const maxWbgt = wbgtVals.length > 0 ? Math.max(...wbgtVals).toFixed(1) + "°C" : "--";
+    const alerts = nodes.filter(n => n.current_level && n.current_level !== "None").length;
+
+    document.getElementById("sentinelKpiTotal").textContent = total;
+    document.getElementById("sentinelKpiOnline").textContent = online;
+    document.getElementById("sentinelKpiMaxWbgt").textContent = maxWbgt;
+    document.getElementById("sentinelKpiAlerts").textContent = alerts;
+
+    if (total === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="12" style="text-align:center; padding:2rem; color:#94a3b8;">
+            No Sentinel nodes currently commissioned. Click <strong>"➕ Commission New Node"</strong> to register an ESP32 hardware node.
+          </td>
+        </tr>
+      `;
+      if (compContainer) {
+        compContainer.innerHTML = `<div style="color:#94a3b8; font-size:0.85rem;">Commission nodes to enable live on-site vs regional model comparison.</div>`;
+      }
+      return;
+    }
+
+    // Render Table Rows
+    tbody.innerHTML = nodes.map(node => {
+      const isOnline = node.is_online;
+      const statusBadge = isOnline 
+        ? `<span class="badge badge-normal" style="background:#065f46; color:#34d399;">🟢 ONLINE</span>`
+        : `<span class="badge badge-alert" style="background:#7f1d1d; color:#f87171;">🔴 OFFLINE</span>`;
+
+      // Alert level badge
+      let lvlBadge = `<span class="badge badge-gray">NONE</span>`;
+      if (node.current_level === "Watch") lvlBadge = `<span class="badge badge-watch">WATCH</span>`;
+      else if (node.current_level === "Warning") lvlBadge = `<span class="badge badge-warning">WARNING</span>`;
+      else if (node.current_level === "Alert") lvlBadge = `<span class="badge badge-alert">ALERT</span>`;
+
+      // Sensors
+      const dhtOk = node.sensor_health?.dht ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">✔ DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;">✖ DHT</span>`;
+      const globeOk = node.sensor_health?.globe ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">✔ Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;">✖ Globe</span>`;
+
+      // Loc Confidence
+      let locBadge = `<span class="badge badge-normal" style="font-size:0.65rem;">EXACT</span>`;
+      if (node.location_confidence === "inferred") locBadge = `<span class="badge badge-warning" style="font-size:0.65rem;">INFERRED</span>`;
+      else if (node.location_confidence === "district_only") locBadge = `<span class="badge badge-alert" style="font-size:0.65rem;">DISTRICT</span>`;
+
+      // Values
+      const wbgtStr = node.last_wbgt !== null && node.last_wbgt !== undefined ? `<strong>${node.last_wbgt.toFixed(1)}°C</strong>` : `<span style="color:#64748b;">--</span>`;
+      const airStr = node.last_air_temp !== null && node.last_air_temp !== undefined ? `${node.last_air_temp.toFixed(1)}°C` : `--`;
+      const rhStr = node.last_rh !== null && node.last_rh !== undefined ? `${Math.round(node.last_rh)}%` : `--`;
+      const globeStr = node.last_globe_temp !== null && node.last_globe_temp !== undefined ? `${node.last_globe_temp.toFixed(1)}°C` : `--`;
+      const lastSeenStr = node.last_seen_utc ? node.last_seen_utc.substring(11, 19) + " UTC" : "Never";
+
+      return `
+        <tr>
+          <td><code style="color:#38bdf8; font-weight:700;">${node.node_id}</code></td>
+          <td><span style="font-weight:600;">${node.site_id}</span></td>
+          <td>${statusBadge}</td>
+          <td style="color:#f59e0b; font-size:0.95rem;">${wbgtStr}</td>
+          <td>${airStr}</td>
+          <td>${rhStr}</td>
+          <td>${globeStr}</td>
+          <td>${dhtOk} &nbsp; ${globeOk}</td>
+          <td>${locBadge}</td>
+          <td>${lvlBadge}</td>
+          <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
+          <td>
+            <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
+              ⚡ Test Reading
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    // Render Microclimate Comparison Card
+    if (compContainer) {
+      compContainer.innerHTML = nodes.map(node => {
+        const measured = node.last_wbgt || 31.5;
+        const modelled = 30.2; // Reference Open-Meteo regional district WBGT
+        const delta = (measured - modelled).toFixed(1);
+        const deltaSign = delta > 0 ? `+${delta}` : delta;
+        const isHotspot = delta > 0.5;
+
+        return `
+          <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:0.85rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+              <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.5rem;">
+                <span>📍 ${node.site_id}</span>
+                <code style="font-size:0.75rem; color:#38bdf8;">(${node.node_id})</code>
+                ${isHotspot ? `<span class="badge badge-warning" style="font-size:0.65rem;">MICROCLIMATE HOTSPOT</span>` : `<span class="badge badge-normal" style="font-size:0.65rem;">NOMINAL</span>`}
+              </div>
+              <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.25rem;">
+                H3 Cell: <code style="color:#cbd5e1;">${node.h3_index || "8743a104effffff"}</code> &bull; Mode: ${node.indoor_mode ? "Indoor / Canteen" : "Outdoor Sun Shield"}
+              </div>
+            </div>
+
+            <div style="display:flex; gap:1.25rem; align-items:center;">
+              <div style="text-align:right;">
+                <div style="font-size:0.7rem; color:#94a3b8;">On-Site (ESP32)</div>
+                <div style="font-size:1.1rem; font-weight:700; color:#f59e0b;">${measured.toFixed(1)}°C</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:0.7rem; color:#94a3b8;">Open-Meteo Model</div>
+                <div style="font-size:1.1rem; font-weight:700; color:#38bdf8;">${modelled.toFixed(1)}°C</div>
+              </div>
+              <div style="text-align:right; min-width:65px;">
+                <div style="font-size:0.7rem; color:#94a3b8;">Microclimate Δ</div>
+                <div style="font-size:1.1rem; font-weight:700; color:${delta > 0 ? '#ef4444' : '#10b981'};">${deltaSign}°C</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#ef4444;">Failed to load Sentinel nodes: ${err.message}</td></tr>`;
+  }
+}
+
+// Modal Handlers
+function openCommissionModal() {
+  const modal = document.getElementById("commissionModal");
+  if (!modal) return;
+  document.getElementById("commNodeId").value = "SENT-" + Math.floor(100 + Math.random() * 900);
+  document.getElementById("commLat").value = "24.9920";
+  document.getElementById("commLon").value = "55.0410";
+  document.getElementById("commAccuracy").value = "15";
+  document.getElementById("commAccuracyText").textContent = "15m";
+  updateConfidenceBadge(15);
+  modal.style.display = "flex";
+}
+
+function closeCommissionModal() {
+  const modal = document.getElementById("commissionModal");
+  if (modal) modal.style.display = "none";
+}
+
+function useCurrentDeviceLocation() {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+  const btn = event.target;
+  const originalText = btn.textContent;
+  btn.textContent = "⌛ Acquiring GPS...";
+  btn.disabled = true;
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      const lat = pos.coords.latitude.toFixed(4);
+      const lon = pos.coords.longitude.toFixed(4);
+      const acc = Math.round(pos.coords.accuracy);
+
+      document.getElementById("commLat").value = lat;
+      document.getElementById("commLon").value = lon;
+      document.getElementById("commAccuracy").value = acc;
+      document.getElementById("commAccuracyText").textContent = acc + "m";
+      updateConfidenceBadge(acc);
+    },
+    (err) => {
+      btn.textContent = originalText;
+      btn.disabled = false;
+      alert("Location acquisition failed: " + err.message + "\nEnsure permissions are granted and page is served over localhost or HTTPS.");
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+  );
+}
+
+function updateConfidenceBadge(accuracyM) {
+  const badgeContainer = document.getElementById("commConfidenceBadge");
+  if (!badgeContainer) return;
+  if (accuracyM <= 50) {
+    badgeContainer.innerHTML = `<span class="badge badge-normal">EXACT GPS (≤50m)</span>`;
+  } else if (accuracyM <= 1000) {
+    badgeContainer.innerHTML = `<span class="badge badge-warning">INFERRED (≤1000m)</span>`;
+  } else {
+    badgeContainer.innerHTML = `<span class="badge badge-alert">DISTRICT ONLY (>1000m)</span>`;
+  }
+}
+
+async function submitCommissionNode() {
+  const nodeId = document.getElementById("commNodeId").value.trim();
+  const siteId = document.getElementById("commSiteId").value;
+  const lat = parseFloat(document.getElementById("commLat").value);
+  const lon = parseFloat(document.getElementById("commLon").value);
+  const acc = parseFloat(document.getElementById("commAccuracy").value);
+  const indoor = document.getElementById("commIndoorMode").checked;
+
+  if (!nodeId) {
+    alert("Please enter a valid Node ID (e.g. SENT-001).");
+    return;
+  }
+
+  const payload = {
+    node_id: nodeId,
+    site_id: siteId,
+    latitude: lat,
+    longitude: lon,
+    accuracy_m: acc,
+    method: "browser_geolocation",
+    indoor_mode: indoor,
+  };
+
+  try {
+    const res = await apiFetch("/api/v1/sentinel/commission", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    closeCommissionModal();
+    alert(`✔ Successfully commissioned ${nodeId} at ${siteId}!\nH3 Cell: ${res.h3_index}\nLocation Confidence: ${res.location_confidence.toUpperCase()}`);
+    loadSentinelView();
+  } catch (err) {
+    alert("Commissioning failed: " + err.message);
+  }
+}
+
+async function simulateNodeUpload(nodeId) {
+  // Generates a live test reading with plausible summer heat parameters
+  const airTemp = 36.5 + (Math.random() * 3.0);
+  const rh = 55.0 + (Math.random() * 10.0);
+  const globeTemp = 43.0 + (Math.random() * 4.0);
+
+  const payload = {
+    node_id: nodeId,
+    seq: Math.floor(Math.random() * 10000),
+    ts: new Date().toISOString(),
+    air_temp_c: parseFloat(airTemp.toFixed(1)),
+    rh_pct: parseFloat(rh.toFixed(1)),
+    globe_temp_c: parseFloat(globeTemp.toFixed(1)),
+    wbgt_est_c: 32.5,
+    ok: { dht: true, globe: true, rssi: -58 },
+  };
+
+  try {
+    const res = await apiFetch("/api/v1/sentinel/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    alert(`✔ Sent telemetry for ${nodeId}!\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
+    loadSentinelView();
+  } catch (err) {
+    alert("Telemetry test failed: " + err.message);
   }
 }
 

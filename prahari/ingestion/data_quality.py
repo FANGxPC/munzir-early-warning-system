@@ -102,3 +102,15 @@ class DataQualityScorer:
 
         return backlog_flags
 
+    def compute_sentinel_completeness(
+        self,
+        node_id: str,
+        readings_received: int,
+        expected_readings: int = 1440,
+    ) -> float:
+        """
+        Completeness score for an ESP32 Sentinel node (0.0 to 1.0).
+        Evaluates 1 reading/minute across 24 hours (1,440 expected).
+        """
+        return min(max(0.0, float(readings_received) / max(expected_readings, 1)), 1.0)
+

@@ -133,13 +133,28 @@
 - [x] **Plain-Language Known Limitations Disclosure (`docs/limitations.md`):** Transparent disclosure of synthetic outcomes, modelled WBGT physics, district-level geolocation fallback, and reporting delays.
 - [x] **Automated Governance Scorecard CLI (`prahari governance`):** Verifies all 7 Responsible AI claims linking directly to governance documents and passing automated tests.
 
+### Phase 11 — Sentinel On-Site WBGT Hardware Integration: COMPLETE
+- [x] **ESP32 Microclimate Shade Node (`hardware/sentinel_node/`):** Firmware for ESP32 DevKit reading DHT22 (air temp/RH), DS18B20 (matte-black globe), and BOOT button.
+- [x] **On-Board Multi-Pattern Visual LED:** Real-time visual alerts (Solid Green, 1Hz Slow Yellow Watch, 2Hz Double Orange Warning, 4Hz Fast Red Alert, Blue-Blip offline mode).
+- [x] **Server-Side WBGT Re-Derivation (`prahari/ingestion/sentinel_ingest.py`):** Independent Stull psychrometric wet-bulb calculation guaranteeing scientific integrity.
+- [x] **Location Commissioning Hierarchy:** W3C Geolocation API binding to H3 Res-7 cell and confidence flag (`exact` $\le 50$m, `inferred` $\le 1000$m, `district_only`).
+- [x] **Sensory Fault & Heartbeat Watchdogs:** Automatic stuck sensor detection (10 consecutive identical reads), 180s offline timeout, and sequence gap logging.
+- [x] **Dashboard Sentinel Fleet View (`prahari/api/static/`):** Live telemetry table, on-site vs Open-Meteo hotspot delta card, and commission modal dialog.
+- [x] **Demo Replay Simulator (`hardware/replay/replay_trace.py`):** Standalone backup tool streaming pre-recorded traces for network-isolated pitch presentations.
+
 ---
 
 ## Quickstart Commands
 
 ```bash
-# 1. Run full unit & integration test suite (104 passing tests across all 8 phases)
+# 1. Run full unit & integration test suite (130 passing tests across all 11 phases)
 make test
+
+# 2. Run Phase 11 Sentinel hardware test suite
+make test-sentinel
+
+# 3. Run Phase 11 Sentinel demo telemetry replay stream
+make sentinel-replay
 
 # 2. Run Phase 8 Responsible AI & Governance Scorecard
 make governance

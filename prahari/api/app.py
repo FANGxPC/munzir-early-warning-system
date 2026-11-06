@@ -6,7 +6,7 @@ Enforces Entra ID app roles, differential privacy, and occupational privacy boun
 
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from fastapi import FastAPI, Depends, Query, Request, HTTPException, status
+from fastapi import FastAPI, Depends, Query, Request, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -50,6 +50,13 @@ from prahari.impact.policy_report import DistrictPolicyEvidenceGenerator
 from prahari.interop.fhir_adapter import FHIRSurveillanceAdapter
 from prahari.interop.sftp_csv import SFTPCSVAdapter
 from prahari.interop.drift_monitor import ModelDriftMonitor, DriftReport
+from prahari.models.canonical import (
+    SentinelUpload,
+    SentinelUploadResponse,
+    SentinelCommission,
+    SentinelNodeStatus,
+)
+from prahari.ingestion.sentinel_ingest import SentinelIngestionEngine
 import numpy as np
 
 # Directories
@@ -80,6 +87,7 @@ demo_service = get_demo_service()
 audit_service = get_audit_service()
 impact_calculator = HealthResilienceImpactCalculator()
 policy_generator = DistrictPolicyEvidenceGenerator(random_seed=42)
+sentinel_engine = SentinelIngestionEngine()
 
 
 # Middleware for View Audit Logging
@@ -484,6 +492,77 @@ async def ingest_sftp_workplace_drop(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
+
+
+# --- 9.6 Munzir Sentinel Hardware Integration Endpoints ---
+
+@app.post("/api/v1/sentinel/upload", response_model=SentinelUploadResponse)
+async def sentinel_upload(
+    upload: SentinelUpload,
+    x_sentinel_key: Optional[str] = Header(None, alias="X-Sentinel-Key"),
+) -> SentinelUploadResponse:
+    """
+    Ingests 1-minute telemetry payload from shade-mounted ESP32 Sentinel node.
+    Re-derives WBGT, stores Bronze observations, and returns real-time alert level to drive on-board LED.
+    """
+    try:
+        return sentinel_engine.process_upload(upload)
+    except KeyError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@app.post("/api/v1/sentinel/commission", response_model=SentinelNodeStatus)
+def commission_sentinel_node(
+    commission: SentinelCommission,
+    user: AuthenticatedUser = Depends(RequireRoles([
+        EntraRole.SURVEILLANCE_OFFICER,
+        EntraRole.OCCUPATIONAL_HEALTH,
+        EntraRole.EMPLOYER_SAFETY,
+    ])),
+) -> SentinelNodeStatus:
+    """
+    Commissions an on-site Sentinel node: binds node ID to physical site and browser geolocation.
+    Derives H3 Res-7 index and sets location confidence flag.
+    """
+    try:
+        return sentinel_engine.commission_node(commission)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@app.get("/api/v1/sentinel/nodes", response_model=List[SentinelNodeStatus])
+def get_sentinel_nodes(
+    site_id: Optional[str] = Query(None, description="Optional site filter"),
+    user: AuthenticatedUser = Depends(get_current_user),
+) -> List[SentinelNodeStatus]:
+    """
+    Returns live fleet health of all commissioned Sentinel nodes,
+    including online/offline status, last observed WBGT, and sensor health flags.
+    """
+    nodes = sentinel_engine.get_all_nodes()
+    if site_id:
+        nodes = [n for n in nodes if n.site_id == site_id]
+    return nodes
+
+
+@app.post("/api/v1/sentinel/ack", response_class=JSONResponse)
+def acknowledge_sentinel_button(
+    payload: Dict[str, Any],
+) -> JSONResponse:
+    """
+    Logs physical BOOT button press from an ESP32 Sentinel node.
+    Logged in the non-repudiation audit trail as an on-site operator acknowledgement.
+    """
+    node_id = payload.get("node_id")
+    if not node_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing required 'node_id' field.")
+    try:
+        record = sentinel_engine.log_node_ack(node_id=node_id, ts=payload.get("ts"))
+        return JSONResponse(content={"status": "acknowledged", "record": record})
+    except KeyError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 # --- 10. Web Single Page Application (Static UI) ---
