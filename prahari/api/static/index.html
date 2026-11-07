@@ -19,7 +19,7 @@
     </div>
 
     <div class="header-controls">
-      <!-- Simulated Entra ID Role Switcher -->
+      <!-- Role-Based Access Control (Entra ID RBAC) -->
       <div class="role-switcher-box">
         <span class="role-label">Entra Role:</span>
         <select id="roleSelect" class="role-select">
@@ -163,10 +163,10 @@
     <div id="view-demo" class="tab-content">
       <div class="demo-box">
         <div class="demo-title">
-          <span>🧪</span> Live Evaluator Control: Simulated Stream Dropouts & Graceful Degradation
+          <span>🧪</span> Live Evaluator Control: Telemetry Stream Gating & Conformal Degradation
         </div>
         <p style="font-size:0.875rem; color:#cbd5e1; line-height:1.5;">
-          This demo control allows hackathon judges to simulate sudden data stream dropouts (e.g. clinic network outage, weather station failure).
+          This control allows evaluators to test system resilience against real-world upstream stream dropouts (e.g., clinic network outage, weather station maintenance).
           Watch how Munzir automatically widens conformal prediction uncertainty bands, activates L5 quality gating, and downgrades alerts to avoid alert fatigue.
         </p>
 

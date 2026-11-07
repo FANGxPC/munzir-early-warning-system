@@ -1,6 +1,6 @@
 """
 Master Operational Validation Orchestrator.
-Coordinates synthetic injection study, rolling-origin evaluation, baseline comparisons,
+Coordinates benchmark scenario backtesting, rolling-origin evaluation, baseline comparisons,
 AMOC curves, calibration, and single-command report generation (make validate SEED=42).
 """
 

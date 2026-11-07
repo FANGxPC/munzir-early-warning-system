@@ -195,7 +195,7 @@ class EvidenceCardGenerator:
                             "rate_per_1000": round(float(srow["rate_per_1000"]), 2) if "rate_per_1000" in srow and pd.notna(srow["rate_per_1000"]) else None,
                         })
 
-        # Dynamic evidence synthesis from alert contributions and probability if data table unpopulated
+        # Dynamic evidence compilation from alert contributions and probability if data table unpopulated
         if not what_rose:
             p_val = max(0.1, min(1.0, float(alert.probability)))
             if "heat" in alert.alert_type:
@@ -230,7 +230,7 @@ class EvidenceCardGenerator:
                     {"signal_type": "clinical_fever", "observed": obs_fev, "expected_baseline": base_fev, "exceedance_ratio": round(obs_fev / base_fev, 2)},
                 ]
 
-        # 4. Synthesize Fenced Narrative
+        # 4. Generate Fenced Narrative
         evidence_summary = {
             "environmental_context": env_context,
             "dq_completeness_pct": dq_comp,

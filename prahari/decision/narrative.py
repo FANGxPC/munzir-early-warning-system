@@ -51,7 +51,7 @@ def extract_numbers_from_obj(obj: Any) -> Set[str]:
 
 class NarrativeGenerator:
     """
-    Synthesizes clinical and operational alert narratives with deterministic safety guarantees.
+    Generates clinical and operational alert narratives with deterministic safety guarantees.
     """
 
     @staticmethod

@@ -154,7 +154,7 @@ class AlertInboxService:
             target_alert = next((a for a in alerts if a.alert_id.startswith(alert_id) or alert_id.startswith(a.alert_id)), None)
 
         if not target_alert:
-            # Fallback to synthesizing a situational alert
+            # Fallback to generating a situational alert
             target_alert = PrahariAlert(
                 alert_id=alert_id,
                 incident_id="INC-DEFAULT",

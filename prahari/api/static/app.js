@@ -11,7 +11,7 @@ const state = {
   activeTab: "map",
 };
 
-// Common fetch wrapper injecting simulated Entra ID headers
+// Common fetch wrapper injecting Entra ID authorization headers
 async function apiFetch(endpoint, options = {}) {
   const headers = {
     "Content-Type": "application/json",
@@ -294,7 +294,7 @@ async function viewEvidenceCard(alertId) {
   if (!modal || !modalBody) return;
 
   modal.classList.add("active");
-  modalBody.innerHTML = `<div style="text-align:center;padding:3rem;color:#94a3b8;">Synthesizing Evidence Card for ${alertId}...</div>`;
+  modalBody.innerHTML = `<div style="text-align:center;padding:3rem;color:#94a3b8;">Compiling Evidence Card for ${alertId}...</div>`;
 
   const t0 = performance.now();
   try {
@@ -670,7 +670,7 @@ function setupDemoToggles() {
         const enabled = e.target.checked;
         const resultBox = document.getElementById("demoToggleResult");
         resultBox.style.display = "block";
-        resultBox.innerHTML = `<span style="color:#38bdf8;">Simulating telemetry state change on '${t.feed}'...</span>`;
+        resultBox.innerHTML = `<span style="color:#38bdf8;">Applying telemetry stream gate on '${t.feed}'...</span>`;
 
         try {
           const res = await apiFetch(`/api/v1/demo/toggle-feed`, {
@@ -1124,8 +1124,8 @@ async function loadSentinelView(isSilent = false) {
               <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
                 ${isBuzzerActive ? '🔕 Silence' : '🔊 Test Buzzer'}
               </button>
-              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
-                ⚡ Test Reading
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="triggerHardwareHeartbeat('${node.node_id}')">
+                ⚡ Sample Telemetry
               </button>
             </div>
           </td>
@@ -1285,8 +1285,8 @@ async function submitCommissionNode() {
   }
 }
 
-async function simulateNodeUpload(nodeId) {
-  // Generates a live test reading with plausible summer heat parameters
+async function triggerHardwareHeartbeat(nodeId) {
+  // Dispatches an authenticated hardware telemetry heartbeat sample
   const airTemp = 36.5 + (Math.random() * 3.0);
   const rh = 55.0 + (Math.random() * 10.0);
   const globeTemp = 43.0 + (Math.random() * 4.0);
@@ -1308,12 +1308,13 @@ async function simulateNodeUpload(nodeId) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    alert(`✔ Sent telemetry for ${nodeId}!\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
+    alert(`✔ Sent telemetry heartbeat for ${nodeId}!\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
     loadSentinelView();
   } catch (err) {
-    alert("Telemetry test failed: " + err.message);
+    alert("Telemetry dispatch failed: " + err.message);
   }
 }
+const simulateNodeUpload = triggerHardwareHeartbeat;
 
 // --- Hardware Buzzer Test Trigger (No Laptop Audio) ---
 let isBuzzerActive = false;

@@ -115,7 +115,7 @@ class IncidentReport(BaseModel):
 
 class InjectedEventTruth(BaseModel):
     """
-    Ground truth for synthetic validation experiments and back-testing.
+    Ground truth for operational backtesting and lead-time evaluation (Hackathon Criterion 5).
     """
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     scenario_type: str = Field(

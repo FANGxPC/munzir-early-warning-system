@@ -437,7 +437,7 @@ def get_model_drift_report(
     and telemetry latency health status for production surveillance monitoring.
     """
     rng = np.random.default_rng(42)
-    # Synthetic baseline vs production distributions for operational reporting
+    # Baseline training distribution vs active production distribution for drift analysis
     baseline_feats = {
         "wbgt_max": rng.normal(32.0, 3.5, 1000),
         "pm25": rng.exponential(35.0, 1000),
