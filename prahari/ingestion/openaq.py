@@ -4,6 +4,7 @@ Pulls measured PM2.5, PM10, and NO2 from physical monitoring stations
 via OpenAQ v3 API with local caching and offline sensor simulation.
 """
 
+import os
 import json
 import logging
 from datetime import datetime, timedelta
@@ -48,7 +49,7 @@ class OpenAQClient:
         cache_dir: Optional[Path] = None,
         use_offline_fallback: bool = True,
     ):
-        self.api_key = api_key
+        self.api_key = api_key or os.environ.get("OPENAQ_API_KEY")
         self.cache_dir = Path(cache_dir or (CACHE_DIR / "openaq"))
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.use_offline_fallback = use_offline_fallback
