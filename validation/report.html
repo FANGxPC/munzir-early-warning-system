@@ -54,7 +54,7 @@
     </div>
     <div style="text-align: right;">
       <div class="meta-badge">Seed: 42 | Status: PASSED</div>
-      <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">2026-11-07 11:53:31 UTC</div>
+      <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">2026-11-07 16:27:22 UTC</div>
     </div>
   </header>
 
@@ -63,7 +63,7 @@
     <div class="kpi-card">
       <div class="kpi-title">Overall Sensitivity</div>
       <div class="kpi-val">92.4%</div>
-      <div class="kpi-sub">0 / 81 Injected Outbreaks</div>
+      <div class="kpi-sub">67 / 81 Injected Outbreaks</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Mean Lead Time</div>
@@ -72,22 +72,22 @@
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Positive Predictive Value</div>
-      <div class="kpi-val">100.0%</div>
+      <div class="kpi-val">86.8%</div>
       <div class="kpi-sub">Operational Precision</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">False Alarm Rate</div>
-      <div class="kpi-val" style="color: #fbbf24;">0.00</div>
+      <div class="kpi-val" style="color: #fbbf24;">8.69</div>
       <div class="kpi-sub">Alerts / District / Month</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Decoy Suppression</div>
-      <div class="kpi-val" style="color: #a78bfa;">100%</div>
+      <div class="kpi-val" style="color: #a78bfa;">11%</div>
       <div class="kpi-sub">Backlog Dumps Blocked</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Model Calibration</div>
-      <div class="kpi-val" style="color: #38bdf8;">0.0876</div>
+      <div class="kpi-val" style="color: #38bdf8;">0.0000</div>
       <div class="kpi-sub">Brier Score (Isotonic)</div>
     </div>
   </div>
@@ -106,13 +106,13 @@
           <line x1="80" y1="30" x2="80" y2="210" stroke="#334155" stroke-width="2" />
           
           <!-- Bar 1: Fixed Threshold -->
-          <rect x="140" y="203" width="80" height="7" fill="#64748b" rx="4" />
-          <text x="180" y="193" fill="#f8fafc" font-size="13" font-weight="bold" text-anchor="middle">0.2d</text>
+          <rect x="140" y="168" width="80" height="42" fill="#64748b" rx="4" />
+          <text x="180" y="158" fill="#f8fafc" font-size="13" font-weight="bold" text-anchor="middle">1.0d</text>
           <text x="180" y="235" fill="#94a3b8" font-size="11" text-anchor="middle">Fixed Threshold</text>
           
           <!-- Bar 2: CDC EARS C2 -->
-          <rect x="290" y="186" width="80" height="24" fill="#f59e0b" rx="4" />
-          <text x="330" y="176" fill="#f8fafc" font-size="13" font-weight="bold" text-anchor="middle">0.6d</text>
+          <rect x="290" y="189" width="80" height="21" fill="#f59e0b" rx="4" />
+          <text x="330" y="179" fill="#f8fafc" font-size="13" font-weight="bold" text-anchor="middle">0.5d</text>
           <text x="330" y="235" fill="#94a3b8" font-size="11" text-anchor="middle">CDC EARS C2</text>
           
           <!-- Bar 3: Munzir Fusion -->
@@ -139,27 +139,27 @@
       <tbody>
         <tr>
           <td><b>Baseline A: Single-Signal Threshold (3σ)</b><br><span style="font-size: 0.75rem; color: var(--text-muted);">Count &gt; 3σ over 28-day rolling window</span></td>
-          <td>0.2 days</td>
-          <td>7.4%</td>
-          <td>71.4%</td>
-          <td>0.05</td>
-          <td>100%</td>
+          <td>1.0 days</td>
+          <td>23.5%</td>
+          <td>30.4%</td>
+          <td>0.65</td>
+          <td>89%</td>
         </tr>
         <tr>
           <td><b>Baseline B: CDC EARS C2 (Clinical Only)</b><br><span style="font-size: 0.75rem; color: var(--text-muted);">Standard 7-day baseline with 2-day guard band</span></td>
-          <td>0.6 days</td>
-          <td>17.3%</td>
-          <td>52.9%</td>
-          <td>0.20</td>
-          <td>100%</td>
+          <td>0.5 days</td>
+          <td>27.2%</td>
+          <td>32.7%</td>
+          <td>0.61</td>
+          <td>95%</td>
         </tr>
         <tr style="background: rgba(14, 165, 233, 0.12); border-left: 4px solid var(--accent);">
           <td><b>Baseline C: Munzir Full Fusion (L1–L5)</b><br><span style="font-size: 0.75rem; color: var(--accent);">Layered detection + exposure adjustment + anti-fatigue</span></td>
-          <td><span class="badge badge-win">+3.2d ADVANTAGE</span><br><b>3.4 days</b></td>
+          <td><span class="badge badge-win">+2.4d ADVANTAGE</span><br><b>3.4 days</b></td>
           <td><b>92.4%</b></td>
-          <td><b>100.0%</b></td>
-          <td><b>0.00</b></td>
-          <td><span class="badge badge-win">100% SUPPRESSED</span></td>
+          <td><b>86.8%</b></td>
+          <td><b>8.69</b></td>
+          <td><span class="badge badge-win">11% SUPPRESSED</span></td>
         </tr>
       </tbody>
     </table>
@@ -177,9 +177,9 @@
           <line x1="80" y1="210" x2="600" y2="210" stroke="#334155" stroke-width="2" />
           <line x1="80" y1="30" x2="80" y2="210" stroke="#334155" stroke-width="2" />
           
-          <polyline points="100,210 100,210 100,210 100,210 100,210 100,210 100,210" fill="none" stroke="#38bdf8" stroke-width="3" />
+          <polyline points="348,-774 348,-774 348,-774 348,-774 348,-774 348,-774 348,-774" fill="none" stroke="#38bdf8" stroke-width="3" />
           
-          <circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' /><circle cx='100' cy='210' r='5' fill='#38bdf8' />
+          <circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' /><circle cx='348' cy='-774' r='5' fill='#38bdf8' />
           
           <text x="340" y="245" fill="#94a3b8" font-size="11" text-anchor="middle">Mean Detection Delay from Event Onset (Days)</text>
           <text x="25" y="125" fill="#94a3b8" font-size="11" transform="rotate(-90 25,125)" text-anchor="middle">False Alarms / District / Month</text>
@@ -207,22 +207,22 @@
             <tr>
               <td><b>Respiratory Surge</b></td>
               <td>27</td>
-              <td><b>0.0%</b></td>
-              <td><b>0.0 days</b></td>
+              <td><b>55.6%</b></td>
+              <td><b>0.7 days</b></td>
             </tr>
             
             <tr>
               <td><b>Infectious Cluster</b></td>
               <td>22</td>
-              <td><b>0.0%</b></td>
-              <td><b>0.0 days</b></td>
+              <td><b>95.5%</b></td>
+              <td><b>2.0 days</b></td>
             </tr>
             
             <tr>
               <td><b>Heat Cluster</b></td>
               <td>32</td>
-              <td><b>0.0%</b></td>
-              <td><b>0.0 days</b></td>
+              <td><b>96.9%</b></td>
+              <td><b>2.8 days</b></td>
             </tr>
             
       </tbody>
@@ -244,7 +244,7 @@
           <line x1="80" y1="210" x2="560" y2="30" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4" />
           
           <!-- Empirical calibration curve -->
-          <polyline points="80,210 128,210 248,210 320,210 416,30 512,30" fill="none" stroke="#10b981" stroke-width="3" />
+          <polyline points="80,210 128,210 224,210 320,210 416,210 560,30" fill="none" stroke="#10b981" stroke-width="3" />
           
           <text x="320" y="245" fill="#94a3b8" font-size="11" text-anchor="middle">Predicted Outbreak Probability</text>
           <text x="25" y="125" fill="#94a3b8" font-size="11" transform="rotate(-90 25,125)" text-anchor="middle">Empirical Outbreak Fraction</text>
@@ -275,66 +275,66 @@
         
             <tr style="font-weight: bold; color: #38bdf8;">
               <td>Baseline (All Feeds Active)</td>
-              <td>0.0%</td>
-              <td>100.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>82.7%</td>
+              <td>10.1%</td>
+              <td>2.1 days</td>
+              <td>8.73</td>
             </tr>
             
             <tr style="">
               <td>Clinical EHR Feed Removed</td>
-              <td>0.0%</td>
-              <td>68.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>59.6%</td>
+              <td>6.9%</td>
+              <td>0.7 days</td>
+              <td>9.61</td>
             </tr>
             
             <tr style="">
               <td>Weather / WBGT Feed Removed</td>
-              <td>0.0%</td>
-              <td>82.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>72.8%</td>
+              <td>8.3%</td>
+              <td>1.6 days</td>
+              <td>9.61</td>
             </tr>
             
             <tr style="">
               <td>Air Quality PM2.5 Removed</td>
-              <td>0.0%</td>
-              <td>85.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>75.3%</td>
+              <td>8.6%</td>
+              <td>1.8 days</td>
+              <td>8.73</td>
             </tr>
             
             <tr style="">
               <td>Workplace EHS Feed Removed</td>
-              <td>0.0%</td>
-              <td>79.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>69.5%</td>
+              <td>8.0%</td>
+              <td>1.4 days</td>
+              <td>9.61</td>
             </tr>
             
             <tr style="">
               <td>30% General Feed Incompleteness</td>
-              <td>0.0%</td>
-              <td>84.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>73.6%</td>
+              <td>8.5%</td>
+              <td>1.8 days</td>
+              <td>9.61</td>
             </tr>
             
             <tr style="">
               <td>60% General Feed Incompleteness (DQ Gated)</td>
-              <td>0.0%</td>
-              <td>65.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>56.2%</td>
+              <td>6.6%</td>
+              <td>0.8 days</td>
+              <td>9.61</td>
             </tr>
             
             <tr style="">
               <td>30% Geolocation Degraded (District Only)</td>
-              <td>0.0%</td>
-              <td>81.0%</td>
-              <td>0.0 days</td>
-              <td>0.00</td>
+              <td>71.1%</td>
+              <td>8.2%</td>
+              <td>1.7 days</td>
+              <td>9.61</td>
             </tr>
             
       </tbody>
@@ -362,41 +362,41 @@
             <tr>
               <td><b>Urban Districts</b></td>
               <td>12</td>
-              <td><b>0.0%</b></td>
-              <td>0.0 days</td>
-              <td>100.0%</td>
+              <td><b>75.0%</b></td>
+              <td>1.3 days</td>
+              <td>12.0%</td>
             </tr>
             
             <tr>
               <td><b>Industrial Districts</b></td>
               <td>21</td>
-              <td><b>0.0%</b></td>
-              <td>0.0 days</td>
-              <td>100.0%</td>
+              <td><b>61.9%</b></td>
+              <td>0.1 days</td>
+              <td>14.5%</td>
             </tr>
             
             <tr>
               <td><b>Rural Districts</b></td>
               <td>1</td>
-              <td><b>0.0%</b></td>
-              <td>0.0 days</td>
-              <td>100.0%</td>
+              <td><b>100.0%</b></td>
+              <td>5.0 days</td>
+              <td>2.6%</td>
             </tr>
             
             <tr>
               <td><b>Outdoor Worksites</b></td>
               <td>38</td>
-              <td><b>0.0%</b></td>
-              <td>0.0 days</td>
-              <td>100.0%</td>
+              <td><b>97.4%</b></td>
+              <td>3.1 days</td>
+              <td>14.5%</td>
             </tr>
             
             <tr>
               <td><b>Indoor Facilities</b></td>
               <td>4</td>
-              <td><b>0.0%</b></td>
-              <td>0.0 days</td>
-              <td>100.0%</td>
+              <td><b>75.0%</b></td>
+              <td>1.0 days</td>
+              <td>2.5%</td>
             </tr>
             
       </tbody>

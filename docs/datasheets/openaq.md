@@ -21,7 +21,11 @@
 - **Derived Metrics:**
   - `pm25_exceedance_hours`: Hours exceeding WHO 24-hour interim guidance target (37.5 µg/m³).
   - `pm_ratio`: $\text{PM}_{2.5} / \text{PM}_{10}$ ratio indicating particulate provenance (combustion vs mineral dust).
-- **Geographic Coverage:** Reference monitors and verified low-cost sensors across Dubai and Northern Emirates.
+- **Geographic Coverage:** Reference monitors and verified ground sensors across Dubai and Northern Emirates, including physical OpenAQ v3 stations:
+  - US Consulate / Business Bay (`Location ID: 14384841`)
+  - The Views Community Station (`Location ID: 10071461`)
+  - Motor City Station (`Location ID: 10877520`)
+  - Al Barari Station (`Location ID: 17486266`)
 - **PII / Confidential Data:** Contains **no personal data**.
 
 ---

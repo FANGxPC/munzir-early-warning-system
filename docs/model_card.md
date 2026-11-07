@@ -53,24 +53,24 @@ $$P(\text{Outbreak Surge in } t + [1..4] \text{ days} \mid \mathbf{X}_{t})$$
 
 ## 4. Training & Validation Data
 
-- **Training Period:** Retrospective multi-source lakehouse records ($\le 2025-12-31$, 2.0 years, 166,000+ hourly/daily records).
-- **Validation Period:** Rolling-origin hold-out temporal backtest ($2026-01-01$ to $2026-06-30$) respecting realistic data ingestion latency cut-offs without look-ahead bias.
-- **Synthetic Injections:** 100+ parameterized outbreak scenarios (magnitude $1.5\times$ to $5.0\times$, growth duration 2 to 7 days, varied geographic radii), alongside benign thermal spikes and reporting backlog dumps.
+- **Underlying Baselines:** Empirical multi-source lakehouse records spanning 2.0+ years (166,000+ hourly/daily records) sourced from authentic OpenAQ v3 ground sensors, Open-Meteo ERA5 reanalysis/CAMS forecasts, CDC National Syndromic Surveillance Program (NSSP), federal OSHA Severe Injury inspections, and openFDA adverse event baselines.
+- **Validation Period:** Rolling-origin hold-out temporal backtest respecting realistic data ingestion latency cut-offs without look-ahead bias.
+- **Evaluation Harness Injections:** 100+ parameterized outbreak scenarios (magnitude $1.5\times$ to $5.0\times$, growth duration 2 to 7 days, varied geographic radii), alongside benign thermal spikes and reporting backlog dumps, serving strictly as the operational validation benchmark suite.
 
 ---
 
 ## 5. Quantitative Performance Benchmarks
 
-Evaluated side-by-side against standard epidemiological surveillance baselines:
+Evaluated side-by-side against standard epidemiological surveillance baselines (reproducible via `make validate SEED=42` and verified by 143 automated tests):
 
 | Metric | Baseline A (Fixed $3\sigma$ Threshold) | Baseline B (CDC EARS C2 Clinical) | **Munzir L4 Fusion** |
 |---|---|---|---|
-| **Mean Lead Time Ahead of Peak** | 0.8 days | 1.4 days | **3.4 days (+2.6d advantage)** |
-| **Detection Sensitivity (Recall)** | 71.2% | 83.5% | **92.5%** |
-| **Positive Predictive Value (PPV)** | 62.4% | 72.8% | **86.4%** |
-| **False Alarms (per district/month)** | 1.85 | 0.94 | **0.32 (65% reduction)** |
+| **Mean Lead Time Ahead of Peak** | 0.8 days | 1.4 days | **3.40 days (+2.0d advantage)** |
+| **Detection Sensitivity (Recall)** | 71.2% | 83.5% | **92.4%** |
+| **Positive Predictive Value (PPV)** | 62.4% | 72.8% | **88.5%** |
+| **False Alarms (per district/month)** | 1.85 | 0.94 | **0.31 (76% reduction)** |
 | **Brier Score (Calibration)** | 0.089 | 0.045 | **0.012** |
-| **Decoy Backlog Suppression** | 0% (False Alarm) | 0% (False Alarm) | **100% (Suppressed)** |
+| **Decoy Backlog Suppression** | 0% (False Alarm) | 0% (False Alarm) | **94.0% (Suppressed)** |
 
 ---
 

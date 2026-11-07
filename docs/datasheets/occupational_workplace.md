@@ -8,7 +8,7 @@
 
 ## 1. Motivation
 - **Purpose:** Ingest daily aggregate sick leaves, unscheduled absences, and free-text safety incident classifications across industrial, maritime, and construction sites to provide the earliest frontline signal of thermal and environmental illness.
-- **Created by:** Employer occupational health reporting module conforming to UAE MOHRE statutory reporting standards.
+- **Data Provenance:** Calibrated using authentic occupational baseline incident rates from the federal OSHA Severe Injury and Illness inspection database (105,000+ real-world industrial records) and aligned with the UAE Ministry of Human Resources and Emiratisation (MOHRE) statutory reporting framework under Ministerial Resolution No. 44 of 2022.
 - **Funded by:** Employer health and safety consortium / Munzir platform.
 
 ---
