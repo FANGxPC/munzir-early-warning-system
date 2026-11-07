@@ -1027,7 +1027,7 @@ async function exportPolicyMarkdown() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `prahari_policy_brief_${month.toLowerCase().replace(" ", "_")}.md`;
+    a.download = `munzir_policy_brief_${month.toLowerCase().replace(" ", "_")}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

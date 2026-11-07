@@ -782,7 +782,7 @@ def cmd_impact(args: argparse.Namespace) -> None:
         gen = DistrictPolicyEvidenceGenerator(random_seed=42)
         report = gen.generate_policy_evidence_report()
         md = gen.export_markdown_brief(report)
-        out_path = Path("prahari_policy_brief.md")
+        out_path = Path("munzir_policy_brief.md")
         out_path.write_text(md, encoding="utf-8")
         print(f"\n[+] Regulatory Policy Evidence Brief exported to: {out_path.resolve()}")
 

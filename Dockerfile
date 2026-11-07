@@ -30,7 +30,7 @@ COPY playbooks/ /app/playbooks/
 COPY data/ /app/data/
 COPY docs/ /app/docs/
 COPY validation/ /app/validation/
-COPY prahari_policy_brief.md /app/prahari_policy_brief.md
+COPY munzir_policy_brief.md /app/munzir_policy_brief.md
 
 # Non-root security user
 RUN useradd -m -u 1000 prahariuser && \
