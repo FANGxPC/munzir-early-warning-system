@@ -581,6 +581,7 @@ async function loadEmployerSafetyView() {
 
 async function testClinicalAccessRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
+  if (!resultDiv) return;
   resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing clinical feed access boundary...</span>`;
   try {
     await apiFetch(`/api/v1/clinical/syndromic?geo_id=DXB-JA`);
@@ -592,6 +593,7 @@ async function testClinicalAccessRejection() {
 
 async function testSubsiteParamRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
+  if (!resultDiv) return;
   resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing prohibited sub-site parameter (gang_id=CREW-04)...</span>`;
   try {
     await apiFetch(`/api/v1/workplace/site-rates?site_id=${state.employerId}&gang_id=CREW-04`);
