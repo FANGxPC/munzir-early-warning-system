@@ -375,7 +375,7 @@ void loop() {
     sendButtonAck();
   }
 
-  // 2. Periodic telemetry upload every 60 seconds
+  // 2. Periodic telemetry upload (every UPLOAD_INTERVAL_MS)
   if (now - lastUploadTime >= UPLOAD_INTERVAL_MS) {
     lastUploadTime = now;
     uploadTelemetry();

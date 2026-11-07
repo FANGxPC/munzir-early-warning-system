@@ -225,9 +225,10 @@ class IncidentClassifier:
             "saved_path": str(self.model_path),
         }
 
-    def predict(self, raw_narrative: str) -> Tuple[str, float]:
+    def predict(self, raw_narrative: Any) -> Tuple[str, float]:
         """
         Sanitize input text and predict incident category with confidence score.
+        Accepts str, list of strings, or raw narrative input.
         """
         if self.pipeline is None:
             if self.model_path.exists():
@@ -247,3 +248,7 @@ class IncidentClassifier:
         confidence = float(probs[best_idx])
 
         return predicted_class, round(confidence, 4)
+
+    def predict_batch(self, raw_narratives: List[Any]) -> List[Tuple[str, float]]:
+        """Predict categories for a batch of narratives."""
+        return [self.predict(item) for item in raw_narratives]

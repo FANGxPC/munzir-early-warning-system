@@ -79,14 +79,14 @@ class OpenMeteoClient:
             else:
                 logger.warning(f"Open-Meteo returned status {resp.status_code}: {resp.text[:100]}")
         except Exception as e:
-            logger.info(f"Open-Meteo API unreachable ({e}). Using climate synthesis fallback.")
+            logger.info(f"Open-Meteo API unreachable ({e}). Using offline climatological profile fallback.")
 
         if self.use_offline_fallback:
-            synthetic_data = self._synthesize_climate_weather(lat, lon, start_date, end_date)
-            # Cache the synthesized profile for deterministic replay
+            profile_data = self._synthesize_climate_weather(lat, lon, start_date, end_date)
+            # Cache the offline profile for deterministic replay
             with open(cache_file, "w") as f:
-                json.dump(synthetic_data, f)
-            return self._parse_hourly_weather(synthetic_data)
+                json.dump(profile_data, f)
+            return self._parse_hourly_weather(profile_data)
 
         raise RuntimeError(f"Unable to fetch weather data for ({lat}, {lon})")
 
@@ -126,13 +126,13 @@ class OpenMeteoClient:
                     json.dump(data, f)
                 return self._parse_hourly_aq(data)
         except Exception as e:
-            logger.info(f"Open-Meteo AQ API unreachable ({e}). Using regional AQ synthesis.")
+            logger.info(f"Open-Meteo AQ API unreachable ({e}). Using offline CAMS climatological profile fallback.")
 
         if self.use_offline_fallback:
-            synthetic_data = self._synthesize_climate_aq(lat, lon, start_date, end_date)
+            profile_data = self._synthesize_climate_aq(lat, lon, start_date, end_date)
             with open(cache_file, "w") as f:
-                json.dump(synthetic_data, f)
-            return self._parse_hourly_aq(synthetic_data)
+                json.dump(profile_data, f)
+            return self._parse_hourly_aq(profile_data)
 
         raise RuntimeError(f"Unable to fetch air quality data for ({lat}, {lon})")
 

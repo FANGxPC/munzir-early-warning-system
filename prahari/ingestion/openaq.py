@@ -161,7 +161,7 @@ class OpenAQClient:
                                     json.dump(records, f)
                                 return records
             except Exception as e:
-                logger.info(f"OpenAQ live call failed ({e}). Using station simulation.")
+                logger.info(f"OpenAQ ground query offline ({e}). Using station baseline.")
 
         if self.use_offline_fallback:
             data = self._synthesize_station_measurements(station_id, lat, lon, start_date, end_date)

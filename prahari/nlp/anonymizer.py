@@ -4,8 +4,9 @@ Strips personal identifiers, names, badge numbers, phone numbers,
 emails, government IDs, and exact addresses before NLP analysis.
 """
 
+import math
 import re
-from typing import Tuple
+from typing import Tuple, Any
 
 # Common regex patterns for personal identifiers
 EMAIL_REGEX = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b")
@@ -27,15 +28,20 @@ ADDRESS_REGEX = re.compile(
 )
 
 
-def sanitize_incident_narrative(narrative: str) -> str:
+def sanitize_incident_narrative(narrative: Any) -> str:
     """
     Sanitize free-text incident narratives by redacting PII with standard tokens.
     Guarantees no person-identifying tokens reach models or logs.
     """
-    if not narrative:
+    if narrative is None:
         return ""
-
-    text = narrative
+    if isinstance(narrative, (list, tuple)):
+        narrative = " ".join(str(x) for x in narrative)
+    if isinstance(narrative, float) and (math.isnan(narrative) or math.isinf(narrative)):
+        return ""
+    text = str(narrative).strip()
+    if not text or text.lower() == "nan":
+        return ""
 
     # 1. Emails
     text = EMAIL_REGEX.sub("[REDACTED_EMAIL]", text)

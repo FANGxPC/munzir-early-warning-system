@@ -942,6 +942,7 @@ def main() -> None:
 
     # inspect
     p_inspect = subparsers.add_parser("inspect", help="Inspect bronze lakehouse tables and statistics")
+    p_inspect.add_argument("--region", type=str, default="uae", help="Regional profile")
     p_inspect.set_defaults(func=cmd_inspect)
 
     # harmonise
@@ -953,6 +954,7 @@ def main() -> None:
 
     # inspect-silver
     p_ins_sil = subparsers.add_parser("inspect-silver", help="Inspect silver harmonised tables and suppression stats")
+    p_ins_sil.add_argument("--region", type=str, default="uae", help="Regional profile")
     p_ins_sil.set_defaults(func=cmd_inspect_silver)
 
     # dp-release
