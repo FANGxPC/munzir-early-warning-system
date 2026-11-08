@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine
+.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine biascorrect test-biascorrect
 
 PYTHON := ./bin/py
 
@@ -125,6 +125,12 @@ timemachine:
 
 test-timemachine:
 	$(PYTHON) -m pytest tests/test_timemachine.py -v
+
+biascorrect:
+	$(PYTHON) -m prahari biascorrect --site $(or $(SITE),SITE-JA-01) --folds $(or $(FOLDS),5)
+
+test-biascorrect:
+	$(PYTHON) -m pytest tests/test_bias_correction.py -v
 
 test:
 	$(PYTHON) -m pytest tests/ -v

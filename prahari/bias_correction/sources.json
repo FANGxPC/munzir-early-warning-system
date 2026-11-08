@@ -1,0 +1,89 @@
+{
+  "citations": [
+    {
+      "key": "ISO_7243_2017",
+      "title": "Ergonomics of the thermal environment — Assessment of heat stress using the WBGT (wet bulb globe temperature) index",
+      "standard": "ISO 7243:2017",
+      "organization": "International Organization for Standardization",
+      "url": "https://www.iso.org/standard/67188.html",
+      "formulas": {
+        "outdoor_with_solar_load": "WBGT_outdoor = 0.7 * Tnw + 0.2 * Tg + 0.1 * Ta",
+        "shade_or_indoor_no_solar": "WBGT_shade = 0.7 * Tw + 0.3 * Tg"
+      },
+      "variable_definitions": {
+        "Tnw": "Natural wet-bulb temperature (°C) with natural air movement and solar radiation on wet wick",
+        "Tw": "Psychrometric wet-bulb temperature (°C) aspirated",
+        "Tg": "Black globe temperature (°C) measured at center of 150mm matte-black hollow sphere",
+        "Ta": "Dry-bulb ambient air temperature (°C) shielded from direct radiation"
+      }
+    },
+    {
+      "key": "STULL_2011",
+      "author": "Stull, Roland",
+      "year": 2011,
+      "title": "Wet-Bulb Temperature from Relative Humidity and Air Temperature",
+      "journal": "Journal of Applied Meteorology and Climatology",
+      "volume": "50",
+      "issue": "11",
+      "pages": "2267-2269",
+      "doi": "10.1175/JAMC-D-11-0143.1",
+      "formula": "Tw = T * atan(0.151977 * sqrt(rh + 8.313659)) + atan(T + rh) - atan(rh - 1.676331) + 0.00391838 * (rh^1.5) * atan(0.023101 * rh) - 4.686035",
+      "validity_domain": {
+        "temperature_c": [-20.0, 50.0],
+        "rh_pct": [5.0, 99.0],
+        "accuracy_statement": "Validates with mean absolute error of 0.3°C across standard sea-level psychrometric tables, but exhibits ±0.5°C to ±1.0°C screening uncertainty relative to an actively aspirated natural wet-bulb with forced convection."
+      }
+    },
+    {
+      "key": "LILJEGREN_2008",
+      "authors": "Liljegren, J. C., Carhart, R. A., Lawday, P., Tschopp, S., & Sharp, R.",
+      "year": 2008,
+      "title": "Modeling the Wet Bulb Globe Temperature Using Standard Meteorological Measurements",
+      "journal": "Journal of Occupational and Environmental Hygiene",
+      "volume": "5",
+      "issue": "10",
+      "pages": "645-655",
+      "doi": "10.1080/15459620802310770",
+      "physics_basis": "Energy balance equation equating radiative solar flux absorption with convective heat dissipation to calculate Tg and Tnw."
+    },
+    {
+      "key": "OSHA_OTM_III_4",
+      "organization": "Occupational Safety and Health Administration (OSHA), U.S. Department of Labor",
+      "title": "OSHA Technical Manual (OTM), Section III: Chapter 4 - Heat Stress",
+      "url": "https://www.osha.gov/otm/section-3-health-hazards/chapter-4",
+      "thresholds": {
+        "caution": 28.0,
+        "extreme_caution": 30.0,
+        "danger": 32.0
+      }
+    },
+    {
+      "key": "UAE_MOHRE_44_2022",
+      "organization": "Ministry of Human Resources and Emiratisation (MOHRE), United Arab Emirates",
+      "title": "Ministerial Resolution No. (44) of 2022 Concerning Occupational Health and Safety and Labour Accommodation",
+      "mandate": "Enforces mandatory midday work bans (12:30 to 15:00) during peak summer months and requires employer provision of shaded rest areas and hydration."
+    }
+  ],
+  "hardware_specifications": {
+    "node_architecture": "ESP32-WROOM-32 Wi-Fi/BLE IoT microcontroller running FreeRTOS",
+    "air_sensor": {
+      "model": "Aosong DHT22 / AM2302",
+      "temperature_range_c": [-40.0, 80.0],
+      "temperature_accuracy_c": 0.5,
+      "humidity_range_pct": [0.0, 100.0],
+      "humidity_accuracy_pct": 2.0,
+      "known_flaw": "Capacitive polymer hygrometer suffers from condensation saturation drift above 99% RH, requiring software filtering for prolonged 99%+ readings."
+    },
+    "globe_sensor": {
+      "model": "Maxim DS18B20 1-Wire Digital Thermometer",
+      "temperature_range_c": [-55.0, 125.0],
+      "temperature_accuracy_c": 0.5,
+      "enclosure": "Matte-black hollow copper globe (standard 150mm diameter or calibrated 40mm equivalent) exposed to ambient radiant flux."
+    }
+  },
+  "methodological_disclosures": {
+    "ground_truth_limitation": "The Sentinel hardware derives ground-truth WBGT using Stull's (2011) psychrometric equation and black-globe thermometry rather than an aspirated natural wet-bulb wick. While practical and low-maintenance for construction sites, this introduces an inherent ±0.5°C to ±1.0°C screening uncertainty.",
+    "spatial_transfer_limitation": "A single sensor can only validate in-situ correction at its immediate physical worksite. Applying corrections to unsensored sites represents an unvalidated spatial extrapolation and is explicitly marked UNVALIDATED-SPATIALLY with widened conformal prediction bands.",
+    "temporal_cross_validation": "All model fitting is evaluated using strictly time-blocked cross-validation (contiguous non-overlapping multi-day blocks) to prevent temporal autocorrelation leakage between adjacent hours."
+  }
+}

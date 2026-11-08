@@ -933,6 +933,94 @@ def cmd_timemachine(args: argparse.Namespace) -> None:
     print("=" * 84)
 
 
+def cmd_biascorrect(args: argparse.Namespace) -> None:
+    """Run Sentinel ESP32 microclimate bias correction and model calibration."""
+    from prahari.bias_correction.engine import BiasCorrectionEngine
+
+    site_id = args.site or "SITE-JA-01"
+    folds = args.folds or 5
+
+    print("=" * 84)
+    print("Munzir Sentinel ESP32 On-Site WBGT Microclimate Bias Correction")
+    print(f"Calibration Target: {site_id} | Validation: Contiguous Time-Blocked CV ({folds} Folds)")
+    print("=" * 84)
+
+    engine = BiasCorrectionEngine()
+    results = engine.run_calibration(site_id=site_id, n_folds=folds, export=True)
+
+    audit = results["audit"]
+    sanity = results["sanity_filter_audit"]
+    err = results["error_metrics_summary"]
+    b = err["before"]
+    a = err["after"]
+    imp = err["improvements"]
+    cv = results["cv_validation"]
+    loso = results["spatial_transfer"]["loso_validation"]
+
+    print("\n[1] Hardware Telemetry & Reference Standard Audit:")
+    print(f"  • Days of Live Bronze Telemetry: {audit['days_count']} days ({', '.join(audit['dates_available']) if audit['dates_available'] else 'None'})")
+    if audit['is_under_two_weeks']:
+        print("  • Physical Duration Alert:       < 2 WEEKS in live store; 30-day paired campaign benchmark evaluated.")
+    print(f"  • Sensor Placement:              {audit['sensor_placement']['air_hygrometer']}")
+    print(f"  • Black Globe Housing:           {audit['sensor_placement']['black_globe']}")
+    print("  • Reference Standard:            Stull (2011) psychrometric approximation (±0.5°C to ±1.0°C screening uncertainty).")
+
+    print("\n[2] Sensor Sanity & Physical Boundary Screening:")
+    print(f"  • Raw Observations:              {sanity['total_records']}")
+    print(f"  • Valid Filtered Records:        {sanity['valid_records']} ({100.0 - sanity['filtered_pct']:.2f}% retained)")
+    print(f"  • Filtered Anomaly Counts:       {sanity['filtered_records']} ({sanity['filtered_pct']:.2f}% dropped)")
+    print(f"    - Physical range violations:   {sanity['breakdown']['range_violations']}")
+    print(f"    - Thermal implausibility:      {sanity['breakdown']['thermal_implausibility']}")
+    print(f"    - Stuck sensor readings:       {sanity['breakdown']['stuck_sensor']}")
+    print(f"    - DHT22 condensation satur.:   {sanity['breakdown']['dht22_condensation_saturation']}")
+
+    print("\n[3] Model Error Before vs. After Bias Correction (Held-Out Test Blocks):")
+    print("  " + "-" * 76)
+    print(f"  {'Metric':<25} {'Raw Model':<16} {'Corrected Model':<18} {'Improvement':<16}")
+    print("  " + "-" * 76)
+    print(f"  {'Mean Bias Error (MBE)':<25} {b['bias']:+.3f}°C         {a['bias']:+.3f}°C           {imp['bias_magnitude_before'] - imp['bias_magnitude_after']:+.3f}°C removed")
+    print(f"  {'Mean Absolute Error (MAE)':<25} {b['mae']:.3f}°C          {a['mae']:.3f}°C            -{imp['mae_reduction_pct']:.1f}%")
+    print(f"  {'Root Mean Squared (RMSE)':<25} {b['rmse']:.3f}°C         {a['rmse']:.3f}°C           -{imp['rmse_reduction_pct']:.1f}%")
+    print(f"  {'Pearson Correlation (r)':<25} {b['pearson_r']:.4f}          {a['pearson_r']:.4f}")
+    print("  " + "-" * 76)
+
+    print("\n[4] Stratified Performance Across Relative Humidity Regimes:")
+    print("  " + "-" * 76)
+    print(f"  {'Regime':<12} {'N':<6} {'Raw MAE':<12} {'Corrected MAE':<16} {'Raw RMSE':<12} {'Corrected RMSE':<14}")
+    print("  " + "-" * 76)
+    for r_name in ["low", "moderate", "high"]:
+        rb = err["by_humidity_regime"]["before"].get(r_name, {})
+        ra = err["by_humidity_regime"]["after"].get(r_name, {})
+        print(f"  {r_name.capitalize():<12} {ra.get('n', 0):<6} {rb.get('mae', 0.0):.2f}°C       {ra.get('mae', 0.0):.2f}°C           {rb.get('rmse', 0.0):.2f}°C       {ra.get('rmse', 0.0):.2f}°C")
+    print("  " + "-" * 76)
+
+    print(f"\n[5] Conformal Interval Coverage on Held-Out Folds:")
+    print(f"  • Validation Strategy:           {cv['strategy']}")
+    print(f"  • Empirical Test Coverage:       {cv['empirical_test_coverage_pct']:.1f}% (Nominal Target: {cv['conformal_target_coverage_pct']}%)")
+
+    if loso:
+        print("\n[6] Multi-Sensor Leave-One-Sensor-Out (LOSO) Spatial Validation:")
+        for t in loso["transfers"]:
+            print(f"  • Train: {t['train_sensor']} -> Held-Out Test: {t['held_out_sensor']}")
+            print(f"    MAE: {t['before_mae']:.2f}°C -> {t['after_mae']:.2f}°C (-{t['mae_reduction_pct']:.1f}%) | RMSE: {t['before_rmse']:.2f}°C -> {t['after_rmse']:.2f}°C (-{t['rmse_reduction_pct']:.1f}%)")
+        print(f"  • Mean Spatial Transfer MAE Reduction: -{loso['mean_spatial_transfer_mae_reduction_pct']:.1f}%")
+
+    print("\n[7] Spatial Transfer Register to Regional Sites:")
+    print("  " + "-" * 76)
+    print(f"  {'Site ID':<14} {'Site Name':<34} {'Confidence Flag':<22} {'Conformal Band'}")
+    print("  " + "-" * 76)
+    for s in results["spatial_transfer"]["spatial_register"][:6]:
+        print(f"  {s['site_id']:<14} {s['site_name'][:32]:<34} {s['confidence_flag']:<22} {s['conformal_multiplier']:.1f}x width")
+    print("  " + "-" * 76)
+
+    print(f"\n[+] Outputs Generated:")
+    print(f"  • JSON Metrics Trace:            {engine.output_dir / 'bias_correction_results.json'}")
+    print(f"  • HTML Audit Report:             {engine.output_dir / 'bias_correction_report.html'}")
+    print(f"\n[!] Disclosure: {results['limitations_and_disclosures']['wet_bulb_approximation']}")
+    print(f"[!] Spatial Transfer: {results['limitations_and_disclosures']['spatial_transfer_boundary']}")
+    print("=" * 84)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Munzir - Population & Workforce Health Early Warning Platform CLI"
@@ -1080,6 +1168,14 @@ def main() -> None:
     p_tm.add_argument("--out-json", type=str, default=None, help="Output path for results JSON")
     p_tm.add_argument("--out-html", type=str, default=None, help="Output path for interactive HTML report")
     p_tm.set_defaults(func=cmd_timemachine)
+
+    # biascorrect
+    p_bc = subparsers.add_parser("biascorrect", help="Run Sentinel ESP32 microclimate bias correction and model calibration")
+    p_bc.add_argument("--site", type=str, default="SITE-JA-01", help="Target worksite ID for calibration (default: SITE-JA-01)")
+    p_bc.add_argument("--folds", type=int, default=5, help="Number of contiguous temporal folds for time-blocked CV (default: 5)")
+    p_bc.add_argument("--export-json", type=str, default=None, help="Output JSON path")
+    p_bc.add_argument("--export-html", type=str, default=None, help="Output HTML report path")
+    p_bc.set_defaults(func=cmd_biascorrect)
 
     args = parser.parse_args()
     args.func(args)

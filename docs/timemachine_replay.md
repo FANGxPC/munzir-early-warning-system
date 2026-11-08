@@ -136,3 +136,4 @@ make test-timemachine
 2. **Simulated Reporting Delay:** Facility transmission latency is simulated using an empirical 3-day geometric distribution (70% D+1, 20% D+2, 10% D+3; mean lag 1.4 days) fitted to CDC NSSP facility latency guidelines.
 3. **Regional Aggregation:** Clinical ED counts reflect HHS Region 10 totals (Washington, Oregon, Idaho, Alaska); hospital-level microdata is restricted under CDC public health data governance.
 4. **Dubai Hybrid Distinction:** For the UAE case study (`dubai_2024`), weather and air quality are 100% authentic (Open-Meteo & OpenAQ v3), but clinical hospital presentations are projected using authentic CDC NSSP and OSHA baseline rates due to confidential statutory restrictions on Dubai NABIDH hospital records.
+

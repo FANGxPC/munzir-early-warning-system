@@ -1047,6 +1047,7 @@ async function loadSentinelView(isSilent = false) {
 
   if (!isSilent) {
     tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+    loadBiasCorrectionView();
   }
 
   try {
@@ -1373,6 +1374,227 @@ setInterval(() => {
     loadSentinelView(true);
   }
 }, 3000);
+
+
+// =========================================================================
+// --- 8b. Sentinel WBGT Microclimate Bias Correction Controller ---
+// =========================================================================
+
+let bcCalibrationData = null;
+let bcTransferData = null;
+
+async function loadBiasCorrectionView() {
+  const siteSelect = document.getElementById("bcSiteSelect");
+  const siteId = siteSelect ? siteSelect.value : "SITE-JA-01";
+
+  try {
+    const [calibRes, transferRes] = await Promise.all([
+      apiFetch(`/api/v1/sentinel/bias-correction?site_id=${siteId}`),
+      apiFetch("/api/v1/sentinel/transfer")
+    ]);
+    bcCalibrationData = calibRes;
+    bcTransferData = transferRes;
+
+    // 1. Update KPI Cards
+    const err = calibRes.error_metrics_summary;
+    const b = err.before;
+    const a = err.after;
+    const imp = err.improvements;
+
+    const kpiMae = document.getElementById("bcKpiMaeImp");
+    if (kpiMae) kpiMae.textContent = `-${imp.mae_reduction_pct.toFixed(1)}%`;
+    const kpiMaeSub = document.getElementById("bcKpiMaeSub");
+    if (kpiMaeSub) kpiMaeSub.textContent = `${b.mae.toFixed(2)}°C → ${a.mae.toFixed(2)}°C (Held-Out)`;
+
+    const kpiRmse = document.getElementById("bcKpiRmseImp");
+    if (kpiRmse) kpiRmse.textContent = `-${imp.rmse_reduction_pct.toFixed(1)}%`;
+    const kpiRmseSub = document.getElementById("bcKpiRmseSub");
+    if (kpiRmseSub) kpiRmseSub.textContent = `${b.rmse.toFixed(2)}°C → ${a.rmse.toFixed(2)}°C (Held-Out)`;
+
+    const kpiBias = document.getElementById("bcKpiBiasImp");
+    if (kpiBias) kpiBias.textContent = `+${(imp.bias_magnitude_before - imp.bias_magnitude_after).toFixed(2)}°C`;
+    const kpiBiasSub = document.getElementById("bcKpiBiasSub");
+    if (kpiBiasSub) kpiBiasSub.textContent = `${b.bias > 0 ? '+' : ''}${b.bias.toFixed(2)}°C → ${a.bias > 0 ? '+' : ''}${a.bias.toFixed(2)}°C MBE`;
+
+    const kpiCov = document.getElementById("bcKpiCoverage");
+    if (kpiCov) kpiCov.textContent = `${calibRes.cv_validation.empirical_test_coverage_pct.toFixed(1)}%`;
+
+    // 2. Render SVG Diurnal Chart
+    renderBiasCorrectionChart(err.diurnal_profile);
+
+    // 3. Populate Regime Error Table
+    const regimeTbody = document.getElementById("bcRegimesTableBody");
+    if (regimeTbody && err.by_humidity_regime) {
+      const regB = err.by_humidity_regime.before;
+      const regA = err.by_humidity_regime.after;
+      let rowsHtml = "";
+      ["low", "moderate", "high"].forEach(r => {
+        const rb = regB[r] || {};
+        const ra = regA[r] || {};
+        rowsHtml += `
+          <tr>
+            <td style="font-weight:600; text-transform:capitalize;">${r}</td>
+            <td>${rb.mae !== undefined ? rb.mae.toFixed(2) : '--'}°C</td>
+            <td style="color:#10b981; font-weight:600;">${ra.mae !== undefined ? ra.mae.toFixed(2) : '--'}°C</td>
+            <td>${rb.rmse !== undefined ? rb.rmse.toFixed(2) : '--'}°C</td>
+            <td style="color:#10b981; font-weight:600;">${ra.rmse !== undefined ? ra.rmse.toFixed(2) : '--'}°C</td>
+          </tr>
+        `;
+      });
+      regimeTbody.innerHTML = rowsHtml;
+    }
+
+    // 4. Populate Spatial Register Table
+    const spatialTbody = document.getElementById("bcSpatialTableBody");
+    if (spatialTbody && transferRes.spatial_register) {
+      let sHtml = "";
+      transferRes.spatial_register.slice(0, 5).forEach(site => {
+        const flag = site.confidence_flag;
+        const color = flag === "SENSED" ? "#10b981" : (flag === "LOSO-VALIDATED" ? "#38bdf8" : "#f59e0b");
+        sHtml += `
+          <tr>
+            <td><code>${site.site_id}</code></td>
+            <td><span class="badge" style="background:${color}22; color:${color}; font-weight:600; font-size:0.75rem;">${flag}</span></td>
+            <td>${site.conformal_multiplier.toFixed(1)}x width</td>
+            <td style="font-size:0.75rem; color:#94a3b8;">${site.note.split('.')[0]}.</td>
+          </tr>
+        `;
+      });
+      spatialTbody.innerHTML = sHtml;
+    }
+
+  } catch (err) {
+    console.error("Failed to load bias correction view:", err);
+  }
+}
+
+function renderBiasCorrectionChart(diurnalProfile) {
+  const svg = document.getElementById("bcSvgChart");
+  if (!svg || !diurnalProfile || diurnalProfile.length === 0) return;
+
+  const width = 800;
+  const height = 200;
+  const padLeft = 40;
+  const padRight = 20;
+  const padTop = 20;
+  const padBottom = 30;
+
+  const chartW = width - padLeft - padRight;
+  const chartH = height - padTop - padBottom;
+
+  // Temperature scale: 22°C to 38°C
+  const minTemp = 22.0;
+  const maxTemp = 38.0;
+
+  const getX = (hour) => padLeft + (hour / 23) * chartW;
+  const getY = (temp) => padTop + chartH - ((temp - minTemp) / (maxTemp - minTemp)) * chartH;
+
+  // Build points for Sensor, Raw Model, Corrected Model, and Bounds
+  const sensorPts = [];
+  const modelPts = [];
+  const corrPts = [];
+  const upperPts = [];
+  const lowerPts = [];
+
+  diurnalProfile.forEach(p => {
+    const x = getX(p.hour);
+    const sY = getY(p.mean_sensor);
+    const mY = getY(p.mean_model);
+
+    // Corrected is model minus bias
+    const corrVal = p.mean_model - p.bias;
+    const cY = getY(corrVal);
+    const uY = getY(corrVal + 1.2);
+    const lY = getY(corrVal - 1.2);
+
+    sensorPts.push(`${x},${sY}`);
+    modelPts.push(`${x},${mY}`);
+    corrPts.push(`${x},${cY}`);
+    upperPts.push(`${x},${uY}`);
+    lowerPts.unshift(`${x},${lY}`);
+  });
+
+  // SVG gridlines
+  let gridSvg = "";
+  for (let t = 24; t <= 36; t += 4) {
+    const y = getY(t);
+    gridSvg += `
+      <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />
+      <text x="${padLeft - 8}" y="${y + 4}" fill="#64748b" font-size="11" text-anchor="end">${t}°</text>
+    `;
+  }
+  // Hour ticks
+  for (let h = 0; h <= 23; h += 4) {
+    const x = getX(h);
+    gridSvg += `
+      <text x="${x}" y="${height - 8}" fill="#64748b" font-size="11" text-anchor="middle">${h}:00</text>
+    `;
+  }
+
+  const ribbonPoints = [...upperPts, ...lowerPts].join(" ");
+
+  svg.innerHTML = `
+    ${gridSvg}
+    <!-- Conformal Prediction Ribbon -->
+    <polygon points="${ribbonPoints}" fill="#10b981" fill-opacity="0.15" />
+    <!-- Raw Model Line (Amber dashed) -->
+    <polyline points="${modelPts.join(' ')}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+    <!-- Corrected Model Line (Green solid) -->
+    <polyline points="${corrPts.join(' ')}" fill="none" stroke="#10b981" stroke-width="2.5" />
+    <!-- Sensor Ground Truth Line (Red solid) -->
+    <polyline points="${sensorPts.join(' ')}" fill="none" stroke="#ef4444" stroke-width="2" />
+  `;
+}
+
+async function openSourcesModal() {
+  const modal = document.getElementById("sourcesModal");
+  const content = document.getElementById("sourcesModalContent");
+  if (!modal || !content) return;
+
+  modal.classList.add("active");
+  content.innerHTML = `<div style="padding:1rem; color:#94a3b8;">Loading academic sources...</div>`;
+
+  try {
+    const res = await apiFetch("/api/v1/sentinel/sources");
+    let html = `
+      <div style="margin-bottom:1.25rem;">
+        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">📖 Academic Standards &amp; Formulations</h4>
+    `;
+
+    res.citations.forEach(c => {
+      html += `
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem; margin-bottom:0.75rem;">
+          <div style="font-weight:700; color:#38bdf8;">${c.title}</div>
+          <div style="font-size:0.75rem; color:#94a3b8; margin:0.25rem 0;">
+            ${c.author || c.authors || c.organization || ''} (${c.year || ''}) &bull; ${c.journal || c.standard || ''} ${c.doi ? '&bull; DOI: ' + c.doi : ''}
+          </div>
+          ${c.formulas ? `<div style="font-family:monospace; font-size:0.75rem; background:#1e293b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">🔌 Sensor Hardware &amp; Measurement Bounds</h4>
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem;">
+          <p><strong>DHT22 / AM2302:</strong> Air temp -40°C to 80°C (±0.5°C), RH 0-100% (±2-5%). <em>Known limitation:</em> condensation saturation drift above 99% RH.</p>
+          <p><strong>Maxim DS18B20:</strong> 1-Wire thermal probe in 150mm matte-black copper globe (±0.5°C accuracy).</p>
+          <p><strong>Stull (2011) Wet-Bulb Screening:</strong> Empirical psychrometric approximation equation carries ±0.5°C to ±1.0°C screening uncertainty relative to an actively aspirated natural wet-bulb.</p>
+        </div>
+      </div>
+    `;
+
+    content.innerHTML = html;
+  } catch (err) {
+    content.innerHTML = `<div style="color:#ef4444;">Failed to load sources: ${err.message}</div>`;
+  }
+}
+
+function closeSourcesModal() {
+  const modal = document.getElementById("sourcesModal");
+  if (modal) modal.classList.remove("active");
+}
 
 
 // =========================================================================

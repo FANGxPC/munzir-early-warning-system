@@ -731,6 +731,49 @@ def get_timemachine_as_of(event: str = "pnw_2021", date: str = "2021-06-26") -> 
     })
 
 
+# --- 9. Sentinel WBGT Microclimate Bias Correction Endpoints ---
+
+@app.get("/api/v1/sentinel/bias-correction", response_class=JSONResponse)
+def get_sentinel_bias_correction(
+    site_id: str = "SITE-JA-01",
+    folds: int = 5,
+) -> JSONResponse:
+    """
+    Returns empirical error metrics before and after microclimate bias correction,
+    time-blocked cross-validation folds, diurnal error curves, and methodology notes.
+    """
+    from prahari.bias_correction.engine import BiasCorrectionEngine
+    engine = BiasCorrectionEngine()
+    results = engine.run_calibration(site_id=site_id, n_folds=folds, export=True)
+    return JSONResponse(content=results)
+
+
+@app.get("/api/v1/sentinel/transfer", response_class=JSONResponse)
+def get_sentinel_transfer_register() -> JSONResponse:
+    """
+    Returns spatial transfer status for all regional worksites:
+    - SENSED: Direct in-situ sensor node (cross-validated)
+    - LOSO-VALIDATED: Multi-sensor Leave-One-Sensor-Out validated
+    - UNVALIDATED-SPATIALLY: Unsensored site (widened conformal interval, no empirical error claimed)
+    """
+    from prahari.bias_correction.engine import BiasCorrectionEngine
+    engine = BiasCorrectionEngine()
+    results = engine.run_calibration(site_id="SITE-JA-01", export=False)
+    return JSONResponse(content={
+        "spatial_register": results["spatial_transfer"]["spatial_register"],
+        "loso_validation": results["spatial_transfer"]["loso_validation"],
+        "unsensored_penalty_multiplier": results["spatial_transfer"]["unsensored_penalty_multiplier"],
+        "truth_in_science_notice": results["limitations_and_disclosures"]["spatial_transfer_boundary"],
+    })
+
+
+@app.get("/api/v1/sentinel/sources", response_class=JSONResponse)
+def get_sentinel_bias_sources() -> JSONResponse:
+    """Returns traceable academic citations, standard formulas, and hardware specifications."""
+    from prahari.bias_correction.config import load_sources_config
+    return JSONResponse(content=load_sources_config())
+
+
 # --- 10. Web Single Page Application (Static UI) ---
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
