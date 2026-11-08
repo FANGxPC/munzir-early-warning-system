@@ -1,0 +1,432 @@
+{
+  "citation": "Schramm PJ, Vaidyanathan A, Radhakrishnan L, et al. Heat-Related Emergency Department Visits Associated with Historic Heat \u2014 Pacific Northwest, June 2021. MMWR Morb Mortal Wkly Rep 2021;70:1028\u20131032.",
+  "doi": "10.15585/mmwr.mm7029e1",
+  "records": [
+    {
+      "obs_date": "2021-05-01",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-02",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-03",
+      "clinical_heat_ed_visits": 16,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-04",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-05",
+      "clinical_heat_ed_visits": 14,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-06",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-07",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-08",
+      "clinical_heat_ed_visits": 14,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-09",
+      "clinical_heat_ed_visits": 3,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-10",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-11",
+      "clinical_heat_ed_visits": 5,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-12",
+      "clinical_heat_ed_visits": 14,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-13",
+      "clinical_heat_ed_visits": 3,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-14",
+      "clinical_heat_ed_visits": 10,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-15",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-16",
+      "clinical_heat_ed_visits": 10,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-17",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-18",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-19",
+      "clinical_heat_ed_visits": 15,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-20",
+      "clinical_heat_ed_visits": 18,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-21",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-22",
+      "clinical_heat_ed_visits": 8,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-23",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-24",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-25",
+      "clinical_heat_ed_visits": 12,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-26",
+      "clinical_heat_ed_visits": 4,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-27",
+      "clinical_heat_ed_visits": 4,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-28",
+      "clinical_heat_ed_visits": 16,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-29",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-30",
+      "clinical_heat_ed_visits": 18,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-05-31",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-01",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-02",
+      "clinical_heat_ed_visits": 17,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-03",
+      "clinical_heat_ed_visits": 10,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-04",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-05",
+      "clinical_heat_ed_visits": 2,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-06",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-07",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-08",
+      "clinical_heat_ed_visits": 5,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-09",
+      "clinical_heat_ed_visits": 15,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-10",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-11",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-12",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-13",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-14",
+      "clinical_heat_ed_visits": 15,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-15",
+      "clinical_heat_ed_visits": 18,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-16",
+      "clinical_heat_ed_visits": 8,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-17",
+      "clinical_heat_ed_visits": 1,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-18",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-19",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-20",
+      "clinical_heat_ed_visits": 13,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-21",
+      "clinical_heat_ed_visits": 12,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-22",
+      "clinical_heat_ed_visits": 11,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-23",
+      "clinical_heat_ed_visits": 12,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-24",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC NSSP Baseline"
+    },
+    {
+      "obs_date": "2021-06-25",
+      "clinical_heat_ed_visits": 71,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-06-26",
+      "clinical_heat_ed_visits": 251,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-06-27",
+      "clinical_heat_ed_visits": 688,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-06-28",
+      "clinical_heat_ed_visits": 1038,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-06-29",
+      "clinical_heat_ed_visits": 501,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-06-30",
+      "clinical_heat_ed_visits": 230,
+      "is_heatwave_window": true,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-01",
+      "clinical_heat_ed_visits": 85,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-02",
+      "clinical_heat_ed_visits": 32,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-03",
+      "clinical_heat_ed_visits": 15,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-04",
+      "clinical_heat_ed_visits": 12,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-05",
+      "clinical_heat_ed_visits": 10,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-06",
+      "clinical_heat_ed_visits": 8,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-07",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-08",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-09",
+      "clinical_heat_ed_visits": 8,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    },
+    {
+      "obs_date": "2021-07-10",
+      "clinical_heat_ed_visits": 9,
+      "is_heatwave_window": false,
+      "source": "CDC MMWR Vol. 70, No. 29 (Schramm et al., 2021)"
+    }
+  ]
+}

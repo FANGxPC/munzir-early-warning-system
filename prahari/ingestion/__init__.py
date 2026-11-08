@@ -4,6 +4,7 @@ from .open_meteo import OpenMeteoClient, ingest_environmental_data
 from .openaq import OpenAQClient, ingest_openaq_stations
 from .osha import OSHAIncidentIngestor
 from .cdc_syndromic import CDCSyndromicIngestor
+from .openfda import OpenFDAClient, ClinicalVulnerabilityEngine
 
 __all__ = [
     "compute_wbgt_outdoor",
@@ -14,6 +15,8 @@ __all__ = [
     "ingest_openaq_stations",
     "OSHAIncidentIngestor",
     "CDCSyndromicIngestor",
+    "OpenFDAClient",
+    "ClinicalVulnerabilityEngine",
 ]
 
 

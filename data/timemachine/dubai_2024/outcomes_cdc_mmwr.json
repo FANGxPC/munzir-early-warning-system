@@ -1,0 +1,377 @@
+{
+  "citation": "Dubai Health Authority NABIDH Schema Projection (Calibrated on CDC NSSP & OSHA Severe Injuries)",
+  "records": [
+    {
+      "obs_date": "2024-07-01",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-02",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-03",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-04",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-05",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-06",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-07",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-08",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-09",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-10",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-11",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-12",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-13",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-14",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-15",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-16",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-17",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-18",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-19",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-20",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-21",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-22",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-23",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-24",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-25",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-26",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-27",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-28",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-29",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-30",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-07-31",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-01",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-02",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-03",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-04",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-05",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-06",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-07",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-08",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-09",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-10",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-11",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-12",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-13",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-14",
+      "clinical_heat_ed_visits": 6,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-15",
+      "clinical_heat_ed_visits": 14,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-16",
+      "clinical_heat_ed_visits": 22,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-17",
+      "clinical_heat_ed_visits": 31,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-18",
+      "clinical_heat_ed_visits": 42,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-19",
+      "clinical_heat_ed_visits": 45,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-20",
+      "clinical_heat_ed_visits": 48,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-21",
+      "clinical_heat_ed_visits": 36,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-22",
+      "clinical_heat_ed_visits": 24,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-23",
+      "clinical_heat_ed_visits": 15,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-24",
+      "clinical_heat_ed_visits": 10,
+      "is_heatwave_window": true,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-25",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-26",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-27",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-28",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-29",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-30",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    },
+    {
+      "obs_date": "2024-08-31",
+      "clinical_heat_ed_visits": 7,
+      "is_heatwave_window": false,
+      "source": "Dubai Hybrid Scenario (CDC/OSHA baseline projection)"
+    }
+  ]
+}

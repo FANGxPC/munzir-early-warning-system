@@ -170,7 +170,7 @@ class MapLayerService:
             ))
 
         # 3. Prospective Space-Time Clusters (L3)
-        # Synthesize active cluster boundary if an active outbreak is detected
+        # Construct active cluster boundary if an active outbreak is detected
         for a in alerts:
             is_cluster = getattr(a, "l3_cluster_detected", False) or "cluster" in a.alert_type
             if is_cluster and len(a.geo_ids) > 0:

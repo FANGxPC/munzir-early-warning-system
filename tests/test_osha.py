@@ -83,3 +83,4 @@ def test_osha_ingest_and_bronze_storage(tmp_path):
     assert not df_obs.empty
     assert (df_obs["signal_type"] == "workplace_incident").all()
     assert (df_obs["value"] >= 1.0).all()
+

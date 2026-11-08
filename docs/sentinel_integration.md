@@ -1,7 +1,8 @@
 # Munzir Sentinel — Hardware Integration & Technical Specification
 
 > **Component:** Munzir Sentinel On-Site Microclimate Hardware Node (Phase 11)  
-> **Hardware:** ESP32 DevKit, DHT22 (Air Temp & RH), DS18B20 (Matte-Black Globe Temp), Multi-Pattern RGB LED, BOOT Button  
+> **Hardware:** ESP32 DevKit, DHT22 (Air Temp & RH), DS18B20 (Matte-Black Globe Temp), Multi-Pattern RGB LED, Piezo Buzzer (GPIO 21), BOOT Button (GPIO 0)  
+> **Firmware:** `firmware/sentinel_node/sentinel_buzzer_node.ino` (Piezo Buzzer + RGB LED Edition)  
 > **Security Clearance:** Operational EHS & Field Surveillance  
 > **Reference Plan:** `new-PRAHARI_Sentinel_Hardware_Plan.md` & `Munzir_Sentinel_Hardware_Integration_Plan.md`
 
@@ -110,16 +111,21 @@ Nodes carry **zero GPS hardware and zero stored location coordinates**. Location
 
 ---
 
-## 5. Visual Alert States & Fault Handling
+## 5. Visual & Audible Alert States & Fault Handling
 
-| Operational State | Alert Level | On-Board RGB LED Pattern | Required Preventive Action |
-| :--- | :--- | :--- | :--- |
-| Normal Baseline | `None` | **Solid Green** | Continuous environmental monitoring |
-| Active Watch | `Watch` | **Slow Yellow Blink (1 Hz)** | Hydration reminders, shade availability check |
-| Preventive Warning | `Warning` | **Double Orange Blink (2 Hz)** | Mandatory 15-min rest cycles per hour, shift rescheduling |
-| Severe Hazard | `Alert` | **Fast Red Blink (4 Hz)** | Immediate heavy work stoppage, misting fan deployment |
-| Node Offline | `Offline` | **Blue Blip (100ms flash / 2s)** | Local fallback mode; dashboard displays offline badge |
-| Sensor Fault | `Fault` | **Magenta Blink** | Gated; valid sensors continue transmission |
+The Sentinel node delivers dual-channel sensory alerting (visual RGB LED + audible piezo buzzer) driven directly by the server's calibrated alert classification:
+
+| Operational State | Alert Level | On-Board RGB LED Pattern | Buzzer Audible Pattern (`GPIO 21`) | Required Preventive Action |
+| :--- | :--- | :--- | :--- | :--- |
+| Normal Baseline | `None` | **Solid Green** | **Silent** | Continuous environmental monitoring |
+| Active Watch | `Watch` | **Slow Yellow Blink (1 Hz)** | **Single short chirp** (800 Hz, 80ms / 30s) | Hydration reminders, shade availability check |
+| Preventive Warning | `Warning` | **Double Orange Blink (2 Hz)** | **Double pulse** (1000 Hz $\to$ 1500 Hz, 150ms / 5s) | Mandatory 15-min rest cycles per hour, shift rescheduling |
+| Severe Hazard | `Alert` | **Fast Red Blink (4 Hz)** | **Staccato alarm** (2200 Hz, 100ms on/off continuous) | Immediate heavy work stoppage, misting fan deployment |
+| Node Offline | `Offline` | **Blue Blip (100ms flash / 2s)** | **Silent** | Local fallback mode; dashboard displays offline badge |
+| Sensor Fault | `Fault` | **Magenta Blink** | **Low error click** (400 Hz, 50ms) | Gated; valid sensors continue transmission |
+
+### Web UI Manual Telemetry Trigger (`⚡ Sample Telemetry`)
+In addition to the autonomous 60-second hardware loop, operators and evaluators can click **`⚡ Sample Telemetry`** directly on the Sentinel dashboard panel. This immediately pushes the latest sensor values to `/api/v1/sentinel/upload` and synchronizes the physical buzzer and LED pattern without waiting for the next cron cycle.
 
 ### Heartbeat Watchdog & Stuck Sensor Detection
 - **Offline Watchdog:** If a node misses 3 consecutive uploads ($> 180$ seconds), the server marks `is_online = False` and triggers conformal interval widening.

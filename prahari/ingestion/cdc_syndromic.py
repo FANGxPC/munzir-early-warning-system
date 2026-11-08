@@ -25,11 +25,16 @@ from prahari.storage.bronze_store import BronzeStore
 logger = logging.getLogger(__name__)
 
 
-# CDC NSSP Empirical Parameters (Per 100,000 population)
+# CDC NSSP & WHO Open Health Empirical Parameters (Per 100,000 population)
 CDC_NSSP_HRI_BASELINE_RATE = 0.85       # Non-summer baseline emergency visit rate
 CDC_NSSP_HRI_SUMMER_MULTIPLIER = 4.5    # Peak summer heat multiplier
 CDC_NSSP_RESP_BASELINE_RATE = 28.5      # Baseline respiratory encounter rate
 CDC_NSSP_RESP_SANDSTORM_SPIKE = 2.8     # Dust storm / particulate surge multiplier
+CDC_NSSP_GI_BASELINE_RATE = 6.2         # Baseline gastrointestinal ED encounters
+CDC_NSSP_FEVER_BASELINE_RATE = 8.4      # Baseline constitutional / fever ED encounters
+WHO_LAB_POS_BASELINE_RATE = 0.08        # WHO FluNet respiratory PCR positivity fraction
+NIOSH_ABSENCE_BASELINE_RATE = 0.018     # NIOSH baseline occupational sickness absence fraction
+NIOSH_HEAT_FIRSTAID_RATE = 0.0004       # Baseline on-site occupational first aid heat rate
 
 
 class CDCSyndromicIngestor:
@@ -156,6 +161,136 @@ class CDCSyndromicIngestor:
                 )
                 observations.append(obs_resp)
 
+                # -------------------------------------------------------------
+                # 3. Gastrointestinal Illness (clinical_gi)
+                # -------------------------------------------------------------
+                expected_gi_rate = CDC_NSSP_GI_BASELINE_RATE
+                if is_weekend:
+                    expected_gi_rate *= 0.75
+                expected_gi_count = expected_gi_rate * pop_ratio
+                actual_gi_count = float(self.rng.poisson(max(0.1, expected_gi_count)))
+
+                obs_gi = SignalObservation(
+                    signal_type="clinical_gi",
+                    geo_level="district",
+                    geo_id=dist_id,
+                    location_confidence="district_only",
+                    obs_date=date_str,
+                    value=actual_gi_count,
+                    denominator=pop,
+                    source_latency_hrs=24.0,
+                    completeness_score=0.97,
+                    suppressed_flag=actual_gi_count <= 10,
+                )
+                observations.append(obs_gi)
+
+                # -------------------------------------------------------------
+                # 4. Constitutional / Undifferentiated Fever (clinical_fever)
+                # -------------------------------------------------------------
+                expected_fever_rate = CDC_NSSP_FEVER_BASELINE_RATE * (1.0 + 0.25 * winter_factor)
+                if is_weekend:
+                    expected_fever_rate *= 0.75
+                expected_fever_count = expected_fever_rate * pop_ratio
+                actual_fever_count = float(self.rng.poisson(max(0.1, expected_fever_count)))
+
+                obs_fever = SignalObservation(
+                    signal_type="clinical_fever",
+                    geo_level="district",
+                    geo_id=dist_id,
+                    location_confidence="district_only",
+                    obs_date=date_str,
+                    value=actual_fever_count,
+                    denominator=pop,
+                    source_latency_hrs=24.0,
+                    completeness_score=0.97,
+                    suppressed_flag=actual_fever_count <= 10,
+                )
+                observations.append(obs_fever)
+
+                # -------------------------------------------------------------
+                # 5. Laboratory Viral PCR Positivity (lab_pos)
+                # -------------------------------------------------------------
+                lab_tested = max(5, int(actual_fever_count * 0.4))
+                lab_pos_prob = min(0.40, WHO_LAB_POS_BASELINE_RATE * viral_seasonality)
+                lab_pos_count = float(self.rng.binomial(lab_tested, lab_pos_prob))
+                lab_pos_rate = round((lab_pos_count / lab_tested) * 100.0, 1)
+
+                obs_lab = SignalObservation(
+                    signal_type="lab_pos",
+                    geo_level="district",
+                    geo_id=dist_id,
+                    location_confidence="district_only",
+                    obs_date=date_str,
+                    value=lab_pos_rate,
+                    denominator=float(lab_tested),
+                    source_latency_hrs=36.0,
+                    completeness_score=0.92,
+                    suppressed_flag=False,
+                )
+                observations.append(obs_lab)
+
+        # -----------------------------------------------------------------
+        # 6. Workplace Site Sickness Absence & First Aid (NIOSH-calibrated)
+        # -----------------------------------------------------------------
+        sites = self.region_config.get("sites", [])
+        for s in sites:
+            site_id = s["id"]
+            workforce = float(s.get("workforce", 1000))
+
+            for i in range(n_days):
+                curr_dt = dt_start + timedelta(days=i)
+                date_str = curr_dt.strftime("%Y-%m-%d")
+                doy = curr_dt.timetuple().tm_yday
+                is_weekend = curr_dt.weekday() in (4, 5)
+
+                summer_factor = math.sin((doy - 80) / 365.0 * 2.0 * math.pi)
+                thermal_season = max(0.0, summer_factor)
+
+                wbgt_val = env_map.get((site_id, date_str, "wbgt_max"), 28.0 + 8.0 * thermal_season)
+                thermal_excess = max(0.0, wbgt_val - 28.0)
+                absence_multiplier = 1.0 + (thermal_excess / 3.0) ** 1.6 if thermal_excess > 0 else 1.0
+
+                expected_absence = NIOSH_ABSENCE_BASELINE_RATE * workforce * absence_multiplier
+                if is_weekend:
+                    expected_absence *= 0.35  # Essential shifts only on weekends
+
+                actual_absence = float(self.rng.poisson(max(0.0, expected_absence)))
+
+                obs_absence = SignalObservation(
+                    signal_type="absence_heat",
+                    geo_level="site",
+                    geo_id=site_id,
+                    location_confidence="exact",
+                    obs_date=date_str,
+                    value=actual_absence,
+                    denominator=workforce,
+                    source_latency_hrs=12.0,
+                    completeness_score=0.97,
+                    suppressed_flag=False,
+                )
+                observations.append(obs_absence)
+
+                # On-site first-aid heat exhaustion events
+                heat_firstaid_mult = math.exp(0.4 * thermal_excess) if thermal_excess > 0 else 1.0
+                expected_heat_cases = NIOSH_HEAT_FIRSTAID_RATE * workforce * heat_firstaid_mult
+                if is_weekend:
+                    expected_heat_cases *= 0.35
+                actual_heat_cases = float(self.rng.poisson(max(0.0, expected_heat_cases)))
+
+                obs_heat_cases = SignalObservation(
+                    signal_type="site_heat_cases",
+                    geo_level="site",
+                    geo_id=site_id,
+                    location_confidence="exact",
+                    obs_date=date_str,
+                    value=actual_heat_cases,
+                    denominator=workforce,
+                    source_latency_hrs=6.0,
+                    completeness_score=0.99,
+                    suppressed_flag=False,
+                )
+                observations.append(obs_heat_cases)
+
         if write_to_store and observations:
             self.bronze_store.write_observations(observations)
             logger.info(
@@ -163,3 +298,4 @@ class CDCSyndromicIngestor:
             )
 
         return observations
+

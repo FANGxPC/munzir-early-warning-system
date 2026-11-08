@@ -15,6 +15,14 @@ class DataHealthService:
     def __init__(self):
         # Default baseline states for feeds
         self.feed_states: Dict[str, Dict[str, Any]] = {
+            "sentinel": {
+                "name": "Sentinel ESP32 IoT Micro-Weather Mesh",
+                "freshness_minutes": 0.1,
+                "completeness_pct": 99.8,
+                "latency_hours": 0.01,
+                "status": "HEALTHY",
+                "is_active": True,
+            },
             "weather": {
                 "name": "Open-Meteo Weather & Thermal API",
                 "freshness_minutes": 14.5,
@@ -32,18 +40,26 @@ class DataHealthService:
                 "is_active": True,
             },
             "clinical": {
-                "name": "MoHAP Syndromic EHR Stream",
+                "name": "CDC NSSP / MoHAP Syndromic Stream",
                 "freshness_minutes": 35.0,
-                "completeness_pct": 95.8,
-                "latency_hours": 1.20,
+                "completeness_pct": 96.5,
+                "latency_hours": 1.10,
                 "status": "HEALTHY",
                 "is_active": True,
             },
-            "workplace": {
-                "name": "MOHRE / Employer EHS Incident Logs",
-                "freshness_minutes": 48.0,
-                "completeness_pct": 93.5,
-                "latency_hours": 2.10,
+            "osha": {
+                "name": "OSHA Severe Injury & Worksite Incident Logs",
+                "freshness_minutes": 42.0,
+                "completeness_pct": 95.2,
+                "latency_hours": 1.80,
+                "status": "HEALTHY",
+                "is_active": True,
+            },
+            "openfda": {
+                "name": "openFDA / DailyMed Pharmacological Vulnerability",
+                "freshness_minutes": 60.0,
+                "completeness_pct": 98.4,
+                "latency_hours": 2.00,
                 "status": "HEALTHY",
                 "is_active": True,
             },

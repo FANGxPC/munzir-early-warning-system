@@ -1,0 +1,81 @@
+[
+  {
+    "drug_class_id": "FDA-VULN-001",
+    "class_name": "Anticholinergics & Antimuscarinics",
+    "representative_drugs": ["Oxybutynin", "Benztropine", "Glycopyrrolate", "Scopolamine"],
+    "fda_application_number": "NDA020897",
+    "adverse_reaction_terms": ["Hyperthermia", "Anhidrosis", "Heat stroke", "Decreased sweating"],
+    "physiological_mechanism": "Directly blocks acetylcholine at muscarinic M3 receptors on cutaneous eccrine sweat glands, producing severe anhidrosis (inability to sweat) and crippling the primary physiological mechanism for evaporative heat dissipation.",
+    "environmental_driver": "heat",
+    "risk_level": "critical",
+    "estimated_workforce_prevalence_pct": 4.5,
+    "fda_boxed_or_label_warning": "FDA Label Warning (Thermoregulation): Exposure to environmental heat during therapy may lead to severe hyperthermia, heat prostration, and fatal heat stroke due to suppression of eccrine sweat gland secretion.",
+    "clinical_mitigation_action": "Mandate active convective fan cooling; monitor for dry, flushed skin and lack of perspiration; reassign workers to air-conditioned duties when WBGT exceeds 30.0C."
+  },
+  {
+    "drug_class_id": "FDA-VULN-002",
+    "class_name": "Loop & Thiazide Diuretics",
+    "representative_drugs": ["Furosemide", "Hydrochlorothiazide", "Chlorthalidone", "Torsemide"],
+    "fda_application_number": "NDA016084",
+    "adverse_reaction_terms": ["Hypovolemia", "Dehydration", "Electrolyte depletion", "Hypokalemia", "Hyponatremia", "Prerenal azotemia"],
+    "physiological_mechanism": "Inhibits renal tubular reabsorption of sodium and water, causing persistent pharmacologic volume depletion. Combined with heavy sweat losses (1-2 L/h in hot environments), rapidly induces severe hypovolemia, electrolyte collapse, and acute rhabdomyolysis.",
+    "environmental_driver": "heat",
+    "risk_level": "critical",
+    "estimated_workforce_prevalence_pct": 18.5,
+    "fda_boxed_or_label_warning": "FDA Label Warning (Fluid and Electrolyte Depletion): Excessive diuresis may lead to profound dehydration, blood volume reduction with circulatory collapse, and vascular thrombosis, especially in high ambient temperatures.",
+    "clinical_mitigation_action": "Hydrate strictly with balanced electrolyte Oral Rehydration Salts (ORS containing sodium/potassium) rather than hypotonic plain water alone to prevent hyponatremic encephalopathy; perform daily pre-shift hydration checks."
+  },
+  {
+    "drug_class_id": "FDA-VULN-003",
+    "class_name": "Beta-Adrenergic Receptor Blockers",
+    "representative_drugs": ["Metoprolol", "Atenolol", "Propranolol", "Bisoprolol"],
+    "fda_application_number": "NDA017963",
+    "adverse_reaction_terms": ["Orthostatic hypotension", "Impaired cardiac output", "Blunted tachycardia", "Peripheral hypoperfusion"],
+    "physiological_mechanism": "Blunts compensatory cardiovascular tachycardia and cutaneous microvascular vasodilation necessary to transfer core metabolic heat to the skin for convective cooling, predisposing workers to acute orthostatic syncope.",
+    "environmental_driver": "heat",
+    "risk_level": "high",
+    "estimated_workforce_prevalence_pct": 12.0,
+    "fda_boxed_or_label_warning": "FDA Label Warning (Cardiovascular Adaptation): Attenuates reflex sympathetic chronotropic and inotropic response to thermal stress; increases incidence of syncopal episodes during prolonged standing in hot conditions.",
+    "clinical_mitigation_action": "Institute 20-minute work / 40-minute rest cycles in shade; observe for delayed heart rate recovery and orthostatic dizziness upon standing from seated rest."
+  },
+  {
+    "drug_class_id": "FDA-VULN-004",
+    "class_name": "Antipsychotics & Neuroleptics",
+    "representative_drugs": ["Haloperidol", "Chlorpromazine", "Olanzapine", "Risperidone", "Quetiapine"],
+    "fda_application_number": "NDA015923",
+    "adverse_reaction_terms": ["Neuroleptic malignant syndrome", "Impaired thermoregulation", "Hyperpyrexia", "Heat exhaustion"],
+    "physiological_mechanism": "Blocks central hypothalamic dopamine D2 receptors regulating autonomic body temperature set-points, while exerting peripheral anticholinergic blockade on sweat production, leading to catastrophic core temperature escalation.",
+    "environmental_driver": "heat",
+    "risk_level": "critical",
+    "estimated_workforce_prevalence_pct": 3.2,
+    "fda_boxed_or_label_warning": "FDA Boxed Warning & Thermoregulation: Disruption of the body's ability to reduce core temperature has been reported. Extreme care should be advised for patients exposed to environmental heat, strenuous exercise, or dehydration.",
+    "clinical_mitigation_action": "Strict prohibition of unshaded outdoor manual labor when WBGT exceeds 30.0C; schedule daily medical check-in with site occupational health nurse."
+  },
+  {
+    "drug_class_id": "FDA-VULN-005",
+    "class_name": "RAAS Inhibitors (ACE Inhibitors & ARBs)",
+    "representative_drugs": ["Lisinopril", "Losartan", "Enalapril", "Valsartan"],
+    "fda_application_number": "NDA019888",
+    "adverse_reaction_terms": ["Acute kidney injury", "Blunted thirst sensation", "Renal insufficiency", "Hypotension"],
+    "physiological_mechanism": "Suppresses angiotensin II, impairing central dipsogenic thirst drive and reducing efferent arteriolar tone in renal glomeruli, precipitating acute tubular necrosis when dehydration reduces renal blood flow.",
+    "environmental_driver": "heat",
+    "risk_level": "high",
+    "estimated_workforce_prevalence_pct": 14.0,
+    "fda_boxed_or_label_warning": "FDA Label Warning (Renal Function Deterioration): In volume-depleted or dehydrated patients, inhibition of the renin-angiotensin-aldosterone system can result in oliguria, progressive azotemia, and acute renal failure.",
+    "clinical_mitigation_action": "Enforce scheduled clock-based fluid intake (250ml every 20 mins) regardless of thirst perception; track urine color charts at all site hydration stations."
+  },
+  {
+    "drug_class_id": "FDA-VULN-006",
+    "class_name": "Respiratory Inhaled Maintenance Therapy",
+    "representative_drugs": ["Fluticasone Propionate / Salmeterol", "Budesonide / Formoterol", "Montelukast", "Albuterol"],
+    "fda_application_number": "NDA021077",
+    "adverse_reaction_terms": ["Acute bronchospasm", "Airway hyperresponsiveness", "Dyspnea", "Exacerbation of asthma"],
+    "physiological_mechanism": "Indicates underlying pre-existing chronic airway hyperreactivity. Inhalation of particulate matter (PM2.5 / PM10) or silica dust triggers mast cell degranulation, alveolar inflammation, and sudden severe bronchospasm.",
+    "environmental_driver": "respiratory_air_quality",
+    "risk_level": "critical",
+    "estimated_workforce_prevalence_pct": 8.5,
+    "fda_boxed_or_label_warning": "FDA Label Warning (Paradoxical Bronchospasm & Irritant Sensitivity): Patients with hyperreactive airways are at elevated risk of acute life-threatening bronchospasm upon exposure to environmental particulates, mineral dust, or airborne aerosols.",
+    "clinical_mitigation_action": "Mandate N95 or PAPR respiratory protection; relocate high-risk individuals with active prescription history to enclosed HEPA-filtered control cabs during sandstorms or particulate inversions."
+  }
+]
+

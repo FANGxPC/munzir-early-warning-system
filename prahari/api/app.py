@@ -57,6 +57,7 @@ from prahari.models.canonical import (
     SentinelNodeStatus,
 )
 from prahari.ingestion.sentinel_ingest import SentinelIngestionEngine
+from prahari.ingestion.openfda import ClinicalVulnerabilityEngine
 import numpy as np
 
 # Directories
@@ -418,6 +419,25 @@ def export_fhir_surveillance_bundle(
     (comprising RiskAssessment and MeasureReport resources) for external integration.
     """
     raw_alerts = alert_service._ensure_alerts_for_date("2025-08-20")
+    if not raw_alerts:
+        raw_alerts = alert_service.pipeline.load_alerts()
+    if not raw_alerts:
+        from prahari.detection.l5_policy import PrahariAlert, AlertSeverity
+        raw_alerts = [
+            PrahariAlert(
+                alert_id="ALT-FHIR-001",
+                incident_id="INC-FHIR-01",
+                alert_type="heat_cluster",
+                severity=AlertSeverity.WARNING,
+                probability=0.88,
+                ci_low=0.79,
+                ci_high=0.94,
+                geo_ids=["SITE-JA-01", district_id],
+                obs_date="2025-08-20",
+                signal_contributions={"wbgt": 0.32, "workplace": 0.28, "clinical": 0.22},
+                owner_role="Site Safety Officer",
+            )
+        ]
     bundle = FHIRSurveillanceAdapter.create_surveillance_bundle(
         alerts=raw_alerts,
         district_id=district_id,
@@ -436,7 +456,7 @@ def get_model_drift_report(
     and telemetry latency health status for production surveillance monitoring.
     """
     rng = np.random.default_rng(42)
-    # Synthetic baseline vs production distributions for operational reporting
+    # Baseline training distribution vs active production distribution for drift analysis
     baseline_feats = {
         "wbgt_max": rng.normal(32.0, 3.5, 1000),
         "pm25": rng.exponential(35.0, 1000),
@@ -577,6 +597,181 @@ def silence_sentinel_test_buzzer(node_id: str) -> JSONResponse:
     """Silences the test buzzer on node."""
     res = sentinel_engine.clear_test_alert_level(node_id)
     return JSONResponse(content={"status": "buzzer_silenced", **res})
+
+
+clinical_engine = ClinicalVulnerabilityEngine()
+
+
+@app.get("/api/v1/clinical/vulnerability-profile", response_class=JSONResponse)
+def get_clinical_vulnerability_profile(
+    hazard: str = "heat",
+    severity: str = "warning",
+    wbgt: Optional[float] = None,
+    pm25: Optional[float] = None,
+) -> JSONResponse:
+    """
+    Returns clinical pharmacological vulnerability evaluation derived from
+    openFDA Drug Label warnings and DailyMed thermoregulatory risk classes.
+    """
+    env_metrics = {}
+    if wbgt is not None:
+        env_metrics["wbgt_max"] = wbgt
+    if pm25 is not None:
+        env_metrics["pm25"] = pm25
+
+    profile = clinical_engine.evaluate_vulnerability_profile(
+        alert_type=f"{hazard}_cluster",
+        severity=severity,
+        environmental_metrics=env_metrics,
+    )
+    return JSONResponse(content=profile)
+
+
+# --- 9b. Time Machine Replay Endpoints ---
+
+@app.get("/api/v1/timemachine/events", response_class=JSONResponse)
+def get_timemachine_events() -> JSONResponse:
+    """Returns list of available historical replay events."""
+    from prahari.timemachine.config import load_sources_config
+    configs = load_sources_config()
+    events = []
+    for eid, cfg in configs.items():
+        events.append({
+            "event_id": cfg.event_id,
+            "name": cfg.name,
+            "region_name": cfg.region_name,
+            "is_hybrid": cfg.is_hybrid,
+            "hybrid_label": cfg.hybrid_label,
+            "coordinates": {"latitude": cfg.latitude, "longitude": cfg.longitude},
+            "baseline_start": cfg.baseline_start,
+            "baseline_end": cfg.baseline_end,
+            "event_start": cfg.event_start,
+            "event_end": cfg.event_end,
+            "observed_peak_date": cfg.observed_peak_date,
+            "observed_peak_value": cfg.observed_peak_value,
+            "weather_source": cfg.weather_source,
+            "outcome_source": cfg.outcome_source,
+            "threshold_comparator": cfg.threshold_comparator,
+        })
+    return JSONResponse(content={"events": events})
+
+
+@app.get("/api/v1/timemachine/replay", response_class=JSONResponse)
+def get_timemachine_replay(event: str = "pnw_2021") -> JSONResponse:
+    """Returns full day-by-day replay time series and operational metrics."""
+    from prahari.timemachine.engine import TimeMachineEngine
+    from prahari.timemachine.data_loader import DEFAULT_DATA_DIR
+    import json
+
+    results_file = DEFAULT_DATA_DIR / event / "replay_results.json"
+    if results_file.exists():
+        with open(results_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return JSONResponse(content=data)
+
+    engine = TimeMachineEngine(event)
+    results, metrics = engine.run_replay()
+    engine.export_results_json(results, metrics)
+    with open(results_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        return JSONResponse(content=data)
+
+
+@app.get("/api/v1/timemachine/as-of", response_class=JSONResponse)
+def get_timemachine_as_of(event: str = "pnw_2021", date: str = "2021-06-26") -> JSONResponse:
+    """Returns the strict as-of-date state on day D, showing visible vs hidden records."""
+    from prahari.timemachine.data_loader import get_data_as_of, DEFAULT_DATA_DIR, _load_raw_outcomes
+    from prahari.timemachine.detector import TimeMachineDetector
+    from prahari.timemachine.config import load_sources_config
+
+    configs = load_sources_config()
+    cfg = configs.get(event)
+    if not cfg:
+        raise HTTPException(status_code=404, detail=f"Unknown event {event}")
+
+    snapshot = get_data_as_of(date, event_id=event)
+    raw_outcomes = _load_raw_outcomes(DEFAULT_DATA_DIR / event)
+
+    tc = cfg.threshold_comparator or {}
+    detector = TimeMachineDetector(
+        event_id=event,
+        baseline_cutoff_date=cfg.baseline_end,
+        static_temp_threshold=float(tc.get("temp_threshold_c", 35.0)),
+        static_wbgt_threshold=float(tc.get("wbgt_threshold_c", 30.0)),
+        baseline_expected_wbgt=float(tc.get("baseline_expected_wbgt", 22.0)),
+    )
+    day_res = detector.evaluate_day(snapshot, raw_outcomes)
+
+    return JSONResponse(content={
+        "as_of_date": date,
+        "event_id": event,
+        "decision": {
+            "munzir_alert": day_res.munzir_alert,
+            "alert_severity": day_res.alert_severity,
+            "calibrated_risk": day_res.calibrated_risk,
+            "conformal_lower": day_res.conformal_lower,
+            "conformal_upper": day_res.conformal_upper,
+            "shap_attributions": day_res.shap_attributions,
+            "what_rose": day_res.what_rose,
+            "recommended_action": day_res.recommended_action,
+            "responsible_role": day_res.responsible_role,
+            "threshold_alert": day_res.threshold_alert,
+            "threshold_cutoff": day_res.threshold_cutoff,
+            "is_observed_peak": day_res.is_observed_peak,
+        },
+        "weather_today": {
+            "temp_max": day_res.temp_max,
+            "wbgt_max": day_res.wbgt_max,
+            "forecast_wbgt_48h": day_res.forecast_wbgt_next_48h,
+        },
+        "visible_reported_outcomes": snapshot.reported_outcomes.to_dict(orient="records"),
+        "unreported_future_count": len(snapshot.unreported_outcomes),
+        "mean_reporting_delay_days": day_res.reporting_latency_mean_days,
+        "metadata": snapshot.metadata,
+    })
+
+
+# --- 9. Sentinel WBGT Microclimate Bias Correction Endpoints ---
+
+@app.get("/api/v1/sentinel/bias-correction", response_class=JSONResponse)
+def get_sentinel_bias_correction(
+    site_id: str = "SITE-JA-01",
+    folds: int = 5,
+) -> JSONResponse:
+    """
+    Returns empirical error metrics before and after microclimate bias correction,
+    time-blocked cross-validation folds, diurnal error curves, and methodology notes.
+    """
+    from prahari.bias_correction.engine import BiasCorrectionEngine
+    engine = BiasCorrectionEngine()
+    results = engine.run_calibration(site_id=site_id, n_folds=folds, export=True)
+    return JSONResponse(content=results)
+
+
+@app.get("/api/v1/sentinel/transfer", response_class=JSONResponse)
+def get_sentinel_transfer_register() -> JSONResponse:
+    """
+    Returns spatial transfer status for all regional worksites:
+    - SENSED: Direct in-situ sensor node (cross-validated)
+    - LOSO-VALIDATED: Multi-sensor Leave-One-Sensor-Out validated
+    - UNVALIDATED-SPATIALLY: Unsensored site (widened conformal interval, no empirical error claimed)
+    """
+    from prahari.bias_correction.engine import BiasCorrectionEngine
+    engine = BiasCorrectionEngine()
+    results = engine.run_calibration(site_id="SITE-JA-01", export=False)
+    return JSONResponse(content={
+        "spatial_register": results["spatial_transfer"]["spatial_register"],
+        "loso_validation": results["spatial_transfer"]["loso_validation"],
+        "unsensored_penalty_multiplier": results["spatial_transfer"]["unsensored_penalty_multiplier"],
+        "truth_in_science_notice": results["limitations_and_disclosures"]["spatial_transfer_boundary"],
+    })
+
+
+@app.get("/api/v1/sentinel/sources", response_class=JSONResponse)
+def get_sentinel_bias_sources() -> JSONResponse:
+    """Returns traceable academic citations, standard formulas, and hardware specifications."""
+    from prahari.bias_correction.config import load_sources_config
+    return JSONResponse(content=load_sources_config())
 
 
 # --- 10. Web Single Page Application (Static UI) ---

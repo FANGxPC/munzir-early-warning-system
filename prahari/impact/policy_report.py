@@ -26,7 +26,7 @@ from prahari.impact.models import (
 
 class DistrictPolicyEvidenceGenerator:
     """
-    Synthesizes aggregated district-level environmental and health burden data
+    Aggregates district-level environmental and health burden data
     to provide defensible evidence briefs for statutory interventions.
     """
 

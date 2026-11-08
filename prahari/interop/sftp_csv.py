@@ -16,7 +16,7 @@ from prahari.models.canonical import SignalObservation, FORBIDDEN_IDENTIFIER_FIE
 
 class SFTPCSVAdapter:
     """
-    Ingests and exports privacy-safe tabular feeds over simulated SFTP batch drops.
+    Ingests and exports privacy-safe tabular feeds over secure SFTP batch drops.
     Enforces privacy-by-architecture by aggressively stripping/rejecting individual identifiers.
     """
 

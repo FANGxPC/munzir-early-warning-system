@@ -1,0 +1,2785 @@
+{
+  "metadata": {
+    "event_id": "pnw_2021",
+    "name": "Pacific Northwest Historic Heat Dome (June 2021)",
+    "region_name": "Pacific Northwest (Seattle / HHS Region 10)",
+    "is_hybrid": false,
+    "weather_source": {
+      "provider": "Open-Meteo Archived Forecast API",
+      "endpoint": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "model": "ECMWF IFS & NOAA GFS Numerical Weather Prediction Archived Model Runs",
+      "temporal_resolution": "hourly",
+      "is_as_of_forecast": true,
+      "parameters": [
+        "temperature_2m",
+        "relative_humidity_2m",
+        "dew_point_2m",
+        "wind_speed_10m",
+        "shortwave_radiation_instant",
+        "direct_normal_irradiance"
+      ],
+      "verified_status": "VERIFIED_PUBLIC_DATASET"
+    },
+    "outcome_source": {
+      "provider": "U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP)",
+      "publication": "Schramm PJ, Vaidyanathan A, Radhakrishnan L, Gates A, Prezant K, Hartnett K. Heat-Related Emergency Department Visits Associated with Historic Heat \u2014 Pacific Northwest, June 2021. MMWR Morb Mortal Wkly Rep 2021;70:1028\u20131032.",
+      "doi": "10.15585/mmwr.mm7029e1",
+      "url": "https://www.cdc.gov/mmwr/volumes/70/wr/mm7029e1.htm",
+      "metric": "Daily Emergency Department Visits for Heat-Related Illness (HRI)",
+      "temporal_resolution": "daily",
+      "geographic_coverage": "HHS Region 10 (Washington, Oregon, Idaho, Alaska)",
+      "verified_status": "VERIFIED_PUBLIC_DATASET"
+    },
+    "reporting_delay_spec": {
+      "mechanism": "SIMULATED DELAY",
+      "description": "Fitted to CDC NSSP empirical facility transmission latency distribution: 70% reported D+1, 20% D+2, 10% D+3 (mean lag: 1.4 days)",
+      "citation": "CDC NSSP Facility Data Transmission Latency Profile (2020)"
+    },
+    "threshold_comparator": {
+      "name": "Standard Static Meteorological Threshold",
+      "definition": "Ambient maximum temperature >= 35.0\u00b0C (95\u00b0F) or WBGT >= 30.0\u00b0C",
+      "temp_threshold_c": 35.0,
+      "wbgt_threshold_c": 30.0,
+      "baseline_expected_wbgt": 22.0,
+      "citation": "National Weather Service (NWS) Heat Advisory & ACGIH Heat Stress Criteria"
+    }
+  },
+  "metrics": {
+    "event_id": "pnw_2021",
+    "event_name": "Pacific Northwest Historic Heat Dome (June 2021)",
+    "observed_peak_date": "2021-06-28",
+    "first_munzir_alert_date": "2021-06-23",
+    "first_threshold_alert_date": "2021-06-26",
+    "lead_time_vs_peak_days": 5.0,
+    "lead_time_vs_threshold_days": 3.0,
+    "bootstrap_lead_time_95ci": [
+      4.5,
+      5.47
+    ],
+    "sensitivity_pct": 83.3,
+    "ppv_pct": 71.4,
+    "false_alarm_rate_per_month": 1.0,
+    "mean_reporting_delay_days": 1.83,
+    "system_compute_latency_seconds": 0.45,
+    "total_replay_days": 66,
+    "baseline_days": 60,
+    "event_days": 6,
+    "true_positive_alert_days": 5,
+    "false_positive_alert_days": 2,
+    "caveat_notice": "SINGLE CASE STUDY NOTICE: This replay represents a single historical heat event (N=1). Reported timeliness and precision reflect strict as-of-date evaluation under empirical reporting delays. General multi-outbreak performance must be referenced to the multi-injection validation benchmark."
+  },
+  "timeline": [
+    {
+      "as_of_date": "2021-05-01",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 0,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 17.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.083,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.179,
+      "shap_attributions": {
+        "environmental": 0.009,
+        "clinical_syndromic": 0.692,
+        "data_quality": 0.299
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 16.3,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.74
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.3,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.0
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.6,
+      "wbgt_max": 16.8,
+      "forecast_wbgt_next_48h": 16.3,
+      "reporting_latency_mean_days": 1.4
+    },
+    {
+      "as_of_date": "2021-05-02",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 9,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.084,
+      "conformal_lower": 0.004,
+      "conformal_upper": 0.164,
+      "shap_attributions": {
+        "environmental": 0.031,
+        "clinical_syndromic": 0.665,
+        "data_quality": 0.303
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.84
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.1,
+      "wbgt_max": 15.8,
+      "forecast_wbgt_next_48h": 18.4,
+      "reporting_latency_mean_days": 1.0
+    },
+    {
+      "as_of_date": "2021-05-03",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 16,
+      "reported_visits_visible": 21,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.084,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.174,
+      "shap_attributions": {
+        "environmental": 0.031,
+        "clinical_syndromic": 0.665,
+        "data_quality": 0.303
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.84
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.0,
+      "wbgt_max": 14.6,
+      "forecast_wbgt_next_48h": 18.4,
+      "reporting_latency_mean_days": 1.2
+    },
+    {
+      "as_of_date": "2021-05-04",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 7,
+      "reported_visits_visible": 36,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.114,
+      "conformal_lower": 0.014,
+      "conformal_upper": 0.214,
+      "shap_attributions": {
+        "environmental": 0.025,
+        "clinical_syndromic": 0.736,
+        "data_quality": 0.239
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.84
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 11.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.18
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.3,
+      "wbgt_max": 16.3,
+      "forecast_wbgt_next_48h": 18.4,
+      "reporting_latency_mean_days": 1.5
+    },
+    {
+      "as_of_date": "2021-05-05",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 14,
+      "reported_visits_visible": 45,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 18.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.039,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.144,
+      "shap_attributions": {
+        "environmental": 0.023,
+        "clinical_syndromic": 0.492,
+        "data_quality": 0.485
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.1,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.78
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 5.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.54
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 18.4,
+      "wbgt_max": 18.4,
+      "forecast_wbgt_next_48h": 17.1,
+      "reporting_latency_mean_days": 1.6
+    },
+    {
+      "as_of_date": "2021-05-06",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 6,
+      "reported_visits_visible": 58,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 18.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.093,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.201,
+      "shap_attributions": {
+        "environmental": 0.006,
+        "clinical_syndromic": 0.719,
+        "data_quality": 0.275
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 15.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.72
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 18.6,
+      "wbgt_max": 17.1,
+      "forecast_wbgt_next_48h": 15.8,
+      "reporting_latency_mean_days": 1.7
+    },
+    {
+      "as_of_date": "2021-05-07",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 66,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 14.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.032,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.142,
+      "shap_attributions": {
+        "environmental": 0.024,
+        "clinical_syndromic": 0.441,
+        "data_quality": 0.535
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.77
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 14.3,
+      "wbgt_max": 13.8,
+      "forecast_wbgt_next_48h": 17.0,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-08",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 14,
+      "reported_visits_visible": 74,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 13.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.048,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.16,
+      "shap_attributions": {
+        "environmental": 0.033,
+        "clinical_syndromic": 0.535,
+        "data_quality": 0.431
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.9,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.81
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 13.6,
+      "wbgt_max": 13.8,
+      "forecast_wbgt_next_48h": 17.9,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-09",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 3,
+      "reported_visits_visible": 74,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 15.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.101,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.214,
+      "shap_attributions": {
+        "environmental": 0.039,
+        "clinical_syndromic": 0.695,
+        "data_quality": 0.266
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 19.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.86
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.8,
+      "wbgt_max": 15.8,
+      "forecast_wbgt_next_48h": 19.0,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-10",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 6,
+      "reported_visits_visible": 67,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 17.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.039,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.153,
+      "shap_attributions": {
+        "environmental": 0.171,
+        "clinical_syndromic": 0.29,
+        "data_quality": 0.539
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 20.3,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.92
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 2.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.22
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.8,
+      "wbgt_max": 17.0,
+      "forecast_wbgt_next_48h": 20.3,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-11",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 5,
+      "reported_visits_visible": 57,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 19.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.067,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.181,
+      "shap_attributions": {
+        "environmental": 0.246,
+        "clinical_syndromic": 0.34,
+        "data_quality": 0.414
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.97
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 19.7,
+      "wbgt_max": 17.9,
+      "forecast_wbgt_next_48h": 21.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-12",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 14,
+      "reported_visits_visible": 55,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 19.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.067,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.18,
+      "shap_attributions": {
+        "environmental": 0.246,
+        "clinical_syndromic": 0.34,
+        "data_quality": 0.414
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.97
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 19.7,
+      "wbgt_max": 19.0,
+      "forecast_wbgt_next_48h": 21.4,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-13",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 3,
+      "reported_visits_visible": 53,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 21.5,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.14,
+      "conformal_lower": 0.026,
+      "conformal_upper": 0.253,
+      "shap_attributions": {
+        "environmental": 0.171,
+        "clinical_syndromic": 0.599,
+        "data_quality": 0.23
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.99
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 21.5,
+      "wbgt_max": 20.3,
+      "forecast_wbgt_next_48h": 21.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-14",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 10,
+      "reported_visits_visible": 52,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 22.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.067,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.18,
+      "shap_attributions": {
+        "environmental": 0.326,
+        "clinical_syndromic": 0.235,
+        "data_quality": 0.438
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.99
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 2.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.22
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 22.3,
+      "wbgt_max": 21.4,
+      "forecast_wbgt_next_48h": 21.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-15",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 52,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 22.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.101,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.214,
+      "shap_attributions": {
+        "environmental": 0.229,
+        "clinical_syndromic": 0.464,
+        "data_quality": 0.307
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.99
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 7.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.75
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 22.1,
+      "wbgt_max": 20.8,
+      "forecast_wbgt_next_48h": 21.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-16",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 10,
+      "reported_visits_visible": 46,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 23.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.069,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.181,
+      "shap_attributions": {
+        "environmental": 0.151,
+        "clinical_syndromic": 0.47,
+        "data_quality": 0.379
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 20.7,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.94
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 23.6,
+      "wbgt_max": 21.8,
+      "forecast_wbgt_next_48h": 20.7,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-17",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 7,
+      "reported_visits_visible": 53,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 24.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.054,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.167,
+      "shap_attributions": {
+        "environmental": 0.009,
+        "clinical_syndromic": 0.597,
+        "data_quality": 0.395
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 15.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.72
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 7.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.75
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 24.0,
+      "wbgt_max": 20.7,
+      "forecast_wbgt_next_48h": 15.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-18",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 7,
+      "reported_visits_visible": 55,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 14.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.037,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.15,
+      "shap_attributions": {
+        "environmental": 0.011,
+        "clinical_syndromic": 0.498,
+        "data_quality": 0.491
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 15.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.72
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 5.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.54
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 14.7,
+      "wbgt_max": 13.1,
+      "forecast_wbgt_next_48h": 15.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-19",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 15,
+      "reported_visits_visible": 57,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 14.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.038,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.151,
+      "shap_attributions": {
+        "environmental": 0.019,
+        "clinical_syndromic": 0.493,
+        "data_quality": 0.487
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 16.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.76
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 5.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.54
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 14.3,
+      "wbgt_max": 13.5,
+      "forecast_wbgt_next_48h": 16.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-20",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 18,
+      "reported_visits_visible": 55,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 15.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.094,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.208,
+      "shap_attributions": {
+        "environmental": 0.011,
+        "clinical_syndromic": 0.715,
+        "data_quality": 0.274
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 16.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.76
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.1,
+      "wbgt_max": 15.8,
+      "forecast_wbgt_next_48h": 16.8,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-21",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 69,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 15.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.147,
+      "conformal_lower": 0.033,
+      "conformal_upper": 0.261,
+      "shap_attributions": {
+        "environmental": 0.008,
+        "clinical_syndromic": 0.799,
+        "data_quality": 0.194
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 16.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.76
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 13.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.4
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.8,
+      "wbgt_max": 15.7,
+      "forecast_wbgt_next_48h": 16.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-22",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 8,
+      "reported_visits_visible": 71,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.045,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.16,
+      "shap_attributions": {
+        "environmental": 0.012,
+        "clinical_syndromic": 0.547,
+        "data_quality": 0.441
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 16.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.74
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.1,
+      "wbgt_max": 16.8,
+      "forecast_wbgt_next_48h": 16.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-23",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 6,
+      "reported_visits_visible": 71,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.047,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.161,
+      "shap_attributions": {
+        "environmental": 0.022,
+        "clinical_syndromic": 0.542,
+        "data_quality": 0.436
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.78
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.4,
+      "wbgt_max": 16.2,
+      "forecast_wbgt_next_48h": 17.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-24",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 68,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 15.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.032,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.147,
+      "shap_attributions": {
+        "environmental": 0.027,
+        "clinical_syndromic": 0.439,
+        "data_quality": 0.534
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.78
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.4,
+      "wbgt_max": 14.9,
+      "forecast_wbgt_next_48h": 17.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-25",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 12,
+      "reported_visits_visible": 68,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.047,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.161,
+      "shap_attributions": {
+        "environmental": 0.022,
+        "clinical_syndromic": 0.542,
+        "data_quality": 0.436
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.78
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.1,
+      "wbgt_max": 15.6,
+      "forecast_wbgt_next_48h": 17.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-26",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 4,
+      "reported_visits_visible": 72,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 17.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.078,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.192,
+      "shap_attributions": {
+        "environmental": 0.069,
+        "clinical_syndromic": 0.602,
+        "data_quality": 0.329
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 19.6,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.89
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 8.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.86
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.8,
+      "wbgt_max": 17.2,
+      "forecast_wbgt_next_48h": 19.6,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-27",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 4,
+      "reported_visits_visible": 63,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 17.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.039,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.153,
+      "shap_attributions": {
+        "environmental": 0.124,
+        "clinical_syndromic": 0.35,
+        "data_quality": 0.526
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 19.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.9
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 3.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.32
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.0,
+      "wbgt_max": 15.5,
+      "forecast_wbgt_next_48h": 19.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-28",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 16,
+      "reported_visits_visible": 51,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.9,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.125,
+      "conformal_lower": 0.011,
+      "conformal_upper": 0.24,
+      "shap_attributions": {
+        "environmental": 0.485,
+        "clinical_syndromic": 0.206,
+        "data_quality": 0.309
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 23.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.05
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 3.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.32
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.2,
+      "wbgt_max": 16.9,
+      "forecast_wbgt_next_48h": 23.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-29",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 54,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 20.9,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.509,
+      "conformal_lower": 0.395,
+      "conformal_upper": 0.623,
+      "shap_attributions": {
+        "environmental": 0.602,
+        "clinical_syndromic": 0.3,
+        "data_quality": 0.098
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 26.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.22
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 11.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.18
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 20.9,
+      "wbgt_max": 19.6,
+      "forecast_wbgt_next_48h": 26.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-05-30",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 18,
+      "reported_visits_visible": 55,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 21.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.463,
+      "conformal_lower": 0.349,
+      "conformal_upper": 0.577,
+      "shap_attributions": {
+        "environmental": 0.742,
+        "clinical_syndromic": 0.143,
+        "data_quality": 0.115
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.23
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 21.0,
+      "wbgt_max": 19.8,
+      "forecast_wbgt_next_48h": 27.0,
+      "reporting_latency_mean_days": 1.8
+    },
+    {
+      "as_of_date": "2021-05-31",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 66,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.564,
+      "conformal_lower": 0.45,
+      "conformal_upper": 0.678,
+      "shap_attributions": {
+        "environmental": 0.558,
+        "clinical_syndromic": 0.356,
+        "data_quality": 0.086
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.23
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 13.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.4
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 25.7,
+      "wbgt_max": 23.2,
+      "forecast_wbgt_next_48h": 27.0,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-01",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 68,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 29.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.463,
+      "conformal_lower": 0.349,
+      "conformal_upper": 0.577,
+      "shap_attributions": {
+        "environmental": 0.742,
+        "clinical_syndromic": 0.143,
+        "data_quality": 0.115
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.23
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 29.7,
+      "wbgt_max": 26.8,
+      "forecast_wbgt_next_48h": 27.0,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-02",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 17,
+      "reported_visits_visible": 65,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 29.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.311,
+      "conformal_lower": 0.196,
+      "conformal_upper": 0.425,
+      "shap_attributions": {
+        "environmental": 0.647,
+        "clinical_syndromic": 0.195,
+        "data_quality": 0.157
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.15
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 29.0,
+      "wbgt_max": 27.0,
+      "forecast_wbgt_next_48h": 25.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-03",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 10,
+      "reported_visits_visible": 76,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 29.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.2,
+      "conformal_lower": 0.086,
+      "conformal_upper": 0.315,
+      "shap_attributions": {
+        "environmental": 0.201,
+        "clinical_syndromic": 0.625,
+        "data_quality": 0.174
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 22.6,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.03
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 12.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.29
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 29.1,
+      "wbgt_max": 25.4,
+      "forecast_wbgt_next_48h": 22.6,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-04",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 6,
+      "reported_visits_visible": 83,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 24.2,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.06,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.175,
+      "shap_attributions": {
+        "environmental": 0.044,
+        "clinical_syndromic": 0.575,
+        "data_quality": 0.381
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.6,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.85
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 7.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.75
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 24.2,
+      "wbgt_max": 22.6,
+      "forecast_wbgt_next_48h": 18.6,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-05",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 2,
+      "reported_visits_visible": 75,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 19.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.034,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.149,
+      "shap_attributions": {
+        "environmental": 0.043,
+        "clinical_syndromic": 0.432,
+        "data_quality": 0.525
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.82
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 19.3,
+      "wbgt_max": 18.6,
+      "forecast_wbgt_next_48h": 18.0,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-06",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 69,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.02,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.135,
+      "shap_attributions": {
+        "environmental": 0.054,
+        "clinical_syndromic": 0.286,
+        "data_quality": 0.661
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.82
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 1.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.11
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 16.6,
+      "wbgt_max": 15.7,
+      "forecast_wbgt_next_48h": 18.0,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-07",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 6,
+      "reported_visits_visible": 58,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 16.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.049,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.163,
+      "shap_attributions": {
+        "environmental": 0.035,
+        "clinical_syndromic": 0.534,
+        "data_quality": 0.431
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 18.0,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.82
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 15.6,
+      "wbgt_max": 16.6,
+      "forecast_wbgt_next_48h": 18.0,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-08",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 5,
+      "reported_visits_visible": 56,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 19.2,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.033,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.148,
+      "shap_attributions": {
+        "environmental": 0.034,
+        "clinical_syndromic": 0.436,
+        "data_quality": 0.53
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 17.6,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.8
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 19.2,
+      "wbgt_max": 18.0,
+      "forecast_wbgt_next_48h": 17.6,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-09",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 15,
+      "reported_visits_visible": 53,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 18.9,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.07,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.185,
+      "shap_attributions": {
+        "environmental": 0.257,
+        "clinical_syndromic": 0.336,
+        "data_quality": 0.408
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.5,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.98
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 4.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.43
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 18.9,
+      "wbgt_max": 17.6,
+      "forecast_wbgt_next_48h": 21.5,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-10",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 48,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 18.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.132,
+      "conformal_lower": 0.017,
+      "conformal_upper": 0.248,
+      "shap_attributions": {
+        "environmental": 0.148,
+        "clinical_syndromic": 0.616,
+        "data_quality": 0.236
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.5,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.98
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 18.7,
+      "wbgt_max": 17.6,
+      "forecast_wbgt_next_48h": 21.5,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-11",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 47,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 17.9,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.084,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.199,
+      "shap_attributions": {
+        "environmental": 0.219,
+        "clinical_syndromic": 0.432,
+        "data_quality": 0.348
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 21.5,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.98
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.9,
+      "wbgt_max": 16.3,
+      "forecast_wbgt_next_48h": 21.5,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-12",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 54,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 22.5,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.099,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.214,
+      "shap_attributions": {
+        "environmental": 0.095,
+        "clinical_syndromic": 0.622,
+        "data_quality": 0.283
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 20.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.93
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 22.5,
+      "wbgt_max": 21.5,
+      "forecast_wbgt_next_48h": 20.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-13",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 7,
+      "reported_visits_visible": 65,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 22.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.103,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.218,
+      "shap_attributions": {
+        "environmental": 0.111,
+        "clinical_syndromic": 0.611,
+        "data_quality": 0.278
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 20.7,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 0.94
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 22.6,
+      "wbgt_max": 20.4,
+      "forecast_wbgt_next_48h": 20.7,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-14",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 15,
+      "reported_visits_visible": 65,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 18.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.093,
+      "conformal_lower": 0.0,
+      "conformal_upper": 0.208,
+      "shap_attributions": {
+        "environmental": 0.304,
+        "clinical_syndromic": 0.35,
+        "data_quality": 0.346
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 22.1,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.0
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 5.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.54
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 17.5,
+      "wbgt_max": 18.4,
+      "forecast_wbgt_next_48h": 22.1,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-15",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 18,
+      "reported_visits_visible": 71,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 19.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.149,
+      "conformal_lower": 0.033,
+      "conformal_upper": 0.264,
+      "shap_attributions": {
+        "environmental": 0.196,
+        "clinical_syndromic": 0.582,
+        "data_quality": 0.223
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 22.1,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.0
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 19.3,
+      "wbgt_max": 19.6,
+      "forecast_wbgt_next_48h": 22.1,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-16",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 8,
+      "reported_visits_visible": 83,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 21.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "None",
+      "calibrated_risk": 0.201,
+      "conformal_lower": 0.086,
+      "conformal_upper": 0.317,
+      "shap_attributions": {
+        "environmental": 0.146,
+        "clinical_syndromic": 0.687,
+        "data_quality": 0.167
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 22.1,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.0
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 13.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.4
+        }
+      ],
+      "recommended_action": "Normal baseline operations.",
+      "responsible_role": "EHS Coordinator",
+      "temp_max": 21.1,
+      "wbgt_max": 20.7,
+      "forecast_wbgt_next_48h": 22.1,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-17",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 1,
+      "reported_visits_visible": 80,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 24.5,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.223,
+      "conformal_lower": 0.108,
+      "conformal_upper": 0.339,
+      "shap_attributions": {
+        "environmental": 0.553,
+        "clinical_syndromic": 0.248,
+        "data_quality": 0.2
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 24.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.11
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 24.5,
+      "wbgt_max": 22.1,
+      "forecast_wbgt_next_48h": 24.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-18",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 75,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.2,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.452,
+      "conformal_lower": 0.336,
+      "conformal_upper": 0.568,
+      "shap_attributions": {
+        "environmental": 0.824,
+        "clinical_syndromic": 0.053,
+        "data_quality": 0.123
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.24
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 1.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.11
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 25.2,
+      "wbgt_max": 22.0,
+      "forecast_wbgt_next_48h": 27.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-19",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 9,
+      "reported_visits_visible": 71,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 23.2,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.514,
+      "conformal_lower": 0.399,
+      "conformal_upper": 0.629,
+      "shap_attributions": {
+        "environmental": 0.678,
+        "clinical_syndromic": 0.221,
+        "data_quality": 0.101
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.24
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 23.2,
+      "wbgt_max": 22.1,
+      "forecast_wbgt_next_48h": 27.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-20",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 13,
+      "reported_visits_visible": 67,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.7,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.481,
+      "conformal_lower": 0.366,
+      "conformal_upper": 0.595,
+      "shap_attributions": {
+        "environmental": 0.75,
+        "clinical_syndromic": 0.138,
+        "data_quality": 0.112
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 27.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.24
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 6.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.65
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 25.7,
+      "wbgt_max": 24.4,
+      "forecast_wbgt_next_48h": 27.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-21",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 12,
+      "reported_visits_visible": 72,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 30.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.392,
+      "conformal_lower": 0.277,
+      "conformal_upper": 0.507,
+      "shap_attributions": {
+        "environmental": 0.603,
+        "clinical_syndromic": 0.273,
+        "data_quality": 0.124
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.9,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.18
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 9.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.97
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 30.3,
+      "wbgt_max": 27.2,
+      "forecast_wbgt_next_48h": 25.9,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-22",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 11,
+      "reported_visits_visible": 69,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 30.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.57,
+      "conformal_lower": 0.455,
+      "conformal_upper": 0.685,
+      "shap_attributions": {
+        "environmental": 0.734,
+        "clinical_syndromic": 0.172,
+        "data_quality": 0.094
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 28.1,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.28
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 8.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.86
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 30.3,
+      "wbgt_max": 25.9,
+      "forecast_wbgt_next_48h": 28.1,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-23",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 12,
+      "reported_visits_visible": 62,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.2,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Warning",
+      "calibrated_risk": 0.7,
+      "conformal_lower": 0.585,
+      "conformal_upper": 0.815,
+      "shap_attributions": {
+        "environmental": 0.776,
+        "clinical_syndromic": 0.145,
+        "data_quality": 0.079
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 32.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.47
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 8.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.86
+        }
+      ],
+      "recommended_action": "Issue Proactive Heat Strain Advisory: prepare shaded respite areas, verify electrolyte stocks, adjust morning shift schedules.",
+      "responsible_role": "Site Safety & Occupational Health Officer",
+      "temp_max": 25.2,
+      "wbgt_max": 24.1,
+      "forecast_wbgt_next_48h": 32.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-24",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 7,
+      "reported_visits_visible": 66,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 26.5,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Warning",
+      "calibrated_risk": 0.7,
+      "conformal_lower": 0.585,
+      "conformal_upper": 0.816,
+      "shap_attributions": {
+        "environmental": 0.776,
+        "clinical_syndromic": 0.145,
+        "data_quality": 0.079
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 32.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.47
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 8.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.86
+        }
+      ],
+      "recommended_action": "Issue Proactive Heat Strain Advisory: prepare shaded respite areas, verify electrolyte stocks, adjust morning shift schedules.",
+      "responsible_role": "Site Safety & Occupational Health Officer",
+      "temp_max": 26.5,
+      "wbgt_max": 25.2,
+      "forecast_wbgt_next_48h": 32.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-25",
+      "is_event_window": true,
+      "is_observed_peak": false,
+      "observed_visits_today": 71,
+      "reported_visits_visible": 73,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 30.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Warning",
+      "calibrated_risk": 0.682,
+      "conformal_lower": 0.567,
+      "conformal_upper": 0.797,
+      "shap_attributions": {
+        "environmental": 0.832,
+        "clinical_syndromic": 0.085,
+        "data_quality": 0.084
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 34.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.58
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 5.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.54
+        }
+      ],
+      "recommended_action": "Issue Proactive Heat Strain Advisory: prepare shaded respite areas, verify electrolyte stocks, adjust morning shift schedules.",
+      "responsible_role": "Site Safety & Occupational Health Officer",
+      "temp_max": 30.0,
+      "wbgt_max": 28.1,
+      "forecast_wbgt_next_48h": 34.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-26",
+      "is_event_window": true,
+      "is_observed_peak": false,
+      "observed_visits_today": 251,
+      "reported_visits_visible": 113,
+      "threshold_alert": true,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 37.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Alert",
+      "calibrated_risk": 0.98,
+      "conformal_lower": 0.865,
+      "conformal_upper": 1.0,
+      "shap_attributions": {
+        "environmental": 0.475,
+        "clinical_syndromic": 0.477,
+        "data_quality": 0.048
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 34.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.58
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 50.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 5.38
+        }
+      ],
+      "recommended_action": "Activate Emergency Heat Protocols: mandatory 15-minute shaded rest per hour, mobile hydration staging, suspend heavy outdoor lifting.",
+      "responsible_role": "Incident Commander & Regional Health Officer",
+      "temp_max": 37.1,
+      "wbgt_max": 32.4,
+      "forecast_wbgt_next_48h": 34.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-27",
+      "is_event_window": true,
+      "is_observed_peak": false,
+      "observed_visits_today": 688,
+      "reported_visits_visible": 295,
+      "threshold_alert": true,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 37.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Alert",
+      "calibrated_risk": 0.98,
+      "conformal_lower": 0.865,
+      "conformal_upper": 1.0,
+      "shap_attributions": {
+        "environmental": 0.475,
+        "clinical_syndromic": 0.477,
+        "data_quality": 0.048
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 34.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.58
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 176.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 18.92
+        }
+      ],
+      "recommended_action": "Activate Emergency Heat Protocols: mandatory 15-minute shaded rest per hour, mobile hydration staging, suspend heavy outdoor lifting.",
+      "responsible_role": "Incident Commander & Regional Health Officer",
+      "temp_max": 37.0,
+      "wbgt_max": 32.0,
+      "forecast_wbgt_next_48h": 34.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-28",
+      "is_event_window": true,
+      "is_observed_peak": true,
+      "observed_visits_today": 1038,
+      "reported_visits_visible": 821,
+      "threshold_alert": true,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 42.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Alert",
+      "calibrated_risk": 0.98,
+      "conformal_lower": 0.864,
+      "conformal_upper": 1.0,
+      "shap_attributions": {
+        "environmental": 0.473,
+        "clinical_syndromic": 0.479,
+        "data_quality": 0.048
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 33.2,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.51
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 482.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 51.83
+        }
+      ],
+      "recommended_action": "Activate Emergency Heat Protocols: mandatory 15-minute shaded rest per hour, mobile hydration staging, suspend heavy outdoor lifting.",
+      "responsible_role": "Incident Commander & Regional Health Officer",
+      "temp_max": 42.4,
+      "wbgt_max": 34.8,
+      "forecast_wbgt_next_48h": 33.2,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-29",
+      "is_event_window": true,
+      "is_observed_peak": false,
+      "observed_visits_today": 501,
+      "reported_visits_visible": 1699,
+      "threshold_alert": true,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 41.3,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": true,
+      "alert_severity": "Warning",
+      "calibrated_risk": 0.723,
+      "conformal_lower": 0.608,
+      "conformal_upper": 0.839,
+      "shap_attributions": {
+        "environmental": 0.343,
+        "clinical_syndromic": 0.597,
+        "data_quality": 0.06
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 26.5,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.2
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 727.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 78.17
+        }
+      ],
+      "recommended_action": "Issue Proactive Heat Strain Advisory: prepare shaded respite areas, verify electrolyte stocks, adjust morning shift schedules.",
+      "responsible_role": "Site Safety & Occupational Health Officer",
+      "temp_max": 41.3,
+      "wbgt_max": 33.2,
+      "forecast_wbgt_next_48h": 26.5,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-06-30",
+      "is_event_window": true,
+      "is_observed_peak": false,
+      "observed_visits_today": 230,
+      "reported_visits_visible": 2315,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 29.8,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.646,
+      "conformal_lower": 0.53,
+      "conformal_upper": 0.761,
+      "shap_attributions": {
+        "environmental": 0.293,
+        "clinical_syndromic": 0.643,
+        "data_quality": 0.064
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.7,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.17
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 351.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 37.74
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 29.8,
+      "wbgt_max": 26.5,
+      "forecast_wbgt_next_48h": 25.7,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-07-01",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 85,
+      "reported_visits_visible": 2667,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 23.4,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.646,
+      "conformal_lower": 0.53,
+      "conformal_upper": 0.762,
+      "shap_attributions": {
+        "environmental": 0.293,
+        "clinical_syndromic": 0.643,
+        "data_quality": 0.064
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.7,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.17
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 161.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 17.31
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 23.4,
+      "wbgt_max": 22.4,
+      "forecast_wbgt_next_48h": 25.7,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-07-02",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 32,
+      "reported_visits_visible": 2815,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 24.0,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.646,
+      "conformal_lower": 0.53,
+      "conformal_upper": 0.762,
+      "shap_attributions": {
+        "environmental": 0.293,
+        "clinical_syndromic": 0.643,
+        "data_quality": 0.064
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.7,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.17
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 59.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 6.34
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 23.9,
+      "wbgt_max": 24.0,
+      "forecast_wbgt_next_48h": 25.7,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-07-03",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 15,
+      "reported_visits_visible": 2806,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.9,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.563,
+      "conformal_lower": 0.447,
+      "conformal_upper": 0.679,
+      "shap_attributions": {
+        "environmental": 0.303,
+        "clinical_syndromic": 0.623,
+        "data_quality": 0.074
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 25.4,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.15
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 22.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 2.37
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 25.9,
+      "wbgt_max": 25.7,
+      "forecast_wbgt_next_48h": 25.4,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-07-04",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 12,
+      "reported_visits_visible": 2580,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 26.6,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.304,
+      "conformal_lower": 0.188,
+      "conformal_upper": 0.42,
+      "shap_attributions": {
+        "environmental": 0.475,
+        "clinical_syndromic": 0.379,
+        "data_quality": 0.145
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 24.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.13
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 10.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 1.08
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 26.6,
+      "wbgt_max": 25.4,
+      "forecast_wbgt_next_48h": 24.8,
+      "reporting_latency_mean_days": 1.9
+    },
+    {
+      "as_of_date": "2021-07-05",
+      "is_event_window": false,
+      "is_observed_peak": false,
+      "observed_visits_today": 10,
+      "reported_visits_visible": 1907,
+      "threshold_alert": false,
+      "threshold_metric_name": "max_temp_or_wbgt",
+      "threshold_metric_value": 25.1,
+      "threshold_cutoff": 35.0,
+      "munzir_alert": false,
+      "alert_severity": "Watch",
+      "calibrated_risk": 0.277,
+      "conformal_lower": 0.161,
+      "conformal_upper": 0.393,
+      "shap_attributions": {
+        "environmental": 0.536,
+        "clinical_syndromic": 0.3,
+        "data_quality": 0.164
+      },
+      "what_rose": [
+        {
+          "signal_type": "wbgt_forecast_48h",
+          "observed": 24.8,
+          "expected_baseline": 22.0,
+          "exceedance_ratio": 1.13
+        },
+        {
+          "signal_type": "clinical_hri_ed_visits",
+          "observed": 8.0,
+          "expected_baseline": 9.3,
+          "exceedance_ratio": 0.86
+        }
+      ],
+      "recommended_action": "Routine thermal surveillance: monitor regional meteorological forecasts.",
+      "responsible_role": "Surveillance Officer",
+      "temp_max": 25.1,
+      "wbgt_max": 23.9,
+      "forecast_wbgt_next_48h": 24.8,
+      "reporting_latency_mean_days": 1.9
+    }
+  ],
+  "limitations": [
+    "Single Case Study: Evaluated on one historical heat dome event (N=1). Generalization requires multi-injection validation.",
+    "Reporting Delay Simulation: CDC NSSP facility reporting latency is simulated using an empirical 3-day geometric distribution (70% D+1, 20% D+2, 10% D+3).",
+    "Regional Aggregation: Outcome counts represent HHS Region 10 aggregate visits; fine-grained municipal hospital breakdown is not publicly released.",
+    "Weather Forecast Horizon: 48-hour forward forecasts utilize archived NWP model predictions without post-hoc assimilation adjustments."
+  ]
+}

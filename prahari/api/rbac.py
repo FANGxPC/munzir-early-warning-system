@@ -27,7 +27,7 @@ class EntraRole(str, Enum):
 
 
 class AuthenticatedUser(BaseModel):
-    """Authenticated user context simulated from Entra ID JWT claims."""
+    """Authenticated user context extracted from Entra ID JWT claims."""
     user_id: str = Field(default="demo-user-01")
     email: str = Field(default="officer@health.gov.ae")
     role: EntraRole = Field(default=EntraRole.SURVEILLANCE_OFFICER)

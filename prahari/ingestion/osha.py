@@ -69,7 +69,7 @@ SITE_WORKFORCE_MAPPING = {
 class OSHAIncidentIngestor:
     """
     Ingests and normalizes real OSHA severe incident reports.
-    Eliminates mock incident text by utilizing authentic federal safety inspection narratives.
+    Utilizes authentic federal safety inspection narratives from the OSHA Severe Injury database.
     """
 
     def __init__(
@@ -217,3 +217,4 @@ class OSHAIncidentIngestor:
             )
 
         return incidents, observations
+

@@ -1,0 +1,118 @@
+{
+  "events": {
+    "pnw_2021": {
+      "event_id": "pnw_2021",
+      "name": "Pacific Northwest Historic Heat Dome (June 2021)",
+      "region_name": "Pacific Northwest (Seattle / HHS Region 10)",
+      "coordinates": {
+        "latitude": 47.6062,
+        "longitude": -122.3321
+      },
+      "replay_period": {
+        "baseline_start": "2021-05-01",
+        "baseline_end": "2021-06-24",
+        "event_start": "2021-06-25",
+        "event_end": "2021-07-05",
+        "observed_peak_date": "2021-06-28",
+        "observed_peak_value": 1038
+      },
+      "weather_source": {
+        "provider": "Open-Meteo Archived Forecast API",
+        "endpoint": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+        "model": "ECMWF IFS & NOAA GFS Numerical Weather Prediction Archived Model Runs",
+        "temporal_resolution": "hourly",
+        "is_as_of_forecast": true,
+        "parameters": [
+          "temperature_2m",
+          "relative_humidity_2m",
+          "dew_point_2m",
+          "wind_speed_10m",
+          "shortwave_radiation_instant",
+          "direct_normal_irradiance"
+        ],
+        "verified_status": "VERIFIED_PUBLIC_DATASET"
+      },
+      "outcome_source": {
+        "provider": "U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP)",
+        "publication": "Schramm PJ, Vaidyanathan A, Radhakrishnan L, Gates A, Prezant K, Hartnett K. Heat-Related Emergency Department Visits Associated with Historic Heat — Pacific Northwest, June 2021. MMWR Morb Mortal Wkly Rep 2021;70:1028–1032.",
+        "doi": "10.15585/mmwr.mm7029e1",
+        "url": "https://www.cdc.gov/mmwr/volumes/70/wr/mm7029e1.htm",
+        "metric": "Daily Emergency Department Visits for Heat-Related Illness (HRI)",
+        "temporal_resolution": "daily",
+        "geographic_coverage": "HHS Region 10 (Washington, Oregon, Idaho, Alaska)",
+        "verified_status": "VERIFIED_PUBLIC_DATASET"
+      },
+      "reporting_delay_spec": {
+        "mechanism": "SIMULATED DELAY",
+        "description": "Fitted to CDC NSSP empirical facility transmission latency distribution: 70% reported D+1, 20% D+2, 10% D+3 (mean lag: 1.4 days)",
+        "citation": "CDC NSSP Facility Data Transmission Latency Profile (2020)"
+      },
+      "leakage_control": {
+        "pre_event_baseline_period": ["2021-05-01", "2021-06-24"],
+        "event_window": ["2021-06-25", "2021-07-05"],
+        "hindsight_leakage": "STRICTLY_PROHIBITED",
+        "model_training_cut_off": "2021-06-24"
+      },
+      "threshold_comparator": {
+        "name": "Standard Static Meteorological Threshold",
+        "definition": "Ambient maximum temperature >= 35.0°C (95°F) or WBGT >= 30.0°C",
+        "temp_threshold_c": 35.0,
+        "wbgt_threshold_c": 30.0,
+        "baseline_expected_wbgt": 22.0,
+        "citation": "National Weather Service (NWS) Heat Advisory & ACGIH Heat Stress Criteria"
+      },
+      "is_hybrid": false
+    },
+    "dubai_2024": {
+      "event_id": "dubai_2024",
+      "name": "Dubai Industrial Corridor Summer Thermal Surge (August 2024)",
+      "region_name": "Jebel Ali Industrial Area / Al Quoz, Dubai, UAE",
+      "coordinates": {
+        "latitude": 24.9857,
+        "longitude": 55.0272
+      },
+      "replay_period": {
+        "baseline_start": "2024-07-01",
+        "baseline_end": "2024-08-14",
+        "event_start": "2024-08-15",
+        "event_end": "2024-08-25",
+        "observed_peak_date": "2024-08-20",
+        "observed_peak_value": 48
+      },
+      "weather_source": {
+        "provider": "Open-Meteo Archived Forecast API",
+        "endpoint": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+        "temporal_resolution": "hourly",
+        "is_as_of_forecast": true,
+        "verified_status": "VERIFIED_PUBLIC_DATASET"
+      },
+      "air_quality_source": {
+        "provider": "OpenAQ Global Platform (v3 REST API)",
+        "station_id": "14384841",
+        "station_name": "US Consulate Dubai / Business Bay",
+        "parameters": ["pm25", "pm10"],
+        "verified_status": "VERIFIED_PUBLIC_DATASET"
+      },
+      "outcome_source": {
+        "provider": "Simulated Health Telemetry Calibrated on CDC NSSP & OSHA Severe Injury Baselines",
+        "description": "Projected syndromic emergency visits and occupational heat incidents using authentic CDC/OSHA baseline rates and UAE Ministerial Resolution No. 44 playbooks.",
+        "verified_status": "SIMULATED_OUTCOME_FALLBACK"
+      },
+      "reporting_delay_spec": {
+        "mechanism": "SIMULATED DELAY",
+        "description": "Fitted to regional EMR batch transmission (mean 1.2 days delay)",
+        "citation": "DHA EMR Batch Sync Specification"
+      },
+      "threshold_comparator": {
+        "name": "Static Threshold Alert",
+        "definition": "WBGT >= 34.0°C or Ambient Temp >= 44.0°C",
+        "temp_threshold_c": 44.0,
+        "wbgt_threshold_c": 34.0,
+        "baseline_expected_wbgt": 31.5,
+        "citation": "UAE MOHRE Midday Work Ban Criteria (Ministerial Resolution No. 44)"
+      },
+      "is_hybrid": true,
+      "hybrid_label": "DUBAI HYBRID (REAL WEATHER & AIR QUALITY + SIMULATED OUTCOME)"
+    }
+  }
+}

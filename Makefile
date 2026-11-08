@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay
+.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine biascorrect test-biascorrect
 
 PYTHON := ./bin/py
 
@@ -35,6 +35,9 @@ backfill-quick:
 
 ingest-real:
 	$(PYTHON) -m prahari ingest-real --region uae
+
+clinical-profile:
+	$(PYTHON) -m prahari clinical-profile --hazard heat --severity alert --wbgt 34.0
 
 harmonise:
 	$(PYTHON) -m prahari harmonise --region uae
@@ -116,6 +119,18 @@ train-nlp:
 
 inspect:
 	$(PYTHON) -m prahari inspect
+
+timemachine:
+	$(PYTHON) -m prahari timemachine --event $(or $(EVENT),pnw_2021)
+
+test-timemachine:
+	$(PYTHON) -m pytest tests/test_timemachine.py -v
+
+biascorrect:
+	$(PYTHON) -m prahari biascorrect --site $(or $(SITE),SITE-JA-01) --folds $(or $(FOLDS),5)
+
+test-biascorrect:
+	$(PYTHON) -m pytest tests/test_bias_correction.py -v
 
 test:
 	$(PYTHON) -m pytest tests/ -v

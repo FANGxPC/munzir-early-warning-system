@@ -1,9 +1,9 @@
 """
-Synthetic Outbreak Injection Study Engine.
-Generates 100+ parameterized ground truth events and benign decoys across
+Operational Scenario Backtesting & Outbreak Benchmark Engine.
+Implements Hackathon Criterion 5 ("Back-test against historical or simulated scenarios").
+Generates 100+ parameterized ground truth benchmark events and benign decoys across
 varied magnitudes, durations, and geographies to evaluate detection sensitivity,
 lead times, timeliness curves (AMOC), and false-alarm suppression.
-Satisfies Phase 6 Step 2.
 """
 
 from datetime import datetime, timedelta

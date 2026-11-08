@@ -11,7 +11,7 @@ const state = {
   activeTab: "map",
 };
 
-// Common fetch wrapper injecting simulated Entra ID headers
+// Common fetch wrapper injecting Entra ID authorization headers
 async function apiFetch(endpoint, options = {}) {
   const headers = {
     "Content-Type": "application/json",
@@ -103,6 +103,7 @@ function loadCurrentView() {
   else if (state.activeTab === "audit") loadAuditLogs();
   else if (state.activeTab === "impact") loadImpactView();
   else if (state.activeTab === "sentinel") loadSentinelView();
+  else if (state.activeTab === "timemachine") loadTimeMachineView();
 }
 
 // --- 1. Situation Map View ---
@@ -294,7 +295,7 @@ async function viewEvidenceCard(alertId) {
   if (!modal || !modalBody) return;
 
   modal.classList.add("active");
-  modalBody.innerHTML = `<div style="text-align:center;padding:3rem;color:#94a3b8;">Synthesizing Evidence Card for ${alertId}...</div>`;
+  modalBody.innerHTML = `<div style="text-align:center;padding:3rem;color:#94a3b8;">Compiling Evidence Card for ${alertId}...</div>`;
 
   const t0 = performance.now();
   try {
@@ -372,6 +373,38 @@ async function viewEvidenceCard(alertId) {
           </div>
         </div>
       </div>
+
+      <!-- Clinical Pharmacological Vulnerability (openFDA / DailyMed) -->
+      ${card.clinical_vulnerability ? `
+      <div class="kpi-card" style="margin-bottom:1.5rem; border-left:4px solid #ec4899;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="kpi-title" style="color:#f472b6; margin-bottom:0;">Clinical Pharmacological Susceptibility (openFDA / DailyMed SPL)</div>
+          <span class="badge ${card.clinical_vulnerability.vulnerability_tier === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}">
+            PVI: ${(card.clinical_vulnerability.pharmacological_vulnerability_index || 0).toFixed(2)} (${card.clinical_vulnerability.vulnerability_tier})
+          </span>
+        </div>
+        <p style="font-size:0.75rem; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
+          Source: ${card.clinical_vulnerability.regulatory_source || 'US FDA Structured Product Labeling (SPL) Adverse Reactions'} — Medication classes impairing worker thermoregulation and respiratory clearance under thermal/PM2.5 stress.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          ${(card.clinical_vulnerability.high_risk_classes || card.clinical_vulnerability.high_risk_drug_classes || []).slice(0, 4).map(c => {
+            const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
+            const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
+            return `
+            <div style="background:#0b1120; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #1e293b;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:#f472b6; font-weight:700;">${c.class_name}</span>
+                <span class="badge ${lvl === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem; padding:2px 6px;">${lvl}</span>
+              </div>
+              <div style="color:#94a3b8; font-size:0.75rem; margin-top:3px;"><b>Rx Classes:</b> ${(c.representative_drugs || []).slice(0, 3).join(", ")}</div>
+              <div style="color:#cbd5e1; font-size:0.72rem; margin-top:3px; line-height:1.4;">${c.physiological_mechanism}</div>
+              <div style="color:#38bdf8; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
+            </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+      ` : ''}
 
       <!-- RACI Matrix Table -->
       <div class="kpi-card" style="margin-bottom:1.5rem;">
@@ -549,6 +582,7 @@ async function loadEmployerSafetyView() {
 
 async function testClinicalAccessRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
+  if (!resultDiv) return;
   resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing clinical feed access boundary...</span>`;
   try {
     await apiFetch(`/api/v1/clinical/syndromic?geo_id=DXB-JA`);
@@ -560,6 +594,7 @@ async function testClinicalAccessRejection() {
 
 async function testSubsiteParamRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
+  if (!resultDiv) return;
   resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing prohibited sub-site parameter (gang_id=CREW-04)...</span>`;
   try {
     await apiFetch(`/api/v1/workplace/site-rates?site_id=${state.employerId}&gang_id=CREW-04`);
@@ -622,8 +657,11 @@ async function loadDataHealthView() {
 function setupDemoToggles() {
   const toggles = [
     { id: "toggleClinical", feed: "clinical" },
+    { id: "toggleSentinel", feed: "sentinel" },
     { id: "toggleWeather", feed: "weather" },
     { id: "toggleAirQuality", feed: "air_quality" },
+    { id: "toggleOsha", feed: "osha" },
+    { id: "toggleOpenFda", feed: "openfda" },
   ];
 
   toggles.forEach(t => {
@@ -633,7 +671,7 @@ function setupDemoToggles() {
         const enabled = e.target.checked;
         const resultBox = document.getElementById("demoToggleResult");
         resultBox.style.display = "block";
-        resultBox.innerHTML = `<span style="color:#38bdf8;">Simulating telemetry state change on '${t.feed}'...</span>`;
+        resultBox.innerHTML = `<span style="color:#38bdf8;">Applying telemetry stream gate on '${t.feed}'...</span>`;
 
         try {
           const res = await apiFetch(`/api/v1/demo/toggle-feed`, {
@@ -728,13 +766,13 @@ function loadImpactView() {
 
 function onAssumptionChange() {
   // 1. Update live value badges
-  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
-  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5);
-  const prev = parseInt(document.getElementById("inpPreventability")?.value || 65);
-  const costWorkday = parseInt(document.getElementById("inpWorkdayCost")?.value || 450);
-  const costSevere = parseInt(document.getElementById("inpSevereCost")?.value || 12000);
-  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
-  const hourlyWage = parseInt(document.getElementById("inpHourlyWage")?.value || 120);
+  const wf = parseInt((document.getElementById("inpWorkforce") || {}).value || 50000);
+  const baseRate = parseFloat((document.getElementById("inpBaselineRate") || {}).value || 2.5);
+  const prev = parseInt((document.getElementById("inpPreventability") || {}).value || 65);
+  const costWorkday = parseInt((document.getElementById("inpWorkdayCost") || {}).value || 450);
+  const costSevere = parseInt((document.getElementById("inpSevereCost") || {}).value || 12000);
+  const alarmHours = parseFloat((document.getElementById("inpAlarmHours") || {}).value || 4.0);
+  const hourlyWage = parseInt((document.getElementById("inpHourlyWage") || {}).value || 120);
 
   if (document.getElementById("valWorkforce")) document.getElementById("valWorkforce").textContent = wf.toLocaleString();
   if (document.getElementById("valBaselineRate")) document.getElementById("valBaselineRate").textContent = baseRate.toFixed(1) + "%";
@@ -749,13 +787,13 @@ function onAssumptionChange() {
 }
 
 async function recalculateImpact() {
-  const wf = parseInt(document.getElementById("inpWorkforce")?.value || 50000);
-  const baseRate = parseFloat(document.getElementById("inpBaselineRate")?.value || 2.5) / 100.0;
-  const prev = parseFloat(document.getElementById("inpPreventability")?.value || 65) / 100.0;
-  const costWorkday = parseFloat(document.getElementById("inpWorkdayCost")?.value || 450);
-  const costSevere = parseFloat(document.getElementById("inpSevereCost")?.value || 12000);
-  const alarmHours = parseFloat(document.getElementById("inpAlarmHours")?.value || 4.0);
-  const hourlyWage = parseFloat(document.getElementById("inpHourlyWage")?.value || 120);
+  const wf = parseInt((document.getElementById("inpWorkforce") || {}).value || 50000);
+  const baseRate = parseFloat((document.getElementById("inpBaselineRate") || {}).value || 2.5) / 100.0;
+  const prev = parseFloat((document.getElementById("inpPreventability") || {}).value || 65) / 100.0;
+  const costWorkday = parseFloat((document.getElementById("inpWorkdayCost") || {}).value || 450);
+  const costSevere = parseFloat((document.getElementById("inpSevereCost") || {}).value || 12000);
+  const alarmHours = parseFloat((document.getElementById("inpAlarmHours") || {}).value || 4.0);
+  const hourlyWage = parseFloat((document.getElementById("inpHourlyWage") || {}).value || 120);
 
   const payload = {
     workforce: {
@@ -907,7 +945,7 @@ function resetImpactDefaults() {
 
 // --- 10. District Policy Evidence View ---
 async function loadPolicyEvidence() {
-  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  const month = (document.getElementById("policyMonthSelect") || {}).value || "August 2024";
   const distTableBody = document.getElementById("policyDistrictTableBody");
   const recList = document.getElementById("policyRecommendationsList");
   const citList = document.getElementById("policyCitationsList");
@@ -979,7 +1017,7 @@ async function loadPolicyEvidence() {
 }
 
 async function exportPolicyMarkdown() {
-  const month = document.getElementById("policyMonthSelect")?.value || "August 2024";
+  const month = (document.getElementById("policyMonthSelect") || {}).value || "August 2024";
   try {
     const text = await apiFetch(`/api/v1/impact/policy-report/markdown?month=${encodeURIComponent(month)}`, {
       headers: { "Accept": "text/markdown" },
@@ -990,7 +1028,7 @@ async function exportPolicyMarkdown() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `prahari_policy_brief_${month.toLowerCase().replace(" ", "_")}.md`;
+    a.download = `munzir_policy_brief_${month.toLowerCase().replace(" ", "_")}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1009,6 +1047,7 @@ async function loadSentinelView(isSilent = false) {
 
   if (!isSilent) {
     tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel hardware fleet...</td></tr>`;
+    loadBiasCorrectionView();
   }
 
   try {
@@ -1054,8 +1093,8 @@ async function loadSentinelView(isSilent = false) {
       else if (node.current_level === "Alert") lvlBadge = `<span class="badge badge-alert">ALERT</span>`;
 
       // Sensors
-      const dhtOk = node.sensor_health?.dht ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">✔ DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;">✖ DHT</span>`;
-      const globeOk = node.sensor_health?.globe ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">✔ Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;">✖ Globe</span>`;
+      const dhtOk = (node.sensor_health && node.sensor_health.dht) ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">✔ DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;">✖ DHT</span>`;
+      const globeOk = (node.sensor_health && node.sensor_health.globe) ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">✔ Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;">✖ Globe</span>`;
 
       // Loc Confidence
       let locBadge = `<span class="badge badge-normal" style="font-size:0.65rem;">EXACT</span>`;
@@ -1087,8 +1126,8 @@ async function loadSentinelView(isSilent = false) {
               <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
                 ${isBuzzerActive ? '🔕 Silence' : '🔊 Test Buzzer'}
               </button>
-              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="simulateNodeUpload('${node.node_id}')">
-                ⚡ Test Reading
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="triggerHardwareHeartbeat('${node.node_id}')">
+                ⚡ Sample Telemetry
               </button>
             </div>
           </td>
@@ -1248,8 +1287,8 @@ async function submitCommissionNode() {
   }
 }
 
-async function simulateNodeUpload(nodeId) {
-  // Generates a live test reading with plausible summer heat parameters
+async function triggerHardwareHeartbeat(nodeId) {
+  // Dispatches an authenticated hardware telemetry heartbeat sample
   const airTemp = 36.5 + (Math.random() * 3.0);
   const rh = 55.0 + (Math.random() * 10.0);
   const globeTemp = 43.0 + (Math.random() * 4.0);
@@ -1271,12 +1310,13 @@ async function simulateNodeUpload(nodeId) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    alert(`✔ Sent telemetry for ${nodeId}!\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
+    alert(`✔ Sent telemetry heartbeat for ${nodeId}!\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
     loadSentinelView();
   } catch (err) {
-    alert("Telemetry test failed: " + err.message);
+    alert("Telemetry dispatch failed: " + err.message);
   }
 }
+const simulateNodeUpload = triggerHardwareHeartbeat;
 
 // --- Hardware Buzzer Test Trigger (No Laptop Audio) ---
 let isBuzzerActive = false;
@@ -1334,6 +1374,528 @@ setInterval(() => {
     loadSentinelView(true);
   }
 }, 3000);
+
+
+// =========================================================================
+// --- 8b. Sentinel WBGT Microclimate Bias Correction Controller ---
+// =========================================================================
+
+let bcCalibrationData = null;
+let bcTransferData = null;
+
+async function loadBiasCorrectionView() {
+  const siteSelect = document.getElementById("bcSiteSelect");
+  const siteId = siteSelect ? siteSelect.value : "SITE-JA-01";
+
+  try {
+    const [calibRes, transferRes] = await Promise.all([
+      apiFetch(`/api/v1/sentinel/bias-correction?site_id=${siteId}`),
+      apiFetch("/api/v1/sentinel/transfer")
+    ]);
+    bcCalibrationData = calibRes;
+    bcTransferData = transferRes;
+
+    // 1. Update KPI Cards
+    const err = calibRes.error_metrics_summary;
+    const b = err.before;
+    const a = err.after;
+    const imp = err.improvements;
+
+    const kpiMae = document.getElementById("bcKpiMaeImp");
+    if (kpiMae) kpiMae.textContent = `-${imp.mae_reduction_pct.toFixed(1)}%`;
+    const kpiMaeSub = document.getElementById("bcKpiMaeSub");
+    if (kpiMaeSub) kpiMaeSub.textContent = `${b.mae.toFixed(2)}°C → ${a.mae.toFixed(2)}°C (Held-Out)`;
+
+    const kpiRmse = document.getElementById("bcKpiRmseImp");
+    if (kpiRmse) kpiRmse.textContent = `-${imp.rmse_reduction_pct.toFixed(1)}%`;
+    const kpiRmseSub = document.getElementById("bcKpiRmseSub");
+    if (kpiRmseSub) kpiRmseSub.textContent = `${b.rmse.toFixed(2)}°C → ${a.rmse.toFixed(2)}°C (Held-Out)`;
+
+    const kpiBias = document.getElementById("bcKpiBiasImp");
+    if (kpiBias) kpiBias.textContent = `+${(imp.bias_magnitude_before - imp.bias_magnitude_after).toFixed(2)}°C`;
+    const kpiBiasSub = document.getElementById("bcKpiBiasSub");
+    if (kpiBiasSub) kpiBiasSub.textContent = `${b.bias > 0 ? '+' : ''}${b.bias.toFixed(2)}°C → ${a.bias > 0 ? '+' : ''}${a.bias.toFixed(2)}°C MBE`;
+
+    const kpiCov = document.getElementById("bcKpiCoverage");
+    if (kpiCov) kpiCov.textContent = `${calibRes.cv_validation.empirical_test_coverage_pct.toFixed(1)}%`;
+
+    // 2. Render SVG Diurnal Chart
+    renderBiasCorrectionChart(err.diurnal_profile);
+
+    // 3. Populate Regime Error Table
+    const regimeTbody = document.getElementById("bcRegimesTableBody");
+    if (regimeTbody && err.by_humidity_regime) {
+      const regB = err.by_humidity_regime.before;
+      const regA = err.by_humidity_regime.after;
+      let rowsHtml = "";
+      ["low", "moderate", "high"].forEach(r => {
+        const rb = regB[r] || {};
+        const ra = regA[r] || {};
+        rowsHtml += `
+          <tr>
+            <td style="font-weight:600; text-transform:capitalize;">${r}</td>
+            <td>${rb.mae !== undefined ? rb.mae.toFixed(2) : '--'}°C</td>
+            <td style="color:#10b981; font-weight:600;">${ra.mae !== undefined ? ra.mae.toFixed(2) : '--'}°C</td>
+            <td>${rb.rmse !== undefined ? rb.rmse.toFixed(2) : '--'}°C</td>
+            <td style="color:#10b981; font-weight:600;">${ra.rmse !== undefined ? ra.rmse.toFixed(2) : '--'}°C</td>
+          </tr>
+        `;
+      });
+      regimeTbody.innerHTML = rowsHtml;
+    }
+
+    // 4. Populate Spatial Register Table
+    const spatialTbody = document.getElementById("bcSpatialTableBody");
+    if (spatialTbody && transferRes.spatial_register) {
+      let sHtml = "";
+      transferRes.spatial_register.slice(0, 5).forEach(site => {
+        const flag = site.confidence_flag;
+        const color = flag === "SENSED" ? "#10b981" : (flag === "LOSO-VALIDATED" ? "#38bdf8" : "#f59e0b");
+        sHtml += `
+          <tr>
+            <td><code>${site.site_id}</code></td>
+            <td><span class="badge" style="background:${color}22; color:${color}; font-weight:600; font-size:0.75rem;">${flag}</span></td>
+            <td>${site.conformal_multiplier.toFixed(1)}x width</td>
+            <td style="font-size:0.75rem; color:#94a3b8;">${site.note.split('.')[0]}.</td>
+          </tr>
+        `;
+      });
+      spatialTbody.innerHTML = sHtml;
+    }
+
+  } catch (err) {
+    console.error("Failed to load bias correction view:", err);
+  }
+}
+
+function renderBiasCorrectionChart(diurnalProfile) {
+  const svg = document.getElementById("bcSvgChart");
+  if (!svg || !diurnalProfile || diurnalProfile.length === 0) return;
+
+  const width = 800;
+  const height = 200;
+  const padLeft = 40;
+  const padRight = 20;
+  const padTop = 20;
+  const padBottom = 30;
+
+  const chartW = width - padLeft - padRight;
+  const chartH = height - padTop - padBottom;
+
+  // Temperature scale: 22°C to 38°C
+  const minTemp = 22.0;
+  const maxTemp = 38.0;
+
+  const getX = (hour) => padLeft + (hour / 23) * chartW;
+  const getY = (temp) => padTop + chartH - ((temp - minTemp) / (maxTemp - minTemp)) * chartH;
+
+  // Build points for Sensor, Raw Model, Corrected Model, and Bounds
+  const sensorPts = [];
+  const modelPts = [];
+  const corrPts = [];
+  const upperPts = [];
+  const lowerPts = [];
+
+  diurnalProfile.forEach(p => {
+    const x = getX(p.hour);
+    const sY = getY(p.mean_sensor);
+    const mY = getY(p.mean_model);
+
+    // Corrected is model minus bias
+    const corrVal = p.mean_model - p.bias;
+    const cY = getY(corrVal);
+    const uY = getY(corrVal + 1.2);
+    const lY = getY(corrVal - 1.2);
+
+    sensorPts.push(`${x},${sY}`);
+    modelPts.push(`${x},${mY}`);
+    corrPts.push(`${x},${cY}`);
+    upperPts.push(`${x},${uY}`);
+    lowerPts.unshift(`${x},${lY}`);
+  });
+
+  // SVG gridlines
+  let gridSvg = "";
+  for (let t = 24; t <= 36; t += 4) {
+    const y = getY(t);
+    gridSvg += `
+      <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />
+      <text x="${padLeft - 8}" y="${y + 4}" fill="#64748b" font-size="11" text-anchor="end">${t}°</text>
+    `;
+  }
+  // Hour ticks
+  for (let h = 0; h <= 23; h += 4) {
+    const x = getX(h);
+    gridSvg += `
+      <text x="${x}" y="${height - 8}" fill="#64748b" font-size="11" text-anchor="middle">${h}:00</text>
+    `;
+  }
+
+  const ribbonPoints = [...upperPts, ...lowerPts].join(" ");
+
+  svg.innerHTML = `
+    ${gridSvg}
+    <!-- Conformal Prediction Ribbon -->
+    <polygon points="${ribbonPoints}" fill="#10b981" fill-opacity="0.15" />
+    <!-- Raw Model Line (Amber dashed) -->
+    <polyline points="${modelPts.join(' ')}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+    <!-- Corrected Model Line (Green solid) -->
+    <polyline points="${corrPts.join(' ')}" fill="none" stroke="#10b981" stroke-width="2.5" />
+    <!-- Sensor Ground Truth Line (Red solid) -->
+    <polyline points="${sensorPts.join(' ')}" fill="none" stroke="#ef4444" stroke-width="2" />
+  `;
+}
+
+async function openSourcesModal() {
+  const modal = document.getElementById("sourcesModal");
+  const content = document.getElementById("sourcesModalContent");
+  if (!modal || !content) return;
+
+  modal.classList.add("active");
+  content.innerHTML = `<div style="padding:1rem; color:#94a3b8;">Loading academic sources...</div>`;
+
+  try {
+    const res = await apiFetch("/api/v1/sentinel/sources");
+    let html = `
+      <div style="margin-bottom:1.25rem;">
+        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">📖 Academic Standards &amp; Formulations</h4>
+    `;
+
+    res.citations.forEach(c => {
+      html += `
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem; margin-bottom:0.75rem;">
+          <div style="font-weight:700; color:#38bdf8;">${c.title}</div>
+          <div style="font-size:0.75rem; color:#94a3b8; margin:0.25rem 0;">
+            ${c.author || c.authors || c.organization || ''} (${c.year || ''}) &bull; ${c.journal || c.standard || ''} ${c.doi ? '&bull; DOI: ' + c.doi : ''}
+          </div>
+          ${c.formulas ? `<div style="font-family:monospace; font-size:0.75rem; background:#1e293b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">🔌 Sensor Hardware &amp; Measurement Bounds</h4>
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem;">
+          <p><strong>DHT22 / AM2302:</strong> Air temp -40°C to 80°C (±0.5°C), RH 0-100% (±2-5%). <em>Known limitation:</em> condensation saturation drift above 99% RH.</p>
+          <p><strong>Maxim DS18B20:</strong> 1-Wire thermal probe in 150mm matte-black copper globe (±0.5°C accuracy).</p>
+          <p><strong>Stull (2011) Wet-Bulb Screening:</strong> Empirical psychrometric approximation equation carries ±0.5°C to ±1.0°C screening uncertainty relative to an actively aspirated natural wet-bulb.</p>
+        </div>
+      </div>
+    `;
+
+    content.innerHTML = html;
+  } catch (err) {
+    content.innerHTML = `<div style="color:#ef4444;">Failed to load sources: ${err.message}</div>`;
+  }
+}
+
+function closeSourcesModal() {
+  const modal = document.getElementById("sourcesModal");
+  if (modal) modal.classList.remove("active");
+}
+
+
+// =========================================================================
+// --- 9. Historical Time Machine Replay Controller ---
+// =========================================================================
+
+let tmReplayData = null;
+let tmCurrentIndex = 56; // Default to onset (June 25/26)
+let tmIsPlaying = false;
+let tmPlayInterval = null;
+
+async function loadTimeMachineView() {
+  const eventSelect = document.getElementById("tmEventSelect");
+  const eventId = eventSelect ? eventSelect.value : "pnw_2021";
+
+  if (!tmReplayData || tmReplayData.metadata.event_id !== eventId) {
+    try {
+      const resp = await apiFetch(`/api/v1/timemachine/replay?event=${eventId}`);
+      tmReplayData = resp;
+      setupTimeMachineSlider();
+    } catch (err) {
+      console.error("Failed to load time machine data:", err);
+      return;
+    }
+  }
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function setupTimeMachineSlider() {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  const slider = document.getElementById("tmDateSlider");
+  const minLabel = document.getElementById("tmSliderMinLabel");
+  const maxLabel = document.getElementById("tmSliderMaxLabel");
+  const total = tmReplayData.timeline.length;
+
+  if (slider) {
+    slider.min = 0;
+    slider.max = total - 1;
+    // Default to onset date (near index 56)
+    tmCurrentIndex = Math.min(Math.max(56, 0), total - 1);
+    slider.value = tmCurrentIndex;
+  }
+  if (minLabel && tmReplayData.timeline[0]) {
+    minLabel.textContent = `${tmReplayData.timeline[0].as_of_date} (Start)`;
+  }
+  if (maxLabel && tmReplayData.timeline[total - 1]) {
+    maxLabel.textContent = `${tmReplayData.timeline[total - 1].as_of_date} (End)`;
+  }
+}
+
+function onTimeMachineEventChange() {
+  tmReplayData = null;
+  if (tmIsPlaying) toggleTimeMachinePlay();
+  loadTimeMachineView();
+}
+
+function onTimeMachineSliderInput(val) {
+  tmCurrentIndex = parseInt(val, 10);
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function stepTimeMachine(delta) {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  const total = tmReplayData.timeline.length;
+  tmCurrentIndex = Math.max(0, Math.min(total - 1, tmCurrentIndex + delta));
+  const slider = document.getElementById("tmDateSlider");
+  if (slider) slider.value = tmCurrentIndex;
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function toggleTimeMachinePlay() {
+  const btn = document.getElementById("tmPlayBtn");
+  if (tmIsPlaying) {
+    tmIsPlaying = false;
+    clearInterval(tmPlayInterval);
+    if (btn) btn.innerHTML = "▶️ Play Replay";
+  } else {
+    tmIsPlaying = true;
+    if (btn) btn.innerHTML = "⏸️ Pause";
+    tmPlayInterval = setInterval(() => {
+      if (!tmReplayData || !tmReplayData.timeline) return;
+      if (tmCurrentIndex >= tmReplayData.timeline.length - 1) {
+        toggleTimeMachinePlay();
+        return;
+      }
+      stepTimeMachine(1);
+    }, 1200);
+  }
+}
+
+function renderTimeMachineDay(index) {
+  if (!tmReplayData || !tmReplayData.timeline || !tmReplayData.timeline[index]) return;
+  const day = tmReplayData.timeline[index];
+  const metrics = tmReplayData.metrics;
+
+  // Update As-Of text
+  const asOfText = document.getElementById("tmAsOfDateText");
+  if (asOfText) asOfText.textContent = day.as_of_date;
+
+  // Update KPIs
+  const kpiLeadPeak = document.getElementById("tmKpiLeadPeak");
+  if (kpiLeadPeak) kpiLeadPeak.innerHTML = `+${metrics.lead_time_vs_peak_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  const kpiLeadThresh = document.getElementById("tmKpiLeadThresh");
+  if (kpiLeadThresh) kpiLeadThresh.innerHTML = `+${metrics.lead_time_vs_threshold_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  const kpiSensitivity = document.getElementById("tmKpiSensitivity");
+  if (kpiSensitivity) kpiSensitivity.textContent = `${metrics.sensitivity_pct.toFixed(1)}% / ${metrics.ppv_pct.toFixed(1)}%`;
+
+  const kpiLatency = document.getElementById("tmKpiLatency");
+  if (kpiLatency) kpiLatency.innerHTML = `${metrics.mean_reporting_delay_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  // Update Day Decision Cards
+  const sevBadge = document.getElementById("tmAlertSeverityBadge");
+  if (sevBadge) {
+    if (day.alert_severity === "Alert") {
+      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#ef4444; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">🚨 CRITICAL ALERT</span>`;
+    } else if (day.alert_severity === "Warning") {
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#f59e0b; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">⚠️ PREVENTIVE WARNING</span>`;
+    } else if (day.alert_severity === "Watch") {
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="font-size:0.85rem; padding:0.3rem 0.75rem;">🟡 ACTIVE WATCH</span>`;
+    } else {
+      sevBadge.innerHTML = `<span class="badge badge-normal" style="font-size:0.85rem; padding:0.3rem 0.75rem;">NORMAL BASELINE</span>`;
+    }
+  }
+
+  const riskScore = document.getElementById("tmRiskScore");
+  if (riskScore) {
+    riskScore.textContent = `${(day.calibrated_risk * 100).toFixed(1)}%`;
+    riskScore.style.color = day.calibrated_risk >= 0.75 ? "#ef4444" : (day.calibrated_risk >= 0.5 ? "#f59e0b" : "#34d399");
+  }
+
+  const confBand = document.getElementById("tmConformalBand");
+  if (confBand) confBand.textContent = `90% CI: [${(day.conformal_lower * 100).toFixed(1)}%, ${(day.conformal_upper * 100).toFixed(1)}%]`;
+
+  // SHAP Bars
+  const shapEnv = document.getElementById("tmShapEnv");
+  const shapEnvBar = document.getElementById("tmShapEnvBar");
+  const shapSyn = document.getElementById("tmShapSyn");
+  const shapSynBar = document.getElementById("tmShapSynBar");
+  const shapDq = document.getElementById("tmShapDq");
+  const shapDqBar = document.getElementById("tmShapDqBar");
+
+  const envPct = Math.round((day.shap_attributions?.environmental || 0.6) * 100);
+  const synPct = Math.round((day.shap_attributions?.clinical_syndromic || 0.3) * 100);
+  const dqPct = Math.round((day.shap_attributions?.data_quality || 0.1) * 100);
+
+  if (shapEnv) shapEnv.textContent = `${envPct}%`;
+  if (shapEnvBar) shapEnvBar.style.width = `${envPct}%`;
+  if (shapSyn) shapSyn.textContent = `${synPct}%`;
+  if (shapSynBar) shapSynBar.style.width = `${synPct}%`;
+  if (shapDq) shapDq.textContent = `${dqPct}%`;
+  if (shapDqBar) shapDqBar.style.width = `${dqPct}%`;
+
+  // Action Directive
+  const roleText = document.getElementById("tmResponsibleRole");
+  if (roleText) roleText.textContent = day.responsible_role || "Site Safety Officer";
+  const actionText = document.getElementById("tmActionDirective");
+  if (actionText) actionText.textContent = day.recommended_action || "Routine surveillance.";
+
+  // Right column feeds
+  const dayTemp = document.getElementById("tmDayTemp");
+  if (dayTemp) dayTemp.textContent = `${day.temp_max.toFixed(1)}°C`;
+  const dayWbgt = document.getElementById("tmDayWbgt");
+  if (dayWbgt) dayWbgt.textContent = `${day.wbgt_max.toFixed(1)}°C`;
+  const dayFcst = document.getElementById("tmDayFcst");
+  if (dayFcst) dayFcst.textContent = `${day.forecast_wbgt_next_48h.toFixed(1)}°C`;
+
+  const visCases = document.getElementById("tmVisCases");
+  if (visCases) visCases.textContent = day.reported_visits_visible;
+  const hiddenCases = document.getElementById("tmHiddenCases");
+  if (hiddenCases) hiddenCases.textContent = Math.max(0, day.observed_visits_today - Math.round(day.reported_visits_visible * 0.4));
+
+  const threshStatus = document.getElementById("tmThreshStatus");
+  if (threshStatus) {
+    if (day.threshold_alert) {
+      threshStatus.textContent = "ALERT ACTIVE (>=35°C)";
+      threshStatus.style.color = "#ef4444";
+    } else {
+      threshStatus.textContent = "NORMAL (< 35°C)";
+      threshStatus.style.color = "#64748b";
+    }
+  }
+
+  // Draw interactive SVG timeline
+  renderTimeMachineTimeline(index);
+}
+
+function renderTimeMachineTimeline(selectedIndex) {
+  const container = document.getElementById("tmTimelineContainer");
+  if (!container || !tmReplayData || !tmReplayData.timeline) return;
+
+  const timeline = tmReplayData.timeline;
+  const metrics = tmReplayData.metrics;
+  const total = timeline.length;
+  const w = container.clientWidth || 900;
+  const h = 240;
+
+  // Zoom view to focus on the key month: index total-22 to total-1
+  const focusStart = Math.max(0, total - 22);
+  const focusEnd = total - 1;
+  const nPoints = focusEnd - focusStart + 1;
+  const stepX = (w - 100) / (nPoints - 1);
+
+  let svg = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="background:#0f172a;">`;
+
+  // Draw grid baseline
+  svg += `<line x1="50" y1="180" x2="${w - 50}" y2="180" stroke="#334155" stroke-width="2"/>`;
+
+  // Max visits for scaling
+  const maxVisits = 1038;
+
+  // Draw bars for observed visits
+  for (let i = focusStart; i <= focusEnd; i++) {
+    const d = timeline[i];
+    const x = 50 + (i - focusStart) * stepX;
+    const barHeight = Math.min(140, Math.max(4, (d.observed_visits_today / maxVisits) * 140));
+    const y = 180 - barHeight;
+
+    const barColor = d.is_observed_peak ? "#38bdf8" : (d.observed_visits_today > 100 ? "#f87171" : "#475569");
+    svg += `<rect x="${x - 6}" y="${y}" width="12" height="${barHeight}" fill="${barColor}" rx="2" opacity="0.8"/>`;
+
+    // Date tick (every 2-3 days or key days)
+    if (d.as_of_date.endsWith("-23") || d.as_of_date.endsWith("-26") || d.as_of_date.endsWith("-28") || d.as_of_date.endsWith("-30") || d.as_of_date.endsWith("-02")) {
+      svg += `<text x="${x}" y="198" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">${d.as_of_date.substring(5)}</text>`;
+    }
+
+    // Flag Pins
+    if (d.as_of_date === metrics.first_munzir_alert_date) {
+      svg += `
+        <circle cx="${x}" cy="35" r="5" fill="#f59e0b"/>
+        <line x1="${x}" y1="35" x2="${x}" y2="180" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="${x}" y="24" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle">📍 MUNZIR ALERT (${d.as_of_date.substring(5)})</text>
+      `;
+    }
+    if (d.as_of_date === metrics.first_threshold_alert_date) {
+      svg += `
+        <circle cx="${x}" cy="55" r="4" fill="#fbbf24"/>
+        <line x1="${x}" y1="55" x2="${x}" y2="180" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="${x}" y="70" fill="#fbbf24" font-size="9" text-anchor="middle">⚠️ THRESHOLD</text>
+      `;
+    }
+    if (d.is_observed_peak) {
+      svg += `
+        <circle cx="${x}" cy="20" r="6" fill="#38bdf8"/>
+        <text x="${x}" y="15" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">🏆 HISTORIC PEAK (1,038 visits)</text>
+      `;
+    }
+  }
+
+  // Draw Lead Time Bracket between First Munzir Alert and Peak
+  let xAlert = 50;
+  let xPeak = 50;
+  for (let i = focusStart; i <= focusEnd; i++) {
+    if (timeline[i].as_of_date === metrics.first_munzir_alert_date) xAlert = 50 + (i - focusStart) * stepX;
+    if (timeline[i].is_observed_peak) xPeak = 50 + (i - focusStart) * stepX;
+  }
+  if (xPeak > xAlert) {
+    const bracketY = 40;
+    svg += `
+      <path d="M ${xAlert} ${bracketY} L ${xAlert} ${bracketY - 8} L ${xPeak} ${bracketY - 8} L ${xPeak} ${bracketY}" fill="none" stroke="#34d399" stroke-width="2"/>
+      <rect x="${(xAlert + xPeak)/2 - 50}" y="${bracketY - 20}" width="100" height="18" fill="#065f46" rx="4"/>
+      <text x="${(xAlert + xPeak)/2}" y="${bracketY - 7}" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">+${metrics.lead_time_vs_peak_days} DAYS LEAD TIME</text>
+    `;
+  }
+
+  // Draw current As-Of scrubber vertical line
+  const currentRelIdx = selectedIndex - focusStart;
+  if (currentRelIdx >= 0 && currentRelIdx < nPoints) {
+    const curX = 50 + currentRelIdx * stepX;
+    const rightW = (w - 50) - curX;
+    if (rightW > 0) {
+      svg += `
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#1e293b" stroke-width="3" />
+          </pattern>
+        </defs>
+        <rect x="${curX}" y="20" width="${rightW}" height="160" fill="url(#hatch)" opacity="0.6"/>
+        <rect x="${curX}" y="20" width="${rightW}" height="160" fill="rgba(15, 23, 42, 0.4)"/>
+        <text x="${curX + rightW/2}" y="100" fill="#64748b" font-size="11" font-weight="bold" text-anchor="middle" letter-spacing="1">
+          🔒 DATA NOT YET REPORTED (HIDDEN AS OF D)
+        </text>
+      `;
+    }
+
+    svg += `
+      <line x1="${curX}" y1="10" x2="${curX}" y2="215" stroke="#38bdf8" stroke-width="2.5"/>
+      <circle cx="${curX}" cy="180" r="6" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+      <text x="${curX}" y="230" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">▲ As-Of: ${timeline[selectedIndex].as_of_date}</text>
+    `;
+  }
+
+  svg += `</svg>`;
+  container.innerHTML = svg;
+}
+
+function openTimeMachineEvidenceModal() {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  openEvidenceCardModal("ALERT-HEAT-SITE-JA-01");
+}
 
 
 

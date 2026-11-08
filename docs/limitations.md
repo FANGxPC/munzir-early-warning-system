@@ -19,7 +19,7 @@
   - Localized microclimates inside enclosed, unventilated industrial sheds or boiler rooms.
   - Radiant heat amplification from heavy diesel machinery operating in close proximity.
   - Personal protective equipment (PPE) thermal burdens (e.g. non-breathable fire-retardant coveralls or full-body chemical suits).
-- **Mitigation:** Actions playbooks instruct worksite safety officers to treat Munzir alerts as triggers for on-site calibrated handheld heat bulb verification.
+- **Mitigation:** The deployment of on-site **Munzir Sentinel ESP32 hardware nodes** directly bridges this gap by reading localized dry-bulb, relative humidity, and black-globe radiant temperatures at 60-second intervals right on the work floor, while action playbooks instruct worksite safety officers to treat regional alerts as triggers for on-site verification.
 
 ---
 

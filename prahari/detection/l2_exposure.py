@@ -8,6 +8,7 @@ Fits distributed-lag exposure models (PM2.5 lags 0-3, WBGT lags 0-2) and produce
 from dataclasses import dataclass
 from typing import Dict, List, Any, Optional, Tuple
 import math
+import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -132,12 +133,14 @@ class L2ExposureBaselineModel:
         # 2. Fit Model A: Unadjusted Calendar Baseline (Seasonality + Day of Week)
         formula_unadj = "value ~ C(day_of_week) + sin_doy + cos_doy"
         try:
-            model_unadj = smf.glm(
-                formula=formula_unadj,
-                data=train_df,
-                family=sm.families.NegativeBinomial(alpha=0.15),
-            ).fit()
-            unadj_expected = float(model_unadj.predict(current_row).iloc[0])
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                model_unadj = smf.glm(
+                    formula=formula_unadj,
+                    data=train_df,
+                    family=sm.families.NegativeBinomial(alpha=0.15),
+                ).fit()
+                unadj_expected = float(model_unadj.predict(current_row).iloc[0])
         except Exception:
             unadj_expected = float(train_df["value"].mean())
 
@@ -153,12 +156,14 @@ class L2ExposureBaselineModel:
             formula_adj = "value ~ C(day_of_week) + sin_doy + cos_doy"
 
         try:
-            model_adj = smf.glm(
-                formula=formula_adj,
-                data=train_df,
-                family=sm.families.NegativeBinomial(alpha=0.15),
-            ).fit()
-            exposure_expected = float(model_adj.predict(current_row).iloc[0])
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                model_adj = smf.glm(
+                    formula=formula_adj,
+                    data=train_df,
+                    family=sm.families.NegativeBinomial(alpha=0.15),
+                ).fit()
+                exposure_expected = float(model_adj.predict(current_row).iloc[0])
         except Exception:
             exposure_expected = unadj_expected
 
