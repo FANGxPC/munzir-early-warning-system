@@ -61,7 +61,7 @@ $$P(\text{Outbreak Surge in } t + [1..4] \text{ days} \mid \mathbf{X}_{t})$$
 
 ## 5. Quantitative Performance Benchmarks
 
-Evaluated side-by-side against standard epidemiological surveillance baselines (reproducible via `make validate SEED=42` and verified by 143 automated tests):
+Evaluated side-by-side against standard epidemiological surveillance baselines (reproducible via `make validate SEED=42` and verified by 150 automated tests):
 
 | Metric | Baseline A (Fixed $3\sigma$ Threshold) | Baseline B (CDC EARS C2 Clinical) | **Munzir L4 Fusion** |
 |---|---|---|---|

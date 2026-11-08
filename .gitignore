@@ -8,7 +8,9 @@ __pycache__/
 .pytest_cache/
 
 # Data landing (bronze lakehouse & cache)
-/data/
+/data/*
+!/data/timemachine/
+!/data/timemachine/**
 !prahari/ingestion/data/
 *.parquet
 

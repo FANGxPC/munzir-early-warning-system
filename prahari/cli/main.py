@@ -900,6 +900,39 @@ def cmd_governance(args: argparse.Namespace) -> None:
     print("=" * 84)
 
 
+def cmd_timemachine(args: argparse.Namespace) -> None:
+    """Run Time Machine replay of real historical heat event with strict as-of evaluation."""
+    from prahari.timemachine.engine import TimeMachineEngine
+
+    event_id = args.event or "pnw_2021"
+    print("=" * 84)
+    print("Munzir Historical Time Machine Replay — Strict As-Of-Date Surveillance")
+    print(f"Event: {event_id} | Hindsight Leakage: STRICTLY PROHIBITED")
+    print("=" * 84)
+
+    engine = TimeMachineEngine(event_id)
+    results, metrics = engine.run_replay(start_date=args.start_date, end_date=args.end_date)
+    json_path = engine.export_results_json(results, metrics, out_path=args.out_json)
+    html_path = engine.export_html_report(results, metrics, out_path=args.out_html)
+
+    print(f"\n[+] Replay Completed Across {metrics.total_replay_days} Days:")
+    print(f"  • Observed Outcome Peak:        {metrics.observed_peak_date} (Peak Day)")
+    print(f"  • First Munzir Warning Alert:   {metrics.first_munzir_alert_date}")
+    print(f"  • First Static Threshold Alert: {metrics.first_threshold_alert_date}")
+    print(f"  • Lead Time Ahead of Peak:      +{metrics.lead_time_vs_peak_days:.1f} days (95% CI: [{metrics.bootstrap_lead_time_95ci[0]}, {metrics.bootstrap_lead_time_95ci[1]}])")
+    print(f"  • Lead Time vs Static Baseline: +{metrics.lead_time_vs_threshold_days:.1f} days operational advantage")
+    print(f"  • Detection Sensitivity:        {metrics.sensitivity_pct:.1f}%")
+    print(f"  • Positive Predictive Value:    {metrics.ppv_pct:.1f}%")
+    print(f"  • False Alarm Frequency:        {metrics.false_alarm_rate_per_month:.2f} / site / month")
+    print(f"  • Empirical Latency (CDC NSSP): {metrics.mean_reporting_delay_days:.2f} days transmission lag")
+    print(f"  • Decision Pipeline Latency:    {metrics.system_compute_latency_seconds:.2f} seconds")
+    print(f"\n[+] Outputs Generated:")
+    print(f"  • JSON Replay Trace:            {json_path}")
+    print(f"  • Interactive Validation HTML:  {html_path}")
+    print(f"\n[!] Caveat: {metrics.caveat_notice}")
+    print("=" * 84)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Munzir - Population & Workforce Health Early Warning Platform CLI"
@@ -1038,6 +1071,15 @@ def main() -> None:
     p_drift = subparsers.add_parser("drift-check", help="Run Continuous Surveillance & Model Drift Monitor (Phase 9)")
     p_drift.add_argument("--seed", type=int, default=42, help="Random seed")
     p_drift.set_defaults(func=cmd_drift_check)
+
+    # timemachine
+    p_tm = subparsers.add_parser("timemachine", help="Run historical heat event time machine replay with strict as-of date evaluation")
+    p_tm.add_argument("--event", type=str, default="pnw_2021", choices=["pnw_2021", "dubai_2024"], help="Replay event identifier (default: pnw_2021)")
+    p_tm.add_argument("--start-date", type=str, default=None, help="Optional replay start date YYYY-MM-DD")
+    p_tm.add_argument("--end-date", type=str, default=None, help="Optional replay end date YYYY-MM-DD")
+    p_tm.add_argument("--out-json", type=str, default=None, help="Output path for results JSON")
+    p_tm.add_argument("--out-html", type=str, default=None, help="Output path for interactive HTML report")
+    p_tm.set_defaults(func=cmd_timemachine)
 
     args = parser.parse_args()
     args.func(args)

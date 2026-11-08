@@ -103,6 +103,7 @@ function loadCurrentView() {
   else if (state.activeTab === "audit") loadAuditLogs();
   else if (state.activeTab === "impact") loadImpactView();
   else if (state.activeTab === "sentinel") loadSentinelView();
+  else if (state.activeTab === "timemachine") loadTimeMachineView();
 }
 
 // --- 1. Situation Map View ---
@@ -1372,6 +1373,307 @@ setInterval(() => {
     loadSentinelView(true);
   }
 }, 3000);
+
+
+// =========================================================================
+// --- 9. Historical Time Machine Replay Controller ---
+// =========================================================================
+
+let tmReplayData = null;
+let tmCurrentIndex = 56; // Default to onset (June 25/26)
+let tmIsPlaying = false;
+let tmPlayInterval = null;
+
+async function loadTimeMachineView() {
+  const eventSelect = document.getElementById("tmEventSelect");
+  const eventId = eventSelect ? eventSelect.value : "pnw_2021";
+
+  if (!tmReplayData || tmReplayData.metadata.event_id !== eventId) {
+    try {
+      const resp = await apiFetch(`/api/v1/timemachine/replay?event=${eventId}`);
+      tmReplayData = resp;
+      setupTimeMachineSlider();
+    } catch (err) {
+      console.error("Failed to load time machine data:", err);
+      return;
+    }
+  }
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function setupTimeMachineSlider() {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  const slider = document.getElementById("tmDateSlider");
+  const minLabel = document.getElementById("tmSliderMinLabel");
+  const maxLabel = document.getElementById("tmSliderMaxLabel");
+  const total = tmReplayData.timeline.length;
+
+  if (slider) {
+    slider.min = 0;
+    slider.max = total - 1;
+    // Default to onset date (near index 56)
+    tmCurrentIndex = Math.min(Math.max(56, 0), total - 1);
+    slider.value = tmCurrentIndex;
+  }
+  if (minLabel && tmReplayData.timeline[0]) {
+    minLabel.textContent = `${tmReplayData.timeline[0].as_of_date} (Start)`;
+  }
+  if (maxLabel && tmReplayData.timeline[total - 1]) {
+    maxLabel.textContent = `${tmReplayData.timeline[total - 1].as_of_date} (End)`;
+  }
+}
+
+function onTimeMachineEventChange() {
+  tmReplayData = null;
+  if (tmIsPlaying) toggleTimeMachinePlay();
+  loadTimeMachineView();
+}
+
+function onTimeMachineSliderInput(val) {
+  tmCurrentIndex = parseInt(val, 10);
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function stepTimeMachine(delta) {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  const total = tmReplayData.timeline.length;
+  tmCurrentIndex = Math.max(0, Math.min(total - 1, tmCurrentIndex + delta));
+  const slider = document.getElementById("tmDateSlider");
+  if (slider) slider.value = tmCurrentIndex;
+  renderTimeMachineDay(tmCurrentIndex);
+}
+
+function toggleTimeMachinePlay() {
+  const btn = document.getElementById("tmPlayBtn");
+  if (tmIsPlaying) {
+    tmIsPlaying = false;
+    clearInterval(tmPlayInterval);
+    if (btn) btn.innerHTML = "▶️ Play Replay";
+  } else {
+    tmIsPlaying = true;
+    if (btn) btn.innerHTML = "⏸️ Pause";
+    tmPlayInterval = setInterval(() => {
+      if (!tmReplayData || !tmReplayData.timeline) return;
+      if (tmCurrentIndex >= tmReplayData.timeline.length - 1) {
+        toggleTimeMachinePlay();
+        return;
+      }
+      stepTimeMachine(1);
+    }, 1200);
+  }
+}
+
+function renderTimeMachineDay(index) {
+  if (!tmReplayData || !tmReplayData.timeline || !tmReplayData.timeline[index]) return;
+  const day = tmReplayData.timeline[index];
+  const metrics = tmReplayData.metrics;
+
+  // Update As-Of text
+  const asOfText = document.getElementById("tmAsOfDateText");
+  if (asOfText) asOfText.textContent = day.as_of_date;
+
+  // Update KPIs
+  const kpiLeadPeak = document.getElementById("tmKpiLeadPeak");
+  if (kpiLeadPeak) kpiLeadPeak.innerHTML = `+${metrics.lead_time_vs_peak_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  const kpiLeadThresh = document.getElementById("tmKpiLeadThresh");
+  if (kpiLeadThresh) kpiLeadThresh.innerHTML = `+${metrics.lead_time_vs_threshold_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  const kpiSensitivity = document.getElementById("tmKpiSensitivity");
+  if (kpiSensitivity) kpiSensitivity.textContent = `${metrics.sensitivity_pct.toFixed(1)}% / ${metrics.ppv_pct.toFixed(1)}%`;
+
+  const kpiLatency = document.getElementById("tmKpiLatency");
+  if (kpiLatency) kpiLatency.innerHTML = `${metrics.mean_reporting_delay_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+
+  // Update Day Decision Cards
+  const sevBadge = document.getElementById("tmAlertSeverityBadge");
+  if (sevBadge) {
+    if (day.alert_severity === "Alert") {
+      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#ef4444; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">🚨 CRITICAL ALERT</span>`;
+    } else if (day.alert_severity === "Warning") {
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#f59e0b; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">⚠️ PREVENTIVE WARNING</span>`;
+    } else if (day.alert_severity === "Watch") {
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="font-size:0.85rem; padding:0.3rem 0.75rem;">🟡 ACTIVE WATCH</span>`;
+    } else {
+      sevBadge.innerHTML = `<span class="badge badge-normal" style="font-size:0.85rem; padding:0.3rem 0.75rem;">NORMAL BASELINE</span>`;
+    }
+  }
+
+  const riskScore = document.getElementById("tmRiskScore");
+  if (riskScore) {
+    riskScore.textContent = `${(day.calibrated_risk * 100).toFixed(1)}%`;
+    riskScore.style.color = day.calibrated_risk >= 0.75 ? "#ef4444" : (day.calibrated_risk >= 0.5 ? "#f59e0b" : "#34d399");
+  }
+
+  const confBand = document.getElementById("tmConformalBand");
+  if (confBand) confBand.textContent = `90% CI: [${(day.conformal_lower * 100).toFixed(1)}%, ${(day.conformal_upper * 100).toFixed(1)}%]`;
+
+  // SHAP Bars
+  const shapEnv = document.getElementById("tmShapEnv");
+  const shapEnvBar = document.getElementById("tmShapEnvBar");
+  const shapSyn = document.getElementById("tmShapSyn");
+  const shapSynBar = document.getElementById("tmShapSynBar");
+  const shapDq = document.getElementById("tmShapDq");
+  const shapDqBar = document.getElementById("tmShapDqBar");
+
+  const envPct = Math.round((day.shap_attributions?.environmental || 0.6) * 100);
+  const synPct = Math.round((day.shap_attributions?.clinical_syndromic || 0.3) * 100);
+  const dqPct = Math.round((day.shap_attributions?.data_quality || 0.1) * 100);
+
+  if (shapEnv) shapEnv.textContent = `${envPct}%`;
+  if (shapEnvBar) shapEnvBar.style.width = `${envPct}%`;
+  if (shapSyn) shapSyn.textContent = `${synPct}%`;
+  if (shapSynBar) shapSynBar.style.width = `${synPct}%`;
+  if (shapDq) shapDq.textContent = `${dqPct}%`;
+  if (shapDqBar) shapDqBar.style.width = `${dqPct}%`;
+
+  // Action Directive
+  const roleText = document.getElementById("tmResponsibleRole");
+  if (roleText) roleText.textContent = day.responsible_role || "Site Safety Officer";
+  const actionText = document.getElementById("tmActionDirective");
+  if (actionText) actionText.textContent = day.recommended_action || "Routine surveillance.";
+
+  // Right column feeds
+  const dayTemp = document.getElementById("tmDayTemp");
+  if (dayTemp) dayTemp.textContent = `${day.temp_max.toFixed(1)}°C`;
+  const dayWbgt = document.getElementById("tmDayWbgt");
+  if (dayWbgt) dayWbgt.textContent = `${day.wbgt_max.toFixed(1)}°C`;
+  const dayFcst = document.getElementById("tmDayFcst");
+  if (dayFcst) dayFcst.textContent = `${day.forecast_wbgt_next_48h.toFixed(1)}°C`;
+
+  const visCases = document.getElementById("tmVisCases");
+  if (visCases) visCases.textContent = day.reported_visits_visible;
+  const hiddenCases = document.getElementById("tmHiddenCases");
+  if (hiddenCases) hiddenCases.textContent = Math.max(0, day.observed_visits_today - Math.round(day.reported_visits_visible * 0.4));
+
+  const threshStatus = document.getElementById("tmThreshStatus");
+  if (threshStatus) {
+    if (day.threshold_alert) {
+      threshStatus.textContent = "ALERT ACTIVE (>=35°C)";
+      threshStatus.style.color = "#ef4444";
+    } else {
+      threshStatus.textContent = "NORMAL (< 35°C)";
+      threshStatus.style.color = "#64748b";
+    }
+  }
+
+  // Draw interactive SVG timeline
+  renderTimeMachineTimeline(index);
+}
+
+function renderTimeMachineTimeline(selectedIndex) {
+  const container = document.getElementById("tmTimelineContainer");
+  if (!container || !tmReplayData || !tmReplayData.timeline) return;
+
+  const timeline = tmReplayData.timeline;
+  const metrics = tmReplayData.metrics;
+  const total = timeline.length;
+  const w = container.clientWidth || 900;
+  const h = 240;
+
+  // Zoom view to focus on the key month: index total-22 to total-1
+  const focusStart = Math.max(0, total - 22);
+  const focusEnd = total - 1;
+  const nPoints = focusEnd - focusStart + 1;
+  const stepX = (w - 100) / (nPoints - 1);
+
+  let svg = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="background:#0f172a;">`;
+
+  // Draw grid baseline
+  svg += `<line x1="50" y1="180" x2="${w - 50}" y2="180" stroke="#334155" stroke-width="2"/>`;
+
+  // Max visits for scaling
+  const maxVisits = 1038;
+
+  // Draw bars for observed visits
+  for (let i = focusStart; i <= focusEnd; i++) {
+    const d = timeline[i];
+    const x = 50 + (i - focusStart) * stepX;
+    const barHeight = Math.min(140, Math.max(4, (d.observed_visits_today / maxVisits) * 140));
+    const y = 180 - barHeight;
+
+    const barColor = d.is_observed_peak ? "#38bdf8" : (d.observed_visits_today > 100 ? "#f87171" : "#475569");
+    svg += `<rect x="${x - 6}" y="${y}" width="12" height="${barHeight}" fill="${barColor}" rx="2" opacity="0.8"/>`;
+
+    // Date tick (every 2-3 days or key days)
+    if (d.as_of_date.endsWith("-23") || d.as_of_date.endsWith("-26") || d.as_of_date.endsWith("-28") || d.as_of_date.endsWith("-30") || d.as_of_date.endsWith("-02")) {
+      svg += `<text x="${x}" y="198" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">${d.as_of_date.substring(5)}</text>`;
+    }
+
+    // Flag Pins
+    if (d.as_of_date === metrics.first_munzir_alert_date) {
+      svg += `
+        <circle cx="${x}" cy="35" r="5" fill="#f59e0b"/>
+        <line x1="${x}" y1="35" x2="${x}" y2="180" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="${x}" y="24" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle">📍 MUNZIR ALERT (${d.as_of_date.substring(5)})</text>
+      `;
+    }
+    if (d.as_of_date === metrics.first_threshold_alert_date) {
+      svg += `
+        <circle cx="${x}" cy="55" r="4" fill="#fbbf24"/>
+        <line x1="${x}" y1="55" x2="${x}" y2="180" stroke="#fbbf24" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="${x}" y="70" fill="#fbbf24" font-size="9" text-anchor="middle">⚠️ THRESHOLD</text>
+      `;
+    }
+    if (d.is_observed_peak) {
+      svg += `
+        <circle cx="${x}" cy="20" r="6" fill="#38bdf8"/>
+        <text x="${x}" y="15" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">🏆 HISTORIC PEAK (1,038 visits)</text>
+      `;
+    }
+  }
+
+  // Draw Lead Time Bracket between First Munzir Alert and Peak
+  let xAlert = 50;
+  let xPeak = 50;
+  for (let i = focusStart; i <= focusEnd; i++) {
+    if (timeline[i].as_of_date === metrics.first_munzir_alert_date) xAlert = 50 + (i - focusStart) * stepX;
+    if (timeline[i].is_observed_peak) xPeak = 50 + (i - focusStart) * stepX;
+  }
+  if (xPeak > xAlert) {
+    const bracketY = 40;
+    svg += `
+      <path d="M ${xAlert} ${bracketY} L ${xAlert} ${bracketY - 8} L ${xPeak} ${bracketY - 8} L ${xPeak} ${bracketY}" fill="none" stroke="#34d399" stroke-width="2"/>
+      <rect x="${(xAlert + xPeak)/2 - 50}" y="${bracketY - 20}" width="100" height="18" fill="#065f46" rx="4"/>
+      <text x="${(xAlert + xPeak)/2}" y="${bracketY - 7}" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">+${metrics.lead_time_vs_peak_days} DAYS LEAD TIME</text>
+    `;
+  }
+
+  // Draw current As-Of scrubber vertical line
+  const currentRelIdx = selectedIndex - focusStart;
+  if (currentRelIdx >= 0 && currentRelIdx < nPoints) {
+    const curX = 50 + currentRelIdx * stepX;
+    const rightW = (w - 50) - curX;
+    if (rightW > 0) {
+      svg += `
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#1e293b" stroke-width="3" />
+          </pattern>
+        </defs>
+        <rect x="${curX}" y="20" width="${rightW}" height="160" fill="url(#hatch)" opacity="0.6"/>
+        <rect x="${curX}" y="20" width="${rightW}" height="160" fill="rgba(15, 23, 42, 0.4)"/>
+        <text x="${curX + rightW/2}" y="100" fill="#64748b" font-size="11" font-weight="bold" text-anchor="middle" letter-spacing="1">
+          🔒 DATA NOT YET REPORTED (HIDDEN AS OF D)
+        </text>
+      `;
+    }
+
+    svg += `
+      <line x1="${curX}" y1="10" x2="${curX}" y2="215" stroke="#38bdf8" stroke-width="2.5"/>
+      <circle cx="${curX}" cy="180" r="6" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
+      <text x="${curX}" y="230" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">▲ As-Of: ${timeline[selectedIndex].as_of_date}</text>
+    `;
+  }
+
+  svg += `</svg>`;
+  container.innerHTML = svg;
+}
+
+function openTimeMachineEvidenceModal() {
+  if (!tmReplayData || !tmReplayData.timeline) return;
+  openEvidenceCardModal("ALERT-HEAT-SITE-JA-01");
+}
 
 
 

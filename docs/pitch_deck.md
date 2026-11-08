@@ -75,7 +75,7 @@ Munzir replaces black-box anomaly alerts with an epidemiologically grounded **5-
 ## Slide 5: Empirical Validation & The Evidence Harness
 
 ### Headline: Proven Performance on Multi-Year Rolling Back-Tests
-Every performance claim is measured, reproducible via `make validate SEED=42`, and verified by a 143-test automated test suite across 100 hold-out synthetic outbreak injections:
+Every performance claim is measured, reproducible via `make validate SEED=42`, and verified by a 150-test automated test suite across 100 hold-out synthetic outbreak injections:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -84,7 +84,7 @@ Every performance claim is measured, reproducible via `make validate SEED=42`, a
 │  • Positive Predictive Value: 88.5% (Precision on confirmed surges)   │
 │  • False Alarm Frequency:    0.31 / site / month (76% reduction)      │
 │  • Decoy Suppression Rate:   94.0% of reporting backlogs filtered     │
-│  • Automated Test Suite:     143 / 143 passing unit & integration tests│
+│  • Automated Test Suite:     150 / 150 passing unit & integration tests│
 └────────────────────────────────────────────────────────────────────────┘
 ```
 

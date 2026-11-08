@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay
+.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine
 
 PYTHON := ./bin/py
 
@@ -119,6 +119,12 @@ train-nlp:
 
 inspect:
 	$(PYTHON) -m prahari inspect
+
+timemachine:
+	$(PYTHON) -m prahari timemachine --event $(or $(EVENT),pnw_2021)
+
+test-timemachine:
+	$(PYTHON) -m pytest tests/test_timemachine.py -v
 
 test:
 	$(PYTHON) -m pytest tests/ -v

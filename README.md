@@ -156,12 +156,20 @@
 - [x] **Dashboard Sentinel Fleet View (`prahari/api/static/`):** Live telemetry table, on-site vs Open-Meteo hotspot delta card, and commission modal dialog.
 - [x] **Demo Replay Simulator (`hardware/replay/replay_trace.py`):** Standalone backup tool streaming pre-recorded traces for network-isolated pitch presentations.
 
+### Phase 12 — Strict As-Of-Date Historical Time Machine Replay: COMPLETE
+- [x] **Zero Hindsight Leakage Data Gateway (`prahari/timemachine/data_loader.py`):** Single `get_data_as_of(date)` function enforcing that no record with `obs_date` or `reported_date` after simulated day D is visible. Verified by automated invariant tests.
+- [x] **100% Real-Outcome Historical Event (`pnw_2021`):** Pacific Northwest Heat Dome (June 2021) fusing Open-Meteo archived NWP forecasts with real daily emergency department syndromic visit counts from the CDC National Syndromic Surveillance Program (MMWR Vol. 70, No. 29; DOI: `10.15585/mmwr.mm7029e1`).
+- [x] **Empirical Reporting Latency Modeling:** Simulates CDC NSSP facility batch submission lag (70% D+1, 20% D+2, 10% D+3; mean lag: 1.4 days), labeled explicitly as `SIMULATED DELAY`.
+- [x] **Side-by-Side Static Threshold Benchmark:** Demonstrates **+5.0 days lead time** ahead of observed peak (1,038 visits on June 28) and **+3.0 days earlier warning** than standard 35°C temperature thresholds.
+- [x] **Interactive Dashboard Scrubber & Timeline (`prahari/api/static/`):** Date slider, auto-play controller, visual lead-time bracket, and distinct shaded boundary marking "Data Not Yet Reported as of D".
+- [x] **Standalone HTML & JSON Verification Reports:** Exported via `make timemachine EVENT=pnw_2021` to `validation/timemachine_pnw_2021.html`.
+
 ---
 
 ## Quickstart Commands
 
 ```bash
-# 1. Run full unit & integration test suite (143 passing tests across all 11 phases, 0 warnings)
+# 1. Run full unit & integration test suite (150 passing tests across all 12 phases, 0 warnings)
 make test
 
 # 2. Run Phase 11 Sentinel hardware test suite

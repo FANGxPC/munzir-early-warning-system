@@ -627,6 +627,110 @@ def get_clinical_vulnerability_profile(
     return JSONResponse(content=profile)
 
 
+# --- 9b. Time Machine Replay Endpoints ---
+
+@app.get("/api/v1/timemachine/events", response_class=JSONResponse)
+def get_timemachine_events() -> JSONResponse:
+    """Returns list of available historical replay events."""
+    from prahari.timemachine.config import load_sources_config
+    configs = load_sources_config()
+    events = []
+    for eid, cfg in configs.items():
+        events.append({
+            "event_id": cfg.event_id,
+            "name": cfg.name,
+            "region_name": cfg.region_name,
+            "is_hybrid": cfg.is_hybrid,
+            "hybrid_label": cfg.hybrid_label,
+            "coordinates": {"latitude": cfg.latitude, "longitude": cfg.longitude},
+            "baseline_start": cfg.baseline_start,
+            "baseline_end": cfg.baseline_end,
+            "event_start": cfg.event_start,
+            "event_end": cfg.event_end,
+            "observed_peak_date": cfg.observed_peak_date,
+            "observed_peak_value": cfg.observed_peak_value,
+            "weather_source": cfg.weather_source,
+            "outcome_source": cfg.outcome_source,
+            "threshold_comparator": cfg.threshold_comparator,
+        })
+    return JSONResponse(content={"events": events})
+
+
+@app.get("/api/v1/timemachine/replay", response_class=JSONResponse)
+def get_timemachine_replay(event: str = "pnw_2021") -> JSONResponse:
+    """Returns full day-by-day replay time series and operational metrics."""
+    from prahari.timemachine.engine import TimeMachineEngine
+    from prahari.timemachine.data_loader import DEFAULT_DATA_DIR
+    import json
+
+    results_file = DEFAULT_DATA_DIR / event / "replay_results.json"
+    if results_file.exists():
+        with open(results_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return JSONResponse(content=data)
+
+    engine = TimeMachineEngine(event)
+    results, metrics = engine.run_replay()
+    engine.export_results_json(results, metrics)
+    with open(results_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        return JSONResponse(content=data)
+
+
+@app.get("/api/v1/timemachine/as-of", response_class=JSONResponse)
+def get_timemachine_as_of(event: str = "pnw_2021", date: str = "2021-06-26") -> JSONResponse:
+    """Returns the strict as-of-date state on day D, showing visible vs hidden records."""
+    from prahari.timemachine.data_loader import get_data_as_of, DEFAULT_DATA_DIR, _load_raw_outcomes
+    from prahari.timemachine.detector import TimeMachineDetector
+    from prahari.timemachine.config import load_sources_config
+
+    configs = load_sources_config()
+    cfg = configs.get(event)
+    if not cfg:
+        raise HTTPException(status_code=404, detail=f"Unknown event {event}")
+
+    snapshot = get_data_as_of(date, event_id=event)
+    raw_outcomes = _load_raw_outcomes(DEFAULT_DATA_DIR / event)
+
+    tc = cfg.threshold_comparator or {}
+    detector = TimeMachineDetector(
+        event_id=event,
+        baseline_cutoff_date=cfg.baseline_end,
+        static_temp_threshold=float(tc.get("temp_threshold_c", 35.0)),
+        static_wbgt_threshold=float(tc.get("wbgt_threshold_c", 30.0)),
+        baseline_expected_wbgt=float(tc.get("baseline_expected_wbgt", 22.0)),
+    )
+    day_res = detector.evaluate_day(snapshot, raw_outcomes)
+
+    return JSONResponse(content={
+        "as_of_date": date,
+        "event_id": event,
+        "decision": {
+            "munzir_alert": day_res.munzir_alert,
+            "alert_severity": day_res.alert_severity,
+            "calibrated_risk": day_res.calibrated_risk,
+            "conformal_lower": day_res.conformal_lower,
+            "conformal_upper": day_res.conformal_upper,
+            "shap_attributions": day_res.shap_attributions,
+            "what_rose": day_res.what_rose,
+            "recommended_action": day_res.recommended_action,
+            "responsible_role": day_res.responsible_role,
+            "threshold_alert": day_res.threshold_alert,
+            "threshold_cutoff": day_res.threshold_cutoff,
+            "is_observed_peak": day_res.is_observed_peak,
+        },
+        "weather_today": {
+            "temp_max": day_res.temp_max,
+            "wbgt_max": day_res.wbgt_max,
+            "forecast_wbgt_48h": day_res.forecast_wbgt_next_48h,
+        },
+        "visible_reported_outcomes": snapshot.reported_outcomes.to_dict(orient="records"),
+        "unreported_future_count": len(snapshot.unreported_outcomes),
+        "mean_reporting_delay_days": day_res.reporting_latency_mean_days,
+        "metadata": snapshot.metadata,
+    })
+
+
 # --- 10. Web Single Page Application (Static UI) ---
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")

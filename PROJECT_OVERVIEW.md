@@ -399,16 +399,19 @@ Here is what happens from the moment a sensor detects heat to the moment an acti
 ### 11.1 Quickstart Commands
 
 ```bash
-# 1. Run all 143 unit and integration tests (clean, 0 warnings)
+# 1. Run all 150 unit and integration tests (clean, 0 warnings)
 make test
 
 # 2. Run Responsible AI & Governance Scorecard (7/7 passing guardrails)
 make governance
 
-# 3. Run Sentinel Hardware tests
+# 3. Run Time Machine historical replay (PNW 2021 CDC NSSP heat dome)
+make timemachine EVENT=pnw_2021
+
+# 4. Run Sentinel Hardware tests
 make test-sentinel
 
-# 4. Launch the Web Application & REST API
+# 5. Launch the Web Application & REST API
 make serve
 # Open browser to: http://localhost:8000
 ```
@@ -417,7 +420,8 @@ make serve
 
 | Command | Action |
 | :--- | :--- |
-| `make test` | Runs the complete 143-test suite across all 11 phases (0 warnings) |
+| `make test` | Runs the complete 150-test suite across all 12 phases (0 warnings) |
+| `make timemachine` | Replays real historical heat event with zero hindsight leakage |
 | `make serve` | Launches FastAPI server on `http://0.0.0.0:8000` |
 | `make governance` | Evaluates Model Cards, Datasheets, DPIA, and runtime safety guardrails |
 | `make test-sentinel` | Runs the Sentinel hardware integration tests |

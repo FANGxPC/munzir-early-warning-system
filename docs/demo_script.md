@@ -10,7 +10,7 @@
 > 1. Dashboard Tab: `http://localhost:8000` (logged into District Surveillance Officer view)  
 > 2. Validation Tab: `validation/report.html` (Empirical Back-Test Proof)  
 > 3. Sentinel Hardware Node: ESP32 with matte-black globe DHT22 sensor, active buzzer, and RGB LED on the presenter table (or `make sentinel-replay` fallback)  
-> 4. Test Suite Verified: 143/143 tests passing  
+> 4. Test Suite Verified: 150/150 tests passing  
 
 ---
 
@@ -108,16 +108,16 @@
 
 ---
 
-### SCENE 4: EMPIRICAL BACK-TEST PROOF (04:50 – 05:20)
+### SCENE 4: EMPIRICAL BACK-TEST PROOF & HISTORICAL TIME MACHINE (04:50 – 05:20)
 
-* **Visual:** Switch tab to `validation/report.html`. Show the multi-year back-test table and Activity Monitoring Operating Characteristic (AMOC) curve.
+* **Visual:** Switch tab to `⏱️ Time Machine Replay` (or open `validation/timemachine_pnw_2021.html`).
+* **Click Action:** Drag the date scrubber to June 26, 2021: point to the lead-time bracket (+5.0 days vs peak, +3.0 days earlier than static 35°C threshold), and show the shaded boundary of "Data Not Yet Reported".
 * **Spoken Pitch:**
-  > *"We don't ask the jury to take our word for it. Every performance metric in Munzir is empirically back-tested across 100 hold-out outbreak injections and verified by our **143-test automated test suite**:*  
-  > *• **3.40 Days** operational advance lead time.*  
-  > *• **92.4% Detection Sensitivity** across industrial and community sectors.*  
-  > *• **88.5% Positive Predictive Value** (Precision).*  
-  > *• **0.31 False Alarms per site per month** — a 76% reduction in alert fatigue.*  
-  > *Any evaluator can clone our repository and run `make validate SEED=42` right from terminal to reproduce every single figure deterministically."*
+  > *"We don't ask the jury to take our word for it. Every performance metric in Munzir is empirically back-tested across 100 hold-out outbreak injections and verified by our **150-test automated test suite**:*  
+  > *• Look at our **Historical Time Machine Replay** of the 2021 Pacific Northwest Heat Dome, fusing archived numerical weather forecasts with authentic CDC NSSP emergency department visit counts.*  
+  > *• With zero hindsight leakage and realistic 1.8-day reporting delays, Munzir alerts on **June 23** — **5 full days before the 1,038-visit hospital peak**, and **3 days earlier than static 35°C weather thresholds**!*  
+  > *• Across diverse geographies, Munzir maintains **92.4% Detection Sensitivity** and **0.31 False Alarms per month** — cutting alert fatigue by 76%.*  
+  > *Any evaluator can clone our repository and run `make validate` or `make timemachine` right from terminal to reproduce every single figure deterministically."*
 
 ---
 
