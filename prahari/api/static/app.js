@@ -212,20 +212,23 @@ async function loadSituationMap() {
     container.innerHTML = "";
     data.features.forEach(feat => {
       const card = document.createElement("div");
-      card.className = `geo-item-card ${feat.hatch_pattern ? 'hatch-pattern' : ''}`;
+      card.id = `geoCard-${feat.geo_id}`;
+      card.className = `geo-item-card risk-${feat.risk_tier.toLowerCase()} ${feat.hatch_pattern ? 'hatch-pattern' : ''}`;
+      card.onclick = () => selectGeoSite(feat.geo_id);
       
       const badgeClass = `badge-${feat.risk_tier.toLowerCase()}`;
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong>${feat.geo_name}</strong>
+          <strong style="color:#f8fafc; font-size:0.88rem;">${feat.geo_name}</strong>
           <span class="badge ${badgeClass}">${feat.risk_tier.toUpperCase()}</span>
         </div>
-        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.75rem; color:#94a3b8;">
-          <span>ID: ${feat.geo_id} (${feat.geo_level})</span>
-          <span>Confidence: <b>${feat.location_confidence.toUpperCase()}</b></span>
+        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.73rem; color:#94a3b8; font-family:var(--font-mono, monospace);">
+          <span>ID: <b>${feat.geo_id}</b> (${feat.geo_level})</span>
+          <span>Confidence: <b style="color:#38bdf8;">${feat.location_confidence.toUpperCase()}</b></span>
         </div>
-        <div style="margin-top:0.25rem; font-size:0.75rem; color:#cbd5e1;">
-          Outbreak Prob: <b>${(feat.calibrated_prob * 100).toFixed(1)}%</b> | Population: ${feat.population ? feat.population.toLocaleString() : 'N/A'}
+        <div style="margin-top:0.35rem; font-size:0.75rem; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+          <span>Outbreak Prob: <b style="color:#f8fafc; font-family:var(--font-mono, monospace);">${(feat.calibrated_prob * 100).toFixed(1)}%</b></span>
+          <span style="font-size:0.7rem; color:#64748b;">Pop: ${feat.population ? feat.population.toLocaleString() : 'N/A'}</span>
         </div>
       `;
       container.appendChild(card);
@@ -239,29 +242,95 @@ async function loadSituationMap() {
   }
 }
 
+function selectGeoSite(geoId) {
+  document.querySelectorAll('.geo-item-card').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById(`geoCard-${geoId}`);
+  if (card) {
+    card.classList.add('selected');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  document.querySelectorAll('.map-node-group').forEach(n => n.classList.remove('selected'));
+  const mapNode = document.getElementById(`mapNode-${geoId}`);
+  if (mapNode) {
+    mapNode.classList.add('selected');
+  }
+}
+
 function renderSvgMap(svgElement, features, clusters) {
   // Geo bounds for Dubai
   const minLat = 24.75, maxLat = 25.35;
   const minLon = 54.95, maxLon = 56.20;
 
-  const width = svgElement.clientWidth || 700;
-  const height = svgElement.clientHeight || 480;
+  const width = svgElement.clientWidth || 740;
+  const height = svgElement.clientHeight || 520;
 
   function toXY(lat, lon) {
-    const x = ((lon - minLon) / (maxLon - minLon)) * (width - 80) + 40;
-    const y = height - (((lat - minLat) / (maxLat - minLat)) * (height - 80) + 40);
+    const x = ((lon - minLon) / (maxLon - minLon)) * (width - 100) + 50;
+    const y = height - (((lat - minLat) / (maxLat - minLat)) * (height - 90) + 45);
     return { x, y };
   }
 
+  // Tactical Radar Center (Downtown / Jebel Ali Axis)
+  const centerDubai = toXY(25.08, 55.20);
+
   let svgHtml = `
     <defs>
-      <pattern id="diagonalHatch" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <line x1="0" y1="0" x2="0" y2="10" style="stroke:#3b82f6; stroke-width:3; opacity:0.4" />
+      <linearGradient id="mapBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#070c18" />
+        <stop offset="50%" stop-color="#050811" />
+        <stop offset="100%" stop-color="#060a14" />
+      </linearGradient>
+      <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+        <line x1="0" y1="0" x2="0" y2="8" style="stroke:#38bdf8; stroke-width:2.5; opacity:0.35" />
       </pattern>
+      <filter id="nodeGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
     </defs>
-    <!-- Background Grid -->
-    <rect width="${width}" height="${height}" fill="#0b1120" />
-    <path d="M 0,${height/2} L ${width},${height/2} M ${width/2},0 L ${width/2},${height}" stroke="#1e293b" stroke-width="1" />
+
+    <!-- Canvas Background -->
+    <rect width="${width}" height="${height}" fill="url(#mapBgGrad)" />
+
+    <!-- Arabian Gulf Maritime Wash (Northwest Coastal Domain) -->
+    <path d="M 0,0 L ${width * 0.45},0 Q ${width * 0.32},${height * 0.4} 0,${height * 0.65} Z" 
+          fill="rgba(14, 165, 233, 0.04)" stroke="rgba(56, 189, 248, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
+    <text x="24" y="55" fill="rgba(56, 189, 248, 0.35)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
+      ARABIAN GULF (MARITIME DOMAIN)
+    </text>
+
+    <!-- Concentric Tactical Radar Range Rings -->
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="80" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="160" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <text x="${centerDubai.x + 84}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">15 KM</text>
+    <text x="${centerDubai.x + 164}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
+    <text x="${centerDubai.x + 244}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
+
+    <!-- Coordinate Grid & Mesh -->
+    <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#1e293b" stroke-width="0.8" stroke-dasharray="2,3" />
+    <line x1="${width/2}" y1="40" x2="${width/2}" y2="${height - 40}" stroke="#1e293b" stroke-width="0.8" stroke-dasharray="2,3" />
+
+    <!-- Corner Reticles (L-brackets) -->
+    <path d="M 16,28 L 16,16 L 28,16" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
+
+    <!-- Telemetry HUD Header / Footer Overlay -->
+    <text x="36" y="24" fill="#38bdf8" font-size="9.5" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
+      TACTICAL RADAR &bull; DUBAI COMMAND HUB &bull; H3 RES-7 GRID
+    </text>
+    <text x="${width - 36}" y="24" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)" text-anchor="end">
+      WGS-84 &bull; LIVE BIOMETEOROLOGY BIAS-CORRECTED
+    </text>
+
+    <text x="36" y="${height - 14}" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)">
+      SENSOR MESH: ESP32 TWIN ACTIVE &bull; SCAN RATE: 10s
+    </text>
+    <text x="${width - 36}" y="${height - 14}" fill="#38bdf8" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
+      [N] AZIMUTH 000&deg;
+    </text>
   `;
 
   // Draw clusters first
@@ -269,9 +338,12 @@ function renderSvgMap(svgElement, features, clusters) {
     clusters.forEach(c => {
       const center = toXY(c.centroid_lat, c.centroid_lon);
       svgHtml += `
-        <circle cx="${center.x}" cy="${center.y}" r="45" fill="rgba(239, 68, 68, 0.25)" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" />
-        <text x="${center.x}" y="${center.y - 48}" fill="#f87171" font-size="11" font-weight="bold" text-anchor="middle">
-          L3 Cluster (RR: ${c.relative_risk}x, p &lt; 0.05)
+        <!-- Outer radiating shockwave ring -->
+        <circle cx="${center.x}" cy="${center.y}" r="54" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85" />
+        <circle cx="${center.x}" cy="${center.y}" r="46" fill="rgba(239, 68, 68, 0.16)" stroke="#ef4444" stroke-width="1.2" />
+        <rect x="${center.x - 95}" y="${center.y - 68}" width="190" height="20" rx="3" fill="#180c10" stroke="#ef4444" stroke-width="1" />
+        <text x="${center.x}" y="${center.y - 54}" fill="#fca5a5" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+          L3 CLUSTER (RR: ${c.relative_risk}x &bull; p &lt; 0.05)
         </text>
       `;
     });
@@ -281,31 +353,42 @@ function renderSvgMap(svgElement, features, clusters) {
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
     let color = "#10b981"; // normal
-    if (f.risk_tier === "watch") color = "#3b82f6";
+    if (f.risk_tier === "watch") color = "#38bdf8";
     else if (f.risk_tier === "warning") color = "#f59e0b";
     else if (f.risk_tier === "alert") color = "#ef4444";
 
     const isSite = f.geo_level === "site";
-    const shape = isSite ? "rect" : "circle";
+    const displayName = f.geo_name.split(" ")[0];
+    const nameWidth = Math.max(76, displayName.length * 8 + 24);
 
-    if (shape === "circle") {
+    svgHtml += `
+      <g id="mapNode-${f.geo_id}" class="map-node-group" onclick="selectGeoSite('${f.geo_id}')" style="cursor:pointer;">
+    `;
+
+    if (isSite) {
+      // Industrial Worksite Marker (Crisp Tactical Rounded Box with glowing core)
       svgHtml += `
-        <circle cx="${pt.x}" cy="${pt.y}" r="14" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : color}" stroke="${color}" stroke-width="2" />
+        <rect x="${pt.x - 14}" y="${pt.y - 14}" width="28" height="28" rx="6" fill="#080e1a" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
         <circle cx="${pt.x}" cy="${pt.y}" r="4" fill="${color}" />
       `;
     } else {
+      // District Sector Node (Concentric Circle with Hatch or Solid)
       svgHtml += `
-        <rect x="${pt.x - 12}" y="${pt.y - 12}" width="24" height="24" rx="4" fill="${color}" stroke="#ffffff" stroke-width="1.5" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="15" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : 'rgba(8,14,26,0.9)'}" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="4.5" fill="${color}" />
       `;
     }
 
+    // Callout Label Banner
     svgHtml += `
-      <text x="${pt.x}" y="${pt.y + 24}" fill="#f8fafc" font-size="11" font-weight="600" text-anchor="middle" style="text-shadow: 0 1px 3px #000;">
-        ${f.geo_name.split(" ")[0]}
-      </text>
-      <text x="${pt.x}" y="${pt.y + 36}" fill="#94a3b8" font-size="9" text-anchor="middle">
-        [${f.risk_tier.toUpperCase()}]
-      </text>
+        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 18}" width="${nameWidth}" height="18" rx="3" fill="#060a14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" />
+        <text x="${pt.x}" y="${pt.y + 31}" fill="#f8fafc" font-size="9.5" font-weight="700" text-anchor="middle">
+          ${displayName}
+        </text>
+        <text x="${pt.x}" y="${pt.y + 44}" fill="${color}" font-size="8" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+          [${f.risk_tier.toUpperCase()}]
+        </text>
+      </g>
     `;
   });
 

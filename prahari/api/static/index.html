@@ -3,7 +3,10 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Munzir (منذر) | Population & Workforce Health Early Warning Platform</title>
+ <title>Munzir (منذر) | Population &amp; Workforce Health Early Warning Platform</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -145,7 +148,7 @@
  <div id="situationSvgMap" class="map-svg-container"></div>
 
  <div style="margin-top:0.75rem; display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8;">
- <span>Legend: Solid = Exact Worksite (● / ■) | Striped Hatch = District Aggregated Estimate (Hatched)</span>
+ <span>Legend: Solid Node = Monitored Industrial Worksite | Striped Hatch = District Aggregated Estimate (Hatched)</span>
  <span>Cluster Scan: Red Dashed Circle = Active L3 Space-Time Permutation Cluster (p &lt; 0.05)</span>
  </div>
  </div>
@@ -2528,7 +2531,12 @@
  </div>
 
  <button id="pttMicButton" class="mic-ptt-btn" onclick="togglePushToTalk()" title="Click to speak or transmit">
- 
+  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+    <line x1="12" y1="19" x2="12" y2="23"></line>
+    <line x1="8" y1="23" x2="16" y2="23"></line>
+  </svg>
  </button>
  <div id="pttStatusText" style="font-size:0.8rem; color:#f87171; margin-top:0.75rem; font-weight:700;">
  CLICK TO TRANSMIT (Push-to-Talk)
