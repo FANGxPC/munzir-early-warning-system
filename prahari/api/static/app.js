@@ -4638,6 +4638,8 @@ async function initHeaderLiveNwpBadge() {
     if (res && res.telemetry) {
       const wbgtEl = document.getElementById("headerBadgeWbgt");
       if (wbgtEl) wbgtEl.textContent = `${res.telemetry.live_calculated_wbgt_c.toFixed(1)}°C`;
+      const tacEl = document.getElementById("tacticalWbgt");
+      if (tacEl) tacEl.textContent = res.telemetry.live_calculated_wbgt_c.toFixed(1);
       const shaEl = document.getElementById("headerBadgeSha");
       if (shaEl && res.audit_seal_sha256) {
         shaEl.textContent = `[${res.audit_seal_sha256.substring(0, 8)}...]`;
@@ -4803,10 +4805,10 @@ function toggleSystemTelemetryHud() {
   if (body) {
     if (body.style.display === "none" || !body.style.display) {
       body.style.display = "block";
-      if (label) label.textContent = "Click to Minimize Telemetry ▼";
+      if (label) label.textContent = "Click to Minimize Telemetry [-]";
     } else {
       body.style.display = "none";
-      if (label) label.textContent = "Click to Expand Telemetry ▲";
+      if (label) label.textContent = "Click to Expand Telemetry [+]";
     }
   }
 }
@@ -4818,6 +4820,7 @@ function exportJuryDossier() {
 window.exportJuryDossier = exportJuryDossier;
 
 function launchInnovationProof(key) {
+  closeSystemDossierModal();
   closeInnovationsMatrixModal();
 
   switch (key) {
@@ -5004,26 +5007,76 @@ function filterCapabilitiesMatrix(category) {
 window.filterCapabilitiesMatrix = filterCapabilitiesMatrix;
 
 // ==============================================================================
-// --- Phase 36: System Architecture Modal & Evaluator 1-Click Showcase ---
+// --- Phase 36: System Dossier Modal & Evaluator 1-Click Showcase ---
 // ==============================================================================
 
-function openSystemArchitectureModal() {
-  const m = document.getElementById("systemArchitectureModal");
-  if (m) m.style.display = "flex";
-}
-window.openSystemArchitectureModal = openSystemArchitectureModal;
+const DOSSIER_PANEL_IDS = {
+  arch: "dossierPanelArch",
+  models: "dossierPanelModels",
+  lakehouse: "dossierPanelLakehouse",
+  ai: "dossierPanelAI",
+  audit: "dossierPanelAudit",
+};
 
-function closeSystemArchitectureModal() {
-  const m = document.getElementById("systemArchitectureModal");
-  if (m) m.style.display = "none";
-}
-window.closeSystemArchitectureModal = closeSystemArchitectureModal;
+const DOSSIER_BTN_IDS = {
+  arch: "tabBtnDossierArch",
+  models: "tabBtnDossierModels",
+  lakehouse: "tabBtnDossierLakehouse",
+  ai: "tabBtnDossierAI",
+  audit: "tabBtnDossierAudit",
+};
 
-// Modal Aliases for Verification Ticker
-window.openLakehouseInspectionModal = openLakehouseInspectorModal;
-window.closeLakehouseInspectionModal = closeLakehouseInspectorModal;
-window.openCudaInspectionModal = openCudaInspectorModal;
-window.closeCudaInspectionModal = closeCudaInspectorModal;
+function switchDossierTab(tabKey) {
+  for (const [key, panelId] of Object.entries(DOSSIER_PANEL_IDS)) {
+    const panel = document.getElementById(panelId);
+    const btn = document.getElementById(DOSSIER_BTN_IDS[key]);
+    if (panel) {
+      if (key === tabKey) {
+        panel.style.display = "block";
+        panel.classList.add("active");
+      } else {
+        panel.style.display = "none";
+        panel.classList.remove("active");
+      }
+    }
+    if (btn) {
+      if (key === tabKey) btn.classList.add("active");
+      else btn.classList.remove("active");
+    }
+  }
+}
+window.switchDossierTab = switchDossierTab;
+
+function openSystemDossierModal(tabKey) {
+  const modal = document.getElementById("systemDossierModal");
+  if (modal) modal.style.display = "flex";
+  if (tabKey) switchDossierTab(tabKey);
+}
+window.openSystemDossierModal = openSystemDossierModal;
+
+function closeSystemDossierModal() {
+  const modal = document.getElementById("systemDossierModal");
+  if (modal) modal.style.display = "none";
+}
+window.closeSystemDossierModal = closeSystemDossierModal;
+
+// Backward-compatible Modal Aliases
+window.openInnovationsMatrixModal = function() { openSystemDossierModal("models"); };
+window.closeInnovationsMatrixModal = closeSystemDossierModal;
+window.openSystemArchitectureModal = function() { openSystemDossierModal("arch"); };
+window.closeSystemArchitectureModal = closeSystemDossierModal;
+window.openLakehouseInspectorModal = function() { openSystemDossierModal("lakehouse"); };
+window.closeLakehouseInspectorModal = closeSystemDossierModal;
+window.openLakehouseInspectionModal = function() { openSystemDossierModal("lakehouse"); };
+window.closeLakehouseInspectionModal = closeSystemDossierModal;
+window.openCudaInspectorModal = function() { openSystemDossierModal("ai"); };
+window.closeCudaInspectorModal = closeSystemDossierModal;
+window.openCudaInspectionModal = function() { openSystemDossierModal("ai"); };
+window.closeCudaInspectionModal = closeSystemDossierModal;
+window.openTestIntegrityModal = function() { openSystemDossierModal("audit"); };
+window.closeTestIntegrityModal = closeSystemDossierModal;
+window.openZeroMockAuditModal = function() { openSystemDossierModal("audit"); };
+window.closeZeroMockAuditModal = closeSystemDossierModal;
 
 function ensureProofDrawerOpen(drawerId) {
   const drawer = document.getElementById(drawerId);
@@ -5036,6 +5089,7 @@ window.ensureProofDrawerOpen = ensureProofDrawerOpen;
 
 function launchEvaluatorShowcase(featureKey) {
   // Close any overlay modals first
+  closeSystemDossierModal();
   closeSystemArchitectureModal();
   if (typeof closeInnovationsMatrixModal === "function") closeInnovationsMatrixModal();
   if (typeof closeZeroMockAuditModal === "function") closeZeroMockAuditModal();
