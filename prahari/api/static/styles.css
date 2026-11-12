@@ -1416,24 +1416,7 @@ input:checked + .slider:before {
   border-color: #10b981;
 }
 
-/* Phase 30: Grand Jury Pitch Tour */
-.tour-step-card {
-  background: #0b1329;
-  border: 1px solid #38bdf8;
-  border-radius: 8px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-}
 
-.tour-step-badge {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
 
 
 

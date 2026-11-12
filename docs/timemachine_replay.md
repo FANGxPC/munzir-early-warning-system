@@ -76,14 +76,14 @@ May 01 - Jun 22  [Quiet Spring Baseline]
 
 Jun 23, 2021     [Advance Meteorological Incursion Detected]
                  • Observed Temp: 25.2°C (Mild today) | 48h WBGT Forecast: 32.4°C (Extreme heat incoming)
-                 • Munzir Alert: ⚠️ PREVENTIVE WARNING (calibrated risk: 67%)
+                 • Munzir Alert: [Warning] PREVENTIVE WARNING (calibrated risk: 67%)
                  • Action Protocol: Issue Proactive Heat Strain Advisory; stage shaded rest areas
                  • Static Threshold: NORMAL (Fails to alert because today is 25.2°C)
 
 Jun 25, 2021     [Heat Dome Onset — First Visible Clinical Uptick]
                  • Observed Temp: 30.0°C | WBGT: 28.1°C | 48h Forecast: 34.8°C
                  • Cumulative reported visits: 71
-                 • Munzir Alert: ⚠️ PREVENTIVE WARNING MAINTAINED
+                 • Munzir Alert: [Warning] PREVENTIVE WARNING MAINTAINED
                  • Static Threshold: NORMAL (Still below 35°C threshold)
 
 Jun 26, 2021     [Severe Heat Wave Surge]
@@ -117,7 +117,7 @@ make timemachine EVENT=dubai_2024
 ### Via Interactive Web Dashboard:
 1. Start the Munzir web application: `make serve`
 2. Open `http://localhost:8000` in your browser.
-3. Click the **⏱️ Time Machine Replay** tab in the top navigation bar.
+3. Click the **[Replay] Time Machine Replay** tab in the top navigation bar.
 4. Use the **Play / Pause** button or drag the **Date Scrubber Slider** to observe the day-by-day intelligence view, the advance lead-time bracket, and the visual boundary of data not yet reported.
 5. Click **[INSPECT] Inspect Detailed Evidence Card** to examine the explainable SHAP feature attribution breakdown.
 

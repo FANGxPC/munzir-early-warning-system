@@ -156,11 +156,11 @@ At any point during the pitch or Q&A, click **[CHAMPIONSHIP] 3-Min Grand Jury To
 | **Header** | Hover `[ORBIT]️ NWP LIVE` seal | Verified green badge with SHA-256 telemetry seal | Direct API verification at `/api/v1/telemetry/live-verify` |
 | **00:50** | Click `Renal Biomarkers` tab | Dual-axis eGFR & dehydration trajectory; +11.5d lead time badge | Point to pre-rendered SVG curve in the card |
 | **01:30** | Click `1️⃣ Scenario 1` button | Jebel Ali turns orange; Evidence Card opens with SHAP & RACI | Click Warning badge directly in Alert Inbox |
-| **02:10** | Click `⚡ Sample Telemetry` | Physical ESP32 double-pulse buzz; amber LED blinks | Point to interactive digital twin widget on screen |
+| **02:10** | Click `[Action] Sample Telemetry` | Physical ESP32 double-pulse buzz; amber LED blinks | Point to interactive digital twin widget on screen |
 | **02:25** | Press physical **BOOT button** | Buzzer mutes; green `MUTED` badge; compliance receipt | Click `[ACTION] Press BOOT Button` in the browser UI |
 | **02:50** | Click `2️⃣ Scenario 2` button | Muhaisnah to Jebel Ali transit corridor; 95% spatial ellipse | Deconvolution runs deterministically via local API |
 | **03:05** | Click `[RESEARCH] Bayesian Causal` subtab | De-mixes 25-worker cohort (73% Heat + 27% Norovirus) | Load preset buttons directly inside view |
-| **03:30** | Click `Municipal Staging` tab | Radar view shows 5 buses, 12 trailers, water tankers, DCAS | Click `⚡ Optimize Staging` to re-render allocations |
+| **03:30** | Click `Municipal Staging` tab | Radar view shows 5 buses, 12 trailers, water tankers, DCAS | Click `[Action] Optimize Staging` to re-render allocations |
 | **03:45** | Click `[HYDRATION] Confirm Hydration` on Phone | Outgoing WhatsApp bubble ([OK][OK]); Lakehouse sync receipt | Logs directly to `/api/v1/intercom/action-confirm` |
 | **04:10** | Click `[AI] Jais Dispatch` tab | Smartphone mockup displays WhatsApp card in Urdu/Hindi | Audio plays via browser Web Speech API synthesis |
 | **04:20** | Click `[MIC]️ Scenario 5` button | Intercom console loads Urdu emergency; speaks dispatch | In-situ WBGT corroborated against Lakehouse |

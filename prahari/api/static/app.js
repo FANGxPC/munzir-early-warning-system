@@ -4762,102 +4762,12 @@ function activateTab(tabName) {
 }
 window.activateTab = activateTab;
 
-let currentTourStep = 1;
-
-const TOUR_STEPS = [
-  {
-    step: 1,
-    rubric: "01. Multi-Signal Surveillance & Live Satellite NWP Telemetry",
-    title: "Real Ingestion: Live Open-Meteo Satellite Model + Lakehouse Telemetry",
-    badgeColor: "#10b981",
-    summary: "Munzir combines materially distinct signals: Open-Meteo live NWP satellite forecasting, Sentinel ESP32 microclimate IoT telemetry, OSHA severe occupational injuries, and openFDA clinical vulnerability feeds. Zero synthetic mock shortcuts.",
-    actionLabel: "Probe Live Dubai NWP Telemetry & Verify SHA-256 Seal",
-    actionFn: () => {
-      openZeroMockAuditModal();
-      if (typeof verifyLiveTelemetry === "function") verifyLiveTelemetry();
-    }
-  },
-  {
-    step: 2,
-    rubric: "02. Technical Depth: ISO 7933 Rational Heat Balance & 72h Debt",
-    title: "Thermodynamics: Uncompensable Storage & Nocturnal Recovery Deficit",
-    badgeColor: "#f59e0b",
-    summary: "Implements full peer-reviewed physics: solving human skin wettedness, maximum evaporative capacity (E_max), and core temperature differentials, tracking cumulative 72-hour nocturnal debt where high night temps (>28°C) block cardiac recovery.",
-    actionLabel: "Run ISO 7933 PHS Physics Engine & Thermal Debt",
-    actionFn: () => {
-      switchMissionPillar('clinical');
-      activateTab('phs');
-      if (typeof runPHSAssessment === "function") runPHSAssessment();
-    }
-  },
-  {
-    step: 3,
-    rubric: "03. Explainable Anomaly Detection: Bayesian Causal De-Mixing",
-    title: "Epidemiological De-Mixing: Heat Stroke vs Camp Canteen Norovirus vs Dust",
-    badgeColor: "#38bdf8",
-    summary: "Directly solves the challenge's core problem: differentiating ambiguous symptom clusters in worker camps. Uses clinical likelihood ratios (LR) and Dirichlet 90% credible intervals to assign exact tri-agency RACI mandates (MOHRE, Dubai Municipality, DHA).",
-    actionLabel: "Test Co-Morbid Outbreak De-Mixing Live",
-    actionFn: () => {
-      switchMissionPillar('clinical');
-      activateTab('causal');
-      if (typeof loadCausalPreset === "function") loadCausalPreset('comorbid');
-    }
-  },
-  {
-    step: 4,
-    rubric: "04. Responsible AI, Safety & Safe-Harbor Privacy Defense",
-    title: "Statutory Safe-Harbor Shield: UAE Law No. 33 Article 13 & Law No. 45",
-    badgeColor: "#8b5cf6",
-    summary: "Protects vulnerable laborers by legally and cryptographically blocking employer disciplinary tracking. Any attempt to query individual worker break logs or biometric identities is quarantined with an immediate HTTP 403 Forbidden.",
-    actionLabel: "Fire Test Disciplinary Query (Verify HTTP 403 Defense)",
-    actionFn: () => {
-      switchMissionPillar('resilience');
-      activateTab('safeharbor');
-      if (typeof testDisciplinaryQuery === "function") testDisciplinaryQuery();
-    }
-  },
-  {
-    step: 5,
-    rubric: "05. Working Solution: Sovereign Jais Voice Intercom & WhatsApp Sync",
-    title: "Frontline Operational Reality: Arabic/Urdu Push-to-Talk & WhatsApp API",
-    badgeColor: "#ec4899",
-    summary: "Equips frontline foremen on scaffolds with hands-free push-to-talk voice radio on local CUDA GPU (Inception 42 Jais-3-0.9B) and interactive WhatsApp buttons that write back live to the Lakehouse, attenuating worker thermal debt.",
-    actionLabel: "Open Voice Intercom & Transmit Radio Turn",
-    actionFn: () => {
-      switchMissionPillar('sovereign_ai');
-      activateTab('intercom');
-      if (typeof loadVoicePreset === "function") loadVoicePreset('ur');
-    }
-  },
-  {
-    step: 6,
-    rubric: "06. Commercial Viability & Path to Pilot: MOHRE Policy Studio",
-    title: "Macroeconomic Public Dividend: AED 4.8M Net Savings across 50,000 Workers",
-    badgeColor: "#10b981",
-    summary: "Empowers MOHRE and health authorities to simulate counterfactual regulatory amendments to the Midday Work Ban across 50,000 outdoor workers with N=1,000 Monte Carlo draws, proving a 4.8x median Benefit-to-Cost Ratio (BCR).",
-    actionLabel: "Replay 50k Worker Ministerial Policy Counterfactual",
-    actionFn: () => {
-      switchMissionPillar('resilience');
-      activateTab('policystudio');
-      if (typeof runPolicySimulation === "function") runPolicySimulation();
-    }
-  }
-];
-
-function startGrandJuryTour() {
-  openInnovationsMatrixModal();
+// Initialize header badge when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initHeaderLiveNwpBadge);
+} else {
+  initHeaderLiveNwpBadge();
 }
-window.startGrandJuryTour = startGrandJuryTour;
-
-function closeGrandJuryModal() {
-  closeInnovationsMatrixModal();
-}
-window.closeGrandJuryModal = closeGrandJuryModal;
-
-function executeTourLiveAction(stepNum) {
-  closeInnovationsMatrixModal();
-}
-window.executeTourLiveAction = executeTourLiveAction;
 
 // Initialize header badge when DOM is ready
 if (document.readyState === "loading") {

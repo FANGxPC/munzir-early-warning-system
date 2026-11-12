@@ -124,8 +124,8 @@ The Sentinel node delivers dual-channel sensory alerting (visual RGB LED + audib
 | Node Offline | `Offline` | **Blue Blip (100ms flash / 2s)** | **Silent** | Local fallback mode; dashboard displays offline badge |
 | Sensor Fault | `Fault` | **Magenta Blink** | **Low error click** (400 Hz, 50ms) | Gated; valid sensors continue transmission |
 
-### Web UI Manual Telemetry Trigger (`⚡ Sample Telemetry`)
-In addition to the autonomous 60-second hardware loop, operators and evaluators can click **`⚡ Sample Telemetry`** directly on the Sentinel dashboard panel. This immediately pushes the latest sensor values to `/api/v1/sentinel/upload` and synchronizes the physical buzzer and LED pattern without waiting for the next cron cycle.
+### Web UI Manual Telemetry Trigger (`[Action] Sample Telemetry`)
+In addition to the autonomous 60-second hardware loop, operators and evaluators can click **`[Action] Sample Telemetry`** directly on the Sentinel dashboard panel. This immediately pushes the latest sensor values to `/api/v1/sentinel/upload` and synchronizes the physical buzzer and LED pattern without waiting for the next cron cycle.
 
 ### Heartbeat Watchdog & Stuck Sensor Detection
 - **Offline Watchdog:** If a node misses 3 consecutive uploads ($> 180$ seconds), the server marks `is_online = False` and triggers conformal interval widening.
