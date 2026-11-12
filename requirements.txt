@@ -23,3 +23,7 @@ lightgbm>=4.0.0
 shap>=0.45.0
 mapie>=1.0.0
 
+# Sovereign AI & Neural LLM Inference (Phase 17)
+torch>=2.0.0
+transformers>=4.40.0
+

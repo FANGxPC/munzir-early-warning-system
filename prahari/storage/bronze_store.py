@@ -5,6 +5,7 @@ incident reports, and ground truth records. Supports local file system and
 pluggable Azure Blob Storage sync.
 """
 
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Optional, Union, Dict, Any
 import pandas as pd
@@ -90,19 +91,38 @@ class BronzeStore:
         target_signals = signal_types or [d.name for d in self.obs_dir.iterdir() if d.is_dir()]
         dfs = []
 
+        # High-performance date bounding: direct partition resolution instead of scanning thousands of disk files
+        target_dates = None
+        if start_date and end_date:
+            try:
+                d_start = datetime.strptime(start_date, "%Y-%m-%d")
+                d_end = datetime.strptime(end_date, "%Y-%m-%d")
+                delta_days = (d_end - d_start).days
+                if 0 <= delta_days <= 366:
+                    target_dates = [
+                        (d_start + timedelta(days=i)).strftime("%Y-%m-%d")
+                        for i in range(delta_days + 1)
+                    ]
+            except Exception:
+                target_dates = None
+
         for sig in target_signals:
             sig_dir = self.obs_dir / sig
             if not sig_dir.exists():
                 continue
 
-            for file_path in sig_dir.glob("*.parquet"):
-                # Fast date filtering from filename (format: YYYY-MM-DD.parquet)
-                date_str = file_path.stem
-                if start_date and date_str < start_date:
-                    continue
-                if end_date and date_str > end_date:
-                    continue
+            if target_dates is not None:
+                candidate_files = [sig_dir / f"{d}.parquet" for d in target_dates]
+                candidate_files = [f for f in candidate_files if f.exists()]
+            else:
+                candidate_files = [
+                    file_path for file_path in sig_dir.glob("*.parquet")
+                    if not file_path.name.endswith(".tmp.parquet")
+                    and (not start_date or file_path.stem >= start_date)
+                    and (not end_date or file_path.stem <= end_date)
+                ]
 
+            for file_path in candidate_files:
                 table = pq.read_table(file_path)
                 df = table.to_pandas()
                 if geo_id:
@@ -110,10 +130,11 @@ class BronzeStore:
                 if not df.empty:
                     dfs.append(df)
 
-        if not dfs:
+        clean_dfs = [d.dropna(how="all", axis=1) for d in dfs if not d.empty]
+        if not clean_dfs:
             return pd.DataFrame()
 
-        result = pd.concat(dfs, ignore_index=True)
+        result = pd.concat(clean_dfs, ignore_index=True)
         result.sort_values(by=["obs_date", "signal_type", "geo_id"], inplace=True)
         return result
 
@@ -151,9 +172,10 @@ class BronzeStore:
                 df = df[df["site_id"] == site_id]
             if not df.empty:
                 dfs.append(df)
-        if not dfs:
+        clean_dfs = [d.dropna(how="all", axis=1) for d in dfs if not d.empty]
+        if not clean_dfs:
             return pd.DataFrame()
-        return pd.concat(dfs, ignore_index=True)
+        return pd.concat(clean_dfs, ignore_index=True)
 
     def write_ground_truth(self, events: List[InjectedEventTruth]) -> int:
         """Store injected event ground truth for validation and scoring."""
@@ -201,9 +223,10 @@ class BronzeStore:
                 continue
             table = pq.read_table(file_path)
             dfs.append(table.to_pandas())
-        if not dfs:
+        clean_dfs = [d.dropna(how="all", axis=1) for d in dfs if not d.empty]
+        if not clean_dfs:
             return pd.DataFrame()
-        return pd.concat(dfs, ignore_index=True)
+        return pd.concat(clean_dfs, ignore_index=True)
 
     def get_summary_stats(self) -> Dict[str, Any]:
         """Return dataset row counts and date spans across bronze tables."""
@@ -216,6 +239,8 @@ class BronzeStore:
                 if sig_dir.is_dir():
                     signals_found.add(sig_dir.name)
                     for f in sig_dir.glob("*.parquet"):
+                        if f.name.endswith(".tmp.parquet"):
+                            continue
                         dates_found.add(f.stem)
                         # Read metadata without loading whole file
                         meta = pq.read_metadata(f)

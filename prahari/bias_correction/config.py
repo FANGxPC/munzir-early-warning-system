@@ -58,3 +58,4 @@ def get_humidity_regime(rh_pct: float) -> str:
         return "moderate"
     else:
         return "high"
+

@@ -42,7 +42,7 @@ def test_deterministic_template_generation():
 
     narrative = NarrativeGenerator.generate_deterministic_template(alert, playbook, evidence_summary)
 
-    assert "PRAHARI SITUATIONAL BRIEFING" in narrative
+    assert "Munzir" in narrative and "Situational Briefing" in narrative
     assert "SITE-JA-01" in narrative
     assert "2025-08-20" in narrative
     assert "96.0%" in narrative
@@ -117,5 +117,5 @@ def test_fenced_llm_verification_rejects_hallucinated_numbers_and_falls_back():
     assert was_accepted is False
     assert "47.5" not in result
     assert "12 hospitalizations" not in result
-    assert "PRAHARI SITUATIONAL BRIEFING" in result
+    assert "Munzir" in result and "Situational Briefing" in result
 

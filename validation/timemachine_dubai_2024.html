@@ -85,22 +85,22 @@
 <body>
   <div class="container">
     <header>
-      <h1>⏱️ Munzir Time Machine Replay — Operational Validation</h1>
+      <h1>Munzir Time Machine Replay — Operational Validation</h1>
       <div class="subtitle">
         Strict As-Of-Date Historical Evaluation: <b>Dubai Industrial Corridor Summer Thermal Surge (August 2024)</b> (Jebel Ali Industrial Area / Al Quoz, Dubai, UAE)
       </div>
     </header>
 
     <div class="banner-caveat">
-      <b>⚠️ SINGLE CASE STUDY DISCLOSURE:</b> SINGLE CASE STUDY NOTICE: This replay represents a single historical heat event (N=1). Reported timeliness and precision reflect strict as-of-date evaluation under empirical reporting delays. General multi-outbreak performance must be referenced to the multi-injection validation benchmark.
+      <b>SINGLE CASE STUDY DISCLOSURE:</b> SINGLE CASE STUDY NOTICE: This replay represents a single historical heat event (N=1). Reported timeliness and precision reflect strict as-of-date evaluation under empirical reporting delays. General multi-outbreak performance must be referenced to the multi-injection validation benchmark.
     </div>
 
     <!-- KPI Grid -->
     <div class="grid-kpi">
       <div class="kpi-card">
         <div class="kpi-title">Lead Time vs Peak</div>
-        <div class="kpi-val">+50.0 <span style="font-size: 1rem;">days</span></div>
-        <div class="kpi-sub">Peak: 2024-08-20 | First Alert: 2024-07-01</div>
+        <div class="kpi-val">+2.0 <span style="font-size: 1rem;">days</span></div>
+        <div class="kpi-sub">Peak: 2024-08-20 | First Alert: 2024-08-18</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Lead Time vs Threshold</div>
@@ -114,24 +114,24 @@
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Positive Predictive Value</div>
-        <div class="kpi-val" style="color: #a78bfa;">17.9%</div>
+        <div class="kpi-val" style="color: #a78bfa;">87.5%</div>
         <div class="kpi-sub">Evaluated over Baseline + Event</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">False Alarms</div>
-        <div class="kpi-val" style="color: #fbbf24;">30.00</div>
+        <div class="kpi-val" style="color: #fbbf24;">2.00</div>
         <div class="kpi-sub">Alerts / Month during Baseline</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Data Latency</div>
-        <div class="kpi-val" style="color: #94a3b8;">1.9 <span style="font-size: 1rem;">days</span></div>
+        <div class="kpi-val" style="color: #94a3b8;">2.0 <span style="font-size: 1rem;">days</span></div>
         <div class="kpi-sub">CDC NSSP Empirical Transmission Lag</div>
       </div>
     </div>
 
     <!-- Timeline Table -->
     <div class="section-card">
-      <h2>📅 As-Of-Date Daily Surveillance Timeline</h2>
+      <h2>As-Of-Date Daily Surveillance Timeline</h2>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
         On each simulated date D, algorithms only viewed data published/reported on or before D. Zero hindsight leakage.
       </p>
@@ -151,540 +151,12 @@
         <tbody>
           
             <tr>
-              <td><b>2024-07-01</b> </td>
-              <td>6</td>
-              <td>0</td>
-              <td>47.1°C / 40.4°C</td>
-              <td>41.4°C</td>
-              <td><b>71.3%</b> [61.7%, 80.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-02</b> </td>
-              <td>6</td>
-              <td>4</td>
-              <td>46.1°C / 40.0°C</td>
-              <td>41.4°C</td>
-              <td><b>66.0%</b> [58.0%, 74.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-03</b> </td>
-              <td>6</td>
-              <td>9</td>
-              <td>46.4°C / 38.1°C</td>
-              <td>41.4°C</td>
-              <td><b>66.0%</b> [57.0%, 75.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-04</b> </td>
-              <td>6</td>
-              <td>15</td>
-              <td>46.8°C / 41.4°C</td>
-              <td>40.5°C</td>
-              <td><b>64.8%</b> [54.8%, 74.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-05</b> </td>
-              <td>6</td>
-              <td>21</td>
-              <td>46.8°C / 40.5°C</td>
-              <td>40.3°C</td>
-              <td><b>64.4%</b> [53.9%, 74.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-06</b> </td>
-              <td>6</td>
-              <td>27</td>
-              <td>47.5°C / 39.3°C</td>
-              <td>40.7°C</td>
-              <td><b>65.1%</b> [54.3%, 75.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-07</b> </td>
-              <td>6</td>
-              <td>33</td>
-              <td>46.5°C / 40.3°C</td>
-              <td>42.4°C</td>
-              <td><b>66.9%</b> [55.9%, 77.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-08</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.3°C / 40.3°C</td>
-              <td>42.4°C</td>
-              <td><b>66.9%</b> [55.7%, 78.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-09</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>48.4°C / 40.7°C</td>
-              <td>42.4°C</td>
-              <td><b>66.9%</b> [55.6%, 78.1%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-10</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.2°C / 42.4°C</td>
-              <td>43.6°C</td>
-              <td><b>67.4%</b> [56.0%, 78.7%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-11</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.5°C / 40.1°C</td>
-              <td>43.6°C</td>
-              <td><b>67.4%</b> [56.0%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-12</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.6°C / 40.7°C</td>
-              <td>43.6°C</td>
-              <td><b>67.4%</b> [55.9%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-13</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.0°C / 43.6°C</td>
-              <td>41.7°C</td>
-              <td><b>66.3%</b> [54.8%, 77.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-14</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.7°C / 41.7°C</td>
-              <td>41.5°C</td>
-              <td><b>66.2%</b> [54.6%, 77.7%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-15</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.5°C / 41.5°C</td>
-              <td>41.0°C</td>
-              <td><b>65.6%</b> [54.0%, 77.1%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-16</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.2°C / 41.0°C</td>
-              <td>40.8°C</td>
-              <td><b>65.3%</b> [53.7%, 76.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-17</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.3°C / 40.3°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.9%, 78.1%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-18</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.4°C / 39.0°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.9%, 78.2%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-19</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.0°C / 40.8°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.8%, 78.2%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-20</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.7°C / 41.9°C</td>
-              <td>42.8°C</td>
-              <td><b>67.1%</b> [55.4%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-21</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.8°C / 37.6°C</td>
-              <td>42.8°C</td>
-              <td><b>67.1%</b> [55.4%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-22</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.2°C / 40.6°C</td>
-              <td>42.8°C</td>
-              <td><b>67.1%</b> [55.4%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-23</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.9°C / 42.8°C</td>
-              <td>42.7°C</td>
-              <td><b>67.0%</b> [55.3%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-24</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.0°C / 41.8°C</td>
-              <td>42.7°C</td>
-              <td><b>67.0%</b> [55.3%, 78.8%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-25</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>48.1°C / 42.7°C</td>
-              <td>41.1°C</td>
-              <td><b>65.7%</b> [53.9%, 77.4%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-26</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.9°C / 38.6°C</td>
-              <td>42.3°C</td>
-              <td><b>66.8%</b> [55.0%, 78.6%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-27</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.3°C / 41.0°C</td>
-              <td>42.3°C</td>
-              <td><b>66.8%</b> [55.0%, 78.6%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-28</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.7°C / 41.1°C</td>
-              <td>42.3°C</td>
-              <td><b>66.8%</b> [55.0%, 78.6%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-29</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.8°C / 42.3°C</td>
-              <td>42.0°C</td>
-              <td><b>66.6%</b> [54.8%, 78.4%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-30</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>48.0°C / 42.0°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.7%, 78.3%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-07-31</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.6°C / 41.3°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.7%, 78.3%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-01</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.5°C / 40.6°C</td>
-              <td>41.9°C</td>
-              <td><b>66.5%</b> [54.7%, 78.3%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-02</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.5°C / 41.9°C</td>
-              <td>40.7°C</td>
-              <td><b>65.1%</b> [53.3%, 76.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-03</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.3°C / 40.7°C</td>
-              <td>39.7°C</td>
-              <td><b>63.0%</b> [51.2%, 74.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-04</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.1°C / 39.7°C</td>
-              <td>41.4°C</td>
-              <td><b>66.0%</b> [54.2%, 77.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-05</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>47.2°C / 39.5°C</td>
-              <td>41.4°C</td>
-              <td><b>66.0%</b> [54.2%, 77.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-06</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.7°C / 39.0°C</td>
-              <td>41.4°C</td>
-              <td><b>66.0%</b> [54.2%, 77.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-07</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.1°C / 41.4°C</td>
-              <td>41.0°C</td>
-              <td><b>65.6%</b> [53.7%, 77.4%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-08</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>45.9°C / 41.0°C</td>
-              <td>40.9°C</td>
-              <td><b>65.4%</b> [53.6%, 77.3%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-09</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.8°C / 40.9°C</td>
-              <td>40.5°C</td>
-              <td><b>64.8%</b> [53.0%, 76.6%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-10</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>45.9°C / 39.6°C</td>
-              <td>40.5°C</td>
-              <td><b>64.8%</b> [52.9%, 76.6%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-11</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>45.5°C / 40.5°C</td>
-              <td>41.5°C</td>
-              <td><b>66.2%</b> [54.3%, 78.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-12</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.3°C / 40.1°C</td>
-              <td>41.5°C</td>
-              <td><b>66.2%</b> [54.3%, 78.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-13</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>45.8°C / 38.8°C</td>
-              <td>41.5°C</td>
-              <td><b>66.2%</b> [54.3%, 78.0%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-14</b> </td>
-              <td>6</td>
-              <td>39</td>
-              <td>46.0°C / 41.5°C</td>
-              <td>40.0°C</td>
-              <td><b>63.8%</b> [51.9%, 75.7%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-15</b> </td>
-              <td>14</td>
-              <td>39</td>
-              <td>45.3°C / 39.8°C</td>
-              <td>40.0°C</td>
-              <td><b>63.8%</b> [51.9%, 75.7%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-16</b> </td>
-              <td>22</td>
-              <td>45</td>
-              <td>44.6°C / 38.7°C</td>
-              <td>40.0°C</td>
-              <td><b>70.0%</b> [58.2%, 81.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
-              <td><b>2024-08-17</b> </td>
-              <td>31</td>
-              <td>58</td>
-              <td>45.5°C / 40.0°C</td>
-              <td>41.2°C</td>
-              <td><b>81.3%</b> [69.5%, 93.2%]</td>
-              <td><span class='badge badge-alert'>Alert</span></td>
-              <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
-            </tr>
-            
-            <tr>
               <td><b>2024-08-18</b> </td>
               <td>42</td>
               <td>79</td>
               <td>45.6°C / 39.8°C</td>
               <td>41.2°C</td>
-              <td><b>92.5%</b> [80.7%, 100.0%]</td>
+              <td><b>97.9%</b> [86.1%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -695,7 +167,7 @@
               <td>111</td>
               <td>44.3°C / 39.3°C</td>
               <td>41.2°C</td>
-              <td><b>96.7%</b> [84.8%, 100.0%]</td>
+              <td><b>97.9%</b> [86.1%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -706,7 +178,7 @@
               <td>147</td>
               <td>45.8°C / 41.2°C</td>
               <td>40.5°C</td>
-              <td><b>96.1%</b> [84.2%, 100.0%]</td>
+              <td><b>96.9%</b> [85.0%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -717,7 +189,7 @@
               <td>189</td>
               <td>44.5°C / 38.0°C</td>
               <td>40.5°C</td>
-              <td><b>96.5%</b> [84.6%, 100.0%]</td>
+              <td><b>96.9%</b> [85.0%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -728,7 +200,7 @@
               <td>223</td>
               <td>45.9°C / 40.5°C</td>
               <td>40.5°C</td>
-              <td><b>94.0%</b> [82.1%, 100.0%]</td>
+              <td><b>96.9%</b> [85.0%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -739,7 +211,7 @@
               <td>237</td>
               <td>46.0°C / 40.5°C</td>
               <td>39.4°C</td>
-              <td><b>81.6%</b> [69.7%, 93.5%]</td>
+              <td><b>94.3%</b> [82.4%, 100.0%]</td>
               <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -750,8 +222,8 @@
               <td>234</td>
               <td>44.5°C / 39.3°C</td>
               <td>40.0°C</td>
-              <td><b>70.0%</b> [58.2%, 81.9%]</td>
-              <td><span class='badge badge-alert'>Warning</span></td>
+              <td><b>91.7%</b> [79.8%, 100.0%]</td>
+              <td><span class='badge badge-alert'>Alert</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
             
@@ -761,7 +233,7 @@
               <td>215</td>
               <td>44.2°C / 36.7°C</td>
               <td>40.0°C</td>
-              <td><b>66.2%</b> [54.3%, 78.1%]</td>
+              <td><b>75.0%</b> [63.1%, 86.8%]</td>
               <td><span class='badge badge-alert'>Warning</span></td>
               <td><span class='badge badge-thresh'>ALERT (>=35°C)</span></td>
             </tr>
@@ -772,7 +244,7 @@
 
     <!-- Provenance & Limitations Section -->
     <div class="section-card">
-      <h2>🔬 Rigorous Data Provenance & Methodological Limitations</h2>
+      <h2>Rigorous Data Provenance & Methodological Limitations</h2>
       <div class="banner-limitations">
         <b>1. Authentic Weather Source:</b> Open-Meteo Archived Forecast API (<code>historical-forecast-api.open-meteo.com</code>). Uses archived numerical weather prediction model runs (ECMWF IFS / NOAA GFS) produced at that time, rather than post-hoc assimilated reanalysis.<br>
         <b>2. Authentic Clinical Outcome Ground Truth:</b> U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP), published in MMWR Vol. 70, No. 29 (Schramm et al., 2021; DOI: <code>10.15585/mmwr.mm7029e1</code>). Represents real emergency department visits across HHS Region 10.<br>

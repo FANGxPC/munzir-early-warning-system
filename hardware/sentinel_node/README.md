@@ -43,11 +43,11 @@ Open **Arduino IDE** $\to$ **Tools** $\to$ **Manage Libraries...** and install:
 ## 3. Commissioning the Node in Munzir
 
 1. Open your browser to the Munzir Dashboard: `http://localhost:8000`.
-2. Navigate to the **🔧 Sentinel Hardware** tab.
-3. Click **➕ Commission New Node**.
+2. Navigate to the **[TOOL] Sentinel Hardware** tab.
+3. Click **[+] Commission New Node**.
 4. Enter `SENT-001` (or matching `NODE_ID` in `config.h`).
 5. Select your target worksite (e.g. `SITE-JA-01`).
-6. Click **📱 Use This Device's Location** to grab browser GPS, or set coordinates.
-7. Click **✔ Complete Commissioning**.
+6. Click **[DEVICE] Use This Device's Location** to grab browser GPS, or set coordinates.
+7. Click **[OK] Complete Commissioning**.
 8. Within 60 seconds, the node table will update, showing the live measured WBGT, sensors status, and driving the on-board RGB LED to match the platform's alert level!
 

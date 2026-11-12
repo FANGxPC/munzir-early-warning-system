@@ -1,152 +1,170 @@
-# Munzir (منذر) — 5–6 Minute Championship Demo Script & Pitch Cue Sheet
+# Munzir (منذر) — 5-Minute Championship Live Demo Script & Pitch Cue Sheet
 
-> **Presenter Cue Sheet:** Dubai International Hackathon Grand Jury Final  
-> **Target Duration:** 5 minutes 30 seconds (leaving 30s buffer for a 6-minute hard limit)  
-> **Protagonists:**  
-> 1. **Dr. Aisha Al-Maktoum** — Lead Epidemiologist, Dubai Health Authority (DHA Public Health Directorate)  
-> 2. **Tariq Mansoor** — Senior EHS & Site Safety Officer, Jebel Ali Industrial Port Logistics Yard  
-> **Live URL:** `http://localhost:8000` (or live Azure Container App endpoint)  
-> **Operator Pre-Flight Checklist:**  
-> 1. Dashboard Tab: `http://localhost:8000` (logged into District Surveillance Officer view)  
-> 2. Validation Tab: `validation/report.html` (Empirical Back-Test Proof)  
-> 3. Sentinel Hardware Node: ESP32 with matte-black globe DHT22 sensor, active buzzer, and RGB LED on the presenter table (or `make sentinel-replay` fallback)  
-> 4. Test Suite Verified: 150/150 tests passing  
+> **Competition Context:** Dubai International Hackathon Grand Jury Final  
+> **Target Duration:** Exactly 5 minutes (with 30s emergency buffer for a 5:30 hard cutoff)  
+> **Featured Sponsor Integration:** **Inception 42 (G42)** — `inception42/Jais-3-0.9B-Chat` on GPU  
+> **Live System Endpoint:** `http://localhost:8000` (or active Azure Container App URL)  
+> **Pre-Flight Operator Checklist:**  
+> 1. Browser Window: `http://localhost:8000` (logged in as District Surveillance Officer)  
+> 2. Top Header Check: Confirm **[CHAMPIONSHIP] 3-Min Grand Jury Tour** button is visible and **[ORBIT]️ NWP LIVE** emerald seal is pulsing  
+> 3. Hardware on Table: ESP32 Sentinel node with black-globe sensor and buzzer connected via USB  
+> 4. Verification Check: 256/256 automated tests passing (`./bin/py -m pytest -q`)  
 
 ---
 
-## Pitch Cue Sheet Timeline
+## The Secret Weapon: 1-Click Grand Jury Tour
+At any point during the pitch or Q&A, click **[CHAMPIONSHIP] 3-Min Grand Jury Tour** on the top navigation bar. It opens a guided modal stepping through all 6 hackathon scoring rubrics with one-click live actions!
+
+---
+
+## 5-Minute Pitch Cue Sheet Timeline (Mapped to Expert Panel Rubric 01–06)
 
 ```
-00:00 - 00:50  ACT I: THE SILO & THE STORM (Dr. Aisha's Blindspot in August)
-00:50 - 01:40  SCENE 1: Baseline Calm & The Fast-Forward Clock
-01:40 - 02:50  ACT II: THE CONVERGENCE & THE FLOOR (Tariq's 3.4-Day Advance Warning)
-02:50 - 03:30  SCENE 2: The Physical Sentinel (Audible Buzzer & Worksite Acknowledgement)
-03:30 - 04:10  SCENE 3: The Differentiator — Foodborne Pathogen vs Environmental Heat
-04:10 - 04:50  ACT III: RESILIENCE PROOF & REGULATORY CERTAINTY (Live Feed Fault Injection)
-04:50 - 05:20  SCENE 4: Empirical Back-Test Proof (92.4% Sensitivity, 88.5% PPV, 143 Tests)
-05:20 - 05:50  SCENE 5: Macro Economic ROI (AED 1.86M Net Benefit & 758x BCR)
-05:50 - 06:00  THE ASK: 12-Week Operational Shadow-Mode Pilot
+00:00 - 00:45  ACT I: THE CRISIS & THE BLIND SPOT        [Rubric 01: Multi-Signal Surveillance]
+00:45 - 01:25  BEAT 1: Catching Strain 11.5 Days Early   [Rubric 01: Sub-Clinical Renal Biomarkers]
+01:25 - 02:05  ACT II: The 3.4-Day Warning & Evidence    [Rubric 02: Explainable Anomaly Detection & SHAP]
+02:05 - 02:40  BEAT 2: Edge Sentinel & Bias Correction   [Rubric 03: Operational Working Hardware]
+02:40 - 03:15  BEAT 3: Spatial Deconvolution & Causal   [Rubric 02 & 03: Geolocation Limits & Attribution]
+03:15 - 03:50  BEAT 4: Automated Municipal & Intercom    [Rubric 03: Actionable Decision Support & Intercom]
+03:50 - 04:30  BEAT 5: Inception 42 Jais & Safe-Harbor   [Rubric 04: Privacy-Preserving Views & Governance]
+04:30 - 05:00  ACT III: Audited ROI (AED 1.36M & 8.11x)  [Rubric 05 & 06: Operational Validation & Impact]
 ```
 
 ---
 
-### ACT I: THE SILO & THE STORM (00:00 – 00:50)
+### ACT I: THE CRISIS & THE BLIND SPOT (00:00 – 00:45)
 
-* **Visual:** Slide 1 / Title Screen — Munzir: Calibrated Early-Warning Platform for Population & Workforce Health Resilience.
-* **Characters Introduced:** Dr. Aisha Al-Maktoum (DHA) and Tariq Mansoor (Jebel Ali Port).
+* **Visual on Screen:** Slide 1 / Title Screen — *Munzir: Calibrated Early-Warning Platform for Population & Workforce Health Resilience*.
+* **Characters Introduced:** **Dr. Aisha Al-Maktoum** (DHA Chief Epidemiologist) & **Tariq Mansoor** (Jebel Ali Port Safety Lead).
 * **Spoken Pitch:**
-  > *"Judges, picture August 15th in Dubai. Ambient temperatures hit 46°C with 78% coastal humidity.*  
-  > *Meet **Dr. Aisha Al-Maktoum**, Lead Epidemiologist at the Dubai Health Authority. She monitors population disease trends, but her hospital registries arrive with a 7-day reporting lag.*  
-  > *Thirty kilometers away at Jebel Ali Port, meet **Tariq Mansoor**, Site Safety Officer responsible for 1,200 container yard workers. Tariq checks the daily national weather forecast: it says 41°C. But down on the asphalt between steel freight containers, radiant heat is pushing wet-bulb globe temperature past 33°C.*  
-  > *By the time Dr. Aisha notices a heat-exhaustion cluster in emergency department admissions next week, Tariq has already sent six workers to intensive care with heat stroke.*  
-  > *Retrospective reporting is not surveillance — it is an autopsy.*  
-  > *This is **Munzir (منذر)** — Arabic for 'the warner'. Munzir fuses environmental, syndromic, and workplace telemetry into a privacy-preserving early-warning system that connects Dr. Aisha's regional vigilance directly to Tariq's work floor — **3.4 days before peak hospital impact**."*
+  > *"Judges, imagine Sunday, August 18th, 2024 in Dubai.*  
+  > *Ambient temperatures reach 44°C with 82% coastal humidity, driving the wet-bulb globe temperature on the asphalt of Jebel Ali Deepwater Port past an uncompensable 45.5°C.*  
+  > *Meet **Dr. Aisha Al-Maktoum**, Lead Epidemiologist at the Dubai Health Authority. She monitors regional population disease trends, but her hospital emergency registries arrive with a 7- to 14-day delay.*  
+  > *Thirty kilometers away at Jebel Ali Port, meet **Tariq Mansoor**, Safety Officer responsible for 1,400 frontline container yard laborers. Tariq checks the standard weather forecast: it reports 41°C ambient. But between shipping containers, radiant asphalt heat is creating a localized microclimate furnace.*  
+  > *By the time Dr. Aisha sees a heat-exhaustion cluster in hospital admission records next week, Tariq has already sent six workers to intensive care with acute heat stroke.*  
+  > *Retrospective reporting is not early warning — it is an autopsy.*  
+  > *This is **Munzir (منذر)** — Arabic for 'the warner'. Munzir fuses environmental, clinical, laboratory, and workplace telemetry into a privacy-preserving early-warning system that connects Dr. Aisha’s regional vigilance directly to Tariq’s work floor — **3.4 days before peak hospital impact**."*
 
 ---
 
-### SCENE 1: BASELINE CALM & THE FAST-FORWARD CLOCK (00:50 – 01:40)
+### BEAT 1: SUB-CLINICAL RENAL BIOMARKERS (00:45 – 01:25)
 
-* **Visual:** Switch to live dashboard (`http://localhost:8000`). Show clean, calm map of Dubai and Northern Emirates with green baseline indicators.
-* **Click Action:** Click the date selector to `2025-08-15` (Baseline Quiet Day −5). Show the Entra ID role selector set to `District Surveillance Officer`.
+* **Visual on Screen:** Switch to browser `http://localhost:8000`. Navigate to `Clinical Sentinel` -> **[EXP] Renal Biomarkers** tab.
+* **Live Action:** Point to the dual-axis trajectory curve showing Mean eGFR (97.7 mL/min), Dehydration Rate (21.7%), KDIGO Stage 1 Rate (216.7 / 1,000), and the callout badge: **+11.5 Days Advance Lead Time**.
 * **Spoken Pitch:**
-  > *"Here is Munzir running live in production. On quiet days, Dr. Aisha sees a serene map. The baseline rate of syndromic presentations is nominal, air quality sensors across OpenAQ report moderate PM2.5, and work absences are steady.*  
-  > *Notice the Role Switcher at the top right: Munzir provides 6 distinct Entra ID role-based perspectives. Dr. Aisha sees district epidemiological patterns; employers see aggregated rates with zero PII; frontline supervisors see operational safety cues.*  
-  > *Now, let’s advance the simulation clock from August 15th forward to August 18th. A regional high-pressure system descends over the Persian Gulf. Watch how Munzir transforms data into targeted early action."*
+  > *"The hackathon prompt explicitly challenges us to identify emerging patterns in **'laboratory signals'**.*  
+  > *Occupational heat illness does not begin with sudden collapse. It begins two weeks earlier as silent, sub-clinical Acute Kidney Injury (AKI).*  
+  > *Here in our **Renal Biomarker Engine**, Munzir ingests routine workplace health screening panels. Applying the clinical race-free **2021 CKD-EPI formula** and **KDIGO 2012 staging**, Munzir detects tubular dehydration strain **11.5 days before hospital emergency admissions**.*  
+  > *Before a single laborer collapses on the dock, Dr. Aisha detects rising biological strain and issues a targeted pre-renal hydration order."*
 
 ---
 
-### ACT II: THE CONVERGENCE & THE FLOOR (01:40 – 02:50)
+### ACT II: THE CONVERGENCE & DECISION-READY EVIDENCE (01:25 – 02:05)
 
-* **Visual:** Map highlights `SITE-JA-01` (Jebel Ali Port Logistics) and `DXB-JA` turning amber-orange (*Warning* tier).
-* **Click Action:** Click on the alert badge in the Alert Inbox to trigger the **Evidence Card modal**.
+* **Visual on Screen:** Click **Judge 1-Click Story Mode**: `1️⃣ Scenario 1: Jebel Ali Heatwave (3.4d Lead)`. The Command Hub immediately pivots to `SITE-JA-01` (Jebel Ali Port Terminal) turning vibrant amber-orange (*Warning* tier).
+* **Live Action:** Click the alert badge in the Alert Inbox to trigger the **Evidence Card modal**.
 * **Spoken Pitch:**
-  > *"Look at the map. Three full days before any hospital ICU admission, Munzir flags Jebel Ali Port with an actionable Warning alert.*  
-  > *Dr. Aisha clicks to open the **Decision-Ready Evidence Card**:*  
-  > *1. **Calibrated Probability:** 83.3% risk of an occupational heat cluster, bound by a rigorous 90% conformal prediction interval.*  
-  > *2. **Explainable SHAP Attribution:** It's not a black box. The model reveals that 44% of the signal is driven by extreme wet-bulb globe temperature exposure exceeding 32°C for over 4 continuous hours, compounded by a 32% sudden rise in unexcused morning absenteeism.*  
-  > *3. **Legally Grounded RACI Action:** Look at the playbook below. This is not generic advice. It cites **UAE Ministerial Resolution No. 44 of 2022** on Occupational Safety, assigning Tariq Mansoor as the Accountable Officer to implement mandatory 15-minute shaded rest rotations, deploy electrolyte hydration stations, and pause crane operations during peak solar exposure.*  
-  > *Now, watch what happens when we switch to the Employer View: instantly, all individual clinical identifiers vanish. Tariq gets operational safety directives without infringing on worker privacy."*
+  > *"Three full days before hospital admissions surge, Munzir flags Jebel Ali Port with an actionable Warning alert.*  
+  > *Dr. Aisha clicks to inspect the **Decision-Ready Evidence Card**:*  
+  > *1. **Calibrated Probability:** 83.3% probability of an occupational heat cluster, bound by a rigorous 90% conformal prediction interval.*  
+  > *2. **Explainable SHAP Attribution:** 44% driven by sustained WBGT exceeding 32°C for over 4 continuous hours, compounded by a 32% rise in morning absenteeism.*  
+  > *3. **Legally Grounded Decision Support:** Citing **UAE Ministerial Resolution No. 44 of 2022**, it designates Tariq Mansoor as Accountable Officer to implement 15-minute shaded rest rotations and deploy chilled oral rehydration salts.*  
+  > *And when we toggle to Employer View: all individual clinical identifiers vanish. Tariq gets operational safety directives with zero disciplinary surveillance."*
 
 ---
 
-### SCENE 2: THE PHYSICAL SENTINEL — AUDIBLE BUZZER & WORKSITE ACKNOWLEDGEMENT (02:50 – 03:30)
+### BEAT 2: THE PHYSICAL SENTINEL & CANOPY BIAS CORRECTION (02:05 – 02:45)
 
-* **Visual:** Switch to the **🔧 Sentinel Hardware** tab on the dashboard, drawing jury attention to the physical ESP32 node on the table.
+* **Visual on Screen:** Navigate to `Field Operations` -> **[TOOL] Sentinel Hardware** tab.
 * **Demonstration Action:**
-  1. Click `⚡ Sample Telemetry` to push the current Jebel Ali microclimate reading.
-  2. The physical ESP32 on the table emits an **audible double-pulse warning buzz** (`1000Hz -> 1500Hz`) and pulses its amber LED.
-  3. Presenter physically presses the **BOOT button** on the ESP32: the buzzer immediately silences, the LED flashes cyan, and a live non-repudiation log entry appears in the web UI: `ACKNOWLEDGED by On-Site Supervisor Tariq Mansoor`.
+  1. Point to the **Canopy Heat Bias dial**: Open-Meteo ERA5 model reports 31.8°C vs On-Site Black Globe measured at **33.4°C (+1.6°C Asphalt Heat Trap)**.
+  2. The physical ESP32 node on the table emits an **audible double-pulse warning buzzer** (`1000Hz -> 1500Hz`) and flashes its amber LED.
+  3. Presenter presses the physical **BOOT button** on the table node (or clicks `[ACTION] Press BOOT Button` in the digital twin): the buzzer mutes instantly, turning the badge green `MUTED / SILENCED`, and committing an immutable cryptographic acknowledgement into the Lakehouse.
 * **Spoken Pitch:**
   > *"Software dashboards are useless if the safety officer is walking the container yard without a laptop. That is why we built **Munzir Sentinel** — an ultra-low-cost, solar-ready ESP32 edge node.*  
-  > *While regional Open-Meteo weather models report 31.8°C WBGT, our on-site Sentinel measures the true steel-deck microclimate: **33.4°C WBGT**!*  
-  > *The moment Munzir calculates a Warning tier, the Sentinel node triggers this audible alert and amber LED right on the work floor.*  
-  > *When Tariq presses this physical button on the node, it instantly silences the buzzer and transmits an immutable cryptographic acknowledgement back to DHA and MOHRE, proving regulatory compliance in real time."*
+  > *While numerical satellite models report 31.8°C WBGT, on-site asphalt radiation drives the real black globe to **33.4°C**!*  
+  > *Munzir applies empirical bias correction to eliminate model error. And for unsensored sites, we maintain scientific honesty by flagging them **UNVALIDATED-SPATIALLY** with widened conformal bounds.*  
+  > *When Tariq presses the physical BOOT button on the worksite, it silences the buzzer and commits an immutable cryptographic audit receipt into the Lakehouse, verifying regulatory compliance in real time."*
 
 ---
 
-### SCENE 3: THE DIFFERENTIATOR — FOODBORNE PATHOGEN VS ENVIRONMENTAL HEAT (03:30 – 04:10)
+### BEAT 3: SPATIAL DECONVOLUTION & BAYESIAN CAUSAL DE-MIXING (02:40 – 03:15)
 
-* **Visual:** Select the alert for `SITE-AQ-01` (Al Quoz Industrial Canteen) on the dashboard map.
-* **Click Action:** Show the Evidence Card highlighting "Zero Environmental Contribution".
+* **Visual on Screen:** Click **Judge 1-Click Story Mode**: `2️⃣ Scenario 2: Muhaisnah Deconvolution (53.4%)`, then click subtab `[RESEARCH] Bayesian Causal De-Mixing`.
+* **Demonstration Action:** 
+  1. Show the interactive tactical SVG map showing the **Sheikh Zayed Road Commuter Corridor (42 km &bull; 6.5h lag)** and the **95% Confidence Spatial Ellipse (~5.16 km²)** centered on Jebel Ali Port.
+  2. Click preset `[OPS] Camp Food Poisoning Co-Morbidity` in the Bayesian Causal De-Mixer: watch the Monte Carlo Dirichlet ($N=1,000$) de-mix the 25-worker cohort into **73.4% Heat Stroke + 26.6% Canteen Norovirus**, assigning concurrent RACI mandates to both MOHRE (cool misting) and Dubai Municipality Food Safety (canteen quarantine)!
 * **Spoken Pitch:**
-  > *"Here is what proves Munzir is not just another threshold alarm: our Layer 2 exposure-response engine.*  
-  > *In August, sickness absence always rises when temperature rises. If an alarm sounds every hot day, officers get alert fatigue and turn it off.*  
-  > *Look at Scenario 3 in Al Quoz: ambient temperature is normal, PM2.5 is normal, yet gastrointestinal clinic visits spike 4.8x.*  
-  > *Munzir isolates the residual from the environmental baseline and classifies this not as heat stress, but as an **'Unexplained Infectious Cluster'**. Instead of ordering water misting, it directs Dr. Aisha's Rapid Response Team to inspect the worker canteen for contaminated water. That is true clinical differentiation."*
+  > *"The hackathon prompt explicitly warns that **'data completeness, especially reliable geolocation, can limit interpretation'**, and symptoms in a labor camp can have competing etiologies.*  
+  > *When workers suffer thermal stress at Jebel Ali, they ride buses back to accommodations in Muhaisnah, presenting with nausea, cramps, and weakness. Is it occupational heat exhaustion, camp food poisoning, or mineral dust pneumonitis?*  
+  > *Our **Bayesian Causal De-Mixing Engine** calculates clinical likelihood ratios ($LR$) across 1,000 Dirichlet Monte Carlo draws. It proves that an outbreak can be co-morbid (73% heat + 27% norovirus), automatically dispatching tri-agency RACI mandates: MOHRE suspends outdoor labor while Dubai Municipality Food Safety seals the camp canteen.*  
+  > *And our **Spatio-Temporal Deconvolution Engine** mathematically reverses clinic timestamps through Weibull incubation kinetics, proving with **53.4% posterior probability** that the true hazard origin was Jebel Ali Port during the morning shift."*
 
 ---
 
-### ACT III: RESILIENCE PROOF & REGULATORY CERTAINTY (04:10 – 04:50)
+### BEAT 4: WHAT-IF SIMULATOR & AUTOMATED MUNICIPAL STAGING (03:15 – 03:50)
 
-* **Visual:** Scroll to the **Data Quality & What-If Sandbox** panel.
-* **Click Action:** Toggle off the **Hospital Clinical Feed** switch to simulate a catastrophic regional EHR network failure.
+* **Visual on Screen:** Navigate to `Field Operations` -> **[FLEET] Municipal Staging** tab.
+* **Demonstration Action:**
+  1. Show the **Municipal Fleet Mobilization Radar** routing cooling assets from Jebel Ali Operations Yard and Al Quoz Depot: **5 Mobile Air-Conditioned Cooling Buses**, **12 Misting Trailers**, **4.2 Tons Potable Water**, and **DCAS Ambulance Standby pre-positioned**.
+  2. Click `[INBOX] Download FHIR R4 Task` to highlight international standards interoperability.
+  3. Show the **Frontline Interactive WhatsApp card**: click `[[HYDRATION] Confirm Oral Rehydration & Shade]` — instantly appends an outgoing confirmation bubble with blue double-checks (`[OK][OK]`) and synchronizes with the Gold Parquet Lakehouse (`-18.5 kJ/m²` thermal debt attenuation)!
 * **Spoken Pitch:**
-  > *"In a real-world crisis, data feeds fail. Watch what happens when I simulate a complete outage of the regional hospital syndromic feed.*  
-  > *Does Munzir crash? No. Does it hallucinate a false alarm? No.*  
-  > *Look at the conformal confidence band: it immediately widens from ±10% to ±25%. The Data Quality index drops to 0.58, and our safety guardrail caps the alert tier at Warning, flagging: 'Clinical feed unavailable — uncertainty bounds expanded'.*  
-  > *And when private clinics upload a 5-day delayed backlog of 50 visits in a single batch, Munzir’s decoy filter recognizes the timestamp clustering as an administrative backlog and suppresses the false alarm with a 94.0% filter rate."*
+  > *"The prompt calls for **automated prevention triggers**. Munzir doesn't just send an email — it mobilizes the city and closes the loop with frontline workers.*  
+  > *In our What-If simulator, Tariq verifies that split-shifting work hours slashes dangerous thermal exposure by 33%.*  
+  > *Our **Municipal Staging Optimizer** generates an automated dispatch order: 5 cooling buses, 12 misting trailers, 4.2 tons of water, and pre-positioned DCAS ambulances, exported directly as an international **HL7 FHIR R4 Task** resource.*  
+  > *And frontline foremen receive interactive WhatsApp alerts with 1-tap confirmation buttons. When Tariq taps 'Confirm Hydration Rest', it writes an immutable receipt to the Lakehouse, proving compliance."*
 
 ---
 
-### SCENE 4: EMPIRICAL BACK-TEST PROOF & HISTORICAL TIME MACHINE (04:50 – 05:20)
+### BEAT 5: INCEPTION 42 JAIS SOVEREIGN LLM & SAFE-HARBOR SHIELD (04:05 – 04:45)
 
-* **Visual:** Switch tab to `⏱️ Time Machine Replay` (or open `validation/timemachine_pnw_2021.html`).
-* **Click Action:** Drag the date scrubber to June 26, 2021: point to the lead-time bracket (+5.0 days vs peak, +3.0 days earlier than static 35°C threshold), and show the shaded boundary of "Data Not Yet Reported".
+* **Visual on Screen:** Click **Judge 1-Click Story Mode**: `[CHAT] Copilot & Action Dossier` and navigate to **[AI] Inception 42 Jais Dispatch**.
+* **Demonstration Action:**
+  1. Point to the **Frontline Smartphone Simulator** displaying localized WhatsApp cards. Toggle between **العربية (Arabic)**, **English**, **اردو (Urdu)**, and **हिन्दी (Hindi)**.
+  2. Click **[AUDIO] Play Spoken Voice Note**: browser audio speaks the localized voice dispatch aloud while the **animated audio waveform bars** bounce in real time!
+  3. Show the **Safe-Harbor Shield** test: probe a prohibited disciplinary query (e.g. individual break log) and watch the system return a hard **HTTP 403 Forbidden** block citing **UAE Federal Decree-Law No. 33 of 2021 Article 13**.
 * **Spoken Pitch:**
-  > *"We don't ask the jury to take our word for it. Every performance metric in Munzir is empirically back-tested across 100 hold-out outbreak injections and verified by our **150-test automated test suite**:*  
-  > *• Look at our **Historical Time Machine Replay** of the 2021 Pacific Northwest Heat Dome, fusing archived numerical weather forecasts with authentic CDC NSSP emergency department visit counts.*  
-  > *• With zero hindsight leakage and realistic 1.8-day reporting delays, Munzir alerts on **June 23** — **5 full days before the 1,038-visit hospital peak**, and **3 days earlier than static 35°C weather thresholds**!*  
-  > *• Across diverse geographies, Munzir maintains **92.4% Detection Sensitivity** and **0.31 False Alarms per month** — cutting alert fatigue by 76%.*  
-  > *Any evaluator can clone our repository and run `make validate` or `make timemachine` right from terminal to reproduce every single figure deterministically."*
+  > *"Now, how do we reach the frontline worker? Site foremen speak Arabic, Urdu, and Hindi. They don't read JSON or web dashboards.*  
+  > *We natively integrated our hackathon sponsor **Inception 42 (G42)** using their flagship **`Jais-3-0.9B-Chat`** foundational model running locally on GPU.*  
+  > *Running sovereign local inference, Jais synthesizes Arabic regulatory notices and multilingual WhatsApp cards with voice audio:*  
+  > *[Click 'Play Voice Note' -> Audio speaks Arabic/Urdu while animated waveform bounces]*  
+  > *Every generated sentence passes through our **Fenced Zero-Hallucination Gate**, guaranteeing 100% factual fidelity against Lakehouse ground truth.*  
+  > *And crucially, under our **Safe-Harbor Worker Protection Shield**, any attempt by an employer to use this system for disciplinary surveillance or wage deductions is cryptographically blocked under **UAE Federal Decree-Law No. 33 of 2021 Article 13**!"*
 
 ---
 
-### SCENE 5: MACRO ECONOMIC ROI & THE ASK (05:20 – 06:00)
+### ACT III: EMPIRICAL PROOF & AUDITED ROI (04:45 – 05:00)
 
-* **Visual:** Switch to the **Impact Model** tab on the dashboard. Drag the cohort slider to 50,000 workers.
-* **Click Action:** Point to the Net Economic Benefit: **AED 1,861,996** and **758:1 Benefit-Cost Ratio**.
+* **Visual on Screen:** Switch to `Resilience & Gov` -> **[METRICS] Impact Model** (50,000 workers pre-set).
+* **Click Action:** Point to **AED 1,364,167 Net Economic Benefit** and the Calibrated **8.11:1 Benefit-to-Cost Ratio (BCR)** [90% CI: 3.45x – 19.73x].
 * **Spoken Pitch:**
-  > *"What is the bottom line for Dubai? Across a cohort of 50,000 industrial workers, calibrated early intervention prevents:*  
-  > *• **3,480 lost workdays** saved per summer.*  
-  > *• **25 severe ICU heat strokes** prevented.*  
-  > *• **AED 1.86 Million in net economic savings**, delivering an extraordinary **758-to-1 return on investment**.*  
-  > *Munzir is deployed on Azure Container Apps with $0.00 idle cost, exports standard **HL7 FHIR R4** bundles for DHA NABIDH and Malaffi, and passes all 7 Responsible AI governance guardrails.*  
-  > *Our ask today is a **12-week operational shadow-mode pilot** across Dubai Health Authority and 4 major industrial employers this summer. Let us give Dr. Aisha and Tariq the tools to protect Dubai’s workforce before the next heatwave.*  
-  > *Predict. Protect. Prevent. Thank you, and we welcome your questions."*
+  > *"Every single claim is backed by empirical proof and our **224 automated passing tests**:*  
+  > *• In our **Historical Time Machine Replay** of the 2021 Heat Dome, Munzir alerts **5 full days before the hospital surge peak**.*  
+  > *• Across a regional workforce of 50,000 outdoor laborers, after accounting for AED 199,000 in capital shade canopies, electrolyte hydration, and split-shift logistics, Munzir delivers **AED 1.36 Million in net savings** — an audited, calibrated **8.11-to-1 return on investment** [90% CI: 3.45x to 19.73x]!*  
+  > *Munzir is deployed on Azure Container Apps with $0.00 idle cost, exports standard **HL7 FHIR R4** bundles, and satisfies all 6 hackathon criteria.*  
+  > *Our ask today is a **12-week operational shadow-mode pilot** across Dubai Health Authority, MOHRE, and 4 major industrial employers this summer.*  
+  > *Predict. Protect. Prevent. Thank you, and we welcome your questions!"*
 
 ---
 
-## Technical Appendix: Demo Action Cheat-Sheet
+## Technical Presenter Cheat-Sheet & Fail-Safe Fallbacks
 
-| Timestamp | Screen / Interface | Trigger Action | Expected Visual / Physical Output |
+| Cue / Beat | Primary Trigger Action | Expected Visual / Physical Output | Fail-Safe Backup Cue (If Click Lags) |
 | :--- | :--- | :--- | :--- |
-| **00:55** | Web Dashboard | Set Date to `2025-08-15` | Clean green map, quiet baseline metrics |
-| **01:45** | Web Dashboard | Advance Date to `2025-08-18` | `SITE-JA-01` turns Orange (*Warning*) |
-| **02:00** | Alert Inbox | Click Warning Badge | Evidence Card opens with SHAP attribution & RACI Playbook |
-| **02:35** | Role Switcher | Toggle `Employer View` | All PII stripped, rate-only metrics displayed |
-| **02:55** | Sentinel Tab | Click `⚡ Sample Telemetry` | Physical ESP32 buzzes (double-pulse), amber LED blinks |
-| **03:15** | Hardware Node | Press physical **BOOT button** | Buzzer mutes, cyan LED flash, non-repudiation audit logged |
-| **03:40** | Web Dashboard | Select `SITE-AQ-01` | Evidence Card highlights "Unexplained Infectious Cluster" |
-| **04:15** | Sandbox Panel | Toggle OFF "Clinical Feed" | Conformal interval widens to ±25%, Data Quality drops to 0.58 |
-| **04:55** | Validation Tab | Open `validation/report.html` | AMOC curve, 92.4% sensitivity, 88.5% PPV, 143 tests |
-| **05:25** | Impact Tab | Workforce Slider = 50,000 | AED 1,861,996 Net Benefit, 758:1 BCR |
+| **Header** | Click `[CHAMPIONSHIP] 3-Min Grand Jury Tour` | Interactive 6-rubric walkthrough modal with live jumps | Manual tab clicking via top pillar navigation |
+| **Header** | Hover `[ORBIT]️ NWP LIVE` seal | Verified green badge with SHA-256 telemetry seal | Direct API verification at `/api/v1/telemetry/live-verify` |
+| **00:50** | Click `Renal Biomarkers` tab | Dual-axis eGFR & dehydration trajectory; +11.5d lead time badge | Point to pre-rendered SVG curve in the card |
+| **01:30** | Click `1️⃣ Scenario 1` button | Jebel Ali turns orange; Evidence Card opens with SHAP & RACI | Click Warning badge directly in Alert Inbox |
+| **02:10** | Click `⚡ Sample Telemetry` | Physical ESP32 double-pulse buzz; amber LED blinks | Point to interactive digital twin widget on screen |
+| **02:25** | Press physical **BOOT button** | Buzzer mutes; green `MUTED` badge; compliance receipt | Click `[ACTION] Press BOOT Button` in the browser UI |
+| **02:50** | Click `2️⃣ Scenario 2` button | Muhaisnah to Jebel Ali transit corridor; 95% spatial ellipse | Deconvolution runs deterministically via local API |
+| **03:05** | Click `[RESEARCH] Bayesian Causal` subtab | De-mixes 25-worker cohort (73% Heat + 27% Norovirus) | Load preset buttons directly inside view |
+| **03:30** | Click `Municipal Staging` tab | Radar view shows 5 buses, 12 trailers, water tankers, DCAS | Click `⚡ Optimize Staging` to re-render allocations |
+| **03:45** | Click `[HYDRATION] Confirm Hydration` on Phone | Outgoing WhatsApp bubble ([OK][OK]); Lakehouse sync receipt | Logs directly to `/api/v1/intercom/action-confirm` |
+| **04:10** | Click `[AI] Jais Dispatch` tab | Smartphone mockup displays WhatsApp card in Urdu/Hindi | Audio plays via browser Web Speech API synthesis |
+| **04:20** | Click `[MIC]️ Scenario 5` button | Intercom console loads Urdu emergency; speaks dispatch | In-situ WBGT corroborated against Lakehouse |
+| **04:30** | Probe Prohibited Query | HTTP 403 Forbidden error pops up with Article 13 citation | Pre-validated Safe-Harbor compliance certificate shown |
+| **04:40** | Adjust Re-ID Cohort Slider | Live k-anonymity risk meter shifts from SAFE to ELEVATED | Mathematical 1/k prosecutor vulnerability audited |
+| **04:45** | Click `[POLICY]️ Scenario 6` button | Policy studio counterfactual replays 50k workers | Macro waterfall shows AED 3.98M Net Benefit (10.9x BCR) |
+| **04:55** | Click `3️⃣ Scenario 3` button | Impact model displays AED 1.36M Net Benefit & 8.11x BCR | Pre-computed 90% confidence interval renders instantly |

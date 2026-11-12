@@ -9,8 +9,9 @@ All figures are explicitly marked as modelled projections with traceable assumpt
 """
 
 from datetime import datetime, timezone
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 import math
+import numpy as np
 
 from prahari.impact.models import (
     AssumptionParameter,
@@ -137,7 +138,7 @@ class HealthResilienceImpactCalculator:
                 value=self.detection.validated_lead_time_days,
                 unit="days",
                 label="Validated Fusion Lead Time",
-                source="PRAHARI Phase 6 Empirical Rolling-Origin Backtest (+2.6d over fixed baseline)",
+                source="Munzir Phase 6 Empirical Rolling-Origin Backtest (+2.6d over fixed baseline)",
                 min_value=0.1,
                 max_value=14.0,
                 description="Days of advance notice delivered ahead of peak community/worksite heat stress.",
@@ -146,7 +147,7 @@ class HealthResilienceImpactCalculator:
                 value=self.detection.validated_sensitivity,
                 unit="fraction",
                 label="Validated Detection Sensitivity",
-                source="PRAHARI Phase 6 100+ Outbreak Injection Study",
+                source="Munzir Phase 6 100+ Outbreak Injection Study",
                 min_value=0.1,
                 max_value=1.0,
                 description="Proportion of genuine heat/outbreak surges successfully triggered.",
@@ -155,7 +156,7 @@ class HealthResilienceImpactCalculator:
                 value=self.detection.false_alarm_rate_monthly,
                 unit="alerts/district/month",
                 label="False Alarm Rate",
-                source="PRAHARI Phase 6 Empirical Evaluation (65% lower than CDC EARS C2)",
+                source="Munzir Phase 6 Empirical Evaluation (65% lower than CDC EARS C2)",
                 min_value=0.0,
                 max_value=10.0,
                 description="Empirically validated false alarm frequency under L5 corroboration rules.",
@@ -325,6 +326,70 @@ class HealthResilienceImpactCalculator:
             grid=grid,
         )
 
+    def compute_monte_carlo_distribution(
+        self, n_samples: int = 1000, seed: int = 42
+    ) -> Dict[str, Any]:
+        """
+        Runs Monte Carlo simulation across assumption ranges to replace single-point
+        estimates with credible uncertainty distributions (median and 90% interval).
+        Incorporates direct operational intervention staging costs alongside false alarm triage.
+        """
+        import numpy as np
+        rng = np.random.RandomState(seed)
+
+        # Sample parameters uniformly across conservative and optimistic bounds
+        s_base_rate = rng.uniform(0.015, 0.040, n_samples)
+        s_preventability = rng.uniform(0.45, 0.85, n_samples)
+        s_workdays = rng.uniform(2.0, 5.0, n_samples)
+        s_wage = rng.uniform(350.0, 600.0, n_samples)
+        s_hosp = rng.uniform(8000.0, 18000.0, n_samples)
+        s_severe_frac = rng.uniform(0.015, 0.045, n_samples)
+        s_inspector = rng.uniform(90.0, 160.0, n_samples)
+        # Operational worksite staging cost per monitored worker across season (AED 2.0 to 6.0 / worker)
+        s_op_cost_per_worker = rng.uniform(2.0, 6.0, n_samples)
+
+        workforce = float(self.workforce.workforce_size)
+        sensitivity = float(self.detection.validated_sensitivity)
+
+        baseline_cases = workforce * s_base_rate
+        cases_detected = baseline_cases * sensitivity
+        cases_prevented = cases_detected * s_preventability
+        workdays_saved = cases_prevented * s_workdays
+        severe_averted = cases_prevented * s_severe_frac
+
+        gross_benefit = (workdays_saved * s_wage) + (severe_averted * s_hosp)
+
+        # Response costs: false alarm triage + operational staging
+        total_false_alarms = self.detection.false_alarm_rate_monthly * self.detection.monitored_districts * self.detection.season_months
+        response_cost = (total_false_alarms * 4.0 * s_inspector) + (workforce * s_op_cost_per_worker)
+
+        net_benefit = gross_benefit - response_cost
+        bcr = gross_benefit / np.maximum(100.0, response_cost)
+
+        def pct(arr: np.ndarray) -> Dict[str, float]:
+            return {
+                "median": round(float(np.percentile(arr, 50)), 2),
+                "p05": round(float(np.percentile(arr, 5)), 2),
+                "p95": round(float(np.percentile(arr, 95)), 2),
+                "mean": round(float(np.mean(arr)), 2),
+            }
+
+        return {
+            "n_samples": n_samples,
+            "seed": seed,
+            "cases_prevented": pct(cases_prevented),
+            "workdays_saved": pct(workdays_saved),
+            "severe_averted": pct(severe_averted),
+            "gross_benefit_aed": pct(gross_benefit),
+            "total_program_cost_aed": pct(response_cost),
+            "net_benefit_aed": pct(net_benefit),
+            "benefit_cost_ratio": pct(bcr),
+            "methodology_note": (
+                "Monte Carlo output incorporates realistic operational intervention staging costs "
+                "alongside false alarm triage, replacing the uncalibrated single-point ratio with a 90% confidence distribution."
+            ),
+        }
+
     def calculate(
         self, request: Optional[ImpactCalculatorRequest] = None
     ) -> ImpactEstimate:
@@ -342,6 +407,7 @@ class HealthResilienceImpactCalculator:
         scenarios = self.compute_scenarios()
         sensitivity = self.compute_sensitivity_matrix()
         assumptions = self.get_assumptions_audit()
+        mc_dist = self.compute_monte_carlo_distribution()
 
         return ImpactEstimate(
             is_modelled_estimate=True,
@@ -350,5 +416,6 @@ class HealthResilienceImpactCalculator:
             scenarios=scenarios,
             sensitivity=sensitivity,
             assumptions_audit=assumptions,
+            monte_carlo_distribution=mc_dist,
         )
 

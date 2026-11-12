@@ -108,8 +108,8 @@ class DetectionPipeline:
                     res_l2 = self.l2_model.evaluate_date(merged_resp, obs_date, "clinical_resp", geo_id)
                     l2_results["resp_unexplained"] = res_l2.unexplained_excess
                     l2_results["resp_explained_frac"] = res_l2.explained_fraction
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("L2 resp evaluation skipped for %s on %s: %s", geo_id, obs_date, e)
 
         abs_df = loc_history[loc_history["signal_type"] == "absence_heat"]
         if len(abs_df) >= 20 and not wbgt_df.empty:
@@ -120,8 +120,8 @@ class DetectionPipeline:
                 try:
                     res_l2_heat = self.l2_model.evaluate_date(merged_abs, obs_date, "absence_heat", geo_id)
                     l2_results["heat_unexplained"] = res_l2_heat.unexplained_excess
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("L2 heat evaluation skipped for %s on %s: %s", geo_id, obs_date, e)
 
         # 3. L3 Space-time cluster check
         l3_dict: Dict[str, Any] = {"is_significant": False, "relative_risk": 1.0}
@@ -328,8 +328,8 @@ class DetectionPipeline:
                     loaded.append(PrahariAlert(**cleaned))
                 if loaded:
                     return loaded
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed loading cached alerts from %s: %s", latest_json, e)
         return []
 
     def build_training_dataset(

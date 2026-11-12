@@ -179,3 +179,4 @@ class BiasEvaluator:
                 "bias_magnitude_after": abs(after["overall"]["bias"]),
             },
         }
+

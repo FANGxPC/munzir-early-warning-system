@@ -1,4 +1,4 @@
-.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine biascorrect test-biascorrect
+.PHONY: help backfill backfill-quick ingest-real run-daily train-nlp inspect test clean harmonise inspect-silver dp-release test-privacy train-fusion detect evaluate-detection test-detection playbooks evidence-card test-decision serve test-api validate test-validation impact test-impact governance test-governance fhir-export drift-check test-interop test-sentinel sentinel-replay timemachine test-timemachine biascorrect test-biascorrect whatif test-whatif
 
 PYTHON := ./bin/py
 
@@ -24,6 +24,12 @@ help:
 	@echo "  make test-decision     : Run Phase 4 decision support unit tests"
 	@echo "  make serve             : Launch Munzir web application and role-based API"
 	@echo "  make test-api          : Run Phase 5 RBAC, privacy boundary & API unit tests"
+	@echo "  make timemachine       : Run retrospective historical event time machine replay"
+	@echo "  make test-timemachine  : Run Phase 6 Time Machine strict as-of-date tests"
+	@echo "  make biascorrect       : Run Sentinel WBGT empirical bias correction"
+	@echo "  make test-biascorrect  : Run microclimate bias correction validation tests"
+	@echo "  make whatif            : Run What-If occupational intervention simulator (Monte Carlo)"
+	@echo "  make test-whatif       : Run What-If simulator and assumptions ledger tests"
 	@echo "  make test              : Run full unit test suite"
 	@echo "  make clean             : Clean local test caches"
 
@@ -131,6 +137,54 @@ biascorrect:
 
 test-biascorrect:
 	$(PYTHON) -m pytest tests/test_bias_correction.py -v
+
+whatif:
+	$(PYTHON) -m prahari whatif --site $(or $(SITE),SITE-JA-01) --action $(or $(ACTION),combined_protocol) --workforce $(or $(WORKFORCE),3200)
+
+test-whatif:
+	$(PYTHON) -m pytest tests/test_whatif.py -v
+
+renal-scan:
+	$(PYTHON) -m prahari renal-scan --site $(or $(SITE),SITE-JA-01) --cumulative-wbgt $(or $(WBGT_HOURS),65.0)
+
+test-renal:
+	$(PYTHON) -m pytest tests/test_biomarkers.py -v
+
+deconvolve:
+	$(PYTHON) -m prahari deconvolve --district $(or $(DISTRICT),Muhaisnah) --cases $(or $(CASES),45)
+
+test-deconvolve:
+	$(PYTHON) -m pytest tests/test_deconvolution.py -v
+
+dispatch:
+	$(PYTHON) -m prahari dispatch --site $(or $(SITE),SITE-JA-01) --workforce $(or $(WORKFORCE),1200)
+
+test-dispatch:
+	$(PYTHON) -m pytest tests/test_dispatch_optimizer.py -v
+
+jais-dispatch:
+	$(PYTHON) -m prahari jais-dispatch --site $(or $(SITE),SITE-JA-01) --tier $(or $(TIER),Warning)
+
+test-jais:
+	$(PYTHON) -m pytest tests/test_jais_integration.py -v
+
+copilot:
+	$(PYTHON) -m prahari copilot --query "$(or $(QUERY),What should I do right now for outdoor workers?)" --site $(or $(SITE),SITE-JA-01)
+
+dossier:
+	$(PYTHON) -m prahari dossier --site $(or $(SITE),SITE-JA-01) --export $(or $(EXPORT),terminal)
+
+test-copilot:
+	$(PYTHON) -m pytest tests/test_copilot.py -v
+
+test-safeharbor:
+	$(PYTHON) -m pytest tests/test_safe_harbor.py -v
+
+test-compound:
+	$(PYTHON) -m pytest tests/test_compound_hazard.py -v
+
+test-championship:
+	$(PYTHON) -m pytest tests/test_api_championship.py tests/test_causal_demix.py tests/test_biomarkers.py tests/test_deconvolution.py tests/test_dispatch_optimizer.py tests/test_jais_integration.py tests/test_copilot.py tests/test_safe_harbor.py tests/test_compound_hazard.py tests/test_iso7933.py tests/test_voice_intercom.py tests/test_policy_studio.py tests/test_championship_v2.py tests/test_cli.py -v
 
 test:
 	$(PYTHON) -m pytest tests/ -v

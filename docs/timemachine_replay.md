@@ -89,13 +89,13 @@ Jun 25, 2021     [Heat Dome Onset — First Visible Clinical Uptick]
 Jun 26, 2021     [Severe Heat Wave Surge]
                  • Observed Temp: 37.1°C (98.8°F) | WBGT: 32.4°C | 48h Forecast: 34.8°C
                  • Cumulative reported visits: 251
-                 • Munzir Alert: 🚨 CRITICAL ALERT (calibrated risk: 98%, 90% CI: [90%, 100%])
+                 • Munzir Alert: [ALERT] CRITICAL ALERT (calibrated risk: 98%, 90% CI: [90%, 100%])
                  • Static Threshold: ALERT ACTIVE (Triggers 3 days later than Munzir)
 
-Jun 28, 2021     [🏆 HISTORIC OBSERVED PEAK]
+Jun 28, 2021     [[CHAMPIONSHIP] HISTORIC OBSERVED PEAK]
                  • Observed Temp: 42.4°C (108.3°F Seattle all-time record) | WBGT: 34.8°C
                  • Clinical Visits Today: 1,038 ED Visits in a Single Day (CDC NSSP Peak)
-                 • Munzir Alert: 🚨 CRITICAL ALERT (Active for 6 continuous days)
+                 • Munzir Alert: [ALERT] CRITICAL ALERT (Active for 6 continuous days)
 ```
 
 ---
@@ -119,7 +119,7 @@ make timemachine EVENT=dubai_2024
 2. Open `http://localhost:8000` in your browser.
 3. Click the **⏱️ Time Machine Replay** tab in the top navigation bar.
 4. Use the **Play / Pause** button or drag the **Date Scrubber Slider** to observe the day-by-day intelligence view, the advance lead-time bracket, and the visual boundary of data not yet reported.
-5. Click **🔍 Inspect Detailed Evidence Card** to examine the explainable SHAP feature attribution breakdown.
+5. Click **[INSPECT] Inspect Detailed Evidence Card** to examine the explainable SHAP feature attribution breakdown.
 
 ### Running Automated Test Suite:
 ```bash

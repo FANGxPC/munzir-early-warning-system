@@ -69,7 +69,7 @@ class NarrativeGenerator:
         sev_label = alert.severity.value.upper()
 
         lines = [
-            f"**Munzir — PRAHARI SITUATIONAL BRIEFING — {sev_label} [{alert.alert_type.replace('_', ' ').upper()}]**",
+            f"**Munzir (منذر) Situational Briefing — {sev_label} [{alert.alert_type.replace('_', ' ').upper()}]**",
             f"**Location:** {geo_str} | **Date:** {alert.obs_date} | **Incident:** {alert.incident_id or 'New'}",
             "",
             f"**Epidemiological Assessment:**",

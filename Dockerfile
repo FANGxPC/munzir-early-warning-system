@@ -27,6 +27,7 @@ ENV PORT=8000
 # Copy application source code, playbooks, configuration, and pre-computed lakehouse data
 COPY prahari/ /app/prahari/
 COPY playbooks/ /app/playbooks/
+COPY config/ /app/config/
 COPY data/ /app/data/
 COPY docs/ /app/docs/
 COPY validation/ /app/validation/

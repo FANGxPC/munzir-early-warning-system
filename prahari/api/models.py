@@ -167,3 +167,48 @@ class AuditLogsResponse(BaseModel):
     total_records: int
     records: List[AuditLogRecord]
 
+
+class CopilotChatRequest(BaseModel):
+    query: str
+    site_id: str = "SITE-JA-01"
+    target_date: str = "2025-08-20"
+    history: Optional[List[Dict[str, str]]] = None
+
+
+class VoiceIntercomRequest(BaseModel):
+    spoken_transcript: Optional[str] = None
+    transcript: Optional[str] = None
+    audio_transcript: Optional[str] = None
+    speech_transcript: Optional[str] = None
+    worker_id: Optional[str] = None
+    site_id: str = "SITE-JA-01"
+    audio_channel: str = "radio_handset_ch4"
+    language_hint: Optional[str] = None
+
+    def get_transcript(self) -> str:
+        text = self.spoken_transcript or self.transcript or self.audio_transcript or self.speech_transcript
+        return text or ""
+
+
+class PolicyStudioRequest(BaseModel):
+    scenario_name: str = "MOHRE Summer Emergency Directive"
+    cohort_size: int = 50000
+    midday_ban_start_hour: float = 12.0
+    midday_ban_end_hour: float = 15.0
+    wbgt_threshold_mandatory_ors: float = 31.0
+    max_distance_to_cooling_shelter_m: float = 75.0
+    mandatory_bedside_usg_screening: bool = True
+    monte_carlo_draws: int = 1000
+
+
+class ActionConfirmRequest(BaseModel):
+    action_type: str = "shade_break"
+    site_id: str = "SITE-JA-01"
+    foreman_name: str = "Tariq Mansoor"
+    notes: Optional[str] = None
+    affected_workers: int = 15
+    timestamp: Optional[str] = None
+
+
+
+

@@ -100,7 +100,7 @@ Nodes carry **zero GPS hardware and zero stored location coordinates**. Location
 
 1. Safety officer logs in and opens the **Commission Node** dialog.
 2. Selects target worksite (`SITE-JA-01`).
-3. Presses **📱 Use This Device's Location** to query the W3C Geolocation API.
+3. Presses **[DEVICE] Use This Device's Location** to query the W3C Geolocation API.
 4. Server computes the Uber H3 Resolution 7 hexagonal index (`~5.16 km²`) and assigns a location confidence flag:
 
 | Browser Accuracy | Location Confidence Flag | Spatial Resolution | Included in L3 Space-Time Scan? |

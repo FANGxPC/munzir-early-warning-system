@@ -9,8 +9,11 @@ Provides model evaluation metrics (Precision, Recall, F1-Score) and prediction p
 """
 
 import os
+import logging
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
+
+logger = logging.getLogger(__name__)
 import joblib
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -167,7 +170,7 @@ class IncidentClassifier:
                 from prahari.ingestion.osha import OSHAIncidentIngestor
                 osha_corpus = OSHAIncidentIngestor().get_training_corpus()
             except Exception as e:
-                pass
+                logger.debug("OSHA incident training corpus unavailable: %s", e)
             data = list(DEFAULT_TRAINING_CORPUS) + osha_corpus
 
         # Sanitize all narratives before training

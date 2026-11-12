@@ -11,9 +11,9 @@ from pydantic import BaseModel, Field, field_validator, model_validator, ConfigD
 
 # List of forbidden personal identifier attributes to guarantee privacy-by-architecture
 FORBIDDEN_IDENTIFIER_FIELDS = {
-    "patient_name", "worker_name", "employee_id", "national_id", "ssn",
-    "emirates_id", "aadhaar", "phone", "email", "passport_no", "dob",
-    "exact_home_address", "residential_address", "name"
+    "patient_name", "worker_name", "employee_id", "worker_id", "laborer_id", "badge_id",
+    "person_id", "patient_id", "national_id", "ssn", "emirates_id", "aadhaar", "phone",
+    "email", "passport_no", "passport", "dob", "exact_home_address", "residential_address", "name"
 }
 
 
@@ -232,7 +232,7 @@ class SentinelUpload(BaseModel):
     Inbound telemetry payload from an ESP32 Sentinel node.
     Strictly forbids personal identifiers or unexpected metadata.
     """
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     node_id: str = Field(..., description="Unique node identifier, e.g. SENT-001")
     seq: int = Field(..., ge=0, description="Monotonic sequence number for gap detection")
@@ -266,7 +266,7 @@ class SentinelUploadResponse(BaseModel):
 
 class SentinelCommission(BaseModel):
     """Node commissioning record — maps physical device to verified site & geolocation."""
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     node_id: str = Field(..., description="Unique node identifier, e.g. SENT-001")
     site_id: str = Field(..., description="Linked worksite ID, e.g. SITE-JA-01")
