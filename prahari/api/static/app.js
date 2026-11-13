@@ -36,8 +36,23 @@ document.addEventListener("DOMContentLoaded", () => {
   setupRoleSwitcher();
   setupDateSelector();
   setupDemoToggles();
+  handleHashNavigation();
   loadCurrentView();
 });
+
+window.addEventListener("hashchange", () => {
+  handleHashNavigation();
+});
+
+function handleHashNavigation() {
+  const hash = (window.location.hash || "").replace(/^#/, "").trim();
+  if (hash) {
+    const targetContent = document.getElementById(`view-${hash}`);
+    if (targetContent) {
+      activateTab(hash);
+    }
+  }
+}
 
 function setupNavigation() {
   const tabButtons = document.querySelectorAll(".tab-btn");
@@ -46,6 +61,9 @@ function setupNavigation() {
       tabButtons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       state.activeTab = btn.dataset.tab;
+      if (window.location.hash !== `#${state.activeTab}`) {
+        history.replaceState(null, null, `#${state.activeTab}`);
+      }
 
       document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
       const targetContent = document.getElementById(`view-${state.activeTab}`);
@@ -4739,6 +4757,9 @@ async function initHeaderLiveNwpBadge() {
 // ==============================================================================
 
 function activateTab(tabName) {
+  if (window.location.hash !== `#${tabName}`) {
+    history.replaceState(null, null, `#${tabName}`);
+  }
   syncActivePillarForTab(tabName);
   const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
   if (tabBtn) {
@@ -4761,13 +4782,6 @@ function activateTab(tabName) {
   }
 }
 window.activateTab = activateTab;
-
-// Initialize header badge when DOM is ready
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initHeaderLiveNwpBadge);
-} else {
-  initHeaderLiveNwpBadge();
-}
 
 // Initialize header badge when DOM is ready
 if (document.readyState === "loading") {

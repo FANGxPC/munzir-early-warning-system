@@ -1932,9 +1932,17 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/index.html", response_class=HTMLResponse)
 def serve_index() -> HTMLResponse:
     """Serves the Munzir Front-End Single Page Application."""
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
         return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
     return HTMLResponse("<h1>Munzir Health Early-Warning Platform</h1><p>UI loading...</p>")
+
+
+@app.get("/favicon.ico")
+def serve_favicon():
+    """Serves clean 204 response for browser favicon requests to avoid 404 noise."""
+    from fastapi import Response
+    return Response(status_code=204)

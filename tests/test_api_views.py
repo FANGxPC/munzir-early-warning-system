@@ -197,7 +197,7 @@ def test_view_audit_logging_persistence(client):
 
 def test_static_index_html_serving(client):
     """
-    GET / serves the single page application HTML dashboard.
+    GET / and GET /index.html serve the single page application HTML dashboard.
     """
     response = client.get("/")
     assert response.status_code == 200
@@ -206,6 +206,13 @@ def test_static_index_html_serving(client):
     assert "Situation Map" in response.text
     assert "Alert Inbox" in response.text
     assert "Employer Safety View" in response.text
+
+    response_index = client.get("/index.html")
+    assert response_index.status_code == 200
+    assert "text/html" in response_index.headers["content-type"]
+
+    response_favicon = client.get("/favicon.ico")
+    assert response_favicon.status_code == 204
 
 
 def test_clinical_vulnerability_profile_endpoint(client):
