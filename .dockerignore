@@ -10,4 +10,8 @@ venv*
 bin/
 tests/
 .system_generated
+scratch/
+.review/
+*.log
+app_fqdn.txt
 
