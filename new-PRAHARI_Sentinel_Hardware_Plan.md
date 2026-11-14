@@ -33,7 +33,7 @@ The node carries no location and no person data.
 | USB cable | Must be a **data** cable, not charge-only. |
 | Power bank | For running away from the laptop. |
 
-Not needed: GPS, OLED, buzzer, second sensor, extra buttons. Use the **BOOT button already on the board** (GPIO 0 on most DevKits, ⚠ verify on yours). For a sun shield, put the DHT22 under an upturned white plastic cup with a few holes, in shade.
+Not needed: GPS, OLED, buzzer, second sensor, extra buttons. Use the **BOOT button already on the board** (GPIO 0 on most DevKits, [Warning] verify on yours). For a sun shield, put the DHT22 under an upturned white plastic cup with a few holes, in shade.
 
 ---
 
@@ -104,7 +104,7 @@ The LED follows `level`. If there are 3 failed uploads in a row, or `valid_until
 
 - Outdoors with sun: `0.7 × Tnw + 0.2 × Tg + 0.1 × Ta`
 - Indoors, no sun (a room demo): `0.7 × Tnw + 0.3 × Tg`
-- `Tnw` is estimated from air temp and humidity with Stull's approximation, a rough stand-in for natural wet-bulb (⚠ check its valid range in the paper).
+- `Tnw` is estimated from air temp and humidity with Stull's approximation, a rough stand-in for natural wet-bulb ([Warning] check its valid range in the paper).
 - Put the mode (`indoor` / `outdoor`) in config and in the data. Label the result **"estimated WBGT"** everywhere.
 - If you cannot build the globe: use the indoor formula with `Tg = Ta` and label it "estimated WBGT (no radiant term)". It is honest but makes the demo weaker.
 

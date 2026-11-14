@@ -1,0 +1,986 @@
+{
+  "resourceType": "Bundle",
+  "id": "munzir-bundle-c3c6ef44",
+  "meta": {
+    "lastUpdated": "2026-11-08T14:15:18.645568+00:00"
+  },
+  "type": "collection",
+  "total": 15,
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:446c9796-0c51-4509-b2b8-1d13c5259bd7",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-2016e39d",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645072+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-2016E39D"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-AQ-01",
+          "display": "Spatial Jurisdictions: SITE-AQ-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (1.89), workplace (0.71), environmental (-0.15)."
+          }
+        ],
+        "mitigation": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:c8a8b52e-d91f-4725-98e4-ad377b1a9fda",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-8048fabe",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645182+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-8048FABE"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-AQ-02",
+          "display": "Spatial Jurisdictions: SITE-AQ-02"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (2.05), workplace (0.75), environmental (0.89)."
+          }
+        ],
+        "mitigation": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:22294011-3fa2-4948-9c37-4cd0c030cbf9",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-2e8014c6",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645216+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-2E8014C6"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-BB-01",
+          "display": "Spatial Jurisdictions: SITE-BB-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (2.33), workplace (1.1), environmental (1.15)."
+          }
+        ],
+        "mitigation": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:e1a0fc06-e9eb-4f66-908e-5fa960a0e565",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-c1ba1341",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645245+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-C1BA1341"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-DR-01",
+          "display": "Spatial Jurisdictions: SITE-DR-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (1.26), workplace (-0.43), environmental (2.2)."
+          }
+        ],
+        "mitigation": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:ed8276ec-4f67-4b75-876f-73156535a88a",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-e230f89e",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645272+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-E230F89E"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-DS-01",
+          "display": "Spatial Jurisdictions: SITE-DS-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "high",
+                  "display": "High risk / Outbreak Alert"
+                }
+              ],
+              "text": "ALERT"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (2.19), workplace (0.27), environmental (1.67)."
+          }
+        ],
+        "mitigation": "Mandatory work-rest cycles (15 min rest/hr), shade stations, pause unshaded roof/steel tasks",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:45a3d07a-f7f8-444a-bfa8-5e4452a60926",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-3f1bd5ab",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645299+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-3F1BD5AB"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-DS-02",
+          "display": "Spatial Jurisdictions: SITE-DS-02"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "high",
+                  "display": "High risk / Outbreak Alert"
+                }
+              ],
+              "text": "ALERT"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (1.7), workplace (-0.58), environmental (0.76)."
+          }
+        ],
+        "mitigation": "Mandatory work-rest cycles (15 min rest/hr), shade stations, pause unshaded roof/steel tasks",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:563ae12d-d3aa-4384-970d-d9bb595ee2a4",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-1c9f53ea",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645325+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-1C9F53EA"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-JA-01",
+          "display": "Spatial Jurisdictions: SITE-JA-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "high",
+                  "display": "High risk / Outbreak Alert"
+                }
+              ],
+              "text": "ALERT"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (2.19), workplace (0.36), environmental (1.15)."
+          }
+        ],
+        "mitigation": "Mandatory work-rest cycles (15 min rest/hr), shade stations, pause unshaded roof/steel tasks",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:91ff672a-e6a4-465c-8d78-324c852c5ff1",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-0c312c20",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645355+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-0C312C20"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-JA-02",
+          "display": "Spatial Jurisdictions: SITE-JA-02"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "high",
+                  "display": "High risk / Outbreak Alert"
+                }
+              ],
+              "text": "ALERT"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (1.77), workplace (0.21), environmental (0.81)."
+          }
+        ],
+        "mitigation": "Mandatory work-rest cycles (15 min rest/hr), shade stations, pause unshaded roof/steel tasks",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:2204598d-2a98-4dae-b651-96a167827ec8",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-2628a246",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645379+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-2628A246"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/SITE-RK-01",
+          "display": "Spatial Jurisdictions: SITE-RK-01"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "403190006",
+                  "display": "Heat-related illness risk"
+                }
+              ],
+              "text": "Heat Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (2.22), workplace (0.96), environmental (-0.33)."
+          }
+        ],
+        "mitigation": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+        "note": [
+          {
+            "text": "Designated Primary Responder: Site Safety Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:899228bc-e140-4557-a1f4-7ca9d55d2b41",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-ab32aff3",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645405+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-AB32AFF3"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-BB",
+          "display": "Spatial Jurisdictions: DXB-BB"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "40733004",
+                  "display": "Infectious disease cluster"
+                }
+              ],
+              "text": "Infectious Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (0.6), workplace (0.83), environmental (-0.25)."
+          }
+        ],
+        "mitigation": "Contact facility occupational nurse, initiate active syndromic case finding, test water tank",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Surveillance Officer (Rapid Response Team)"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:8eb2d51e-ae44-46f3-bd10-d8474a3200d0",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-20c793d5",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645432+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-20C793D5"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-BD",
+          "display": "Spatial Jurisdictions: DXB-BD"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "50043002",
+                  "display": "Respiratory tract disorder surge"
+                }
+              ],
+              "text": "Respiratory Surge"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (0.81), workplace (0.84), environmental (0.12)."
+          }
+        ],
+        "mitigation": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Health Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:22982ca4-73f6-4a0d-a381-97ebcd7ff66d",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-f43efd6e",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645459+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-F43EFD6E"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-DR",
+          "display": "Spatial Jurisdictions: DXB-DR"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "50043002",
+                  "display": "Respiratory tract disorder surge"
+                }
+              ],
+              "text": "Respiratory Surge"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (0.69), workplace (0.83), environmental (0.38)."
+          }
+        ],
+        "mitigation": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Health Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:9a3f40e0-f0c9-41c7-93db-97e3b530004e",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-22afe81b",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645489+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-22AFE81B"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-HT",
+          "display": "Spatial Jurisdictions: DXB-HT"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "40733004",
+                  "display": "Infectious disease cluster"
+                }
+              ],
+              "text": "Infectious Cluster"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (0.62), workplace (0.83), environmental (-0.04)."
+          }
+        ],
+        "mitigation": "Contact facility occupational nurse, initiate active syndromic case finding, test water tank",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Surveillance Officer (Rapid Response Team)"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:be04e5e4-8759-4bac-909f-ed525e42ad80",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-e04197cb",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645516+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-E04197CB"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-JA",
+          "display": "Spatial Jurisdictions: DXB-JA"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "50043002",
+                  "display": "Respiratory tract disorder surge"
+                }
+              ],
+              "text": "Respiratory Surge"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (0.84), workplace (0.78), environmental (0.7)."
+          }
+        ],
+        "mitigation": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Health Officer"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:68daea91-df43-45c1-b722-057fc9e8900f",
+      "resource": {
+        "resourceType": "RiskAssessment",
+        "id": "risk-alt-3f3b3347",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/StructureDefinition/RiskAssessment"
+          ],
+          "lastUpdated": "2026-11-08T14:15:18.645541+00:00"
+        },
+        "identifier": [
+          {
+            "system": "urn:munzir:alert-id",
+            "value": "ALT-3F3B3347"
+          }
+        ],
+        "status": "final",
+        "subject": {
+          "reference": "Location/DXB-MU",
+          "display": "Spatial Jurisdictions: DXB-MU"
+        },
+        "occurrenceDateTime": "2026-06-01T00:00:00Z",
+        "basis": [
+          {
+            "display": "Data Quality Status: HEALTHY"
+          }
+        ],
+        "prediction": [
+          {
+            "outcome": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "50043002",
+                  "display": "Respiratory tract disorder surge"
+                }
+              ],
+              "text": "Respiratory Surge"
+            },
+            "probabilityDecimal": 1.0,
+            "qualitativeRisk": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/risk-probability",
+                  "code": "moderate",
+                  "display": "Moderate risk / Preventive Warning"
+                }
+              ],
+              "text": "WARNING"
+            },
+            "whenPeriod": {
+              "start": "2026-06-01T00:00:00Z"
+            },
+            "rationale": "Multi-signal fusion model calibrated probability: 100.0% [90% Conformal CI: 88.0% - 100.0%]. Top contributing features: clinical (1.03), workplace (0.43), environmental (0.71)."
+          }
+        ],
+        "mitigation": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+        "note": [
+          {
+            "text": "Designated Primary Responder: District Health Officer"
+          }
+        ]
+      }
+    }
+  ]
+}

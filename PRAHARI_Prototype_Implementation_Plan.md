@@ -8,7 +8,7 @@
 ## 0. How to read this document
 
 - Every phase lists **Goal → Steps → Deliverables → Exit criteria (Definition of Done)**.
-- Anything marked **⚠ VERIFY** is a fact that changes over time (quotas, free tiers, dataset availability). Check it in the Azure portal or the source site before relying on it. Nothing in this plan depends on an unverified item without a fallback.
+- Anything marked **[Warning] VERIFY** is a fact that changes over time (quotas, free tiers, dataset availability). Check it in the Azure portal or the source site before relying on it. Nothing in this plan depends on an unverified item without a fallback.
 - Performance numbers in this document are **targets to measure and report**, not claimed results. Judges reward honest, measured numbers far more than impressive invented ones.
 
 ---
@@ -91,16 +91,16 @@ Plus **one "missing data" demo**: turn off the clinical feed mid-demo and show t
 
 | Service | Use | Cost note |
 |---|---|---|
-| Azure Functions (Consumption) | Scheduled ingestion & feature jobs | Has a monthly free grant ⚠ VERIFY current amount |
+| Azure Functions (Consumption) | Scheduled ingestion & feature jobs | Has a monthly free grant [Warning] VERIFY current amount |
 | Azure Blob Storage | Bronze raw data (Parquet), model artefacts | Very low cost at prototype scale |
-| Azure Database for PostgreSQL – Flexible Server (Burstable tier) + PostGIS | Silver/gold aggregated tables, spatial queries | Included in the 12-month free services list for eligible accounts ⚠ VERIFY tier/hours; **stop the server when not in use** |
-| Azure Container Apps | FastAPI detection + API service, scale-to-zero | Has a monthly free grant ⚠ VERIFY |
+| Azure Database for PostgreSQL – Flexible Server (Burstable tier) + PostGIS | Silver/gold aggregated tables, spatial queries | Included in the 12-month free services list for eligible accounts [Warning] VERIFY tier/hours; **stop the server when not in use** |
+| Azure Container Apps | FastAPI detection + API service, scale-to-zero | Has a monthly free grant [Warning] VERIFY |
 | Azure Static Web Apps (Free plan) | Front-end hosting | Free plan available |
 | Microsoft Entra ID | Login + app roles for RBAC | Basic features available |
 | Azure Key Vault | Secrets (API keys, DB creds) | Low cost |
 | Application Insights | Pipeline latency, API errors, data-freshness telemetry | Watch ingestion volume |
-| Azure AI Language (free tier, optional) | Classify free-text incident reports | ⚠ VERIFY free tier availability in your region |
-| Azure OpenAI / Foundry models (optional) | Narrative rephrasing of alert JSON | **⚠ Not guaranteed on student subscriptions** — quotas may be zero or resource creation may be blocked by policy. Design must work without it (template fallback). |
+| Azure AI Language (free tier, optional) | Classify free-text incident reports | [Warning] VERIFY free tier availability in your region |
+| Azure OpenAI / Foundry models (optional) | Narrative rephrasing of alert JSON | **[Warning] Not guaranteed on student subscriptions** — quotas may be zero or resource creation may be blocked by policy. Design must work without it (template fallback). |
 | Cost Management | Budget alert at e.g. 50%/80% of credit | Set on day 1 |
 
 **Budget discipline:** Azure for Students gives US$100 credit valid 12 months, no credit card; services stop when credit is exhausted. Do model training **locally / in GitHub Codespaces / Colab**, not on paid Azure ML compute. Deploy only inference to Azure.
@@ -118,9 +118,9 @@ Real person-level clinical and HR data will not be available in a hackathon. The
 | Temperature, humidity, wind, solar radiation (hourly, historical + forecast) | **Open-Meteo** Forecast & Historical Weather APIs (ERA5 reanalysis back to 1940) | No API key, free for non-commercial use, CC BY 4.0 attribution required; fair-use limit (~10,000 requests/day) |
 | Modelled air quality (PM2.5, PM10, O₃, NO₂, SO₂, CO) | **Open-Meteo Air Quality API** (CAMS-based) | Values are revised each model run — store snapshot time |
 | Measured air quality from monitors | **OpenAQ API v3** (v1/v2 are retired) | Free API key; includes coverage/completeness metadata — use it for DQ scoring |
-| Occupational incident narratives (for training the text classifier) | **OSHA Severe Injury Reports** (public US dataset) | ⚠ VERIFY current download page; use only as training text, not as your demo region's data |
-| Optional real aggregate health series for back-testing | e.g., CDC public datasets on data.cdc.gov (wastewater/NWSS, ED syndromic trends), WHO FluNet | ⚠ VERIFY availability and licence; use one series only to show the detector on real data |
-| Admin boundaries | GADM or national open boundary files | ⚠ VERIFY licence for your use |
+| Occupational incident narratives (for training the text classifier) | **OSHA Severe Injury Reports** (public US dataset) | [Warning] VERIFY current download page; use only as training text, not as your demo region's data |
+| Optional real aggregate health series for back-testing | e.g., CDC public datasets on data.cdc.gov (wastewater/NWSS, ED syndromic trends), WHO FluNet | [Warning] VERIFY availability and licence; use one series only to show the detector on real data |
+| Admin boundaries | GADM or national open boundary files | [Warning] VERIFY licence for your use |
 
 ### 4.2 Synthetic generator (core of the demo — build it carefully)
 
@@ -170,7 +170,7 @@ audit_log(user_role, endpoint, geo_level, purpose, ts)
 **Goal:** a working, cost-safe environment and agreed design rules before code.
 
 **Steps**
-1. Activate Azure for Students; create one resource group `rg-prahari-dev` in a single region close to you that offers the services you need ⚠ VERIFY service availability per region.
+1. Activate Azure for Students; create one resource group `rg-prahari-dev` in a single region close to you that offers the services you need [Warning] VERIFY service availability per region.
 2. In **Cost Management**, create a budget with alerts at 50% and 80% of the credit.
 3. Create the GitHub repo (monorepo):
    ```
@@ -202,7 +202,7 @@ audit_log(user_role, endpoint, geo_level, purpose, ts)
    - Pull hourly temperature, relative humidity, wind speed, shortwave radiation from Open-Meteo for each district centroid and each site.
    - Pull PM2.5/PM10/O₃/NO₂ from Open-Meteo Air Quality and measured values from OpenAQ v3 stations within each district.
    - Backfill 3–5 years of history once (respect fair-use; batch by location; cache to Blob).
-2. **Derive WBGT** (outdoor heat-stress index) from weather variables using an established implementation (e.g., the `thermofeel` library from ECMWF or `pythermalcomfort`) ⚠ VERIFY function names in the installed version. Store daily max WBGT and hours above threshold per site.
+2. **Derive WBGT** (outdoor heat-stress index) from weather variables using an established implementation (e.g., the `thermofeel` library from ECMWF or `pythermalcomfort`) [Warning] VERIFY function names in the installed version. Store daily max WBGT and hours above threshold per site.
 3. **Synthetic clinical & workplace feeds:** run `simulator/` to produce daily district-level syndromic counts (respiratory, GI, fever, heat-related), lab test positivity, site-level sickness absence (by reason category), and incident reports with short free-text narratives.
 4. **Incident text classification:** train a small classifier (TF-IDF + logistic regression, or a small transformer run locally) on public OSHA narratives to tag incidents as `heat`, `respiratory/chemical`, `injury`, `other`. Optionally compare with Azure AI Language. Strip any names/addresses with **Microsoft Presidio** before classification.
 5. **Data quality scoring job:** for each signal × location × day compute completeness (observed vs expected reporters), latency (event date vs ingestion time), and staleness. Persist as `completeness_score`, `source_latency_hrs`.
@@ -217,7 +217,7 @@ audit_log(user_role, endpoint, geo_level, purpose, ts)
 **Goal:** a single aggregated, suppression-aware dataset that is safe by construction.
 
 **Steps**
-1. Provision PostgreSQL Flexible Server (Burstable), enable **PostGIS** and `h3`-style indexing in Python (`h3` library) ⚠ VERIFY extension allow-list on your server.
+1. Provision PostgreSQL Flexible Server (Burstable), enable **PostGIS** and `h3`-style indexing in Python (`h3` library) [Warning] VERIFY extension allow-list on your server.
 2. Load district boundaries; map each site/clinic to district and to an H3 cell (resolution chosen so a cell is larger than a single small workplace — e.g., res 6–7).
 3. **Geolocation fallback:** if a record has exact coordinates → site/H3; if only an address district → district with `location_confidence='district_only'`; if neither → state-level bucket, excluded from cluster scanning but included in totals.
 4. **Aggregate** to (geo × day × signal) with denominators (population or workforce at risk).
@@ -310,7 +310,7 @@ audit_log(user_role, endpoint, geo_level, purpose, ts)
 **Steps**
 1. **Entra ID app roles:** `surveillance_officer`, `occupational_health`, `employer_safety`, `regulator`, `public`, `auditor`. The API filters by role (geo level, suppression level, fields).
 2. **Views:**
-   - **Situation map** (Leaflet or MapLibre with OpenStreetMap tiles within the tile usage policy; or Azure Maps if your quota allows ⚠ VERIFY): districts/H3 coloured by risk, cluster outlines, location-confidence hatching.
+   - **Situation map** (Leaflet or MapLibre with OpenStreetMap tiles within the tile usage policy; or Azure Maps if your quota allows [Warning] VERIFY): districts/H3 coloured by risk, cluster outlines, location-confidence hatching.
    - **Alert inbox:** severity, probability with uncertainty band, DQ badge, owner, status.
    - **Evidence card:** as in Phase 4, with time-series charts (observed vs expected vs exposure-adjusted expected).
    - **Employer view:** only their own sites, rates only, minimum group size enforced, banner: *"Aggregate data — not for individual employment or disciplinary decisions."*
@@ -467,7 +467,7 @@ audit_log(user_role, endpoint, geo_level, purpose, ts)
 
 ---
 
-## 9. Facts to verify on day 1 (⚠ checklist)
+## 9. Facts to verify on day 1 ([Warning] checklist)
 
 - [ ] Azure for Students credit and expiry shown in your portal (Cost Management).
 - [ ] Current free amounts for Functions, Container Apps, PostgreSQL Flexible Server, Static Web Apps on azure.microsoft.com/pricing/free-services.

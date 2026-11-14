@@ -62,8 +62,8 @@ class OpenFDAClient:
                 try:
                     with open(cache_file, "w", encoding="utf-8") as f:
                         json.dump(data, f)
-                except Exception:
-                    pass
+                except Exception as ce:
+                    logger.debug("Failed caching openFDA response: %s", ce)
                 return data
         except Exception as e:
             logger.info(f"Live openFDA query for '{term}' unavailable ({e}). Using offline registry.")

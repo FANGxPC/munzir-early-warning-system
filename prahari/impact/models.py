@@ -191,6 +191,7 @@ class ImpactEstimate(BaseModel):
     scenarios: ScenarioBounds
     sensitivity: SensitivityMatrix
     assumptions_audit: Dict[str, AssumptionParameter]
+    monte_carlo_distribution: Optional[Dict[str, Any]] = None
 
 
 class DistrictExposureBurden(BaseModel):

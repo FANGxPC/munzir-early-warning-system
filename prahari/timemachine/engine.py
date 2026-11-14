@@ -155,7 +155,7 @@ class TimeMachineEngine:
                 else "<span class='badge badge-none'>Normal</span>"
             )
             peak_badge = (
-                "<span class='badge badge-peak'>🏆 OBSERVED PEAK</span>"
+                "<span class='badge badge-peak'>OBSERVED PEAK</span>"
                 if r.is_observed_peak
                 else ""
             )
@@ -260,14 +260,14 @@ class TimeMachineEngine:
 <body>
   <div class="container">
     <header>
-      <h1>⏱️ Munzir Time Machine Replay — Operational Validation</h1>
+      <h1>Munzir Time Machine Replay — Operational Validation</h1>
       <div class="subtitle">
         Strict As-Of-Date Historical Evaluation: <b>{self.config.name}</b> ({self.config.region_name})
       </div>
     </header>
 
     <div class="banner-caveat">
-      <b>⚠️ SINGLE CASE STUDY DISCLOSURE:</b> {metrics.caveat_notice}
+      <b>SINGLE CASE STUDY DISCLOSURE:</b> {metrics.caveat_notice}
     </div>
 
     <!-- KPI Grid -->
@@ -306,7 +306,7 @@ class TimeMachineEngine:
 
     <!-- Timeline Table -->
     <div class="section-card">
-      <h2>📅 As-Of-Date Daily Surveillance Timeline</h2>
+      <h2>As-Of-Date Daily Surveillance Timeline</h2>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
         On each simulated date D, algorithms only viewed data published/reported on or before D. Zero hindsight leakage.
       </p>
@@ -331,7 +331,7 @@ class TimeMachineEngine:
 
     <!-- Provenance & Limitations Section -->
     <div class="section-card">
-      <h2>🔬 Rigorous Data Provenance & Methodological Limitations</h2>
+      <h2>Rigorous Data Provenance & Methodological Limitations</h2>
       <div class="banner-limitations">
         <b>1. Authentic Weather Source:</b> Open-Meteo Archived Forecast API (<code>historical-forecast-api.open-meteo.com</code>). Uses archived numerical weather prediction model runs (ECMWF IFS / NOAA GFS) produced at that time, rather than post-hoc assimilated reanalysis.<br>
         <b>2. Authentic Clinical Outcome Ground Truth:</b> U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP), published in MMWR Vol. 70, No. 29 (Schramm et al., 2021; DOI: <code>10.15585/mmwr.mm7029e1</code>). Represents real emergency department visits across HHS Region 10.<br>

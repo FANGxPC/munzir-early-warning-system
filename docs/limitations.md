@@ -45,3 +45,24 @@
 - **Limitation:** Low-cost optical particle counters (OPCs) can experience optical chamber dust fouling or hygroscopic particulate swelling during humid marine incursions, leading to transient particulate overestimation.
 - **Mitigation:** Munzir computes the $\text{PM}_{2.5} / \text{PM}_{10}$ ratio and corroborates ground sensors against CAMS atmospheric model forecasts to filter out optical sensor saturation.
 
+---
+
+## 6. Spatial Transfer Limits of Single Sentinel Sensor
+- **Context:** An on-site ESP32 Sentinel node with DHT22 and DS18B20 matte-black globe measures true localized microclimates and trains an empirical bias correction against numerical weather model forecasts.
+- **Limitation:** When only a single physical hardware node is active (e.g., at Jebel Ali Port), spatial transfer across other geographically dispersed industrial sites (e.g., Al Quoz, Ras Al Khor) cannot be empirically cross-validated without multi-node Leave-One-Sensor-Out (LOSO) telemetry. Claiming universal microclimate generalization across an entire emirate from a single point would be scientifically invalid.
+- **Mitigation:** Any unsensored site is explicitly tagged with `UNVALIDATED-SPATIALLY` in all API responses and UI panels, its conformal prediction intervals are widened to reflect spatial uncertainty, and before-and-after error reductions are strictly reported only for sensored locations. Multi-sensor LOSO validation is scheduled as part of the Phase 12/13 pilot deployment.
+
+---
+
+## 7. Intervention Cost Parameter Verification in What-If Simulator
+- **Context:** The What-If Intervention Simulator combines deterministic schedule recomputations with literature-derived dose-response curves and operational intervention unit costs.
+- **Limitation:** While epidemiological effect sizes are cited directly from peer-reviewed literature (*Hall & Horta 2020*, *Wegman et al. 2018*, *MOHRE Ministerial Resolution 44/2022*), local commercial costs (such as modular shade canopy rentals, chilled electrolyte bulk procurement, and split-shift transportation logistics in the UAE) vary by contractor and seasonal supply chain fluctuations.
+- **Mitigation:** All cost parameters without a published academic or regulatory index are cataloged in `config/assumptions.yaml` with explicit `UNVERIFIED` tags. The system uses Monte Carlo distributions ($N=1,000$ draws) across wide plausible cost ranges rather than single fixed figures, and users can inspect or override unit cost assumptions in real time.
+
+---
+
+## 8. Health Data Provenance & Prospective Shadow-Mode Path
+- **Context:** True patient-level syndromic emergency department records from UAE public health authorities (DHA, MOHRE, SEHA) are confidential under UAE Federal Decree-Law No. 45 of 2021 on Personal Data Protection and cannot be published or distributed in public competition repositories without formal institutional IRB approval.
+- **Limitation:** To ensure absolute reproducibility and operational benchmarking under Hackathon Challenge Criterion #5 without violating privacy laws, historical evaluation uses authentic CDC NSSP Pacific Northwest emergency department records and authentic federal US DOL OSHA Severe Injury records alongside authentic Open-Meteo and OpenAQ v3 feeds. Local UAE syndromic trends are modeled using calibrated synthetic epidemiology conforming to DHA/MOHRE demographics.
+- **Mitigation:** We have designed an explicit 12-week prospective shadow-mode pilot protocol (aligned with DECIDE-AI Stage 2) to validate Munzir against live, non-public DHA hospital registries in an air-gapped, zero-PII environment prior to active clinical interventional deployment.
+

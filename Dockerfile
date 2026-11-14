@@ -11,22 +11,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+# Pre-install CPU-only PyTorch wheel to prevent downloading the 2.8 GB CUDA wheel
+RUN pip install --no-cache-dir --prefix=/install torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # Final Runtime Image
 FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy installed Python packages from builder
-COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
+# Copy installed Python packages from builder directly to standard /usr/local
+COPY --from=builder /install /usr/local
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
 # Copy application source code, playbooks, configuration, and pre-computed lakehouse data
 COPY prahari/ /app/prahari/
 COPY playbooks/ /app/playbooks/
+COPY config/ /app/config/
 COPY data/ /app/data/
 COPY docs/ /app/docs/
 COPY validation/ /app/validation/

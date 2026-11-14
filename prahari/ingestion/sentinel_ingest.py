@@ -9,6 +9,9 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 from prahari.config import (
     GOLD_DIR,
@@ -71,8 +74,8 @@ class SentinelIngestionEngine:
                 for item in data:
                     comm = SentinelCommission(**item)
                     self._register_commission_internal(comm, persist=False)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed restoring registered Sentinel nodes from %s: %s", self.persistence_file, e)
 
     def _persist_nodes(self) -> None:
         """Serializes commissioned nodes to Gold storage."""
@@ -391,8 +394,8 @@ class SentinelIngestionEngine:
                 diff_sec = (now_dt - last_dt).total_seconds()
                 if diff_sec > SENTINEL_OFFLINE_THRESHOLD_SECS:
                     status.is_online = False
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed restoring registered Sentinel nodes from %s: %s", self.persistence_file, e)
 
         return status
 

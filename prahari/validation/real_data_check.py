@@ -6,9 +6,12 @@ to prove that detection behaviors remain sound on genuine, non-synthetic physica
 Satisfies Phase 6 Step 5.
 """
 
+import logging
 from typing import Dict, List, Any
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 from prahari.detection.l1_aberration import L1AberrationDetector
 from prahari.detection.l3_spacetime import ProspectiveSpaceTimeScan
@@ -39,8 +42,8 @@ class RealDataSanityChecker:
                 df_bronze = BronzeStore().read_observations(start_date=start_date, end_date=end_date)
                 if not df_bronze.empty:
                     df_obs = df_bronze
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("BronzeStore fallback read failed: %s", e)
 
         if df_obs.empty:
             return {

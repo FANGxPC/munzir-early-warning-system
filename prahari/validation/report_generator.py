@@ -91,7 +91,7 @@ class ValidationReportGenerator:
 
   <header>
     <div>
-      <h1>Munzir (PRAHARI) Operational Validation Report</h1>
+      <h1>Munzir (منذر) Operational Validation Report</h1>
       <div class="subtitle">Reproducible Benchmarking, Lead-Time Verification, and AMOC Timeliness Analysis</div>
     </div>
     <div style="text-align: right;">
@@ -136,7 +136,7 @@ class ValidationReportGenerator:
 
   <!-- 1. Baseline Comparative Benchmark -->
   <div class="section-card">
-    <h2>🏆 1. Side-by-Side Baseline Comparison</h2>
+    <h2>1. Side-by-Side Baseline Comparison</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Proving the core thesis: <em>"Multi-signal fusion gives 2–4 days more lead time at the same or lower false-alarm rate."</em>
     </p>
@@ -187,7 +187,7 @@ class ValidationReportGenerator:
 
   <!-- 2. AMOC Curve -->
   <div class="section-card">
-    <h2>📈 2. Activity Monitoring Operating Characteristic (AMOC)</h2>
+    <h2>2. Activity Monitoring Operating Characteristic (AMOC)</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Trade-off curve between Detection Delay (days from event start) and False Alarm Rate across decision thresholds.
     </p>
@@ -198,7 +198,7 @@ class ValidationReportGenerator:
 
   <!-- 3. Scenario-Specific Breakdown -->
   <div class="section-card">
-    <h2>🎯 3. Scenario-Specific Detection Breakdown</h2>
+    <h2>3. Scenario-Specific Detection Breakdown</h2>
     <table>
       <thead>
         <tr>
@@ -216,7 +216,7 @@ class ValidationReportGenerator:
 
   <!-- 4. Calibration Reliability Diagram -->
   <div class="section-card">
-    <h2>⚖️ 4. Probability Calibration (Reliability Diagram)</h2>
+    <h2>4. Probability Calibration (Reliability Diagram)</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Evaluates whether an alert with 80% predicted probability corresponds to a true outbreak 80% of the time.
     </p>
@@ -227,7 +227,7 @@ class ValidationReportGenerator:
 
   <!-- 5. Missing-Data Ablation Table -->
   <div class="section-card">
-    <h2>🧪 5. Missing-Input Degradation Ablation Study</h2>
+    <h2>5. Missing-Input Degradation Ablation Study</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Quantifies platform resilience when primary sensors fail or feeds drop out. Demonstrates graceful degradation.
     </p>
@@ -249,7 +249,7 @@ class ValidationReportGenerator:
 
   <!-- 6. Subgroup Fairness & Parity -->
   <div class="section-card">
-    <h2>🌍 6. Subgroup Equity & Disaggregated Metrics</h2>
+    <h2>6. Subgroup Equity & Disaggregated Metrics</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Fairlearn-style disaggregated validation verifying the system does not under-serve rural or industrial sectors.
     </p>
@@ -271,7 +271,7 @@ class ValidationReportGenerator:
 
   <!-- 7. Real-Data Sanity Check -->
   <div class="section-card">
-    <h2>🔬 7. Genuine Physical Telemetry Sanity Check</h2>
+    <h2>7. Genuine Physical Telemetry Sanity Check</h2>
     <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6;">
       <strong>Dataset:</strong> {real_data_summary.get('evaluated_signal', 'Open-Meteo & OpenAQ Data')}<br>
       <strong>Date Range:</strong> {real_data_summary.get('date_range', 'Historical')}<br>

@@ -44,10 +44,10 @@ $$P(\text{Outbreak Surge in } t + [1..4] \text{ days} \mid \mathbf{X}_{t})$$
 
 ## 3. Strictly Out-of-Scope & Prohibited Uses
 
-- ❌ **Individual Clinical Diagnostics:** Model does not predict individual patient outcomes or diagnose medical conditions.
-- ❌ **Employee Surveillance & Disciplinary Actions:** Prohibited by system architecture from being used to monitor individual employee attendance, dispute medical leave, or execute punitive employment sanctions.
-- ❌ **Commercial Insurance Underwriting:** Forbidden from being utilized to deny health coverage or increase premiums for specific employer workforces.
-- ❌ **Autonomous Enforcement:** Model outputs are strictly advisory decision-support mechanisms requiring human-in-the-loop triage before field action.
+- [NO] **Individual Clinical Diagnostics:** Model does not predict individual patient outcomes or diagnose medical conditions.
+- [NO] **Employee Surveillance & Disciplinary Actions:** Prohibited by system architecture from being used to monitor individual employee attendance, dispute medical leave, or execute punitive employment sanctions.
+- [NO] **Commercial Insurance Underwriting:** Forbidden from being utilized to deny health coverage or increase premiums for specific employer workforces.
+- [NO] **Autonomous Enforcement:** Model outputs are strictly advisory decision-support mechanisms requiring human-in-the-loop triage before field action.
 
 ---
 

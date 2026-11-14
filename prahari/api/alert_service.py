@@ -4,7 +4,7 @@ Manages alert inbox filtering, human-in-the-loop acknowledgement workflow,
 operational PPV metrics, and Evidence Card generation under strict SLA (< 2 seconds).
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 from fastapi import HTTPException, status
 import pandas as pd
@@ -186,6 +186,8 @@ class AlertInboxService:
         card_dict = card.to_dict()
 
         # Add aliases and formatted views for UI and client consumers
+        card_dict["primary_driver"] = card.primary_driver_group
+        card_dict["proportionality_tier"] = getattr(card, "proportionality_tier", "TARGETED_PREVENTIVE")
         card_dict["shap_breakdown"] = card.shap_attributions
         card_dict["action_checklist"] = card.recommended_actions
         card_dict["environmental_forecast"] = {
@@ -222,13 +224,24 @@ class AlertInboxService:
         user: AuthenticatedUser,
     ) -> AcknowledgeResponse:
         """Processes human-in-the-loop acknowledgement transition."""
-        try:
-            target_status = AlertStatus(request.action.lower())
-        except ValueError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid action '{request.action}'. Allowed: {[s.value.upper() for s in AlertStatus]}"
-            )
+        action_clean = request.action.lower().strip()
+        ACTION_MAP = {
+            "acknowledge": AlertStatus.ACKNOWLEDGED,
+            "acknowledged": AlertStatus.ACKNOWLEDGED,
+            "act": AlertStatus.ACTED,
+            "acted": AlertStatus.ACTED,
+            "dismiss": AlertStatus.DISMISSED,
+            "dismissed": AlertStatus.DISMISSED,
+        }
+        target_status = ACTION_MAP.get(action_clean)
+        if not target_status:
+            try:
+                target_status = AlertStatus(action_clean)
+            except ValueError:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Invalid action '{request.action}'. Allowed: {[s.value.upper() for s in AlertStatus]}"
+                )
 
         # Validation: Mandatory reason if dismissed
         unproc_code = getattr(status, "HTTP_422_UNPROCESSABLE_CONTENT", 422)
@@ -272,7 +285,7 @@ class AlertInboxService:
         return AcknowledgeResponse(
             alert_id=alert_id,
             status=target_status.value.upper(),
-            updated_at=datetime.utcnow().isoformat() + "Z",
+            updated_at=datetime.now(timezone.utc).isoformat(),
             user_id=user.user_id,
             message=f"Alert {alert_id} successfully transitioned to {target_status.value.upper()}."
         )

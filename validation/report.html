@@ -49,12 +49,12 @@
 
   <header>
     <div>
-      <h1>Munzir (PRAHARI) Operational Validation Report</h1>
+      <h1>Munzir (منذر) Operational Validation Report</h1>
       <div class="subtitle">Reproducible Benchmarking, Lead-Time Verification, and AMOC Timeliness Analysis</div>
     </div>
     <div style="text-align: right;">
       <div class="meta-badge">Seed: 42 | Status: PASSED</div>
-      <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">2026-11-08 08:48:04 UTC</div>
+      <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">2026-11-13 08:29:16 UTC</div>
     </div>
   </header>
 
@@ -94,7 +94,7 @@
 
   <!-- 1. Baseline Comparative Benchmark -->
   <div class="section-card">
-    <h2>🏆 1. Side-by-Side Baseline Comparison</h2>
+    <h2>1. Side-by-Side Baseline Comparison</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Proving the core thesis: <em>"Multi-signal fusion gives 2–4 days more lead time at the same or lower false-alarm rate."</em>
     </p>
@@ -167,7 +167,7 @@
 
   <!-- 2. AMOC Curve -->
   <div class="section-card">
-    <h2>📈 2. Activity Monitoring Operating Characteristic (AMOC)</h2>
+    <h2>2. Activity Monitoring Operating Characteristic (AMOC)</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Trade-off curve between Detection Delay (days from event start) and False Alarm Rate across decision thresholds.
     </p>
@@ -192,7 +192,7 @@
 
   <!-- 3. Scenario-Specific Breakdown -->
   <div class="section-card">
-    <h2>🎯 3. Scenario-Specific Detection Breakdown</h2>
+    <h2>3. Scenario-Specific Detection Breakdown</h2>
     <table>
       <thead>
         <tr>
@@ -231,7 +231,7 @@
 
   <!-- 4. Calibration Reliability Diagram -->
   <div class="section-card">
-    <h2>⚖️ 4. Probability Calibration (Reliability Diagram)</h2>
+    <h2>4. Probability Calibration (Reliability Diagram)</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Evaluates whether an alert with 80% predicted probability corresponds to a true outbreak 80% of the time.
     </p>
@@ -257,7 +257,7 @@
 
   <!-- 5. Missing-Data Ablation Table -->
   <div class="section-card">
-    <h2>🧪 5. Missing-Input Degradation Ablation Study</h2>
+    <h2>5. Missing-Input Degradation Ablation Study</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Quantifies platform resilience when primary sensors fail or feeds drop out. Demonstrates graceful degradation.
     </p>
@@ -343,7 +343,7 @@
 
   <!-- 6. Subgroup Fairness & Parity -->
   <div class="section-card">
-    <h2>🌍 6. Subgroup Equity & Disaggregated Metrics</h2>
+    <h2>6. Subgroup Equity & Disaggregated Metrics</h2>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
       Fairlearn-style disaggregated validation verifying the system does not under-serve rural or industrial sectors.
     </p>
@@ -405,11 +405,11 @@
 
   <!-- 7. Real-Data Sanity Check -->
   <div class="section-card">
-    <h2>🔬 7. Genuine Physical Telemetry Sanity Check</h2>
+    <h2>7. Genuine Physical Telemetry Sanity Check</h2>
     <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6;">
       <strong>Dataset:</strong> Real Open-Meteo / OpenAQ Physical Measurements<br>
       <strong>Date Range:</strong> 2025-06-01 to 2025-08-31<br>
-      <strong>Observations Examined:</strong> 5244<br>
+      <strong>Observations Examined:</strong> 5205<br>
       <strong>L1 Aberrations & L3 Clusters Verified:</strong> 0 aberrant days, 3 clusters.<br>
       <em>Findings:</em> Real-data sanity check confirmed that L1 EARS and L3 permutation clustering reliably detect summer thermal heatwaves and atmospheric inversion events in Dubai without artificial noise inflation. Baseline physical behavior verified.
     </p>

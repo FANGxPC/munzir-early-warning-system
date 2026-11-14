@@ -32,7 +32,7 @@ def main():
         readings = json.load(f)
 
     print("=" * 76)
-    print("  🚨 MUNZIR SENTINEL TELEMETRY REPLAY RUNNER [DEMO BACKUP MODE] 🚨  ")
+    print("  MUNZIR SENTINEL TELEMETRY REPLAY RUNNER [DEMO BACKUP MODE]  ")
     print(f"  Streaming {len(readings)} readings to: {args.api_url}")
     print("=" * 76)
 
@@ -56,7 +56,7 @@ def main():
                 timeout=5
             )
             if r.status_code == 200:
-                print(f"[REPLAY] ✔ Commissioned {first_node} at SITE-JA-01 (H3: {r.json().get('h3_index')})")
+                print(f"[REPLAY] [OK] Commissioned {first_node} at SITE-JA-01 (H3: {r.json().get('h3_index')})")
             else:
                 print(f"[REPLAY] Commission notice: {r.status_code} - {r.text}")
         except Exception as e:
@@ -92,7 +92,7 @@ def main():
             time.sleep(args.interval)
 
     print("\n" + "=" * 76)
-    print("  ✔ REPLAY STREAM COMPLETED. Dashboard view is updated live.")
+    print("  [OK] REPLAY STREAM COMPLETED. Dashboard view is updated live.")
     print("=" * 76)
 
 

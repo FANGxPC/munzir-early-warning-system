@@ -88,7 +88,7 @@ def get_current_user(
         email=f"{role_enum.value}@prahari.gov.ae",
         role=role_enum,
         employer_id=emp_id if role_enum == EntraRole.EMPLOYER_SAFETY else None,
-        organization=org_mapping.get(role_enum, "PRAHARI System"),
+        organization=org_mapping.get(role_enum, "Munzir Surveillance System"),
         purpose=x_purpose or "authorized_operation",
     )
 
