@@ -22,6 +22,7 @@ class CopilotIntent(str, Enum):
     OPERATIONAL_INTERVENTION = "operational_intervention"
     FLEET_LOGISTICS = "fleet_logistics"
     CLINICAL_RENAL = "clinical_renal"
+    ACTION_PLAN = "action_plan"
     GREETING = "greeting"
     CONVERSATIONAL = "conversational"
     CLINICAL_EDUCATION = "clinical_education"
@@ -68,6 +69,14 @@ class RetrievedContextPacket:
         """Formats the retrieved packet into a concise prompt (~100-140 tokens) optimized for local LLM inference."""
         if self.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
             return "Munzir Sovereign Health Copilot. Conversational greeting and public health platform identity."
+        if self.intent == CopilotIntent.ACTION_PLAN:
+            ctx = self.live_context
+            return (
+                f"Master Operational Heat Safety Plan for {ctx.site_name} ({ctx.site_id}). "
+                f"Peak WBGT: {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier). "
+                f"Logistics readiness: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, "
+                f"{ctx.potable_water_tons} tons potable water. UAE MOHRE Resolution 44/2022 Article 1 midday ban."
+            )
         if self.intent == CopilotIntent.CLINICAL_EDUCATION:
             return "Clinical thermal physiology domain: Heat strain vs stroke, hydration guidelines, WBGT index, and DHA health protection standards."
         if self.intent == CopilotIntent.FIRST_AID:
@@ -182,23 +191,33 @@ class SovereignRAGRetriever:
         if any(w in q for w in platform_phrases):
             return CopilotIntent.PLATFORM_GUIDANCE
 
-        # 6. Statutory Decrees & Legal Mandates
+        # 6. Operational Planning & Master Heat Safety Plans
+        plan_phrases = [
+            "plan", "make a plan", "create a plan", "operational plan", "action plan",
+            "contingency plan", "plan for tomorrow", "safety plan", "intervention plan",
+            "how to plan", "heat action plan", "work plan", "shift plan", "planning",
+            "master plan", "emergency plan", "risk plan", "give me a plan"
+        ]
+        if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in plan_phrases):
+            return CopilotIntent.ACTION_PLAN
+
+        # 7. Statutory Decrees & Legal Mandates
         if any(w in q for w in ["law", "decree", "resolution", "resolution 44", "mohre", "legal", "fine", "penalty", "illegal", "midday", "ban"]):
             return CopilotIntent.REGULATORY_COMPLIANCE
 
-        # 7. Site Alert Drivers & SHAP Attributions
+        # 8. Site Alert Drivers & SHAP Attributions
         if any(w in q for w in ["why", "cause", "driver", "explain jebel ali", "explain risk", "attribution", "reason", "shap"]):
             return CopilotIntent.ALERT_EXPLANATION
 
-        # 8. Municipal Cooling Fleet Logistics
+        # 9. Municipal Cooling Fleet Logistics
         if any(w in q for w in ["bus", "fleet", "misting", "water tanker", "dcas", "depot", "transport", "staging"]):
             return CopilotIntent.FLEET_LOGISTICS
 
-        # 9. Renal Biomarkers & AKI Screening
+        # 10. Renal Biomarkers & AKI Screening
         if any(w in q for w in ["renal", "kidney", "egfr", "kdigo", "dehydration rate", "urine", "biomarker"]):
             return CopilotIntent.CLINICAL_RENAL
 
-        # 10. Operational Action Checklist
+        # 11. Operational Action Checklist
         if any(w in q for w in ["do", "action", "step", "checklist", "what should", "intervention", "protocol", "raci", "next"]):
             return CopilotIntent.OPERATIONAL_INTERVENTION
 

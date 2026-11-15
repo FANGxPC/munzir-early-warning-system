@@ -490,7 +490,36 @@ function renderSvgMap(svgElement, features, clusters) {
   }
   svgHtml += `</g>`;
 
-  // Draw features (H3 Hexagons & Biometeorology Sensor Mesh)
+  // Draw H3 Res-7 Hexagons Layer
+  svgHtml += `<g id="layerGroupHexes" style="display:${hexesDisp};">`;
+  features.forEach(f => {
+    const pt = toXY(f.lat, f.lon);
+    let hexFill = "rgba(102, 217, 175, 0.14)";
+    let hexStroke = "rgba(102, 217, 175, 0.4)";
+    if (f.risk_tier === "watch") {
+      hexFill = "rgba(101, 223, 205, 0.22)";
+      hexStroke = "rgba(101, 223, 205, 0.55)";
+    } else if (f.risk_tier === "warning") {
+      hexFill = "rgba(233, 170, 98, 0.32)";
+      hexStroke = "rgba(233, 170, 98, 0.75)";
+    } else if (f.risk_tier === "alert") {
+      hexFill = "rgba(241, 121, 113, 0.42)";
+      hexStroke = "rgba(241, 121, 113, 0.88)";
+    }
+
+    const r = 26;
+    const pts = [0, 1, 2, 3, 4, 5].map(i => {
+      const a = (Math.PI / 3) * i + Math.PI / 6;
+      return `${(pt.x + r * Math.cos(a)).toFixed(1)},${(pt.y + r * Math.sin(a)).toFixed(1)}`;
+    }).join(" ");
+
+    svgHtml += `
+      <polygon points="${pts}" fill="${hexFill}" stroke="${hexStroke}" stroke-width="1.3" />
+    `;
+  });
+  svgHtml += `</g>`;
+
+  // Draw features (Biometeorology Sensor Mesh & Industrial Worksite Markers)
   svgHtml += `<g id="layerGroupSensors" style="display:${sensorsDisp};">`;
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
@@ -500,8 +529,16 @@ function renderSvgMap(svgElement, features, clusters) {
     else if (f.risk_tier === "alert") color = "#f17971";
 
     const isSite = f.geo_level === "site";
-    const displayName = f.geo_name.split(" ")[0];
-    const nameWidth = Math.max(76, displayName.length * 8 + 24);
+    let displayName = f.geo_name
+      .replace(" Deepwater Port Terminal", "")
+      .replace(" Deepwater Port", "")
+      .replace(" Industrial Area", "")
+      .replace(" Industrial", "")
+      .replace(" Logistics Zone", "")
+      .replace(" Port", "")
+      .trim();
+    if (displayName.length > 14) displayName = displayName.substring(0, 13) + "…";
+    const nameWidth = Math.max(74, displayName.length * 7.5 + 20);
 
     svgHtml += `
       <g id="mapNode-${f.geo_id}" class="map-node-group" onclick="selectGeoSite('${f.geo_id}', '${escapeHtml(f.geo_name)}')" style="cursor:pointer;">
@@ -6532,3 +6569,41 @@ function initLoginState() {
   }
 }
 window.initLoginState = initLoginState;
+
+// Global Window Exports for Inline HTML Event Handlers
+window.closeActionDossierModal = closeActionDossierModal;
+window.closeCommissionModal = closeCommissionModal;
+window.closeModal = closeModal;
+window.closeSourcesModal = closeSourcesModal;
+window.copyDossierMarkdown = copyDossierMarkdown;
+window.downloadFhirTask = downloadFhirTask;
+window.exportPolicyMarkdown = exportPolicyMarkdown;
+window.generateDossierFromUI = generateDossierFromUI;
+window.generateJaisDispatch = generateJaisDispatch;
+window.loadAuditLogs = loadAuditLogs;
+window.loadBiasCorrectionView = loadBiasCorrectionView;
+window.loadRenalBiomarkers = loadRenalBiomarkers;
+window.loadSentinelView = loadSentinelView;
+window.openCommissionModal = openCommissionModal;
+window.openSourcesModal = openSourcesModal;
+window.openTimeMachineEvidenceModal = openTimeMachineEvidenceModal;
+window.optimizeDispatch = optimizeDispatch;
+window.resetImpactDefaults = resetImpactDefaults;
+window.runDeconvolution = runDeconvolution;
+window.sendDrawerQuery = sendDrawerQuery;
+window.sendSuggestedQuery = sendSuggestedQuery;
+window.stepTimeMachine = stepTimeMachine;
+window.submitAcknowledgement = submitAcknowledgement;
+window.submitCommissionNode = submitCommissionNode;
+window.switchImpactSubtab = switchImpactSubtab;
+window.switchJaisLanguage = switchJaisLanguage;
+window.switchMissionPillar = switchMissionPillar;
+window.toggleFloatingCopilotDrawer = toggleFloatingCopilotDrawer;
+window.toggleTestBuzzer = toggleTestBuzzer;
+window.toggleTimeMachinePlay = toggleTimeMachinePlay;
+window.useCurrentDeviceLocation = useCurrentDeviceLocation;
+window.handleCopilotSubmit = handleCopilotSubmit;
+window.handleDrawerSubmit = handleDrawerSubmit;
+window.toggleCopilotBubbleLang = toggleCopilotBubbleLang;
+window.playCopilotBubbleAudio = playCopilotBubbleAudio;
+window.filterCodexArticles = filterCodexArticles;

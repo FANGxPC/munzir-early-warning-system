@@ -155,16 +155,30 @@ class SovereignCopilotAgent:
             try:
                 import torch
                 prompt_context = packet.format_compact_prompt_context()
-                if packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL, CopilotIntent.CLINICAL_EDUCATION, CopilotIntent.FIRST_AID, CopilotIntent.PLATFORM_GUIDANCE):
+                is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
+                target_lang = "Arabic" if is_query_arabic else "English"
+
+                if packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                        "Answer the user question clearly, politely, and authoritatively in English and Arabic based on public health and DHA guidelines. "
-                        "Do not output emergency site disaster declarations for conversational, first-aid, or educational inquiries."
+                        f"Answer the user clearly, politely, and warmly in {target_lang}. "
+                        "Do not output emergency site disaster declarations for conversational inquiries."
+                    )
+                elif packet.intent == CopilotIntent.ACTION_PLAN:
+                    system_instruction = (
+                        "You are Munzir Sovereign Health Copilot, an expert operational safety planner for the UAE MOHRE and DHA. "
+                        f"Formulate a structured 5-phase master plan in {target_lang} strictly adhering to UAE MOHRE Resolution 44/2022 midday break."
+                    )
+                elif packet.intent in (CopilotIntent.CLINICAL_EDUCATION, CopilotIntent.FIRST_AID, CopilotIntent.PLATFORM_GUIDANCE):
+                    system_instruction = (
+                        "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
+                        f"Answer the user question clearly, politely, and authoritatively in {target_lang} based on public health and DHA guidelines. "
+                        "Do not output emergency site disaster declarations for educational or platform inquiries."
                     )
                 else:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                        "You answer questions from frontline safety directors and epidemiologists based STRICTLY on the retrieved context. "
+                        f"You answer questions from frontline safety directors and epidemiologists based STRICTLY on the retrieved context in {target_lang}. "
                         "Never invent unstated numbers, decrees, or facts."
                     )
 
@@ -179,12 +193,19 @@ class SovereignCopilotAgent:
                         r = "user" if turn.get("role") == "user" else "assistant"
                         c = turn.get("content", "").strip()
                         if c:
-                            messages.append({"role": r, "content": c[:300]})
+                            if r == "assistant":
+                                messages.append({"role": "assistant", "content": c[:300], "thinking": ""})
+                            else:
+                                messages.append({"role": "user", "content": c[:300]})
 
+                user_instruction = (
+                    f"{prompt_context}\n\nUser Question: {query}\n\n"
+                    f"Requirement: Answer strictly in {target_lang}. Provide an authoritative, concise response."
+                )
                 messages.append(
                     {
                         "role": "user",
-                        "content": f"{prompt_context}\n\nUser Question: {query}\n\nProvide an authoritative, concise response citing relevant statutory articles (MOHRE Resolution 44/2022) or clinical guidance.",
+                        "content": user_instruction,
                     }
                 )
                 prompt = self.jais_runner._tokenizer.apply_chat_template(
@@ -249,12 +270,15 @@ class SovereignCopilotAgent:
 
         # 3. Grounded Deterministic Sovereign Synthesis Engine (Zero Hallucination Guaranteed)
         english_ans, arabic_ans = self._synthesize_grounded_answer(packet.intent, query, ctx, articles)
+        is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
+        primary_ans = arabic_ans if is_query_arabic else english_ans
+        secondary_ans = english_ans if is_query_arabic else arabic_ans
         is_valid, _ = self.validator.verify_text(english_ans, ctx, articles)
 
         return CopilotChatResponse(
             query=query,
-            response_text=english_ans,
-            arabic_translation=arabic_ans,
+            response_text=primary_ans,
+            arabic_translation=secondary_ans,
             intent=packet.intent.value,
             citations=packet.citations,
             execution_mode="JAIS_VERIFIED_TEMPLATE",
@@ -291,15 +315,118 @@ class SovereignCopilotAgent:
             )
 
         elif intent == CopilotIntent.CONVERSATIONAL:
+            q_lower = query.lower()
+            if any(w in q_lower for w in ["thank", "thanks", "shukran", "appreciate"]):
+                eng = (
+                    "You are very welcome! As Munzir Sovereign Health Copilot, I am always on standby to support your team with "
+                    "real-time heat biosurveillance, statutory compliance under Resolution 44/2022, and operational decision support. "
+                    "Stay safe and let me know whenever you need further guidance."
+                )
+                ar = (
+                    "عفواً، على الرحب والسعة دائماً! بصفتي المساعد السيادي لمنصة مُنذِر، أنا هنا دائماً لدعم فريقكم "
+                    "ببيانات الرصد الحراري اللحظي، والامتثال للقرار الوزاري رقم 44 لسنة 2022، والدعم التشغيلي الميداني. "
+                    "دمتم سالمين، ولا تترددوا في طلبي لأي استفسار آخر."
+                )
+            elif any(w in q_lower for w in ["who are you", "what are you", "tell me about yourself", "who made you"]):
+                eng = (
+                    "I am Munzir Sovereign Copilot, an official public health decision support AI developed for the "
+                    "Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE).\n\n"
+                    "I am powered by the UAE's sovereign Inception 42 Jais foundation model running locally on GPU. "
+                    "I analyze real-time IoT microclimate telemetry, assess ISO 7933 predicted heat strain, track renal biomarkers, "
+                    "and ensure strict compliance with UAE Ministerial Resolution No. 44 of 2022."
+                )
+                ar = (
+                    "أنا المساعد السيادي لمنصة مُنذِر (Munzir Sovereign Copilot)، نظام ذكاء اصطناعي وطني رسمي لدعم القرار الصحي "
+                    "تم تطويره لصالح هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين.\n\n"
+                    "أعمل بنموذج جيس (Inception 42 Jais) السيادي محلياً على كروت GPU. أقوم بتحليل بيانات الحساسات اللحظية، "
+                    "وتقييم الإجهاد الحراري وفق معيار ISO 7933، ومتابعة صحة الكلى، وضمان الامتثال التام للقرار الوزاري رقم 44 لسنة 2022."
+                )
+            elif any(w in q_lower for w in ["what can you do", "capabilities", "features", "how do you work"]):
+                eng = (
+                    "Here is what I can do for your frontline operations:\n\n"
+                    "• Real-Time Surveillance: Live WBGT, solar globe, and humidity tracking across UAE industrial sites.\n"
+                    "• Operational Master Plans: Formulate 5-phase shift and midday ban compliance schedules.\n"
+                    "• Statutory Enforcement: Instant guidance on MOHRE Resolution No. 44 (2022) and administrative fines.\n"
+                    "• Fleet & Logistics Dispatch: Stage municipal cooling buses, misting trailers, and potable water reserves.\n"
+                    "• Clinical Biosurveillance: Early detection of AKI risk and dehydration via eGFR and KDIGO staging."
+                )
+                ar = (
+                    "إليك ما يمكنني تقديمه لدعم العمليات الميدانية:\n\n"
+                    "• الرصد اللحظي المباشر: قياس مؤشرات WBGT والإشعاع والرطوبة عبر المناطق الصناعية في الإمارات.\n"
+                    "• إعداد خطط العمل التشغيلية: صياغة جداول المناوبات والتطبيق الإلزامي لحظر العمل وقت الظهيرة.\n"
+                    "• الامتثال القانوني: استشارات فورية بشأن القرار الوزاري رقم 44 لسنة 2022 والغرامات الإدارية.\n"
+                    "• توجيه أساطيل التبريد: توزيع حافلات التبريد البلدية ومقطورات الرذاذ وخزانات المياه.\n"
+                    "• الحراسة السريرية الوقائية: الكشف المبكر عن مخاطر الفشل الكلوي الحاد (AKI) ومؤشرات eGFR."
+                )
+            elif any(w in q_lower for w in ["speak arabic", "speak english", "languages"]):
+                eng = (
+                    "Yes! I am fully bilingual in English and Arabic (عربي وإنجليزي). "
+                    "I can communicate naturally in both languages and dispatch frontline voice broadcasts in 5 languages: "
+                    "Arabic, English, Urdu, Hindi, and Malayalam."
+                )
+                ar = (
+                    "نعم بكل تأكيد! أنا ثنائي اللغة بالكامل وأتحدث باللغتين العربية والإنجليزية بطلاقة. "
+                    "كما أستطيع بث التوجيهات الصوتية الميدانية بخمس لغات: العربية، والإنجليزية، والأردية، والهندية، والمالايالامية."
+                )
+            else:
+                eng = (
+                    "I am doing well, thank you! As Munzir Sovereign Health Copilot, I am actively monitoring occupational thermal safety across all UAE industrial zones.\n\n"
+                    "I was developed for the Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE), powered by Inception 42 Jais-3-0.9B running locally on GPU.\n\n"
+                    "I can assist you with real-time site risks, official midday break regulations (Resolution 44/2022), first-aid protocols, and municipal cooling fleet staging. How can I help your team right now?"
+                )
+                ar = (
+                    "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
+                    "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
+                    "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+                )
+
+        elif intent == CopilotIntent.ACTION_PLAN:
             eng = (
-                "I am doing well, thank you! As Munzir Sovereign Health Copilot, I am actively monitoring occupational thermal safety across all UAE industrial zones.\n\n"
-                "I was developed for the Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE), powered by Inception 42 Jais-3-0.9B running locally on GPU.\n\n"
-                "I can assist you with real-time site risks, official midday break regulations (Resolution 44/2022), first-aid protocols, and municipal cooling fleet staging. How can I help your team right now?"
+                f"Master Operational Heat Safety Plan for {ctx.site_name} (Date: {ctx.target_date}):\n\n"
+                f"• Target Microclimate: Peak WBGT {ctx.current_wbgt_c:.1f}°C ({ctx.alert_tier.upper()} Tier, Outbreak Risk {round(ctx.calibrated_probability * 100, 1)}%).\n\n"
+                f"1. Phase 1: Pre-Shift Inspection & Briefing (05:00 - 08:30)\n"
+                f"• Frontline supervisor toolbox talk on heat stroke warning signs.\n"
+                f"• Mandatory 500 mL pre-shift hydration verification for all workers.\n"
+                f"• Sentinel ESP32 microclimate sensor calibration at worksite perimeters.\n\n"
+                f"2. Phase 2: Morning Thermal Surveillance (08:30 - 12:30)\n"
+                f"• Continuous WBGT telemetry tracking; activate shaded rest stations.\n"
+                f"• Mandatory 15-minute rest intervals for every 45 minutes of physical labor.\n"
+                f"• Frontline electrolyte distribution (oral rehydration salts) and chilled water replenishment (250 mL every 15-20 min).\n\n"
+                f"3. Phase 3: Statutory Midday Work Ban Execution (12:30 - 15:00)\n"
+                f"• Mandatory cessation of all outdoor physical labor under {art_ref} (Article 1).\n"
+                f"• Relocate workforce to air-conditioned rest halls and deploy {ctx.cooling_buses_needed} municipal cooling buses.\n"
+                f"• Disciplinary shielding and compliance verification to prevent statutory penalties ({penalties}).\n\n"
+                f"4. Phase 4: Afternoon Re-Mobilization & Vigilance (15:00 - 18:00)\n"
+                f"• Gradual shift resumption with {ctx.misting_trailers_needed} high-pressure misting trailers active.\n"
+                f"• Core temperature spot checks using non-invasive acoustic sensors.\n"
+                f"• Dedicated buddy system for early detection of ataxia or disorientation.\n\n"
+                f"5. Phase 5: Post-Shift Clinical Triage & Logistics Restock (18:00 - 20:00)\n"
+                f"• Sentinel sub-clinical screening (mean eGFR {ctx.mean_egfr:.1f} mL/min, dehydration surveillance).\n"
+                f"• Replenish {ctx.potable_water_tons:.1f} tons of potable water reserves from {ctx.nearest_depot}.\n"
+                f"• File end-of-day compliance audit to MOHRE and DHA biosurveillance registry."
             )
             ar = (
-                "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
-                "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
-                "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+                f"خطة العمل التشغيلية الشاملة للسلامة الحرارية لموقع {ctx.site_name} (بتاريخ {ctx.target_date}):\n\n"
+                f"• المؤشرات المستهدفة: الحد الأقصى لمؤشر WBGT هو {ctx.current_wbgt_c:.1f} درجة مئوية (مستوى {ctx.alert_tier}، نسبة الاحتمال {round(ctx.calibrated_probability * 100, 1)}%).\n\n"
+                f"١. المرحلة الأولى: الفحص الصباحي والإحاطة التوجيهية (05:00 - 08:30)\n"
+                f"• عقد ورشة السلامة الميدانية للمشرفين للتوعية بأعراض الإجهاد الحراري.\n"
+                f"• إلزام العمال بشرب ٥٠٠ مل من الماء قبل بدء الوردية، وتفحص معدات الوقاية.\n"
+                f"• معايرة حساسات Sentinel ESP32 لرصد الحرارة الدقيقة في الموقع.\n\n"
+                f"٢. المرحلة الثانية: المراقبة الحرارية الصباحية (08:30 - 12:30)\n"
+                f"• متابعة حية لمؤشر WBGT وتفعيل استراحات مظللة دورية.\n"
+                f"• تطبيق جدول راحة: ١٥ دقيقة راحة لكل ٤٥ دقيقة عمل ميداني.\n"
+                f"• توزيع محاليل الأملاح التعويضية وتوفير ٢٥٠ مل ماء مبرد كل ١٥ دقيقة.\n\n"
+                f"٣. المرحلة الثالثة: التطبيق الإلزامي لحظر العمل وقت الظهيرة (12:30 - 15:00)\n"
+                f"• الإيقاف التام لكافة الأعمال تحت أشعة الشمس المباشرة بموجب {art_ref} (المادة 1).\n"
+                f"• نقل العمال إلى استراحات مكيفة وتوفير {ctx.cooling_buses_needed} حافلات تبريد بلدية.\n"
+                f"• تفعيل الرقابة الميدانية لتفادي الغرامات الوزارية ({penalties}).\n\n"
+                f"٤. المرحلة الرابعة: استئناف العمل التدريجي في الفترة المسائية (15:00 - 18:00)\n"
+                f"• استئناف العمل تدريجياً مع تشغيل {ctx.misting_trailers_needed} مقطورات رذاذ مائي.\n"
+                f"• فحص دوري لمؤشرات الإجهاد الحراري ونظام الرفيق لرصد أي أعراض دوار.\n\n"
+                f"٥. المرحلة الخامسة: التقييم السريري المسائي وإعادة التموين (18:00 - 20:00)\n"
+                f"• الكشف السريري المبكر عن الجفاف ومؤشرات الكلى (eGFR {ctx.mean_egfr:.1f}).\n"
+                f"• تزويد الموقع بـ {ctx.potable_water_tons:.1f} طن من مياه الشرب المبردة من {ctx.nearest_depot}.\n"
+                f"• إرسال تقرير الامتثال اليومي المعتمد لوزارة الموارد البشرية وهيئة الصحة بدبي."
             )
 
         elif intent == CopilotIntent.CLINICAL_EDUCATION:

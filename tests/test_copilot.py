@@ -249,6 +249,27 @@ class TestSovereignCopilotAgent:
         # Must not inject a false emergency site shutdown for a simple greeting
         assert "Emergency Tier" not in res.response_text
 
+    def test_agent_chat_action_plan(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("make a plan for tomorrow", site_id="SITE-JA-01")
+
+        assert res.intent == "action_plan"
+        assert res.passed_fenced_gate is True
+        assert any(term in res.response_text for term in ["Phase 1", "Pre-Shift", "Midday Work Ban", "Phase 3"])
+        assert any(term in res.response_text for term in ["MOHRE", "Resolution", "44"])
+
+    def test_agent_chat_conversational_questions(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_who = agent.chat("who are you", site_id="SITE-JA-01")
+        assert res_who.intent == "conversational"
+        assert "Munzir" in res_who.response_text
+        assert res_who.passed_fenced_gate is True
+
+        res_thanks = agent.chat("thank you so much", site_id="SITE-JA-01")
+        assert res_thanks.intent == "conversational"
+        assert "welcome" in res_thanks.response_text.lower()
+        assert res_thanks.passed_fenced_gate is True
+
     def test_agent_chat_clinical_first_aid(self):
         agent = SovereignCopilotAgent(region_key="uae")
         res = agent.chat("worker fainted, need first aid", site_id="SITE-JA-01")
