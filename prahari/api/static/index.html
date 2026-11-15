@@ -11,161 +11,646 @@
 </head>
 <body>
 
- <!-- Master Executive Header (Tier 1 - 52px) -->
- <header class="master-header">
-   <div class="brand-lockup">
-     <div class="brand-badge" title="Munzir Early Warning System">
-       <svg class="brand-mark-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-       <span>MUNZIR</span>
-     </div>
-     <div class="brand-meta">
-       <div class="brand-title">munzir<span class="wave">.</span> <span class="brand-arabic">منذر</span> &bull; <span class="brand-sub">Dubai Health &amp; Biosurveillance</span></div>
-       <div class="brand-beacon"><span class="uae-flag" title="United Arab Emirates Operations">AE</span><span class="beacon-dot"></span>OPERATIONAL &bull; GST</div>
-     </div>
-   </div>
+  <div class="app-shell theme-dark">
+    <!-- Sovereign Left Navigation Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+      <a class="brand" href="#map" onclick="activateTab('map'); return false;" aria-label="Munzir home">
+        <span class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </span>
+        <span class="brand-name">munzir<span>MUNZIR EARLY WARNING</span></span>
+        <button class="mobile-close" onclick="toggleMobileSidebar()" aria-label="Close navigation" style="display:none;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </a>
 
-   <!-- 5 Mission Navigation Pillars as Segmented Switch (Tier 1) -->
-   <nav class="pillar-segmented-switch" id="missionPillars">
-     <button class="pillar-btn active" data-pillar="command" onclick="switchMissionPillar('command')">Command Hub</button>
-     <button class="pillar-btn" data-pillar="clinical" onclick="switchMissionPillar('clinical')">Clinical Sentinel</button>
-     <button class="pillar-btn" data-pillar="operations" onclick="switchMissionPillar('operations')">Field Operations</button>
-     <button class="pillar-btn" data-pillar="sovereign_ai" onclick="switchMissionPillar('sovereign_ai')">Sovereign AI</button>
-     <button class="pillar-btn" data-pillar="resilience" onclick="switchMissionPillar('resilience')">Policy &amp; Resilience</button>
-   </nav>
+      <button class="region-select" type="button" title="United Arab Emirates Operations">
+        <span class="uae-flag" aria-label="United Arab Emirates">AE</span>
+        <span><b>UAE Operations</b><small>Dubai &amp; Northern Emirates</small></span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
 
-   <div class="header-utility-group">
-     <div class="control-group">
-       <span class="control-label">SIM</span>
-       <input type="date" id="simDateInput" class="sim-date-picker" value="2025-08-20">
-     </div>
+      <div class="nav-scroll">
+        <!-- Group 1: COMMAND & OPERATIONS -->
+        <section class="nav-group">
+          <p class="nav-label">COMMAND &amp; OPERATIONS</p>
+          <button class="nav-item nav-active" data-tab="map" onclick="activateTab('map')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Situation Map</span>
+          </button>
+          <button class="nav-item" data-tab="inbox" onclick="activateTab('inbox')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span>Alert Inbox</span>
+            <span class="nav-badge" id="sidebarInboxBadge">3</span>
+          </button>
+          <button class="nav-item" data-tab="employer" onclick="activateTab('employer')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            <span>Employer Safety View</span>
+          </button>
+          <button class="nav-item" data-tab="dispatch" onclick="activateTab('dispatch')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            <span>Municipal Cooling Fleet</span>
+          </button>
+          <button class="nav-item" data-tab="sentinel" onclick="activateTab('sentinel')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+            <span>Sentinel Hardware Twin</span>
+          </button>
+        </section>
 
-     <div class="control-group">
-       <span class="control-label">ROLE</span>
-       <select id="roleSelect" class="role-select">
-         <option value="surveillance_officer">DHA Surveillance Lead</option>
-         <option value="occupational_health">MOHRE Health Officer</option>
-         <option value="employer_safety">Site Safety Manager</option>
-         <option value="regulator">H&amp;S Regulator</option>
-         <option value="public">Public Portal (&epsilon;=1.0)</option>
-         <option value="auditor">Inspector General</option>
-       </select>
-     </div>
+        <!-- Group 2: CLINICAL SENTINEL -->
+        <section class="nav-group">
+          <p class="nav-label">CLINICAL SENTINEL</p>
+          <button class="nav-item" data-tab="phs" onclick="activateTab('phs')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+            <span>Heat Strain &amp; Debt (ISO 7933)</span>
+          </button>
+          <button class="nav-item" data-tab="renal" onclick="activateTab('renal')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span>Renal Biomarkers (AKI)</span>
+          </button>
+          <button class="nav-item" data-tab="deconvolve" onclick="activateTab('deconvolve')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+            <span>Spatial Deconvolution</span>
+          </button>
+          <button class="nav-item" data-tab="compound" onclick="activateTab('compound')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+            <span>Compound Multi-Hazard</span>
+          </button>
+          <button class="nav-item" data-tab="causal" onclick="activateTab('causal')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><line x1="8.5" y1="16.5" x2="15.5" y2="7.5"></line><line x1="8.5" y1="18" x2="15" y2="18"></line></svg>
+            <span>Bayesian Causal De-Mixing</span>
+          </button>
+          <button class="nav-item" data-tab="nabidh" onclick="activateTab('nabidh')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>NABIDH FHIR CDS</span>
+          </button>
+        </section>
 
-     <button class="nav-btn-dossier" id="btnOpenSystemDossier" onclick="openSystemDossierModal()" title="Inspect 5-Layer Architecture, 12 Models, Lakehouse Telemetry &amp; Provenance">
-       MODELS &amp; DOSSIER
-     </button>
-   </div>
+        <!-- Group 3: SOVEREIGN AI & COMMS -->
+        <section class="nav-group">
+          <p class="nav-label">SOVEREIGN AI &amp; COMMS</p>
+          <button class="nav-item" data-tab="intercom" onclick="activateTab('intercom')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            <span>Frontline Intercom</span>
+          </button>
+          <button class="nav-item" data-tab="jais" onclick="activateTab('jais')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Jais Legal Dispatch</span>
+          </button>
+          <button class="nav-item" data-tab="copilot" onclick="activateTab('copilot')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            <span>Sovereign Copilot &amp; Codex</span>
+          </button>
+        </section>
 
-   <div id="activeRoleBadge" style="display:none;">SURVEILLANCE OFFICER</div>
-   <div id="employerSiteIndicator" style="display:none;">Site: SITE-JA-01</div>
- </header>
+        <!-- Group 4: POLICY & RESILIENCE -->
+        <section class="nav-group">
+          <p class="nav-label">POLICY &amp; RESILIENCE</p>
+          <button class="nav-item" data-tab="policystudio" onclick="activateTab('policystudio')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            <span>MOHRE Policy Studio</span>
+          </button>
+          <button class="nav-item" data-tab="impact" onclick="activateTab('impact')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            <span>Health Impact &amp; ROI</span>
+          </button>
+          <button class="nav-item" data-tab="timemachine" onclick="activateTab('timemachine')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span>Time Machine Replay</span>
+          </button>
+          <button class="nav-item" data-tab="whatif" onclick="activateTab('whatif')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>What-If Interventions</span>
+          </button>
+          <button class="nav-item" data-tab="safeharbor" onclick="activateTab('safeharbor')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Safe-Harbor Shield</span>
+          </button>
+          <button class="nav-item" data-tab="health" onclick="activateTab('health')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            <span>Data Health Panel</span>
+          </button>
+          <button class="nav-item" data-tab="demo" onclick="activateTab('demo')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            <span>Missing-Data Validation</span>
+          </button>
+          <button class="nav-item" data-tab="audit" onclick="activateTab('audit')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Security Audit Logs</span>
+          </button>
+        </section>
 
- <!-- Contextual Sub-Tab Navigation Strip (Tier 2 - 36px) -->
- <nav class="subtabs-bar" id="subtabsBar">
-   <div class="subtabs-container">
-     <!-- Pillar 1: Command Hub -->
-     <button class="tab-btn subtab-link active" data-tab="map" data-pillar="command">Situation Map</button>
-     <button class="tab-btn subtab-link" data-tab="inbox" data-pillar="command">Alert Inbox</button>
+        <div class="sidebar-divider"></div>
+        <p class="nav-label">SAVED VIEWS</p>
+        <button class="nav-item muted-nav" type="button" onclick="loadSavedView('dubai')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span>Dubai Heat Stress</span>
+        </button>
+        <button class="nav-item muted-nav" type="button" onclick="loadSavedView('sensors')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path></svg>
+          <span>Sentinel Field Sites</span>
+        </button>
+      </div>
 
-     <!-- Pillar 2: Clinical Sentinel -->
-     <button class="tab-btn subtab-link" data-tab="phs" data-pillar="clinical" style="display:none;">Heat Strain &amp; Debt (ISO 7933)</button>
-     <button class="tab-btn subtab-link" data-tab="renal" data-pillar="clinical" style="display:none;">Renal Biomarkers (AKI)</button>
-     <button class="tab-btn subtab-link" data-tab="deconvolve" data-pillar="clinical" style="display:none;">Spatial Deconvolution</button>
-     <button class="tab-btn subtab-link" data-tab="compound" data-pillar="clinical" style="display:none;">Compound Multi-Hazard</button>
-     <button class="tab-btn subtab-link" data-tab="causal" data-pillar="clinical" style="display:none;">Bayesian Causal De-Mixing</button>
-     <button class="tab-btn subtab-link" data-tab="nabidh" data-pillar="clinical" style="display:none;">NABIDH FHIR CDS</button>
+      <div class="sidebar-bottom">
+        <div class="privacy-note" title="Sealed per UAE Federal Decree-Law No. 33/2021">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          <span><b>Privacy by design</b><small>Aggregated signals only (&epsilon;=0.14)</small></span>
+        </div>
+        <div class="profile">
+          <div class="avatar">AK</div>
+          <span><b>Amira Khalid</b><small>Public Health Lead</small></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+        </div>
+      </div>
+    </aside>
 
-     <!-- Pillar 3: Field Operations -->
-     <button class="tab-btn subtab-link" data-tab="sentinel" data-pillar="operations" style="display:none;">Sentinel Hardware Twin</button>
-     <button class="tab-btn subtab-link" data-tab="dispatch" data-pillar="operations" style="display:none;">Municipal Staging</button>
-     <button class="tab-btn subtab-link" data-tab="employer" data-pillar="operations" style="display:none;">Employer Safety View</button>
+    <!-- Main Executive Panel -->
+    <div class="main-panel">
+      <!-- Hidden legacy containers for backward compatibility -->
+      <div style="display:none;" id="legacyNavContainer">
+        <nav class="pillar-segmented-switch" id="missionPillars">
+          <button class="pillar-btn active" data-pillar="command" onclick="switchMissionPillar('command')">Command Hub</button>
+          <button class="pillar-btn" data-pillar="clinical" onclick="switchMissionPillar('clinical')">Clinical Sentinel</button>
+          <button class="pillar-btn" data-pillar="operations" onclick="switchMissionPillar('operations')">Field Operations</button>
+          <button class="pillar-btn" data-pillar="sovereign_ai" onclick="switchMissionPillar('sovereign_ai')">Sovereign AI</button>
+          <button class="pillar-btn" data-pillar="resilience" onclick="switchMissionPillar('resilience')">Policy &amp; Resilience</button>
+        </nav>
+        <nav class="subtabs-bar" id="subtabsBar">
+          <div class="subtabs-container">
+            <button class="tab-btn subtab-link active" data-tab="map" data-pillar="command">Situation Map</button>
+            <button class="tab-btn subtab-link" data-tab="inbox" data-pillar="command">Alert Inbox</button>
+            <button class="tab-btn subtab-link" data-tab="phs" data-pillar="clinical">Heat Strain &amp; Debt (ISO 7933)</button>
+            <button class="tab-btn subtab-link" data-tab="renal" data-pillar="clinical">Renal Biomarkers (AKI)</button>
+            <button class="tab-btn subtab-link" data-tab="deconvolve" data-pillar="clinical">Spatial Deconvolution</button>
+            <button class="tab-btn subtab-link" data-tab="compound" data-pillar="clinical">Compound Multi-Hazard</button>
+            <button class="tab-btn subtab-link" data-tab="causal" data-pillar="clinical">Bayesian Causal De-Mixing</button>
+            <button class="tab-btn subtab-link" data-tab="nabidh" data-pillar="clinical">NABIDH FHIR CDS</button>
+            <button class="tab-btn subtab-link" data-tab="sentinel" data-pillar="operations">Sentinel Hardware Twin</button>
+            <button class="tab-btn subtab-link" data-tab="dispatch" data-pillar="operations">Municipal Staging</button>
+            <button class="tab-btn subtab-link" data-tab="employer" data-pillar="operations">Employer Safety View</button>
+            <button class="tab-btn subtab-link" data-tab="intercom" data-pillar="sovereign_ai">Two-Way Voice Intercom</button>
+            <button class="tab-btn subtab-link" data-tab="jais" data-pillar="sovereign_ai">Jais Dispatch Generator</button>
+            <button class="tab-btn subtab-link" data-tab="copilot" data-pillar="sovereign_ai">Sovereign Copilot &amp; Codex</button>
+            <button class="tab-btn subtab-link" data-tab="policystudio" data-pillar="resilience">MOHRE Policy Studio</button>
+            <button class="tab-btn subtab-link" data-tab="impact" data-pillar="resilience">Health Impact &amp; Resilience</button>
+            <button class="tab-btn subtab-link" data-tab="timemachine" data-pillar="resilience">Time Machine Replay</button>
+            <button class="tab-btn subtab-link" data-tab="whatif" data-pillar="resilience">What-If Interventions</button>
+            <button class="tab-btn subtab-link" data-tab="safeharbor" data-pillar="resilience">Safe-Harbor Shield</button>
+            <button class="tab-btn subtab-link" data-tab="health" data-pillar="resilience">Data Health Panel</button>
+            <button class="tab-btn subtab-link" data-tab="demo" data-pillar="resilience">Missing-Data Validation</button>
+            <button class="tab-btn subtab-link" data-tab="audit" data-pillar="resilience">Security Audit Logs</button>
+          </div>
+        </nav>
+      </div>
 
-     <!-- Pillar 4: Sovereign AI -->
-     <button class="tab-btn subtab-link" data-tab="intercom" data-pillar="sovereign_ai" style="display:none;">Two-Way Voice Intercom</button>
-     <button class="tab-btn subtab-link" data-tab="jais" data-pillar="sovereign_ai" style="display:none;">Jais Dispatch Generator</button>
-     <button class="tab-btn subtab-link" data-tab="copilot" data-pillar="sovereign_ai" style="display:none;">Sovereign Copilot &amp; Codex</button>
+      <!-- Sovereign Executive Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" onclick="toggleMobileSidebar()" aria-label="Open navigation" style="display:none;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="breadcrumbs">
+            <span>Workspace</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <b id="breadcrumbCurrent">Situation Map</b>
+          </div>
+        </div>
 
-     <!-- Pillar 5: Policy & Resilience -->
-     <button class="tab-btn subtab-link" data-tab="policystudio" data-pillar="resilience" style="display:none;">MOHRE Policy Studio</button>
-     <button class="tab-btn subtab-link" data-tab="impact" data-pillar="resilience" style="display:none;">Health Impact &amp; Resilience</button>
-     <button class="tab-btn subtab-link" data-tab="timemachine" data-pillar="resilience" style="display:none;">Time Machine Replay</button>
-     <button class="tab-btn subtab-link" data-tab="whatif" data-pillar="resilience" style="display:none;">What-If Interventions</button>
-     <button class="tab-btn subtab-link" data-tab="safeharbor" data-pillar="resilience" style="display:none;">Safe-Harbor Shield</button>
-     <button class="tab-btn subtab-link" data-tab="health" data-pillar="resilience" style="display:none;">Data Health Panel</button>
-     <button class="tab-btn subtab-link" data-tab="demo" data-pillar="resilience" style="display:none;">Missing-Data Validation</button>
-     <button class="tab-btn subtab-link" data-tab="audit" data-pillar="resilience" style="display:none;">Security Audit Logs</button>
-   </div>
- </nav>
+        <div class="top-actions">
+          <div class="live-status">
+            <span class="pulse-dot"></span>
+            <span>All systems operational</span>
+          </div>
 
- <!-- Main View Container -->
- <main>
+          <div class="control-group">
+            <span class="control-label">SIM</span>
+            <input type="date" id="simDateInput" class="sim-date-picker" value="2025-08-20">
+          </div>
 
- <!-- 1. Situation Map View -->
- <div id="view-map" class="tab-content active">
- <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none;"></div>
+          <div class="control-group">
+            <span class="control-label">ROLE</span>
+            <select id="roleSelect" class="role-select">
+              <option value="surveillance_officer">DHA Surveillance Lead</option>
+              <option value="occupational_health">MOHRE Health Officer</option>
+              <option value="employer_safety">Site Safety Manager</option>
+              <option value="regulator">H&amp;S Regulator</option>
+              <option value="public">Public Portal (&epsilon;=1.0)</option>
+              <option value="auditor">Inspector General</option>
+            </select>
+          </div>
 
- <!-- Tactical KPI Ribbon (4 Hero Metrics) -->
- <div class="tactical-kpi-ribbon" id="tacticalKpiRibbon">
-   <div class="kpi-card" onclick="openSystemDossierModal('lakehouse')" title="Inspect Live Open-Meteo ERA5 NWP and bias correction telemetry">
-     <div class="kpi-label">AMBIENT THERMAL INDEX</div>
-     <div class="kpi-val"><span id="tacticalWbgt">33.4</span>&deg;C WBGT</div>
-     <div class="kpi-sub"><span class="kpi-indicator-dot warning"></span>High Risk &bull; +1.8&deg;C Bias Corrected</div>
-   </div>
+          <button class="nav-btn-dossier" id="btnOpenSystemDossier" onclick="openSystemDossierModal()" title="Inspect 5-Layer Architecture, 12 Models, Lakehouse Telemetry &amp; Provenance">
+            MODELS &amp; DOSSIER
+          </button>
 
-   <div class="kpi-card" onclick="activateTab('inbox')" title="Inspect active industrial worksite alerts">
-     <div class="kpi-label">ACTIVE WORKSITE ALERTS</div>
-     <div class="kpi-val"><span style="color:#f17971;">3 CRITICAL</span> <span style="font-size:0.9rem; color:#94a3b8;">/ 8 WATCH</span></div>
-     <div class="kpi-sub"><span class="kpi-indicator-dot alert"></span>Jebel Ali &bull; Al Quoz &bull; Ras Al Khor</div>
-   </div>
+          <div id="topSearchWrapper" style="position:relative; display:inline-flex; align-items:center;">
+            <input type="text" id="topSearchInput" class="top-search-input" placeholder="Search sites, alerts..." style="display:none;" onkeyup="handleQuickSearch(event)">
+            <button class="icon-button search-button" id="btnTopSearch" aria-label="Quick Command Search" onclick="toggleQuickSearch()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <kbd>⌘ K</kbd>
+            </button>
+          </div>
+        </div>
 
-   <div class="kpi-card" onclick="openSystemDossierModal('lakehouse')" title="Inspect Parquet Medallion Lakehouse workforce partitions">
-     <div class="kpi-label">MONITORED WORKFORCE</div>
-     <div class="kpi-val">142,500 <span style="font-size:0.8rem; font-weight:500; color:#94a3b8;">PERSONS</span></div>
-     <div class="kpi-sub"><span class="kpi-indicator-dot normal"></span>60,473 Parquet Records &bull; Snappy</div>
-   </div>
+        <div id="activeRoleBadge" style="display:none;">SURVEILLANCE OFFICER</div>
+        <div id="employerSiteIndicator" style="display:none;">Site: SITE-JA-01</div>
+      </header>
 
-   <div class="kpi-card" onclick="openSystemDossierModal('ai')" title="Inspect Inception 42 Jais sovereign bilingual inference and Safe-Harbor shield">
-     <div class="kpi-label">SOVEREIGN AI &amp; PRIVACY</div>
-     <div class="kpi-val" style="color:#65dfcd;">JAIS-3-0.9B DUAL</div>
-     <div class="kpi-sub"><span class="kpi-indicator-dot normal"></span>Inception 42 &bull; Safe-Harbor &epsilon;=0.142</div>
-   </div>
- </div>
- 
- <div class="map-layout">
- <!-- Map Canvas -->
- <div class="map-card">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
- <div>
- <h2 style="font-size:1.15rem; font-weight:700;">Dubai Health Risk & Hexagonal Cell Map</h2>
- <div style="font-size:0.8rem; color:#94a3b8;">H3 Resolution 7 Detection Grid (~5.16 km² cells) with Space-Time Scan</div>
- </div>
- <!-- Accessible Risk Legend -->
- <div style="display:flex; gap:0.5rem; align-items:center;">
- <span class="badge badge-normal">NORMAL</span>
- <span class="badge badge-watch">WATCH</span>
- <span class="badge badge-warning">WARNING</span>
- <span class="badge badge-alert">ALERT</span>
- </div>
- </div>
+      <!-- Main Content Area -->
+      <div class="content-area">
+        <main>
+  <!-- 1. Situation Map View (Executive Command Center) -->
+  <div id="view-map" class="tab-content active">
+    <!-- Editorial Page Heading -->
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>UAE OPERATIONS <span class="eyebrow-dot">&middot;</span> REGIONAL BRIEFING</div>
+        <h1 class="page-title">Heat-health outlook<span class="wave">.</span></h1>
+        <p class="heading-sub">Live exposure signals, priority sites, and intervention planning across Dubai &amp; Northern Emirates.</p>
+      </div>
+      <div class="heading-actions">
+        <button class="export-button" onclick="exportRegionalBriefingCSV()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export briefing
+        </button>
+      </div>
+    </div>
 
- <div id="situationSvgMap" class="map-svg-container"></div>
+    <!-- Active Hazard Alert Banner -->
+    <section class="alert-banner" id="active-hazard">
+      <div class="alert-symbol">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      </div>
+      <div class="alert-copy">
+        <div class="alert-kicker">ACTIVE HAZARD <span>&middot;</span> JEBEL ALI PORT</div>
+        <h2>Extreme heat exposure detected</h2>
+        <p>On-site WBGT is <strong><span id="activeHazardWbgt">33.4</span>&deg;C</strong>, exceeding the severe threshold by 1.4&deg;C. Clinical signals are corroborating.</p>
+      </div>
+      <div class="alert-meta">
+        <span class="confidence"><span class="confidence-dot"></span>94% confidence</span>
+        <span>Updated 4 min ago</span>
+      </div>
+      <button class="ack-button" id="btnHazardAcknowledge" onclick="handleHazardAcknowledge()">
+        <span id="ackBtnText">Acknowledge</span>
+        <span id="ackBtnArrow">&nearr;</span>
+      </button>
+    </section>
 
- <div style="margin-top:0.75rem; display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8;">
- <span>Legend: Solid Node = Monitored Industrial Worksite | Striped Hatch = District Aggregated Estimate (Hatched)</span>
- <span>Cluster Scan: Red Dashed Circle = Active L3 Space-Time Permutation Cluster (p &lt; 0.05)</span>
- </div>
- </div>
+    <!-- Tactical KPI Ribbon (4 Hero Metrics) -->
+    <div class="metric-grid tactical-kpi-ribbon" id="tacticalKpiRibbon">
+      <article class="metric-card" role="button" tabindex="0" onclick="document.getElementById('trend-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" title="Inspect Live Open-Meteo ERA5 NWP and bias correction telemetry">
+        <div class="metric-top">
+          <span>REGIONAL WBGT</span>
+          <span class="metric-icon teal-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+          </span>
+          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="metric-value"><span id="tacticalWbgt">33.4</span><span>&deg;C</span></div>
+        <div class="metric-foot">
+          <span class="trend-up">&uarr; 1.8&deg;</span>
+          <span>vs. 24h ago</span>
+          <span class="metric-spark spark-teal">&block;&marker;&marker;&marker;&block;&block;&block;</span>
+        </div>
+      </article>
 
- <!-- Location Sidebar -->
- <div class="map-card" style="max-height:580px; overflow-y:auto;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem;">Monitored Jurisdictions & Sites</h3>
- <div id="mapGeoList"></div>
- </div>
- </div>
- </div>
+      <article class="metric-card" role="button" tabindex="0" onclick="activateTab('employer')" title="Inspect workforce monitored partitions">
+        <div class="metric-top">
+          <span>AT-RISK WORKERS</span>
+          <span class="metric-icon amber-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path></svg>
+          </span>
+          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="metric-value">142,500<span class="metric-unit">workers</span></div>
+        <div class="metric-foot">
+          <span class="trend-up">&uarr; 12.4%</span>
+          <span>across 6 sites</span>
+          <span class="metric-spark spark-amber">&block;&marker;&marker;&block;&block;&block;&block;</span>
+        </div>
+      </article>
 
- <!-- 2. Alert Inbox View -->
- <div id="view-inbox" class="tab-content">
+      <article class="metric-card" role="button" tabindex="0" onclick="activateTab('inbox')" title="Inspect active industrial worksite alerts">
+        <div class="metric-top">
+          <span>CLINICAL SIGNALS</span>
+          <span class="metric-icon red-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+          </span>
+          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="metric-value">18<span class="metric-unit">reports</span></div>
+        <div class="metric-foot">
+          <span class="trend-down">&darr; 3.1%</span>
+          <span>vs. baseline</span>
+          <span class="metric-spark spark-red">&marker;&marker;&block;&block;&marker;&block;&block;</span>
+        </div>
+      </article>
+
+      <article class="metric-card" role="button" tabindex="0" onclick="activateTab('sentinel')" title="Inspect on-site microclimate IoT sensor nodes">
+        <div class="metric-top">
+          <span>SENTINEL NETWORK</span>
+          <span class="metric-icon blue-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+          </span>
+          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="metric-value">24<span class="metric-fraction">/ 26</span></div>
+        <div class="metric-foot">
+          <span class="online-count"><i></i>92% online</span>
+          <span>2 nodes offline</span>
+          <span class="metric-spark spark-blue">&block;&block;&block;&marker;&block;&block;&block;</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- Upper Dashboard Grid: Trend + Map -->
+    <div class="dashboard-grid">
+      <!-- Environmental Heat Exposure Trend Panel -->
+      <section class="panel trend-panel" id="trend-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="section-overline">ENVIRONMENTAL EXPOSURE</div>
+            <h3>Heat exposure trend</h3>
+          </div>
+          <div class="chart-controls">
+            <div class="segmented" role="group" aria-label="Chart time range">
+              <button class="segment-btn segment-active" data-range="24h" onclick="setTrendRange('24h')">24h</button>
+              <button class="segment-btn" data-range="7d" onclick="setTrendRange('7d')">7d</button>
+              <button class="segment-btn" data-range="30d" onclick="setTrendRange('30d')">30d</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-summary">
+          <span class="big-reading" id="trendReadingVal">31.2&deg; <small>WBGT</small></span>
+          <span class="chart-change" id="trendChangeVal">&uarr; 6.2% <small>from previous 24 hours</small></span>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-axis">
+            <span>36&deg;</span>
+            <span>32&deg;</span>
+            <span>28&deg;</span>
+            <span>24&deg;</span>
+          </div>
+          <div class="chart-content">
+            <div class="chart-gridlines"><i></i><i></i><i></i><i></i></div>
+            <div class="threshold-line"><span>Severe threshold &middot; 32&deg;C</span></div>
+            <svg class="trend-chart" id="trendSvgChart" viewBox="0 0 360 112">
+              <defs>
+                <linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#55d6c2" stop-opacity=".22"></stop>
+                  <stop offset="100%" stop-color="#55d6c2" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <path id="trendAreaPath" d="M 0,88 L 24,82 L 48,85 L 72,69 L 96,72 L 120,59 L 144,66 L 168,50 L 192,55 L 216,43 L 240,48 L 264,29 L 288,34 L 312,17 L 336,24 L 360,10 L 360 112 L 0 112 Z" fill="url(#areaGrad)"></path>
+              <polyline id="trendModelLine" points="0,77 24,71 48,74 72,58 96,61 120,48 144,55 168,39 192,44 216,32 240,37 264,18 288,23 312,6 336,13 360,0" fill="none" stroke="#a5bec5" stroke-width="1.8" stroke-dasharray="5 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"></polyline>
+              <polyline id="trendLine" points="0,88 24,82 48,85 72,69 96,72 120,59 144,66 168,50 192,55 216,43 240,48 264,29 288,34 312,17 336,24 360,10" fill="none" stroke="#65dfcd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+              <line x1="264" y1="0" x2="264" y2="112" stroke="#e9aa62" stroke-dasharray="4 5" opacity=".8"></line>
+              <circle cx="264" cy="29" r="4" fill="#e9aa62" stroke="#152725" stroke-width="2"></circle>
+            </svg>
+            <div class="chart-x" id="trendXLabels">
+              <span>12 AM</span><span>4 AM</span><span>8 AM</span><span>12 PM</span><span>4 PM</span><span>8 PM</span><span>Now</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-legend">
+          <span><i class="legend-wbgt"></i>Measured on-site WBGT</span>
+          <button type="button" class="model-toggle" id="btnToggleModelLine" onclick="toggleModelLine()">
+            <i class="legend-model"></i>Regional model
+          </button>
+          <span><i class="legend-threshold"></i>Hazard threshold</span>
+        </div>
+      </section>
+
+      <!-- Regional Risk Map Panel -->
+      <section class="panel map-panel" id="regional-risk-map">
+        <div class="panel-heading">
+          <div>
+            <div class="section-overline">SPATIAL OVERVIEW</div>
+            <h3>Regional risk map</h3>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button class="map-filter" type="button" onclick="activateTab('map')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              Layers
+            </button>
+          </div>
+        </div>
+
+        <div class="map-body">
+          <div class="map-art" aria-label="Regional heat-risk map">
+            <div class="map-grid"></div>
+            <div class="map-tiles" id="mapHexTiles">
+              <!-- Hex grid cells -->
+              <div class="hex hex-cool" style="grid-column: 1; grid-row: 1;"></div>
+              <div class="hex hex-cool" style="grid-column: 2; grid-row: 1; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 3; grid-row: 1;"></div>
+              <div class="hex hex-warm" style="grid-column: 4; grid-row: 1; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 5; grid-row: 1;"></div>
+              <div class="hex hex-cool" style="grid-column: 6; grid-row: 1; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 7; grid-row: 1;"></div>
+              
+              <div class="hex hex-cool" style="grid-column: 1; grid-row: 2;"></div>
+              <div class="hex hex-cool" style="grid-column: 2; grid-row: 2; transform: translateY(15px);"></div>
+              <div class="hex hex-hot" style="grid-column: 3; grid-row: 2;"></div>
+              <div class="hex hex-warm" style="grid-column: 4; grid-row: 2; transform: translateY(15px);"></div>
+              <div class="hex hex-warm" style="grid-column: 5; grid-row: 2;"></div>
+              <div class="hex hex-cool" style="grid-column: 6; grid-row: 2; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 7; grid-row: 2;"></div>
+
+              <div class="hex hex-cool" style="grid-column: 1; grid-row: 3;"></div>
+              <div class="hex hex-cool" style="grid-column: 2; grid-row: 3; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 3; grid-row: 3;"></div>
+              <div class="hex hex-hot" style="grid-column: 4; grid-row: 3; transform: translateY(15px);"></div>
+              <div class="hex hex-warm" style="grid-column: 5; grid-row: 3;"></div>
+              <div class="hex hex-cool" style="grid-column: 6; grid-row: 3; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 7; grid-row: 3;"></div>
+
+              <div class="hex hex-cool" style="grid-column: 1; grid-row: 4;"></div>
+              <div class="hex hex-cool" style="grid-column: 2; grid-row: 4; transform: translateY(15px);"></div>
+              <div class="hex hex-hot" style="grid-column: 3; grid-row: 4;"></div>
+              <div class="hex hex-warm" style="grid-column: 4; grid-row: 4; transform: translateY(15px);"></div>
+              <div class="hex hex-warm" style="grid-column: 5; grid-row: 4;"></div>
+              <div class="hex hex-cool" style="grid-column: 6; grid-row: 4; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 7; grid-row: 4;"></div>
+
+              <div class="hex hex-cool" style="grid-column: 1; grid-row: 5;"></div>
+              <div class="hex hex-cool" style="grid-column: 2; grid-row: 5; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 3; grid-row: 5;"></div>
+              <div class="hex hex-cool" style="grid-column: 4; grid-row: 5; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 5; grid-row: 5;"></div>
+              <div class="hex hex-cool" style="grid-column: 6; grid-row: 5; transform: translateY(15px);"></div>
+              <div class="hex hex-cool" style="grid-column: 7; grid-row: 5;"></div>
+            </div>
+
+            <button class="map-label label-jebel" type="button" onclick="selectMapSite('Jebel Ali Port')"><i></i>Jebel Ali</button>
+            <button class="map-label label-quoz" type="button" onclick="selectMapSite('Al Quoz Industrial')"><i></i>Al Quoz</button>
+
+            <div class="map-coast">PERSIAN GULF</div>
+            <div class="map-legend">
+              <span><i class="legend-low"></i>Low</span>
+              <span><i class="legend-med"></i>Elevated</span>
+              <span><i class="legend-high"></i>High</span>
+            </div>
+            <div class="map-scale">25 km</div>
+          </div>
+        </div>
+
+        <div class="map-footer">
+          <span><i class="map-live-dot"></i>Live site conditions &middot; H3 Resolution 7 Grid</span>
+          <button onclick="activateTab('map')">Full Screen Map &rarr;</button>
+        </div>
+
+        <!-- Embedded Live H3 Geo & SVG Container (Preserving Existing Logic) -->
+        <div style="margin-top:12px; border-top:1px solid #283531; padding-top:10px;">
+          <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none;"></div>
+          <div id="situationSvgMap" class="map-svg-container" style="min-height:220px;"></div>
+          <div id="mapGeoList" style="display:none;"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Lower Dashboard Grid: Priority Sites + Simulator Preview -->
+    <div class="lower-grid">
+      <!-- Priority Sites Panel -->
+      <section class="panel sites-panel" id="priority-sites">
+        <div class="panel-heading">
+          <div>
+            <div class="section-overline">NEEDS ATTENTION</div>
+            <h3>Priority sites <span class="heading-count" id="prioritySitesCountBadge">3</span></h3>
+          </div>
+          <button class="text-link" onclick="activateTab('inbox')">View all alerts &rarr;</button>
+        </div>
+
+        <div class="site-filters" role="group" aria-label="Filter priority sites">
+          <button type="button" class="site-filter site-filter-active" data-filter="All" onclick="setSiteFilter('All')">All <span>3</span></button>
+          <button type="button" class="site-filter" data-filter="Alert" onclick="setSiteFilter('Alert')">Alert <span>1</span></button>
+          <button type="button" class="site-filter" data-filter="Warning" onclick="setSiteFilter('Warning')">Warning <span>1</span></button>
+          <button type="button" class="site-filter" data-filter="Watch" onclick="setSiteFilter('Watch')">Watch <span>1</span></button>
+        </div>
+
+        <div class="site-table">
+          <div class="table-head">
+            <span>LOCATION</span>
+            <span>RISK</span>
+            <span>WBGT</span>
+            <span>CLINICAL</span>
+            <span>CONFIDENCE</span>
+            <span>UPDATED</span>
+          </div>
+
+          <!-- Site 1: Jebel Ali Port -->
+          <div class="site-entry" data-level="Alert">
+            <button class="site-row" type="button" onclick="toggleSiteDetails('jebel-ali')">
+              <span class="site-name">
+                <i class="risk-dot red"></i>
+                <span><b>Jebel Ali Port</b><small>Dubai &middot; Industrial zone 04</small></span>
+              </span>
+              <span><em class="risk-pill red">Alert</em></span>
+              <span class="wbgt-cell">33.4&deg;<small>+3.2&deg;</small></span>
+              <span class="clinical-cell">18<small>reports</small></span>
+              <span class="confidence-cell"><i><b style="width:94%;"></b></i>94%</span>
+              <span class="updated-cell">4 min ago &rarr;</span>
+            </button>
+            <div class="site-details" id="site-details-jebel-ali" style="display:none;">
+              <div>
+                <span class="details-eyebrow">RECOMMENDED RESPONSE</span>
+                <p>Activate the site heat-response protocol, increase hydration breaks, and confirm on-site clinical support under UAE Resolution No. 44/2022.</p>
+                <small>94% model confidence &middot; Updated 4 min ago</small>
+              </div>
+              <button class="site-action" onclick="activateTab('employer')">Review response &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Site 2: Al Quoz Industrial -->
+          <div class="site-entry" data-level="Warning">
+            <button class="site-row" type="button" onclick="toggleSiteDetails('al-quoz')">
+              <span class="site-name">
+                <i class="risk-dot amber"></i>
+                <span><b>Al Quoz Industrial</b><small>Dubai &middot; Industrial zone 12</small></span>
+              </span>
+              <span><em class="risk-pill amber">Warning</em></span>
+              <span class="wbgt-cell">31.8&deg;<small>+1.6&deg;</small></span>
+              <span class="clinical-cell">11<small>reports</small></span>
+              <span class="confidence-cell"><i><b style="width:87%;"></b></i>87%</span>
+              <span class="updated-cell">18 min ago &rarr;</span>
+            </button>
+            <div class="site-details" id="site-details-al-quoz" style="display:none;">
+              <div>
+                <span class="details-eyebrow">RECOMMENDED RESPONSE</span>
+                <p>Increase shade and hydration checks, and review the next scheduled rest interval.</p>
+                <small>87% model confidence &middot; Updated 18 min ago</small>
+              </div>
+              <button class="site-action" onclick="activateTab('employer')">Review response &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Site 3: Khalifa Port -->
+          <div class="site-entry" data-level="Watch">
+            <button class="site-row" type="button" onclick="toggleSiteDetails('khalifa-port')">
+              <span class="site-name">
+                <i class="risk-dot blue"></i>
+                <span><b>Khalifa Port</b><small>Abu Dhabi &middot; Port district</small></span>
+              </span>
+              <span><em class="risk-pill blue">Watch</em></span>
+              <span class="wbgt-cell">29.6&deg;<small>+0.8&deg;</small></span>
+              <span class="clinical-cell">7<small>reports</small></span>
+              <span class="confidence-cell"><i><b style="width:79%;"></b></i>79%</span>
+              <span class="updated-cell">32 min ago &rarr;</span>
+            </button>
+            <div class="site-details" id="site-details-khalifa-port" style="display:none;">
+              <div>
+                <span class="details-eyebrow">RECOMMENDED RESPONSE</span>
+                <p>Keep the site under observation and verify the next sentinel reading.</p>
+                <small>79% model confidence &middot; Updated 32 min ago</small>
+              </div>
+              <button class="site-action" onclick="activateTab('sentinel')">Review response &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Intervention Simulator Preview Panel -->
+      <section class="panel simulator-panel" id="intervention-preview">
+        <div class="panel-heading">
+          <div>
+            <div class="section-overline">DECISION SUPPORT</div>
+            <h3>Intervention preview</h3>
+          </div>
+        </div>
+        <p class="sim-desc">Estimate the impact of a split-shift intervention across your workforce cohort.</p>
+        <div class="slider-header">
+          <label for="cohortWorkersSlider">Workforce cohort</label>
+          <span><span id="cohortWorkersLabel">50,000</span> <small>workers</small></span>
+        </div>
+        <input id="cohortWorkersSlider" class="cohort-slider" type="range" min="10000" max="100000" step="5000" value="50000" oninput="updateCohortSlider(this.value)">
+        <div class="slider-ends"><span>10,000</span><span>100,000</span></div>
+        <div class="sim-result">
+          <div>
+            <span>PROJECTED ILLNESSES AVERTED</span>
+            <strong id="projectedIllnessesAverted">60</strong>
+            <small>per summer season &middot; median estimate</small>
+          </div>
+          <div class="result-mark">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </div>
+        </div>
+        <button class="sim-button" onclick="activateTab('policystudio')">Explore scenario in Policy Studio &rarr;</button>
+      </section>
+    </div>
+  </div>
+
+<div id="view-inbox" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>DECISION SUPPORT &middot; MULTI-SIGNAL CORROBORATION</div>
+        <h1 class="page-title">Decision-ready alert inbox<span class="wave">.</span></h1>
+        <p class="heading-sub">Multi-signal corroborated alerts with calibrated outbreak probabilities and conformal prediction bands.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
  <div>
  <h2 style="font-size:1.25rem; font-weight:700;">Decision-Ready Alert Inbox</h2>
@@ -200,6 +685,13 @@
 
  <!-- 3. Employer Safety View -->
  <div id="view-employer" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>COMPLIANCE &middot; SITE SAFETY MANAGEMENT</div>
+        <h1 class="page-title">Employer safety cockpit<span class="wave">.</span></h1>
+        <p class="heading-sub">Mandatory statutory rest-break timeline, anonymized cohort cards (k &ge; 50), and shade hydration verification.</p>
+      </div>
+    </div>
  <div id="employerDashboardContainer">
  <!-- Dynamically populated -->
  </div>
@@ -207,6 +699,13 @@
 
  <!-- 4. Data Health Panel -->
  <div id="view-health" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>TELEMETRY AUDIT &middot; INGESTION QUALITY GATING</div>
+        <h1 class="page-title">Ingestion stream freshness &amp; telemetry health<span class="wave">.</span></h1>
+        <p class="heading-sub">Continuous quality gating, ingestion latency monitoring, and composite platform data quality.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
  <div>
  <h2 style="font-size:1.25rem; font-weight:700;">Ingestion Stream Freshness & Telemetry Health</h2>
@@ -226,6 +725,13 @@
 
  <!-- 5. Interactive Missing-Data Demo Widget -->
  <div id="view-demo" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>EVALUATOR LAB &middot; TELEMETRY DROPOUT RESILIENCE</div>
+        <h1 class="page-title">Missing-data resilience laboratory<span class="wave">.</span></h1>
+        <p class="heading-sub">Simulate upstream stream dropouts and verify conformal uncertainty band widening and graceful degradation.</p>
+      </div>
+    </div>
  <div class="demo-box">
  <div class="demo-title">
  Live Evaluator Control: Telemetry Stream Gating & Conformal Degradation
@@ -291,6 +797,13 @@
 
  <!-- 6. Security Audit Logs View -->
  <div id="view-audit" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>GOVERNANCE &middot; IMMUTABLE GOLD LEDGER</div>
+        <h1 class="page-title">Immutable security &amp; view audit trail<span class="wave">.</span></h1>
+        <p class="heading-sub">Non-repudiation logging in Gold Lakehouse Parquet with SHA-256 HMAC cryptographic seals.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
  <div>
  <h2 style="font-size:1.25rem; font-weight:700;">Immutable Security & View Audit Trail</h2>
@@ -320,6 +833,13 @@
 
  <!-- 7. Health & Resilience Impact Model & Policy Evidence View -->
  <div id="view-impact" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>ECONOMIC HEALTH &middot; BENEFIT-COST EVALUATION</div>
+        <h1 class="page-title">Health impact &amp; resilience economics<span class="wave">.</span></h1>
+        <p class="heading-sub">Quantified economic ROI, DALYs averted, hospital admissions prevented, and ministerial cost-benefit ledger.</p>
+      </div>
+    </div>
  <!-- Statutory Disclaimer Banner -->
  <div class="banner banner-privacy" style="margin-bottom:1.25rem;">
  
@@ -590,6 +1110,13 @@
 
  <!-- 8. Sentinel Hardware Fleet View -->
  <div id="view-sentinel" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>IOT TELEMETRY &middot; FIELD SENSOR MESH</div>
+        <h1 class="page-title">Sentinel hardware digital twin<span class="wave">.</span></h1>
+        <p class="heading-sub">Micro-climate IoT sensor nodes (ESP32-S3), thermal index calibration, and battery telemetry.</p>
+      </div>
+    </div>
  <div class="card" style="margin-bottom:1.25rem;">
  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
  <div>
@@ -885,6 +1412,13 @@
 
  <!-- 9. Historical Time Machine Replay View -->
  <div id="view-timemachine" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>RETROSPECTIVE EVALUATION &middot; HEAT DOME REPLAY</div>
+        <h1 class="page-title">Time machine historical replay<span class="wave">.</span></h1>
+        <p class="heading-sub">Zero-leakage counterfactual replay verifying +5.0 days early warning lead time.</p>
+      </div>
+    </div>
  <!-- Header & Event Selector -->
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
  <div>
@@ -1107,6 +1641,13 @@
 
  <!-- 10. What-If Occupational Intervention Simulator View -->
  <div id="view-whatif" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>DECISION SIMULATION &middot; MONTE CARLO PROJECTIONS</div>
+        <h1 class="page-title">What-if intervention scenario laboratory<span class="wave">.</span></h1>
+        <p class="heading-sub">Interactive Monte Carlo projections of workforce interventions, cooling breaks, and shade staging.</p>
+      </div>
+    </div>
  <!-- Top Title and Controls Bar -->
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
  <div>
@@ -1373,6 +1914,13 @@
 
  <!-- 10. Occupational Renal Biomarkers View (Phase 14) -->
  <div id="view-renal" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>CLINICAL SURVEILLANCE &middot; OCCUPATIONAL NEPHROPATHY</div>
+        <h1 class="page-title">Renal biomarker surveillance &amp; AKI sentinel<span class="wave">.</span></h1>
+        <p class="heading-sub">Sub-clinical eGFR decay trajectory monitoring, KDIGO stage micro-pills, and early nephropathy detection.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -1482,6 +2030,13 @@
 
  <!-- 11. Spatial Deconvolution View (Phase 15) -->
  <div id="view-deconvolve" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>EPIDEMIOLOGY &middot; UPSTREAM ORIGIN ESTIMATION</div>
+        <h1 class="page-title">Spatial deconvolution &amp; cluster demixing<span class="wave">.</span></h1>
+        <p class="heading-sub">Hospital-admitted heat stress cases de-mixed to industrial point sources and labor dormitory clusters.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -1599,6 +2154,13 @@
 
  <!-- 12. Municipal Dispatch View (Phase 16) -->
  <div id="view-dispatch" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>LOGISTICS &middot; REAL-TIME FLEET MOBILIZATION</div>
+        <h1 class="page-title">Municipal cooling fleet staging<span class="wave">.</span></h1>
+        <p class="heading-sub">Optimal positioning of rapid-deployment cooling buses, hydration stations, and paramedic escorts.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -1699,6 +2261,13 @@
 
  <!-- 13. Inception 42 Jais Dispatch View (Phase 17) -->
  <div id="view-jais" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>SOVEREIGN AI &middot; INCEPTION 42 JAIS-3-0.9B</div>
+        <h1 class="page-title">Jais sovereign legal dispatch generator<span class="wave">.</span></h1>
+        <p class="heading-sub">Bilingual Arabic-English frontline statutory notices grounded in UAE MOHRE Resolution No. 44/2022.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -1871,6 +2440,13 @@
 
  <!-- 14. Sovereign RAG Copilot & Executive Action Dossier (Phase 18) -->
  <div id="view-copilot" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>KNOWLEDGE BASE &middot; SOVEREIGN RAG ENGINE</div>
+        <h1 class="page-title">Sovereign copilot &amp; legal knowledge codex<span class="wave">.</span></h1>
+        <p class="heading-sub">Grounding in UAE Labor Law No. 33/2021, ISO 7933 physics, and Medallion Lakehouse telemetry.</p>
+      </div>
+    </div>
  <div class="banner banner-info" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:linear-gradient(135deg, #0b192c 0%, #1e1b4b 100%); border:1px solid #4338ca;">
  <div>
  <h2 style="font-size:1.25rem; font-weight:800; color:#65dfcd; display:flex; align-items:center; gap:0.5rem; margin:0 0 0.35rem 0;">
@@ -2015,6 +2591,13 @@
 
  <!-- 15. Compound Multi-Hazard Synergy Engine (Phase 21) -->
  <div id="view-compound" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>ENVIRONMENTAL HEALTH &middot; SYNERGISTIC RISK</div>
+        <h1 class="page-title">Compound multi-hazard interaction matrix<span class="wave">.</span></h1>
+        <p class="heading-sub">Synergistic non-linear risk interactions between WBGT heat stress and PM10/PM2.5 particulate dust.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2128,6 +2711,13 @@
 
  <!-- 16. Safe-Harbor Worker Protection Shield View (Phase 20) -->
  <div id="view-safeharbor" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>WORKER PROTECTION &middot; UAE LABOR LAW NO. 33/2021</div>
+        <h1 class="page-title">Safe-harbor worker shield &amp; privacy isolation<span class="wave">.</span></h1>
+        <p class="heading-sub">Hard quarantine preventing disciplinary query exploitation, certified with differential privacy epsilon=0.14.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2335,6 +2925,13 @@
 
  <!-- 15. ISO 7933 Predicted Heat Strain & Nocturnal Debt View (Phase 22) -->
  <div id="view-phs" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>PHYSIOLOGY &middot; PREDICTED HEAT STRAIN (ISO 7933)</div>
+        <h1 class="page-title">Physiological heat strain &amp; nocturnal debt<span class="wave">.</span></h1>
+        <p class="heading-sub">Core body temperature (Tre), maximum sweat rate, limit exposure duration (Dlim), and 72h nocturnal debt.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2509,6 +3106,13 @@
 
  <!-- 16. Hands-Free Multilingual Two-Way Voice Intercom View (Phase 23) -->
  <div id="view-intercom" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>FRONTLINE INTERCOM &middot; HANDS-FREE VOICE NLU</div>
+        <h1 class="page-title">Two-way frontline voice intercom<span class="wave">.</span></h1>
+        <p class="heading-sub">Multilingual voice triage and acoustic audio capture for site supervisors and field medics.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2659,6 +3263,13 @@
 
  <!-- 17. MOHRE Ministerial Policy Studio & Regulatory Replay View (Phase 24) -->
  <div id="view-policystudio" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>REGULATORY MODELING &middot; COUNTERFACTUAL POLICY</div>
+        <h1 class="page-title">MOHRE ministerial policy studio<span class="wave">.</span></h1>
+        <p class="heading-sub">Counterfactual regulatory policy simulation under UAE Federal Decree-Law No. 33/2021.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2849,6 +3460,13 @@
 
  <!-- 18. DHA NABIDH & Malaffi HL7 FHIR R4 Gateway View -->
  <div id="view-nabidh" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>INTEROPERABILITY &middot; DHA HEALTH INFORMATION EXCHANGE</div>
+        <h1 class="page-title">NABIDH FHIR CDS integration hub<span class="wave">.</span></h1>
+        <p class="heading-sub">HL7 FHIR R4 clinical data repository exchange with DHA Malaffi/NABIDH clinical health records.</p>
+      </div>
+    </div>
  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
  <div>
  <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
@@ -2914,6 +3532,13 @@
 
  <!-- 22. Bayesian Causal De-Mixing & Multi-Signal Outbreak Attribution (Phase 26) -->
  <div id="view-causal" class="tab-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span>CAUSAL INFERENCE &middot; OUTBREAK ATTRIBUTION</div>
+        <h1 class="page-title">Bayesian causal syndromic de-mixing<span class="wave">.</span></h1>
+        <p class="heading-sub">Posterior attribution between extreme heat stroke, canteen norovirus, and shamal dust outbreak signals.</p>
+      </div>
+    </div>
  <div class="card" style="background:linear-gradient(135deg, #101817 0%, #071927 100%); border:1px solid #1c4b42; margin-bottom:1.5rem;">
  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
  <div>
@@ -3157,6 +3782,10 @@
 
 
  </main>
+      </div> <!-- /content-area -->
+    </div> <!-- /main-panel -->
+  </div> <!-- /app-shell -->
+
 
  <!-- Evidence Card Modal -->
  <div id="evidenceCardModal" class="modal-overlay">

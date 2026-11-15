@@ -80,6 +80,46 @@ function handleHashNavigation() {
   }
 }
 
+const VIEW_TITLES_MAP = {
+  map: "Situation Map",
+  inbox: "Alert Inbox",
+  employer: "Employer Safety View",
+  dispatch: "Municipal Cooling Fleet",
+  sentinel: "Sentinel Hardware Twin",
+  phs: "Heat Strain & Debt (ISO 7933)",
+  renal: "Renal Biomarkers (AKI)",
+  deconvolve: "Spatial Deconvolution",
+  compound: "Compound Multi-Hazard",
+  causal: "Bayesian Causal De-Mixing",
+  nabidh: "NABIDH FHIR CDS",
+  intercom: "Frontline Intercom",
+  jais: "Jais Legal Dispatch",
+  copilot: "Sovereign Copilot & Codex",
+  policystudio: "MOHRE Policy Studio",
+  impact: "Health Impact & ROI",
+  timemachine: "Time Machine Replay",
+  whatif: "What-If Interventions",
+  safeharbor: "Safe-Harbor Shield",
+  health: "Data Health Panel",
+  demo: "Missing-Data Validation",
+  audit: "Security Audit Logs",
+};
+
+function syncSidebarAndBreadcrumbs(tabName) {
+  const breadcrumb = document.getElementById("breadcrumbCurrent");
+  if (breadcrumb) {
+    breadcrumb.textContent = VIEW_TITLES_MAP[tabName] || tabName;
+  }
+  document.querySelectorAll(".sidebar .nav-item").forEach(item => {
+    item.classList.toggle("nav-active", item.dataset.tab === tabName);
+  });
+  const sidebar = document.getElementById("appSidebar");
+  if (sidebar && window.innerWidth <= 850) {
+    sidebar.classList.remove("sidebar-open");
+  }
+}
+window.syncSidebarAndBreadcrumbs = syncSidebarAndBreadcrumbs;
+
 function setupNavigation() {
   const tabButtons = document.querySelectorAll(".tab-btn");
   tabButtons.forEach(btn => {
@@ -96,7 +136,15 @@ function setupNavigation() {
       if (targetContent) targetContent.classList.add("active");
 
       syncActivePillarForTab(btn.dataset.tab);
+      syncSidebarAndBreadcrumbs(btn.dataset.tab);
       loadCurrentView();
+    });
+  });
+
+  const sidebarNavItems = document.querySelectorAll(".sidebar .nav-item[data-tab]");
+  sidebarNavItems.forEach(item => {
+    item.addEventListener("click", () => {
+      activateTab(item.dataset.tab);
     });
   });
 }
@@ -4788,6 +4836,7 @@ function activateTab(tabName) {
     history.replaceState(null, null, `#${tabName}`);
   }
   syncActivePillarForTab(tabName);
+  syncSidebarAndBreadcrumbs(tabName);
   const tabBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
   if (tabBtn) {
     tabBtn.style.display = "inline-flex";
@@ -5208,3 +5257,211 @@ window.launchEvaluatorShowcase = launchEvaluatorShowcase;
 
 
 
+
+// ==============================================================================
+// --- Phase 35: Munzir Sovereign Executive Sample Interactive Features ---
+// ==============================================================================
+
+function exportRegionalBriefingCSV() {
+  const generatedAt = new Date();
+  const rows = [
+    ["Munzir regional heat-risk briefing"],
+    ["Generated at", generatedAt.toLocaleString()],
+    [],
+    ["Regional metric", "Current value"],
+    ["Regional WBGT", "33.4°C"],
+    ["At-risk workers", "142,500"],
+    ["Clinical signals", "18 reports"],
+    ["Sentinel network", "24 / 26 nodes"],
+    ["Intervention cohort", document.getElementById("cohortWorkersLabel") ? document.getElementById("cohortWorkersLabel").textContent : "50,000"],
+    ["Projected illnesses averted", document.getElementById("projectedIllnessesAverted") ? document.getElementById("projectedIllnessesAverted").textContent : "60"],
+    [],
+    ["Priority site", "Area", "Risk level", "WBGT", "Trend", "Clinical reports", "Confidence", "Updated"],
+    ["Jebel Ali Port", "Dubai · Industrial zone 04", "Alert", "33.4°C", "+3.2°", "18", "94%", "4 min ago"],
+    ["Al Quoz Industrial", "Dubai · Industrial zone 12", "Warning", "31.8°C", "+1.6°", "11", "87%", "18 min ago"],
+    ["Khalifa Port", "Abu Dhabi · Port district", "Watch", "29.6°C", "+0.8°", "7", "79%", "32 min ago"]
+  ];
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `munzir-heat-risk-briefing-${generatedAt.toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+window.exportRegionalBriefingCSV = exportRegionalBriefingCSV;
+
+let isHazardAcknowledged = false;
+function handleHazardAcknowledge() {
+  isHazardAcknowledged = !isHazardAcknowledged;
+  const btn = document.getElementById("btnHazardAcknowledge");
+  const text = document.getElementById("ackBtnText");
+  const arrow = document.getElementById("ackBtnArrow");
+  if (btn && text && arrow) {
+    if (isHazardAcknowledged) {
+      btn.classList.add("ack-done");
+      text.textContent = "Acknowledged";
+      arrow.textContent = "Undo";
+    } else {
+      btn.classList.remove("ack-done");
+      text.textContent = "Acknowledge";
+      arrow.innerHTML = "&nearr;";
+    }
+  }
+}
+window.handleHazardAcknowledge = handleHazardAcknowledge;
+
+function updateCohortSlider(val) {
+  const num = Number(val);
+  const label = document.getElementById("cohortWorkersLabel");
+  const averted = document.getElementById("projectedIllnessesAverted");
+  if (label) label.textContent = num.toLocaleString();
+  if (averted) averted.textContent = Math.round(num * 0.0012).toLocaleString();
+}
+window.updateCohortSlider = updateCohortSlider;
+
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById("appSidebar");
+  if (sidebar) sidebar.classList.toggle("sidebar-open");
+}
+window.toggleMobileSidebar = toggleMobileSidebar;
+
+const TREND_SERIES_DATA = {
+  "24h": {
+    reading: "31.2°",
+    change: "↑ 6.2% from previous 24 hours",
+    points: "0,88 24,82 48,85 72,69 96,72 120,59 144,66 168,50 192,55 216,43 240,48 264,29 288,34 312,17 336,24 360,10",
+    model: "0,77 24,71 48,74 72,58 96,61 120,48 144,55 168,39 192,44 216,32 240,37 264,18 288,23 312,6 336,13 360,0",
+    labels: ["12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "Now"]
+  },
+  "7d": {
+    reading: "30.7°",
+    change: "↑ 4.8% from previous 7 days",
+    points: "0,91 24,78 48,82 72,70 96,73 120,64 144,69 168,53 192,58 216,44 240,49 264,32 288,36 312,22 336,28 360,14",
+    model: "0,80 24,67 48,71 72,59 96,62 120,53 144,58 168,42 192,47 216,33 240,38 264,21 288,25 312,11 336,17 360,3",
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  },
+  "30d": {
+    reading: "29.9°",
+    change: "↑ 2.1% from previous 30 days",
+    points: "0,96 24,89 48,91 72,78 96,82 120,73 144,76 168,65 192,70 216,56 240,61 264,43 288,48 312,34 336,39 360,25",
+    model: "0,85 24,78 48,80 72,67 96,71 120,62 144,65 168,54 192,59 216,45 240,50 264,32 288,37 312,23 336,28 360,14",
+    labels: ["Nov 1", "Nov 5", "Nov 10", "Nov 15", "Nov 20", "Nov 25", "Nov 30"]
+  }
+};
+
+function setTrendRange(range) {
+  const data = TREND_SERIES_DATA[range];
+  if (!data) return;
+  document.querySelectorAll(".segment-btn").forEach(btn => {
+    btn.classList.toggle("segment-active", btn.dataset.range === range);
+  });
+  const rVal = document.getElementById("trendReadingVal");
+  const cVal = document.getElementById("trendChangeVal");
+  const line = document.getElementById("trendLine");
+  const mLine = document.getElementById("trendModelLine");
+  const area = document.getElementById("trendAreaPath");
+  const xLabels = document.getElementById("trendXLabels");
+
+  if (rVal) rVal.innerHTML = `${data.reading} <small>WBGT</small>`;
+  if (cVal) cVal.innerHTML = data.change;
+  if (line) line.setAttribute("points", data.points);
+  if (mLine) mLine.setAttribute("points", data.model);
+  if (area) {
+    const areaPoints = `M ${data.points.replace(/ /g, " L ")} L 360 112 L 0 112 Z`;
+    area.setAttribute("d", areaPoints);
+  }
+  if (xLabels) {
+    xLabels.innerHTML = data.labels.map(l => `<span>${l}</span>`).join("");
+  }
+}
+window.setTrendRange = setTrendRange;
+
+let isModelLineVisible = true;
+function toggleModelLine() {
+  isModelLineVisible = !isModelLineVisible;
+  const mLine = document.getElementById("trendModelLine");
+  const btn = document.getElementById("btnToggleModelLine");
+  if (mLine) mLine.style.display = isModelLineVisible ? "inline" : "none";
+  if (btn) btn.classList.toggle("model-off", !isModelLineVisible);
+}
+window.toggleModelLine = toggleModelLine;
+
+function setSiteFilter(filter) {
+  document.querySelectorAll(".site-filter").forEach(b => {
+    b.classList.toggle("site-filter-active", b.dataset.filter === filter);
+  });
+  document.querySelectorAll(".site-entry").forEach(row => {
+    if (filter === "All" || row.dataset.level === filter) {
+      row.style.display = "block";
+    } else {
+      row.style.display = "none";
+    }
+  });
+}
+window.setSiteFilter = setSiteFilter;
+
+function toggleSiteDetails(siteId) {
+  const el = document.getElementById(`site-details-${siteId}`);
+  if (el) {
+    el.style.display = (el.style.display === "none" || !el.style.display) ? "flex" : "none";
+  }
+}
+window.toggleSiteDetails = toggleSiteDetails;
+
+function selectMapSite(siteName) {
+  const target = document.getElementById("priority-sites");
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  if (siteName.includes("Jebel")) toggleSiteDetails("jebel-ali");
+  else if (siteName.includes("Quoz")) toggleSiteDetails("al-quoz");
+}
+window.selectMapSite = selectMapSite;
+
+function loadSavedView(view) {
+  if (view === "dubai") {
+    activateTab("map");
+    setSiteFilter("All");
+  } else if (view === "sensors") {
+    activateTab("sentinel");
+  }
+}
+window.loadSavedView = loadSavedView;
+
+function toggleQuickSearch() {
+  const input = document.getElementById("topSearchInput");
+  if (input) {
+    if (input.style.display === "none" || !input.style.display) {
+      input.style.display = "inline-block";
+      input.focus();
+    } else {
+      input.style.display = "none";
+    }
+  }
+}
+window.toggleQuickSearch = toggleQuickSearch;
+
+function handleQuickSearch(event) {
+  if (event.key === "Escape") {
+    const input = document.getElementById("topSearchInput");
+    if (input) input.style.display = "none";
+    return;
+  }
+  const q = (event.target.value || "").toLowerCase();
+  document.querySelectorAll(".site-entry").forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? "block" : "none";
+  });
+}
+window.handleQuickSearch = handleQuickSearch;
+
+window.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    toggleQuickSearch();
+  }
+});
