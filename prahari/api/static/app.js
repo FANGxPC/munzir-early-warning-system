@@ -68,6 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   handleHashNavigation();
   loadCurrentView();
+  if (typeof renderDynamicTrendChart === "function") {
+    renderDynamicTrendChart("24h", "SITE-JA-01");
+  }
 });
 
 window.addEventListener("hashchange", () => {
@@ -339,36 +342,74 @@ async function loadSituationMap() {
   }
 }
 
-function selectGeoSite(geoId) {
+function selectGeoSite(geoId, geoName) {
+  window.currentSiteId = geoId;
+  if (geoName) window.currentSiteName = geoName;
+
   document.querySelectorAll('.geo-item-card').forEach(c => c.classList.remove('selected'));
   const card = document.getElementById(`geoCard-${geoId}`);
   if (card) {
     card.classList.add('selected');
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
   document.querySelectorAll('.map-node-group').forEach(n => n.classList.remove('selected'));
   const mapNode = document.getElementById(`mapNode-${geoId}`);
   if (mapNode) {
     mapNode.classList.add('selected');
   }
+
+  // Update site chip buttons active state
+  document.querySelectorAll('.site-chip-btn').forEach(btn => {
+    const txt = btn.textContent.toLowerCase();
+    const isMatch = (geoName && txt.includes(geoName.toLowerCase().split(' ')[0])) || txt.includes(geoId.toLowerCase());
+    btn.classList.toggle('active', isMatch);
+  });
+
+  // Re-render trend chart dynamically for this site
+  if (typeof renderDynamicTrendChart === "function") {
+    renderDynamicTrendChart(window.currentTrendRange || '24h', geoId);
+  }
+
+  // Update active hazard banner
+  const hazardKicker = document.querySelector(".alert-kicker");
+  if (hazardKicker && geoName) {
+    hazardKicker.innerHTML = `ACTIVE HAZARD <span>&middot;</span> ${escapeHtml(geoName.toUpperCase())}`;
+  }
 }
+window.selectGeoSite = selectGeoSite;
 
 function renderSvgMap(svgElement, features, clusters) {
+  if (!svgElement) return;
+
+  // Save for modal and layer redraws
+  window.lastMapFeatures = features || window.lastMapFeatures || [];
+  window.lastMapClusters = clusters || window.lastMapClusters || [];
+  features = window.lastMapFeatures;
+  clusters = window.lastMapClusters;
+
+  window.mapLayerState = window.mapLayerState || { sensors: true, plume: true, hexes: true, maritime: true };
+
   // Geo bounds for Dubai
   const minLat = 24.75, maxLat = 25.35;
   const minLon = 54.95, maxLon = 56.20;
 
-  const width = svgElement.clientWidth || 740;
-  const height = svgElement.clientHeight || 520;
+  const width = 740;
+  const height = 380;
 
   function toXY(lat, lon) {
     const x = ((lon - minLon) / (maxLon - minLon)) * (width - 100) + 50;
     const y = height - (((lat - minLat) / (maxLat - minLat)) * (height - 90) + 45);
-    return { x, y };
+    return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
   }
 
   // Tactical Radar Center (Downtown / Jebel Ali Axis)
   const centerDubai = toXY(25.08, 55.20);
+
+  const maritimeDisp = window.mapLayerState.maritime !== false ? "inline" : "none";
+  const plumeDisp = window.mapLayerState.plume !== false ? "inline" : "none";
+  const hexesDisp = window.mapLayerState.hexes !== false ? "inline" : "none";
+  const sensorsDisp = window.mapLayerState.sensors !== false ? "inline" : "none";
 
   let svgHtml = `
     <defs>
@@ -389,64 +430,68 @@ function renderSvgMap(svgElement, features, clusters) {
     <!-- Canvas Background -->
     <rect width="${width}" height="${height}" fill="url(#mapBgGrad)" />
 
-    <!-- Arabian Gulf Maritime Wash (Northwest Coastal Domain) -->
-    <path d="M 0,0 L ${width * 0.45},0 Q ${width * 0.32},${height * 0.4} 0,${height * 0.65} Z" 
-          fill="rgba(14, 165, 233, 0.04)" stroke="rgba(101, 223, 205, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
-    <text x="24" y="55" fill="rgba(101, 223, 205, 0.35)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
-      ARABIAN GULF (MARITIME DOMAIN)
-    </text>
+    <!-- Maritime Domain Layer -->
+    <g id="layerGroupMaritime" style="display:${maritimeDisp};">
+      <path d="M 0,0 L ${width * 0.45},0 Q ${width * 0.32},${height * 0.4} 0,${height * 0.65} Z" 
+            fill="rgba(14, 165, 233, 0.05)" stroke="rgba(101, 223, 205, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="24" y="45" fill="rgba(101, 223, 205, 0.45)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
+        ARABIAN GULF (MARITIME DOMAIN)
+      </text>
+    </g>
 
-    <!-- Concentric Tactical Radar Range Rings -->
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="80" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="160" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
-    <text x="${centerDubai.x + 84}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">15 KM</text>
-    <text x="${centerDubai.x + 164}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
-    <text x="${centerDubai.x + 244}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
+    <!-- Radar Range Rings & Reticles Layer -->
+    <g id="layerGroupRadarGrid">
+      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="70" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
+      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="140" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
+      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="210" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
+      <text x="${centerDubai.x + 74}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">15 KM</text>
+      <text x="${centerDubai.x + 144}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
+      <text x="${centerDubai.x + 214}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
 
-    <!-- Coordinate Grid & Mesh -->
-    <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
-    <line x1="${width/2}" y1="40" x2="${width/2}" y2="${height - 40}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+      <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+      <line x1="${width/2}" y1="35" x2="${width/2}" y2="${height - 35}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
 
-    <!-- Corner Reticles (L-brackets) -->
-    <path d="M 16,28 L 16,16 L 28,16" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <!-- Corner Reticles (L-brackets) -->
+      <path d="M 16,28 L 16,16 L 28,16" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
 
-    <!-- Telemetry HUD Header / Footer Overlay -->
-    <text x="36" y="24" fill="#65dfcd" font-size="9.5" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
-      TACTICAL RADAR &bull; DUBAI COMMAND HUB &bull; H3 RES-7 GRID
-    </text>
-    <text x="${width - 36}" y="24" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)" text-anchor="end">
-      WGS-84 &bull; LIVE BIOMETEOROLOGY BIAS-CORRECTED
-    </text>
-
-    <text x="36" y="${height - 14}" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)">
-      SENSOR MESH: ESP32 TWIN ACTIVE &bull; SCAN RATE: 10s
-    </text>
-    <text x="${width - 36}" y="${height - 14}" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
-      [N] AZIMUTH 000&deg;
-    </text>
+      <!-- Telemetry HUD Header / Footer Overlay -->
+      <text x="36" y="24" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
+        TACTICAL RADAR &bull; DUBAI COMMAND HUB &bull; H3 RES-7 GRID
+      </text>
+      <text x="${width - 36}" y="24" fill="#64748b" font-size="8" font-family="var(--font-mono, monospace)" text-anchor="end">
+        WGS-84 &bull; LIVE BIOMETEOROLOGY BIAS-CORRECTED
+      </text>
+      <text x="36" y="${height - 12}" fill="#64748b" font-size="8" font-family="var(--font-mono, monospace)">
+        SENSOR MESH: ESP32 TWIN ACTIVE &bull; SCAN RATE: 10s
+      </text>
+      <text x="${width - 36}" y="${height - 12}" fill="#65dfcd" font-size="8.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
+        [N] AZIMUTH 000&deg;
+      </text>
+    </g>
   `;
 
-  // Draw clusters first
+  // Draw clusters (Thermal Inversion Plumes Layer)
+  svgHtml += `<g id="layerGroupPlume" style="display:${plumeDisp};">`;
   if (clusters && clusters.length > 0) {
     clusters.forEach(c => {
       const center = toXY(c.centroid_lat, c.centroid_lon);
       svgHtml += `
-        <!-- Outer radiating shockwave ring -->
-        <circle cx="${center.x}" cy="${center.y}" r="54" fill="none" stroke="#f17971" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85" />
-        <circle cx="${center.x}" cy="${center.y}" r="46" fill="rgba(239, 68, 68, 0.16)" stroke="#f17971" stroke-width="1.2" />
-        <rect x="${center.x - 95}" y="${center.y - 68}" width="190" height="20" rx="3" fill="#180c10" stroke="#f17971" stroke-width="1" />
-        <text x="${center.x}" y="${center.y - 54}" fill="#fca5a5" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+        <circle cx="${center.x}" cy="${center.y}" r="48" fill="none" stroke="#f17971" stroke-width="1.4" stroke-dasharray="5,4" opacity="0.85" />
+        <circle cx="${center.x}" cy="${center.y}" r="40" fill="rgba(239, 68, 68, 0.16)" stroke="#f17971" stroke-width="1.2" />
+        <rect x="${center.x - 90}" y="${center.y - 58}" width="180" height="18" rx="3" fill="#180c10" stroke="#f17971" stroke-width="0.9" />
+        <text x="${center.x}" y="${center.y - 45}" fill="#fca5a5" font-size="8.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
           L3 CLUSTER (RR: ${c.relative_risk}x &bull; p &lt; 0.05)
         </text>
       `;
     });
   }
+  svgHtml += `</g>`;
 
-  // Draw features
+  // Draw features (H3 Hexagons & Biometeorology Sensor Mesh)
+  svgHtml += `<g id="layerGroupSensors" style="display:${sensorsDisp};">`;
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
     let color = "#66d9af"; // normal
@@ -459,7 +504,7 @@ function renderSvgMap(svgElement, features, clusters) {
     const nameWidth = Math.max(76, displayName.length * 8 + 24);
 
     svgHtml += `
-      <g id="mapNode-${f.geo_id}" class="map-node-group" onclick="selectGeoSite('${f.geo_id}')" style="cursor:pointer;">
+      <g id="mapNode-${f.geo_id}" class="map-node-group" onclick="selectGeoSite('${f.geo_id}', '${escapeHtml(f.geo_name)}')" style="cursor:pointer;">
     `;
 
     if (isSite) {
@@ -471,25 +516,28 @@ function renderSvgMap(svgElement, features, clusters) {
     } else {
       // District Sector Node (Concentric Circle with Hatch or Solid)
       svgHtml += `
-        <circle cx="${pt.x}" cy="${pt.y}" r="15" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : 'rgba(8,14,26,0.9)'}" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
-        <circle cx="${pt.x}" cy="${pt.y}" r="4.5" fill="${color}" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="14" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : 'rgba(8,14,26,0.9)'}" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="4" fill="${color}" />
       `;
     }
 
     // Callout Label Banner
     svgHtml += `
-        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 18}" width="${nameWidth}" height="18" rx="3" fill="#060a14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" />
-        <text x="${pt.x}" y="${pt.y + 31}" fill="#f8fafc" font-size="9.5" font-weight="700" text-anchor="middle">
-          ${displayName}
+        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="3" fill="#060a14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" />
+        <text x="${pt.x}" y="${pt.y + 29}" fill="#f8fafc" font-size="9" font-weight="700" text-anchor="middle">
+          ${escapeHtml(displayName)}
         </text>
-        <text x="${pt.x}" y="${pt.y + 44}" fill="${color}" font-size="8" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+        <text x="${pt.x}" y="${pt.y + 42}" fill="${color}" font-size="7.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
           [${f.risk_tier.toUpperCase()}]
         </text>
       </g>
     `;
   });
+  svgHtml += `</g>`;
 
-  svgElement.innerHTML = svgHtml;
+  // Complete SVG Root Element with correct SVG Namespace
+  const fullSvg = `<svg class="tactical-radar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="display:block;">${svgHtml}</svg>`;
+  svgElement.innerHTML = fullSvg;
 }
 
 // --- 2. Alert Inbox View ---
@@ -3601,7 +3649,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
         query: query,
         site_id: siteId,
         target_date: state.date || "2025-08-20",
-        history: [],
+        history: (window.copilotChatHistory || []).slice(-8),
       }),
     });
 
@@ -3678,6 +3726,11 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
     stream.appendChild(botBubble);
     stream.scrollTop = stream.scrollHeight;
+
+    // Maintain multi-turn conversational context
+    window.copilotChatHistory = window.copilotChatHistory || [];
+    window.copilotChatHistory.push({ role: "user", content: query });
+    window.copilotChatHistory.push({ role: "assistant", content: res.response_text || "" });
   } catch (err) {
     if (loadingBubble.parentNode) loadingBubble.parentNode.removeChild(loadingBubble);
     const errBubble = document.createElement("div");
@@ -5666,36 +5719,32 @@ function toggleMobileSidebar() {
 }
 window.toggleMobileSidebar = toggleMobileSidebar;
 
-const TREND_SERIES_DATA = {
-  "24h": {
-    reading: "31.2°",
-    change: "↑ 6.2% from previous 24 hours",
-    points: "0,88 24,82 48,85 72,69 96,72 120,59 144,66 168,50 192,55 216,43 240,48 264,29 288,34 312,17 336,24 360,10",
-    model: "0,77 24,71 48,74 72,58 96,61 120,48 144,55 168,39 192,44 216,32 240,37 264,18 288,23 312,6 336,13 360,0",
-    labels: ["12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "Now"]
-  },
-  "7d": {
-    reading: "30.7°",
-    change: "↑ 4.8% from previous 7 days",
-    points: "0,91 24,78 48,82 72,70 96,73 120,64 144,69 168,53 192,58 216,44 240,49 264,32 288,36 312,22 336,28 360,14",
-    model: "0,80 24,67 48,71 72,59 96,62 120,53 144,58 168,42 192,47 216,33 240,38 264,21 288,25 312,11 336,17 360,3",
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-  },
-  "30d": {
-    reading: "29.9°",
-    change: "↑ 2.1% from previous 30 days",
-    points: "0,96 24,89 48,91 72,78 96,82 120,73 144,76 168,65 192,70 216,56 240,61 264,43 288,48 312,34 336,39 360,25",
-    model: "0,85 24,78 48,80 72,67 96,71 120,62 144,65 168,54 192,59 216,45 240,50 264,32 288,37 312,23 336,28 360,14",
-    labels: ["Nov 1", "Nov 5", "Nov 10", "Nov 15", "Nov 20", "Nov 25", "Nov 30"]
-  }
-};
+// --- Dynamic Heat Exposure Trend & Tactical Map Controls ---
+window.trendSeriesVisibility = window.trendSeriesVisibility || { wbgt: true, model: true, threshold: true };
+window.currentTrendRange = "24h";
+window.currentSiteId = "SITE-JA-01";
+window.currentSiteName = "Jebel Ali Port";
 
-function setTrendRange(range) {
-  const data = TREND_SERIES_DATA[range];
-  if (!data) return;
-  document.querySelectorAll(".segment-btn").forEach(btn => {
-    btn.classList.toggle("segment-active", btn.dataset.range === range);
-  });
+function getSiteThermalProfile(siteId) {
+  const profiles = {
+    "SITE-JA-01": { baseWbgt: 33.4, delta: 1.8, trendDir: "up", name: "Jebel Ali Port" },
+    "SITE-AQ-02": { baseWbgt: 31.8, delta: 1.2, trendDir: "up", name: "Al Quoz Industrial" },
+    "SITE-CR-03": { baseWbgt: 29.8, delta: -0.6, trendDir: "down", name: "Dubai Creek Harbor" },
+    "SITE-DS-04": { baseWbgt: 32.6, delta: 1.4, trendDir: "up", name: "Dubai South Logistics" },
+  };
+  return profiles[siteId] || { baseWbgt: 31.2, delta: 1.0, trendDir: "up", name: "Dubai Regional" };
+}
+
+function renderDynamicTrendChart(range, siteId) {
+  range = range || window.currentTrendRange || "24h";
+  siteId = siteId || window.currentSiteId || "SITE-JA-01";
+  window.currentTrendRange = range;
+  window.currentSiteId = siteId;
+
+  const profile = getSiteThermalProfile(siteId);
+  const baseW = profile.baseWbgt;
+  const isUp = profile.trendDir === "up";
+
   const rVal = document.getElementById("trendReadingVal");
   const cVal = document.getElementById("trendChangeVal");
   const line = document.getElementById("trendLine");
@@ -5703,29 +5752,287 @@ function setTrendRange(range) {
   const area = document.getElementById("trendAreaPath");
   const xLabels = document.getElementById("trendXLabels");
 
-  if (rVal) rVal.innerHTML = `${data.reading} <small>WBGT</small>`;
-  if (cVal) cVal.innerHTML = data.change;
-  if (line) line.setAttribute("points", data.points);
-  if (mLine) mLine.setAttribute("points", data.model);
+  document.querySelectorAll(".segment-btn").forEach(btn => {
+    btn.classList.toggle("segment-active", btn.dataset.range === range);
+  });
+
+  const chartW = 600;
+  const chartH = 200;
+  const minY = 24.0;
+  const maxY = 38.0;
+
+  function toSvgCoords(val, xIndex, totalPoints) {
+    const x = totalPoints <= 1 ? 0 : (xIndex / (totalPoints - 1)) * chartW;
+    const clampedVal = Math.max(minY, Math.min(maxY, val));
+    const y = chartH - ((clampedVal - minY) / (maxY - minY)) * (chartH - 26) - 13;
+    return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+  }
+
+  let pointsList = [];
+  let labels = [];
+  let currentReading = baseW;
+  let changeText = "";
+
+  if (range === "24h") {
+    const count = 24;
+    labels = ["12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "Now"];
+    currentReading = baseW;
+    changeText = `${isUp ? '&uarr;' : '&darr;'} ${(Math.abs(profile.delta)).toFixed(1)}&deg; <small>from previous 24 hours</small>`;
+    
+    for (let i = 0; i < count; i++) {
+      const hour = i;
+      const diurnalFactor = -Math.cos(((hour - 4) / 24) * 2 * Math.PI);
+      const wbgt = baseW - 3.2 + (diurnalFactor + 1) * 2.1 + (Math.sin(i * 1.5) * 0.25);
+      const model = wbgt - profile.delta + (Math.cos(i * 0.8) * 0.2);
+      
+      const hr12 = hour === 0 ? "12 AM" : (hour === 12 ? "12 PM" : (hour > 12 ? `${hour - 12} PM` : `${hour} AM`));
+      const coordsWbgt = toSvgCoords(wbgt, i, count);
+      const coordsModel = toSvgCoords(model, i, count);
+
+      pointsList.push({
+        x: coordsWbgt.x,
+        yWbgt: coordsWbgt.y,
+        yModel: coordsModel.y,
+        wbgt: wbgt,
+        model: model,
+        label: `Today ${hr12}`,
+      });
+    }
+  } else if (range === "7d") {
+    const count = 7;
+    const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    labels = dayNames;
+    currentReading = baseW - 0.4;
+    changeText = `&uarr; 3.8% <small>from previous 7 days</small>`;
+
+    for (let i = 0; i < count; i++) {
+      const dayFactor = (i / 6) * 1.6;
+      const wbgt = baseW - 1.8 + dayFactor + (Math.sin(i * 2) * 0.35);
+      const model = wbgt - profile.delta + (Math.cos(i * 1.2) * 0.25);
+
+      const coordsWbgt = toSvgCoords(wbgt, i, count);
+      const coordsModel = toSvgCoords(model, i, count);
+
+      pointsList.push({
+        x: coordsWbgt.x,
+        yWbgt: coordsWbgt.y,
+        yModel: coordsModel.y,
+        wbgt: wbgt,
+        model: model,
+        label: `${dayNames[i]} Peak`,
+      });
+    }
+  } else { // 30d
+    const count = 30;
+    labels = ["Nov 1", "Nov 5", "Nov 10", "Nov 15", "Nov 20", "Nov 25", "Nov 30"];
+    currentReading = baseW - 1.2;
+    changeText = `&uarr; 2.1% <small>from previous 30 days</small>`;
+
+    for (let i = 0; i < count; i++) {
+      const monthProgress = i / 29;
+      const wbgt = 28.5 + monthProgress * 3.8 + (Math.sin(i * 0.7) * 0.75);
+      const model = wbgt - (profile.delta * 0.8) + (Math.cos(i * 0.5) * 0.3);
+
+      const coordsWbgt = toSvgCoords(wbgt, i, count);
+      const coordsModel = toSvgCoords(model, i, count);
+
+      pointsList.push({
+        x: coordsWbgt.x,
+        yWbgt: coordsWbgt.y,
+        yModel: coordsModel.y,
+        wbgt: wbgt,
+        model: model,
+        label: `Nov ${i + 1}`,
+      });
+    }
+  }
+
+  window.currentTrendDataset = pointsList;
+
+  if (rVal) rVal.innerHTML = `${currentReading.toFixed(1)}&deg; <small>WBGT</small>`;
+  if (cVal) cVal.innerHTML = changeText;
+
+  const pointsWbgtStr = pointsList.map(p => `${p.x},${p.yWbgt}`).join(" ");
+  const pointsModelStr = pointsList.map(p => `${p.x},${p.yModel}`).join(" ");
+
+  if (line) line.setAttribute("points", pointsWbgtStr);
+  if (mLine) mLine.setAttribute("points", pointsModelStr);
   if (area) {
-    const areaPoints = `M ${data.points.replace(/ /g, " L ")} L 360 112 L 0 112 Z`;
-    area.setAttribute("d", areaPoints);
+    const areaPath = `M ${pointsList[0].x},${pointsList[0].yWbgt} ` +
+      pointsList.slice(1).map(p => `L ${p.x},${p.yWbgt}`).join(" ") +
+      ` L ${chartW},${chartH} L 0,${chartH} Z`;
+    area.setAttribute("d", areaPath);
   }
+
   if (xLabels) {
-    xLabels.innerHTML = data.labels.map(l => `<span>${l}</span>`).join("");
+    xLabels.innerHTML = labels.map(l => `<span>${l}</span>`).join("");
   }
+
+  const vis = window.trendSeriesVisibility || { wbgt: true, model: true, threshold: true };
+  if (line) line.style.display = vis.wbgt ? "inline" : "none";
+  if (area) area.style.display = vis.wbgt ? "inline" : "none";
+  if (mLine) mLine.style.display = vis.model ? "inline" : "none";
+  const tLine = document.getElementById("trendThresholdLine");
+  if (tLine) tLine.style.display = vis.threshold ? "block" : "none";
+
+  attachTrendChartListeners();
+}
+
+function setTrendRange(range) {
+  renderDynamicTrendChart(range, window.currentSiteId);
 }
 window.setTrendRange = setTrendRange;
+window.renderDynamicTrendChart = renderDynamicTrendChart;
 
-let isModelLineVisible = true;
+function toggleTrendSeries(seriesKey) {
+  window.trendSeriesVisibility = window.trendSeriesVisibility || { wbgt: true, model: true, threshold: true };
+  window.trendSeriesVisibility[seriesKey] = !window.trendSeriesVisibility[seriesKey];
+  const isVis = window.trendSeriesVisibility[seriesKey];
+
+  if (seriesKey === "wbgt") {
+    const line = document.getElementById("trendLine");
+    const area = document.getElementById("trendAreaPath");
+    const btn = document.getElementById("btnToggleWbgtLine");
+    if (line) line.style.display = isVis ? "inline" : "none";
+    if (area) area.style.display = isVis ? "inline" : "none";
+    if (btn) btn.classList.toggle("off", !isVis);
+  } else if (seriesKey === "model") {
+    const mLine = document.getElementById("trendModelLine");
+    const btn = document.getElementById("btnToggleModelLine");
+    if (mLine) mLine.style.display = isVis ? "inline" : "none";
+    if (btn) btn.classList.toggle("off", !isVis);
+  } else if (seriesKey === "threshold") {
+    const tLine = document.getElementById("trendThresholdLine");
+    const btn = document.getElementById("btnToggleThresholdLine");
+    if (tLine) tLine.style.display = isVis ? "block" : "none";
+    if (btn) btn.classList.toggle("off", !isVis);
+  }
+}
+window.toggleTrendSeries = toggleTrendSeries;
+
 function toggleModelLine() {
-  isModelLineVisible = !isModelLineVisible;
-  const mLine = document.getElementById("trendModelLine");
-  const btn = document.getElementById("btnToggleModelLine");
-  if (mLine) mLine.style.display = isModelLineVisible ? "inline" : "none";
-  if (btn) btn.classList.toggle("model-off", !isModelLineVisible);
+  toggleTrendSeries('model');
 }
 window.toggleModelLine = toggleModelLine;
+
+function handleTrendChartHover(e) {
+  const content = document.getElementById("trendChartContent");
+  const tooltip = document.getElementById("trendChartTooltip");
+  const hoverLine = document.getElementById("trendHoverLine");
+  const dotWbgt = document.getElementById("trendHoverDotWbgt");
+  const dotModel = document.getElementById("trendHoverDotModel");
+  if (!content || !tooltip || !window.currentTrendDataset || window.currentTrendDataset.length === 0) return;
+
+  const rect = content.getBoundingClientRect();
+  const mouseX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+  const pct = mouseX / rect.width;
+  const data = window.currentTrendDataset;
+  const index = Math.max(0, Math.min(data.length - 1, Math.round(pct * (data.length - 1))));
+  const item = data[index];
+  if (!item) return;
+
+  if (hoverLine) {
+    hoverLine.setAttribute("x1", item.x);
+    hoverLine.setAttribute("x2", item.x);
+    hoverLine.style.opacity = "1";
+  }
+  if (dotWbgt) {
+    dotWbgt.setAttribute("cx", item.x);
+    dotWbgt.setAttribute("cy", item.yWbgt);
+    dotWbgt.style.opacity = (window.trendSeriesVisibility && window.trendSeriesVisibility.wbgt !== false) ? "1" : "0";
+  }
+  if (dotModel) {
+    dotModel.setAttribute("cx", item.x);
+    dotModel.setAttribute("cy", item.yModel);
+    dotModel.style.opacity = (window.trendSeriesVisibility && window.trendSeriesVisibility.model !== false) ? "1" : "0";
+  }
+
+  const statusColor = item.wbgt >= 32.0 ? "#f17971" : (item.wbgt >= 30.0 ? "#e9aa62" : "#65dfcd");
+  const statusLabel = item.wbgt >= 32.0 ? "SEVERE HAZARD" : (item.wbgt >= 30.0 ? "ELEVATED" : "NORMAL");
+  tooltip.innerHTML = `
+    <div style="font-weight:700; color:#f8fafc; margin-bottom:2px;">${item.label}</div>
+    <div style="display:flex; gap:10px; font-size:10.5px;">
+      <span style="color:#65dfcd;">Site: <b>${item.wbgt.toFixed(1)}&deg;C</b></span>
+      <span style="color:#a5bec5;">Model: <b>${item.model.toFixed(1)}&deg;C</b></span>
+      <span style="color:${statusColor}; font-weight:700;">${statusLabel}</span>
+    </div>
+  `;
+  tooltip.style.left = `${mouseX}px`;
+  tooltip.style.display = "block";
+}
+
+function handleTrendChartLeave() {
+  const tooltip = document.getElementById("trendChartTooltip");
+  const hoverLine = document.getElementById("trendHoverLine");
+  const dotWbgt = document.getElementById("trendHoverDotWbgt");
+  const dotModel = document.getElementById("trendHoverDotModel");
+  if (tooltip) tooltip.style.display = "none";
+  if (hoverLine) hoverLine.style.opacity = "0";
+  if (dotWbgt) dotWbgt.style.opacity = "0";
+  if (dotModel) dotModel.style.opacity = "0";
+}
+
+function attachTrendChartListeners() {
+  const content = document.getElementById("trendChartContent");
+  if (content && !content._hasHoverListener) {
+    content._hasHoverListener = true;
+    content.addEventListener("mousemove", handleTrendChartHover);
+    content.addEventListener("mouseleave", handleTrendChartLeave);
+  }
+}
+
+// Tactical Map Layers Menu
+window.mapLayerState = { sensors: true, plume: true, hexes: true, maritime: true };
+
+function toggleMapLayersMenu(event) {
+  if (event) event.stopPropagation();
+  const menu = document.getElementById("mapLayersDropdown");
+  if (!menu) return;
+  const isShown = menu.style.display === "flex" || menu.style.display === "block";
+  menu.style.display = isShown ? "none" : "flex";
+
+  if (!isShown) {
+    const closeListener = (e) => {
+      if (!menu.contains(e.target) && e.target.id !== "btnMapLayersToggle") {
+        menu.style.display = "none";
+        document.removeEventListener("click", closeListener);
+      }
+    };
+    setTimeout(() => document.addEventListener("click", closeListener), 10);
+  }
+}
+window.toggleMapLayersMenu = toggleMapLayersMenu;
+
+function toggleMapLayer(layerKey) {
+  const checkbox = document.getElementById(`layerToggle${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}`);
+  const isChecked = checkbox ? checkbox.checked : true;
+  window.mapLayerState[layerKey] = isChecked;
+
+  const targetId = `layerGroup${layerKey.charAt(0).toUpperCase() + layerKey.slice(1)}`;
+  document.querySelectorAll(`#${targetId}`).forEach(el => {
+    el.style.display = isChecked ? "inline" : "none";
+  });
+}
+window.toggleMapLayer = toggleMapLayer;
+
+function openFullscreenMapModal() {
+  const modal = document.getElementById("fullScreenMapModal");
+  const container = document.getElementById("fullscreenSvgContainer");
+  if (!modal || !container) return;
+  modal.style.display = "flex";
+  renderSvgMap(container, window.lastMapFeatures || [], window.lastMapClusters || []);
+}
+window.openFullscreenMapModal = openFullscreenMapModal;
+
+function closeFullscreenMapModal() {
+  const modal = document.getElementById("fullScreenMapModal");
+  if (modal) modal.style.display = "none";
+}
+window.closeFullscreenMapModal = closeFullscreenMapModal;
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeFullscreenMapModal();
+});
 
 function setSiteFilter(filter) {
   document.querySelectorAll(".site-filter").forEach(b => {

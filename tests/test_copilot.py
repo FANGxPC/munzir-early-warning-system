@@ -257,6 +257,25 @@ class TestSovereignCopilotAgent:
         assert any(term in res.response_text for term in ["Shade", "Cooling", "Hydration", "998"])
         assert res.passed_fenced_gate is True
 
+    def test_agent_chat_follow_up_elaboration(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("tell me more abou it", site_id="SITE-JA-01")
+
+        assert res.intent == "follow_up_elaboration"
+        assert any(term in res.response_text for term in ["Microclimate", "Thermal", "WBGT", "Resolution", "44"])
+        assert res.passed_fenced_gate is True
+
+    def test_agent_chat_multi_turn_history(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        history = [
+            {"role": "user", "content": "What is the status of Jebel Ali?"},
+            {"role": "assistant", "content": "Jebel Ali is at Alert Tier with 41.3C WBGT."}
+        ]
+        res = agent.chat("tell me more about this site", site_id="SITE-JA-01", history=history)
+
+        assert res.intent == "follow_up_elaboration"
+        assert res.passed_fenced_gate is True
+
 
 class TestCopilotAPIEndpoints:
     """Tests FastAPI REST endpoints for Copilot and Dossier."""

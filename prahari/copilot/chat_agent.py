@@ -173,11 +173,20 @@ class SovereignCopilotAgent:
                         "role": "system",
                         "content": system_instruction,
                     },
+                ]
+                if history:
+                    for turn in history[-4:]:
+                        r = "user" if turn.get("role") == "user" else "assistant"
+                        c = turn.get("content", "").strip()
+                        if c:
+                            messages.append({"role": r, "content": c[:300]})
+
+                messages.append(
                     {
                         "role": "user",
                         "content": f"{prompt_context}\n\nUser Question: {query}\n\nProvide an authoritative, concise response citing relevant statutory articles (MOHRE Resolution 44/2022) or clinical guidance.",
-                    },
-                ]
+                    }
+                )
                 prompt = self.jais_runner._tokenizer.apply_chat_template(
                     messages,
                     tokenize=False,
@@ -430,6 +439,38 @@ class SovereignCopilotAgent:
                 f"• مهلة الإنذار المبكر: توفر +{ctx.renal_advance_lead_time_days:.1f} يوماً استباقياً قبل دخول حالات الطوارئ للمستشفيات."
             )
 
+        elif intent == CopilotIntent.FOLLOW_UP_ELABORATION:
+            eng = (
+                f"Operational & Clinical Deep-Dive for {ctx.site_name} ({ctx.site_id}) on {ctx.target_date}:\n\n"
+                f"1. Atmospheric Microclimate Trajectory:\n"
+                f"• Peak measured WBGT is {ctx.current_wbgt_c:.1f}°C, triggering {ctx.alert_tier.upper()} Tier (Calibrated Outbreak Probability: {ctx.calibrated_probability * 100:.1f}%).\n"
+                f"• In-situ ESP32 sensors confirm a microclimate delta of {ctx.microclimate_delta_c:+.1f}°C relative to regional atmospheric models.\n\n"
+                f"2. Worker Thermal Strain & Clinical Physiology (ISO 7933 PHS):\n"
+                f"• Sustained physical exertion in direct sunlight exceeds safe physiological core limits (> 38.5°C) within 35 minutes.\n"
+                f"• Sweating rate is estimated at 1.2 L/hour per worker. Active cohort dehydration rate is {ctx.dehydration_rate_pct:.1f}% with KDIGO Stage 1 incidence at {ctx.kdigo_stage1_rate_per_1k:.1f}/1,000 workers.\n\n"
+                f"3. Statutory Legal Obligations ({art_ref}):\n"
+                f"• Mandatory Midday Break: Direct outdoor sunlight work is prohibited between 12:30 PM and 3:00 PM.\n"
+                f"• Shaded Rest & Hydration: Employers must enforce 15-minute shaded rest per hour and dispense cool potable water with electrolytes. Non-compliance incurs penalties of {penalties}.\n\n"
+                f"4. Municipal Logistics Deployment:\n"
+                f"• Staging {ctx.cooling_buses_needed} mobile cooling buses and {ctx.misting_trailers_needed} misting trailers from {ctx.nearest_depot} (ETA {ctx.depot_transit_minutes} minutes).\n"
+                f"• Dispensing {ctx.potable_water_tons:.2f} tons of potable water and {ctx.electrolyte_sachets_needed:,} electrolyte sachets."
+            )
+            ar = (
+                f"التقرير التشغيلي والسريري المفصل لموقع {ctx.site_name} ({ctx.site_id}) بتاريخ {ctx.target_date}:\n\n"
+                f"١. تحليل المناخ الحراري الميداني:\n"
+                f"• بلغ مؤشر الحرارة الرطبة المقاسة {ctx.current_wbgt_c:.1f} درجة مئوية، مفعلاً مستوى الإنذار ({ctx.alert_tier}) باحتمالية {ctx.calibrated_probability * 100:.1f}٪.\n"
+                f"• رصدت حساسات إنترنت الأشياء الميدانية فارقاً حرارياً قدره {ctx.microclimate_delta_c:+.1f} درجة مئوية أعلى من النماذج العامة.\n\n"
+                f"٢. الإجهاد الفسيولوجي وصحة العمال (ISO 7933):\n"
+                f"• العمل اليدوي المتواصل تحت أشعة الشمس المباشرة يتجاوز الحد الآمن لحرارة الجسم (۳۸.٥°م) خلال ۳٥ دقيقة.\n"
+                f"• معدل التعرق المقدر ۱.۲ لتر/ساعة، ونسبة الجفاف {ctx.dehydration_rate_pct:.1f}٪ مع رصد إجهاد كلوي مبكر.\n\n"
+                f"٣. الالتزام القانوني واللوائح الوزارية ({art_ref}):\n"
+                f"• حظر العمل وقت الظهيرة: يُحظر العمل المكشوف تماماً بين 12:30 ظهراً و 3:00 مساءً.\n"
+                f"• فترات الراحة والترطيب: إلزامية توفير مظلات استراحة ١٥ دقيقة كل ساعة ومياه مبردة وأملاح تعويضية. تترتب على المخالفة غرامات قدرها {penalties}.\n\n"
+                f"٤. الجاهزية اللوجستية وأسطول التبريد:\n"
+                f"• تخصيص {ctx.cooling_buses_needed} حافلات تبريد و{ctx.misting_trailers_needed} مقطورات رذاذ من مستودع {ctx.nearest_depot} (زمن الوصول: {ctx.depot_transit_minutes} دقيقة).\n"
+                f"• توزيع {ctx.potable_water_tons:.2f} طن ماء مبرد و{ctx.electrolyte_sachets_needed:,} مغلف أملاح تعويضية."
+            )
+
         else:  # GENERAL_OVERVIEW
             eng = (
                 f"Munzir Surveillance Briefing for {ctx.site_name} on {ctx.target_date}:\n"
@@ -496,6 +537,15 @@ class SovereignCopilotAgent:
                 "• الذكاء الاصطناعي السيادي: نموذج Inception 42 Jais-3 على كروت GPU المحلية، وإرسال برقيات بخمس لغات، ونظام لاسلكي ذكي.\n"
                 "• المرونة والسياسات: محاكي قرارات وزارة الموارد البشرية رقم 44 لسنة 2022، وحساب العائد الاستثماري، ودرع حماية الخصوصية التفاضلية.\n"
                 "• التنقل السريع: اضغط ⌘ K أو Ctrl+K في أي وقت لفتح لوحة الأوامر السريعة والانتقال الفوري لأي شاشة."
+            )
+        if intent == CopilotIntent.FOLLOW_UP_ELABORATION:
+            art_num = f"{article.instrument} {article.article_number}" if article else "القرار الوزاري رقم 44 لسنة 2022"
+            return (
+                f"التقرير التشغيلي والسريري المفصل لموقع {ctx.site_name} بموجب {art_num}:\n\n"
+                f"• مؤشر الحرارة الرطبة الحالي: {ctx.current_wbgt_c:.1f} درجة مئوية بمستوى إنذار ({ctx.alert_tier}).\n"
+                f"• الحظر الوزاري: يُحظر العمل المكشوف تماماً بين 12:30 و 3:00 ظهراً تحت طائلة الغرامات الإدارية.\n"
+                f"• صحة العمال: إلزامية فترات راحة مظللة ١٥ دقيقة وتوزيع ماء مبرد وأملاح تعويضية للوقاية من الإجهاد الكلوي.\n"
+                f"• الدعم اللوجستي: جاهزية {ctx.cooling_buses_needed} حافلات تبريد و{ctx.potable_water_tons:.2f} طن مياه من مستودع {ctx.nearest_depot}."
             )
 
         art_ref = f"{article.instrument} {article.article_number}" if article else "قرار وزارة الموارد البشرية رقم ٤٤ لسنة ٢٠٢٢"

@@ -27,6 +27,7 @@ class CopilotIntent(str, Enum):
     CLINICAL_EDUCATION = "clinical_education"
     FIRST_AID = "first_aid"
     PLATFORM_GUIDANCE = "platform_guidance"
+    FOLLOW_UP_ELABORATION = "follow_up_elaboration"
     GENERAL_OVERVIEW = "general_overview"
 
 
@@ -73,6 +74,14 @@ class RetrievedContextPacket:
             return "Frontline emergency first-aid protocols: immediate shade, active cooling, hydration, recovery position, and DCAS ambulance dispatch."
         if self.intent == CopilotIntent.PLATFORM_GUIDANCE:
             return "Munzir Sovereign Health Early Warning Platform: 22 specialized views, Sentinel IoT hardware twins, Medallion Lakehouse telemetry, and MOHRE statutory codex."
+        if self.intent == CopilotIntent.FOLLOW_UP_ELABORATION:
+            ctx = self.live_context
+            return (
+                f"Comprehensive thermal, clinical, and regulatory deep-dive for {ctx.site_name} ({ctx.site_id}). "
+                f"Peak WBGT: {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier, probability {round(ctx.calibrated_probability * 100, 1)}%). "
+                f"Governed by UAE MOHRE Resolution 44/2022 Article 1 midday break. "
+                f"Logistics readiness: {ctx.cooling_buses_needed} cooling buses, {ctx.potable_water_tons} tons potable water."
+            )
 
         ctx = self.live_context
         base = (
@@ -133,6 +142,17 @@ class SovereignRAGRetriever:
         if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in conv_phrases):
             if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
                 return CopilotIntent.CONVERSATIONAL
+
+        # 3. Contextual Follow-up & Deep-Dive Elaboration
+        follow_up_phrases = [
+            "tell me more", "tell me more about", "tell me more abou", "explain further",
+            "give me details", "give more details", "elaborate", "can you elaborate", "what else",
+            "go deeper", "more details", "what does this mean", "break it down", "expand on this",
+            "more info", "what are the details", "explain in detail", "tell me about this",
+            "tell me about it", "tell me about this site"
+        ]
+        if any(w in q for w in follow_up_phrases):
+            return CopilotIntent.FOLLOW_UP_ELABORATION
 
         # 3. Emergency First-Aid Guidelines
         first_aid_phrases = [

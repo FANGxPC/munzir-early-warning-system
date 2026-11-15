@@ -463,133 +463,107 @@
         </div>
 
         <div class="chart-summary">
-          <span class="big-reading" id="trendReadingVal">31.2&deg; <small>WBGT</small></span>
-          <span class="chart-change" id="trendChangeVal">&uarr; 6.2% <small>from previous 24 hours</small></span>
+          <span class="big-reading" id="trendReadingVal">33.4&deg; <small>WBGT</small></span>
+          <span class="chart-change" id="trendChangeVal">&uarr; 1.8&deg; <small>from previous 24 hours</small></span>
         </div>
 
-        <div class="chart-wrap">
-          <div class="chart-axis">
-            <span>36&deg;</span>
-            <span>32&deg;</span>
-            <span>28&deg;</span>
-            <span>24&deg;</span>
+        <div class="chart-wrap" id="trendChartWrap">
+          <div class="chart-axis" id="trendYAxis">
+            <span>38&deg;</span>
+            <span>34&deg;</span>
+            <span>30&deg;</span>
+            <span>26&deg;</span>
           </div>
-          <div class="chart-content">
+          <div class="chart-content" id="trendChartContent">
             <div class="chart-gridlines"><i></i><i></i><i></i><i></i></div>
-            <div class="threshold-line"><span>Severe threshold &middot; 32&deg;C</span></div>
-            <svg class="trend-chart" id="trendSvgChart" viewBox="0 0 360 112">
+            <div class="threshold-line" id="trendThresholdLine"><span>Severe threshold &middot; 32&deg;C</span></div>
+            <svg class="trend-chart" id="trendSvgChart" viewBox="0 0 600 200" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#55d6c2" stop-opacity=".22"></stop>
+                  <stop offset="0%" stop-color="#55d6c2" stop-opacity=".26"></stop>
                   <stop offset="100%" stop-color="#55d6c2" stop-opacity="0"></stop>
                 </linearGradient>
               </defs>
-              <path id="trendAreaPath" d="M 0,88 L 24,82 L 48,85 L 72,69 L 96,72 L 120,59 L 144,66 L 168,50 L 192,55 L 216,43 L 240,48 L 264,29 L 288,34 L 312,17 L 336,24 L 360,10 L 360 112 L 0 112 Z" fill="url(#areaGrad)"></path>
-              <polyline id="trendModelLine" points="0,77 24,71 48,74 72,58 96,61 120,48 144,55 168,39 192,44 216,32 240,37 264,18 288,23 312,6 336,13 360,0" fill="none" stroke="#a5bec5" stroke-width="1.8" stroke-dasharray="5 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"></polyline>
-              <polyline id="trendLine" points="0,88 24,82 48,85 72,69 96,72 120,59 144,66 168,50 192,55 216,43 240,48 264,29 288,34 312,17 336,24 360,10" fill="none" stroke="#65dfcd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
-              <line x1="264" y1="0" x2="264" y2="112" stroke="#e9aa62" stroke-dasharray="4 5" opacity=".8"></line>
-              <circle cx="264" cy="29" r="4" fill="#e9aa62" stroke="#152725" stroke-width="2"></circle>
+              <path id="trendAreaPath" d="" fill="url(#areaGrad)"></path>
+              <polyline id="trendModelLine" points="" fill="none" stroke="#a5bec5" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"></polyline>
+              <polyline id="trendLine" points="" fill="none" stroke="#65dfcd" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+              <line id="trendHoverLine" x1="0" y1="0" x2="0" y2="200" stroke="#e9aa62" stroke-width="1.2" stroke-dasharray="3 3" opacity="0"></line>
+              <circle id="trendHoverDotWbgt" cx="0" cy="0" r="5" fill="#65dfcd" stroke="#060a14" stroke-width="2" opacity="0"></circle>
+              <circle id="trendHoverDotModel" cx="0" cy="0" r="4" fill="#a5bec5" stroke="#060a14" stroke-width="2" opacity="0"></circle>
             </svg>
+            <div id="trendChartTooltip" class="trend-chart-tooltip" style="display:none;"></div>
             <div class="chart-x" id="trendXLabels">
               <span>12 AM</span><span>4 AM</span><span>8 AM</span><span>12 PM</span><span>4 PM</span><span>8 PM</span><span>Now</span>
             </div>
           </div>
         </div>
 
-        <div class="chart-legend">
-          <span><i class="legend-wbgt"></i>Measured on-site WBGT</span>
-          <button type="button" class="model-toggle" id="btnToggleModelLine" onclick="toggleModelLine()">
+        <div class="chart-legend" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:12px;">
+          <button type="button" class="legend-btn active" id="btnToggleWbgtLine" onclick="toggleTrendSeries('wbgt')">
+            <i class="legend-wbgt"></i>Measured on-site WBGT
+          </button>
+          <button type="button" class="legend-btn active" id="btnToggleModelLine" onclick="toggleTrendSeries('model')">
             <i class="legend-model"></i>Regional model
           </button>
-          <span><i class="legend-threshold"></i>Hazard threshold</span>
+          <button type="button" class="legend-btn active" id="btnToggleThresholdLine" onclick="toggleTrendSeries('threshold')">
+            <i class="legend-threshold"></i>Hazard threshold (32&deg;C)
+          </button>
         </div>
       </section>
 
       <!-- Regional Risk Map Panel -->
-      <section class="panel map-panel" id="regional-risk-map">
+      <section class="panel map-panel" id="regional-risk-map" style="position:relative;">
         <div class="panel-heading">
           <div>
             <div class="section-overline">SPATIAL OVERVIEW</div>
             <h3>Regional risk map</h3>
           </div>
-          <div style="display:flex; gap:0.5rem; align-items:center;">
-            <button class="map-filter" type="button" onclick="activateTab('map')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <div style="display:flex; gap:0.5rem; align-items:center; position:relative;">
+            <button class="map-filter" id="btnMapLayersToggle" type="button" onclick="toggleMapLayersMenu(event)" aria-haspopup="true" aria-expanded="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
               Layers
             </button>
+            <!-- Tactical Layers Dropdown -->
+            <div id="mapLayersDropdown" class="map-layers-menu" style="display:none;">
+              <div class="map-layers-header">Tactical GIS Layers</div>
+              <label class="layer-checkbox-row">
+                <input type="checkbox" id="layerToggleSensors" checked onchange="toggleMapLayer('sensors')">
+                <span>Biometeorology Sensor Mesh</span>
+              </label>
+              <label class="layer-checkbox-row">
+                <input type="checkbox" id="layerTogglePlume" checked onchange="toggleMapLayer('plume')">
+                <span>Thermal Inversion Heat Plume</span>
+              </label>
+              <label class="layer-checkbox-row">
+                <input type="checkbox" id="layerToggleHexes" checked onchange="toggleMapLayer('hexes')">
+                <span>H3 Res-7 Risk Hexagons</span>
+              </label>
+              <label class="layer-checkbox-row">
+                <input type="checkbox" id="layerToggleMaritime" checked onchange="toggleMapLayer('maritime')">
+                <span>Arabian Gulf Maritime Wash</span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="map-body">
-          <div class="map-art" aria-label="Regional heat-risk map">
-            <div class="map-grid"></div>
-            <div class="map-tiles" id="mapHexTiles">
-              <!-- Hex grid cells -->
-              <div class="hex hex-cool" style="grid-column: 1; grid-row: 1;"></div>
-              <div class="hex hex-cool" style="grid-column: 2; grid-row: 1; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 3; grid-row: 1;"></div>
-              <div class="hex hex-warm" style="grid-column: 4; grid-row: 1; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 5; grid-row: 1;"></div>
-              <div class="hex hex-cool" style="grid-column: 6; grid-row: 1; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 7; grid-row: 1;"></div>
-              
-              <div class="hex hex-cool" style="grid-column: 1; grid-row: 2;"></div>
-              <div class="hex hex-cool" style="grid-column: 2; grid-row: 2; transform: translateY(15px);"></div>
-              <div class="hex hex-hot" style="grid-column: 3; grid-row: 2;"></div>
-              <div class="hex hex-warm" style="grid-column: 4; grid-row: 2; transform: translateY(15px);"></div>
-              <div class="hex hex-warm" style="grid-column: 5; grid-row: 2;"></div>
-              <div class="hex hex-cool" style="grid-column: 6; grid-row: 2; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 7; grid-row: 2;"></div>
-
-              <div class="hex hex-cool" style="grid-column: 1; grid-row: 3;"></div>
-              <div class="hex hex-cool" style="grid-column: 2; grid-row: 3; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 3; grid-row: 3;"></div>
-              <div class="hex hex-hot" style="grid-column: 4; grid-row: 3; transform: translateY(15px);"></div>
-              <div class="hex hex-warm" style="grid-column: 5; grid-row: 3;"></div>
-              <div class="hex hex-cool" style="grid-column: 6; grid-row: 3; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 7; grid-row: 3;"></div>
-
-              <div class="hex hex-cool" style="grid-column: 1; grid-row: 4;"></div>
-              <div class="hex hex-cool" style="grid-column: 2; grid-row: 4; transform: translateY(15px);"></div>
-              <div class="hex hex-hot" style="grid-column: 3; grid-row: 4;"></div>
-              <div class="hex hex-warm" style="grid-column: 4; grid-row: 4; transform: translateY(15px);"></div>
-              <div class="hex hex-warm" style="grid-column: 5; grid-row: 4;"></div>
-              <div class="hex hex-cool" style="grid-column: 6; grid-row: 4; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 7; grid-row: 4;"></div>
-
-              <div class="hex hex-cool" style="grid-column: 1; grid-row: 5;"></div>
-              <div class="hex hex-cool" style="grid-column: 2; grid-row: 5; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 3; grid-row: 5;"></div>
-              <div class="hex hex-cool" style="grid-column: 4; grid-row: 5; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 5; grid-row: 5;"></div>
-              <div class="hex hex-cool" style="grid-column: 6; grid-row: 5; transform: translateY(15px);"></div>
-              <div class="hex hex-cool" style="grid-column: 7; grid-row: 5;"></div>
-            </div>
-
-            <button class="map-label label-jebel" type="button" onclick="selectMapSite('Jebel Ali Port')"><i></i>Jebel Ali</button>
-            <button class="map-label label-quoz" type="button" onclick="selectMapSite('Al Quoz Industrial')"><i></i>Al Quoz</button>
-
-            <div class="map-coast">PERSIAN GULF</div>
-            <div class="map-legend">
-              <span><i class="legend-low"></i>Low</span>
-              <span><i class="legend-med"></i>Elevated</span>
-              <span><i class="legend-high"></i>High</span>
-            </div>
-            <div class="map-scale">25 km</div>
+        <div class="map-body" style="height:260px; min-height:260px; position:relative; overflow:hidden; border:1px solid #283531; border-radius:6px; background:#060a14;">
+          <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none; position:absolute; top:8px; left:8px; z-index:4;"></div>
+          <div id="situationSvgMap" class="map-svg-container" style="width:100%; height:100%;"></div>
+          <!-- Quick-Jump Site Chips -->
+          <div class="map-site-chips" style="position:absolute; bottom:8px; left:10px; display:flex; gap:6px; z-index:3;">
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-JA-01', 'Jebel Ali Port')">Jebel Ali</button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-AQ-02', 'Al Quoz Industrial')">Al Quoz</button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-CR-03', 'Dubai Creek Harbor')">Creek</button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-DS-04', 'Dubai South Logistics')">Dubai South</button>
           </div>
         </div>
 
-        <div class="map-footer">
+        <div class="map-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
           <span><i class="map-live-dot"></i>Live site conditions &middot; H3 Resolution 7 Grid</span>
-          <button onclick="activateTab('map')">Full Screen Map &rarr;</button>
+          <button type="button" class="btn-fullscreen-map" onclick="openFullscreenMapModal()">Full Screen Map &rarr;</button>
         </div>
 
-        <!-- Embedded Live H3 Geo & SVG Container (Preserving Existing Logic) -->
-        <div style="margin-top:12px; border-top:1px solid #283531; padding-top:10px;">
-          <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none;"></div>
-          <div id="situationSvgMap" class="map-svg-container" style="min-height:220px;"></div>
-          <div id="mapGeoList" style="display:none;"></div>
-        </div>
+        <div id="mapGeoList" style="display:none;"></div>
       </section>
     </div>
 
@@ -5217,6 +5191,34 @@
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('First aid protocol for heat collapse')">Heat First Aid</button>
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('What is the legal fine under UAE Resolution 44?')">Resolution 44 Penalty</button>
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('Show municipal cooling fleet staging')">Municipal Fleet Staging</button>
+    </div>
+
+    <!-- Fullscreen Tactical Map Modal -->
+    <div id="fullScreenMapModal" class="fullscreen-map-modal" style="display:none;" role="dialog" aria-modal="true" aria-label="Tactical Command Radar Map">
+      <div class="fullscreen-map-backdrop" onclick="closeFullscreenMapModal()"></div>
+      <div class="fullscreen-map-window">
+        <div class="fullscreen-map-header">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="live-radar-dot"></span>
+            <h3 style="margin:0; font-size:1.15rem; color:#f8fafc; font-weight:700;">Tactical Situation Map &middot; Dubai Biometeorology Command Hub</h3>
+            <span class="badge badge-emerald" style="font-size:0.75rem;">H3 RES-7 &bull; WGS-84</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="modal-close-btn" onclick="closeFullscreenMapModal()" aria-label="Close Fullscreen Map">&times;</button>
+          </div>
+        </div>
+        <div class="fullscreen-map-content">
+          <div id="fullscreenSvgContainer" style="width:100%; height:100%; min-height:480px;"></div>
+        </div>
+        <div class="fullscreen-map-footer">
+          <div style="display:flex; gap:16px; font-size:0.8rem; color:#94a3b8; font-family:var(--font-mono, monospace);">
+            <span>RADAR AZIMUTH: 000&deg;</span>
+            <span>SCAN FREQUENCY: 10s</span>
+            <span>TELEMETRY: SENSIRION SHT40 + ESP32 BIAS MESH</span>
+          </div>
+          <button type="button" class="btn-close-modal" onclick="closeFullscreenMapModal()">Exit Fullscreen (ESC)</button>
+        </div>
+      </div>
     </div>
 
     <!-- Drawer Chat Stream -->
