@@ -1523,6 +1523,7 @@ def get_jais_multilingual_dispatch(
                 "hindi": card.hindi_text,
                 "malayalam": card.malayalam_text,
                 "audio_scripts": card.audio_tts_scripts,
+                "audio_phonetic": card.audio_tts_phonetic,
                 "whatsapp_preview": card.whatsapp_preview_markdown,
             },
         }

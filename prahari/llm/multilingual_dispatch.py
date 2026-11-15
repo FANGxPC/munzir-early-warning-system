@@ -6,7 +6,7 @@ in Arabic (العربية), English, Urdu (اردو), and Hindi (हिन्द
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from prahari.llm.jais_runner import JaisInferenceRunner
@@ -23,9 +23,10 @@ class MultilingualDispatchCard:
     english_text: str
     urdu_text: str
     hindi_text: str
-    audio_tts_scripts: Dict[str, str]  # language_code -> phonetic text
+    audio_tts_scripts: Dict[str, str]  # language_code -> native text
     whatsapp_preview_markdown: str
     malayalam_text: str = ""
+    audio_tts_phonetic: Dict[str, str] = field(default_factory=dict)
 
 
 def generate_multilingual_dispatch(
@@ -85,13 +86,22 @@ def generate_multilingual_dispatch(
         f"നിർദ്ദേശം: യുഎഇ സർക്കാർ ഉത്തരവ് അനുസരിച്ച് തൊഴിലാളികൾക്ക് തണലിൽ വിശ്രമവും ഒ.ആർ.എസ് അടങ്ങിയ തണുത്ത വെള്ളവും ഉടൻ നൽകുക."
     )
 
-    # Audio TTS Phonetic Scripts (Optimized for Web Speech Synthesis API)
+    # Audio TTS Native Scripts
     audio_scripts = {
-        "ar": f"تنبيه وقائي منذر في {site_name}. يرجى تطبيق فترات الراحة المظللة والترطيب فوراً.",
-        "en": f"Munzir preventive warning for {site_name}. Please enforce shaded rest and hydration stations immediately.",
-        "ur": f"منذر الرٹ برائے {site_name}۔ برائے مہربانی ورکرز کو سائے میں آرام اور پانی دیں۔",
+        "ar": f"تنبيه وقائي من منصة منذر لموقع {site_name}. يرجى تطبيق فترات الراحة المظللة والترطيب فوراً.",
+        "en": f"Munzir preventive safety warning for {site_name}. Please enforce shaded rest and hydration stations immediately.",
+        "ur": f"منذر پیشگی وارننگ الرٹ برائے {site_name}۔ برائے مہربانی ورکرز کو سائے میں آرام اور او آر ایس ملا پانی دیں۔",
         "hi": f"मुन्ज़िर सुरक्षा अलर्ट: {site_name} में तुरंत छायादार आराम और ओआरएस पानी उपलब्ध कराएं।",
         "ml": f"മുൻസിർ സുരക്ഷാ മുന്നറിയിപ്പ്: {site_name} ൽ തൊഴിലാളികൾക്ക് തണലിൽ വിശ്രമവും വെള്ളവും നൽകുക.",
+    }
+
+    # Audio TTS Phonetic Transliterations (Ensures clear, natural audibility across all browsers and operating systems)
+    audio_phonetic = {
+        "ar": f"Tanbeeh wiqaa'ee min Munzir fee {site_name}. Yurjaa tatbeeq fataraat ar-raahah al-muzallalah wal-tarteeb fowran.",
+        "en": f"Munzir preventive safety warning for {site_name}. Please enforce shaded rest and hydration stations immediately.",
+        "ur": f"Munzir Alert baraye {site_name}. Baraye mehrbani workers ko saaye mein aaram aur thanda paani dein.",
+        "hi": f"Munzir suraksha alert {site_name}. Kripya shramikon ko turant chhayadaar aaram aur ORS paani uplabdh karayein.",
+        "ml": f"Munzir suraksha munnariyippu {site_name}. Thozhilalikalikku thanalil vishramavum thadutha vellavum nalkuka.",
     }
 
     # WhatsApp Styled Preview Markdown
@@ -123,5 +133,6 @@ def generate_multilingual_dispatch(
         audio_tts_scripts=audio_scripts,
         whatsapp_preview_markdown=wa_preview,
         malayalam_text=malayalam,
+        audio_tts_phonetic=audio_phonetic,
     )
 

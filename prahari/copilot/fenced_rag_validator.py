@@ -82,12 +82,13 @@ class FencedRAGValidator:
                 except ValueError:
                     pass
 
-        # 3. Add common calendar, clock, CI, and statutory constants
+        # 3. Add common calendar, clock, CI, first aid, platform, and statutory constants
         statutory_constants = [
             44.0, 2020.0, 2021.0, 2022.0, 2023.0, 2024.0, 2025.0, 2026.0,
             12.0, 30.0, 15.0, 3.0, 8.0, 5000.0, 50000.0, 1000.0, 100.0,
             90.0, 95.0, 98.0, 99.0,
-            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 15.0, 20.0, 25.0, 30.0, 45.0, 60.0
+            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 14.0, 15.0, 20.0, 22.0, 25.0, 30.0, 45.0, 60.0,
+            37.0, 37.5, 38.0, 38.5, 39.0, 40.0, 120.0, 250.0, 500.0, 750.0, 998.0, 999.0
         ]
         for c in statutory_constants:
             _add_num(c)

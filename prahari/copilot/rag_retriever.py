@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+import re
 from typing import Any, Dict, List, Optional
 
 from prahari.copilot.context_builder import LiveSiteSurveillanceContext, LiveSurveillanceContextBuilder
@@ -22,6 +23,10 @@ class CopilotIntent(str, Enum):
     FLEET_LOGISTICS = "fleet_logistics"
     CLINICAL_RENAL = "clinical_renal"
     GREETING = "greeting"
+    CONVERSATIONAL = "conversational"
+    CLINICAL_EDUCATION = "clinical_education"
+    FIRST_AID = "first_aid"
+    PLATFORM_GUIDANCE = "platform_guidance"
     GENERAL_OVERVIEW = "general_overview"
 
 
@@ -60,6 +65,15 @@ class RetrievedContextPacket:
 
     def format_compact_prompt_context(self) -> str:
         """Formats the retrieved packet into a concise prompt (~100-140 tokens) optimized for local LLM inference."""
+        if self.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
+            return "Munzir Sovereign Health Copilot. Conversational greeting and public health platform identity."
+        if self.intent == CopilotIntent.CLINICAL_EDUCATION:
+            return "Clinical thermal physiology domain: Heat strain vs stroke, hydration guidelines, WBGT index, and DHA health protection standards."
+        if self.intent == CopilotIntent.FIRST_AID:
+            return "Frontline emergency first-aid protocols: immediate shade, active cooling, hydration, recovery position, and DCAS ambulance dispatch."
+        if self.intent == CopilotIntent.PLATFORM_GUIDANCE:
+            return "Munzir Sovereign Health Early Warning Platform: 22 specialized views, Sentinel IoT hardware twins, Medallion Lakehouse telemetry, and MOHRE statutory codex."
+
         ctx = self.live_context
         base = (
             f"Site: {ctx.site_name} ({ctx.site_id}). Date: {ctx.target_date}. "
@@ -101,22 +115,73 @@ class SovereignRAGRetriever:
     def classify_intent(self, query: str) -> CopilotIntent:
         """Classifies the primary domain of the user query."""
         q = query.lower().strip()
-        greeting_words = {"hello", "hi", "hey", "salam", "salaam", "marhaba", "welcome", "greetings", "good morning", "good afternoon", "good evening"}
-        if q in greeting_words or any(q.startswith(w + " ") or q.startswith(w + "!") or q.startswith(w + ",") or q.startswith(w + "?") for w in greeting_words):
-            return CopilotIntent.GREETING
-        if any(w in q for w in ["who are you", "what can you do", "what are you", "how does this work", "help"]):
-            return CopilotIntent.GREETING
 
+        # 1. Polite Greetings
+        greeting_words = ["hello", "hi", "hey", "salam", "salaam", "marhaba", "welcome", "greetings", "good morning", "good afternoon", "good evening", "ahlan"]
+        if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in greeting_words):
+            # Guard against operational queries that might happen to start with greeting
+            if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
+                return CopilotIntent.GREETING
+
+        # 2. Conversational Inquiries & Gratitude
+        conv_phrases = [
+            "who are you", "what are you", "what can you do", "how are you", "how are you doing",
+            "tell me about yourself", "who made you", "who created you", "thank you", "thanks",
+            "appreciate it", "great job", "nice", "cool", "can you speak arabic", "can you speak english",
+            "how do you work", "introduce yourself"
+        ]
+        if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in conv_phrases):
+            if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
+                return CopilotIntent.CONVERSATIONAL
+
+        # 3. Emergency First-Aid Guidelines
+        first_aid_phrases = [
+            "first aid", "faint", "fainted", "unconscious", "collapse", "collapsed", "dizzy",
+            "vomit", "vomiting", "seizure", "emergency triage", "treat heat stroke", "cramps",
+            "998", "ambulance", "paramedic emergency"
+        ]
+        if any(w in q for w in first_aid_phrases):
+            return CopilotIntent.FIRST_AID
+
+        # 4. Clinical Health Education & Hydration Biology
+        edu_phrases = [
+            "heat stroke vs", "heat exhaustion", "difference between heat stroke", "symptom", "symptoms",
+            "hydration tip", "hydration guidelines", "water intake", "how much water", "drink water",
+            "electrolytes", "wbgt formula", "what is wbgt", "how wbgt is calculated", "body temperature",
+            "prevent heat illness", "nutrition in summer"
+        ]
+        if any(w in q for w in edu_phrases):
+            return CopilotIntent.CLINICAL_EDUCATION
+
+        # 5. Platform Features & Navigation Guidance
+        platform_phrases = [
+            "how to use", "how do i use", "what is sentinel", "hardware twin", "how to export",
+            "command palette", "change region", "safe harbor shield", "what models", "how does prahari work",
+            "how does munzir work", "explain features", "what can this app do"
+        ]
+        if any(w in q for w in platform_phrases):
+            return CopilotIntent.PLATFORM_GUIDANCE
+
+        # 6. Statutory Decrees & Legal Mandates
         if any(w in q for w in ["law", "decree", "resolution", "resolution 44", "mohre", "legal", "fine", "penalty", "illegal", "midday", "ban"]):
             return CopilotIntent.REGULATORY_COMPLIANCE
-        if any(w in q for w in ["why", "cause", "driver", "explain", "attribution", "reason", "shap"]):
+
+        # 7. Site Alert Drivers & SHAP Attributions
+        if any(w in q for w in ["why", "cause", "driver", "explain jebel ali", "explain risk", "attribution", "reason", "shap"]):
             return CopilotIntent.ALERT_EXPLANATION
-        if any(w in q for w in ["bus", "fleet", "misting", "water", "dcas", "ambulance", "paramedic", "depot", "transport"]):
+
+        # 8. Municipal Cooling Fleet Logistics
+        if any(w in q for w in ["bus", "fleet", "misting", "water tanker", "dcas", "depot", "transport", "staging"]):
             return CopilotIntent.FLEET_LOGISTICS
-        if any(w in q for w in ["renal", "kidney", "egfr", "kdigo", "dehydration", "urine", "biomarker"]):
+
+        # 9. Renal Biomarkers & AKI Screening
+        if any(w in q for w in ["renal", "kidney", "egfr", "kdigo", "dehydration rate", "urine", "biomarker"]):
             return CopilotIntent.CLINICAL_RENAL
+
+        # 10. Operational Action Checklist
         if any(w in q for w in ["do", "action", "step", "checklist", "what should", "intervention", "protocol", "raci", "next"]):
             return CopilotIntent.OPERATIONAL_INTERVENTION
+
         return CopilotIntent.GENERAL_OVERVIEW
 
     def retrieve(

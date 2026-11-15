@@ -149,6 +149,11 @@ class TestSovereignRAGRetriever:
         assert retriever.classify_intent("How many cooling buses and misting trailers are needed?") == CopilotIntent.FLEET_LOGISTICS
         assert retriever.classify_intent("What are the eGFR and KDIGO renal biomarker rates?") == CopilotIntent.CLINICAL_RENAL
         assert retriever.classify_intent("What 30-minute operational actions should I take?") == CopilotIntent.OPERATIONAL_INTERVENTION
+        assert retriever.classify_intent("hello") == CopilotIntent.GREETING
+        assert retriever.classify_intent("who are you?") == CopilotIntent.CONVERSATIONAL
+        assert retriever.classify_intent("what is heat stroke vs heat exhaustion?") == CopilotIntent.CLINICAL_EDUCATION
+        assert retriever.classify_intent("worker fainted, need first aid") == CopilotIntent.FIRST_AID
+        assert retriever.classify_intent("how do I use the sentinel hardware twin?") == CopilotIntent.PLATFORM_GUIDANCE
 
     def test_retrieval_packet_assembly(self):
         retriever = SovereignRAGRetriever(region_key="uae")
@@ -232,6 +237,24 @@ class TestSovereignCopilotAgent:
 
         assert res.intent == "regulatory_compliance"
         assert any(term in res.response_text for term in ["Resolution", "44", "القرار", "MOHRE"])
+        assert res.passed_fenced_gate is True
+
+    def test_agent_chat_conversational_greeting(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("hello", site_id="SITE-JA-01")
+
+        assert res.intent == "greeting"
+        assert "Munzir" in res.response_text
+        assert res.passed_fenced_gate is True
+        # Must not inject a false emergency site shutdown for a simple greeting
+        assert "Emergency Tier" not in res.response_text
+
+    def test_agent_chat_clinical_first_aid(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("worker fainted, need first aid", site_id="SITE-JA-01")
+
+        assert res.intent == "first_aid"
+        assert any(term in res.response_text for term in ["Shade", "Cooling", "Hydration", "998"])
         assert res.passed_fenced_gate is True
 
 

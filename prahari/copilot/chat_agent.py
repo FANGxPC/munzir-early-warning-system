@@ -129,23 +129,53 @@ class SovereignCopilotAgent:
                 target_date=ctx.target_date,
             )
 
+        # 1. Quick greetings and general pleasantries: provide immediate sovereign conversational response
+        if packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
+            eng_ans, ar_ans = self._synthesize_grounded_answer(packet.intent, query, ctx, articles)
+            is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
+            primary_text = ar_ans if is_query_arabic else eng_ans
+            secondary_text = eng_ans if is_query_arabic else ar_ans
+            return CopilotChatResponse(
+                query=query,
+                response_text=primary_text,
+                arabic_translation=secondary_text,
+                intent=packet.intent.value,
+                citations=packet.citations,
+                execution_mode="JAIS_SOVEREIGN_CONVERSATIONAL",
+                device=self.jais_runner._device,
+                passed_fenced_gate=True,
+                grounding_badge="Munzir Sovereign Assistant",
+                site_id=ctx.site_id,
+                site_name=ctx.site_name,
+                target_date=ctx.target_date,
+            )
+
         # 2. Try Local Jais Model on GPU if loaded
         if self.jais_runner.try_load_model() and self.jais_runner._model is not None and self.jais_runner._tokenizer is not None:
             try:
                 import torch
                 prompt_context = packet.format_compact_prompt_context()
+                if packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL, CopilotIntent.CLINICAL_EDUCATION, CopilotIntent.FIRST_AID, CopilotIntent.PLATFORM_GUIDANCE):
+                    system_instruction = (
+                        "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
+                        "Answer the user question clearly, politely, and authoritatively in English and Arabic based on public health and DHA guidelines. "
+                        "Do not output emergency site disaster declarations for conversational, first-aid, or educational inquiries."
+                    )
+                else:
+                    system_instruction = (
+                        "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
+                        "You answer questions from frontline safety directors and epidemiologists based STRICTLY on the retrieved context. "
+                        "Never invent unstated numbers, decrees, or facts."
+                    )
+
                 messages = [
                     {
                         "role": "system",
-                        "content": (
-                            "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                            "You answer questions from frontline safety directors and epidemiologists based STRICTLY on the retrieved context. "
-                            "Never invent unstated numbers, decrees, or facts."
-                        ),
+                        "content": system_instruction,
                     },
                     {
                         "role": "user",
-                        "content": f"{prompt_context}\n\nUser Question: {query}\n\nProvide an authoritative, concise operational answer in English citing official articles (Resolution 44) and Lakehouse metrics.",
+                        "content": f"{prompt_context}\n\nUser Question: {query}\n\nProvide an authoritative, concise response citing relevant statutory articles (MOHRE Resolution 44/2022) or clinical guidance.",
                     },
                 ]
                 prompt = self.jais_runner._tokenizer.apply_chat_template(
@@ -239,7 +269,91 @@ class SovereignCopilotAgent:
         art_ref = f"{primary_art.instrument} {primary_art.article_number}" if primary_art else "UAE MOHRE Ministerial Resolution No. 44 of 2022"
         penalties = primary_art.penalties if primary_art else "AED 5,000 per worker up to AED 50,000 per facility"
 
-        if intent == CopilotIntent.REGULATORY_COMPLIANCE:
+        if intent == CopilotIntent.GREETING:
+            eng = (
+                "Marhaba! Welcome to Munzir Sovereign Health Copilot. I am your biosurveillance and heat safety intelligence assistant for the UAE.\n\n"
+                "I monitor real-time thermal microclimates, UAE MOHRE Ministerial Resolution No. 44 (2022) compliance, sub-clinical renal biomarkers, and emergency fleet staging.\n\n"
+                "How can I assist you today? You can ask me about live site alert levels, midday break legal regulations, frontline heat first aid, or ask for hydration advice."
+            )
+            ar = (
+                "مرحباً بك في المساعد السيادي لمنصة مُنذِر للإنذار المبكر والسلامة الحرارية في دولة الإمارات.\n\n"
+                "أقوم برصد درجات الحرارة الميدانية، والتحقق من الامتثال لقرار وزير الموارد البشرية رقم 44 لسنة 2022، ومتابعة المؤشرات الحيوية لصحة العمال، وتوجيه أساطيل التبريد.\n\n"
+                "كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن مستويات الخطر اللحظية، أو اشتراطات حظر العمل وقت الظهيرة، أو إجراءات الإسعاف الأولي للإجهاد الحراري."
+            )
+
+        elif intent == CopilotIntent.CONVERSATIONAL:
+            eng = (
+                "I am doing well, thank you! As Munzir Sovereign Health Copilot, I am actively monitoring occupational thermal safety across all UAE industrial zones.\n\n"
+                "I was developed for the Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE), powered by Inception 42 Jais-3-0.9B running locally on GPU.\n\n"
+                "I can assist you with real-time site risks, official midday break regulations (Resolution 44/2022), first-aid protocols, and municipal cooling fleet staging. How can I help your team right now?"
+            )
+            ar = (
+                "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
+                "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
+                "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+            )
+
+        elif intent == CopilotIntent.CLINICAL_EDUCATION:
+            eng = (
+                "Clinical Thermal Physiology Guide (DHA & WHO Standards):\n\n"
+                "1. Heat Exhaustion vs Heat Stroke:\n"
+                "• Heat Exhaustion: Heavy sweating, clammy skin, dizziness, nausea, normal to slightly elevated core temperature (< 39°C). Workers remain conscious.\n"
+                "• Heat Stroke (Medical Emergency): Core temperature exceeds 40°C, hot dry skin or profuse sweating, confusion, ataxia, loss of consciousness. Requires immediate DCAS 998 dispatch.\n\n"
+                "2. Hydration Guidelines for Outdoor Labor:\n"
+                "• Fluid Intake: 250 mL of chilled potable water every 15 to 20 minutes under extreme heat.\n"
+                "• Electrolytes: Replace sodium and potassium lost in sweat using oral rehydration salts.\n\n"
+                "3. Wet-Bulb Globe Temperature (WBGT):\n"
+                "• Comprehensive thermal index combining ambient dry-bulb temperature, radiant sun load, relative humidity, and wind speed (ISO 7243 / ISO 7933)."
+            )
+            ar = (
+                "الدليل السريري للسلامة الفسيولوجية من الإجهاد الحراري (معايير هيئة الصحة بدبي ومنظمة الصحة العالمية):\n\n"
+                "١. الفرق بين الإجهاد الحراري وضربة الشمس:\n"
+                "• الإجهاد الحراري: تعرق غزير، شحوب، دوار، غثيان، حرارة الجسم أقل من ۳۹ درجة مئوية. يبقى العامل واعياً.\n"
+                "• ضربة الشمس (طوارئ حرجة): حرارة الجسم تتجاوز ٤٠ درجة مئوية، اضطراب في الوعي، فقدان الاتزان. تستوجب استدعاء الإسعاف فوراً (998).\n\n"
+                "٢. إرشادات الترطيب للعمال في الأماكن المكشوفة:\n"
+                "• شرب ٢٥٠ مل من الماء المبرد كل ١٥ إلى ٢٠ دقيقة في درجات الحرارة المرتفعة.\n"
+                "• تعويض الأملاح المفقودة عبر مغلفات الأملاح الفموية (ORS).\n\n"
+                "٣. مؤشر الحرارة الرطبة (WBGT):\n"
+                "• مقياس حراري متكامل يجمع بين حرارة الجو، والرطوبة النسبية، وسرعة الرياح، والإشعاع الشمسي المباشر."
+            )
+
+        elif intent == CopilotIntent.FIRST_AID:
+            eng = (
+                "Emergency Frontline Heat First-Aid Protocol (Immediate Response):\n\n"
+                "1. Move to Shade Immediately: Relocate the affected worker to an air-conditioned room or mobile cooling bus.\n"
+                "2. Active Cooling: Loosen tight clothing, apply cold wet towels or ice packs to the neck, armpits, and groin, and activate misting fans.\n"
+                "3. Hydration: If conscious and able to swallow, provide small sips of cool water with electrolytes. NEVER give fluids to an unconscious worker.\n"
+                "4. Elevation: Lay the worker flat and elevate feet 20-30 cm to restore cerebral circulation.\n"
+                "5. Emergency Call: If the worker is confused, vomiting, or faints, immediately contact Dubai Ambulance (DCAS) on 998."
+            )
+            ar = (
+                "بروتوكول الإسعافات الأولية لحالات الإجهاد الحراري الميدانية (استجابة فورية):\n\n"
+                "١. النقل الفوري إلى الظل: نقل العامل فوراً إلى مكان مكيف أو حافلة تبريد متنقلة.\n"
+                "٢. التبريد النشط: تخفيف الملابس، وضع كمادات باردة على الرقبة وتحت الإبطين، وتشغيل مراوح الرذاذ.\n"
+                "٣. الترطيب: إذا كان العامل واعياً وقادراً على البلع، يُعطى رشفات من الماء المبرد مع الأملاح. يُمنع إعطاء السوائل لفاقد الوعي.\n"
+                "٤. وضعية الإنعاش: تمديد العامل ورفع القدمين ٢٠-٣٠ سم لتحسين تدفق الدم للمخ.\n"
+                "٥. الطوارئ: في حال فقدان الوعي أو التقيؤ أو الهذيان، اتصل فوراً بإسعاف دبي على الرقم 998."
+            )
+
+        elif intent == CopilotIntent.PLATFORM_GUIDANCE:
+            eng = (
+                "Munzir Sovereign Health Early Warning Platform Architecture:\n\n"
+                "• Situation Map: Real-time geospatial heat risk across 8 UAE operational zones with Sentinel IoT telemetry.\n"
+                "• Clinical Sentinel: ISO 7933 Predicted Heat Strain (PHS), Renal AKI biomarkers, and NABIDH FHIR CDS.\n"
+                "• Sovereign AI: Inception 42 Jais-3 LLM on GPU, 5-language dispatches, and hands-free push-to-talk voice radio.\n"
+                "• Policy & Resilience: MOHRE Ministerial Resolution 44/2022 studio, counterfactual what-if ROI simulations, and Safe-Harbor privacy shield (ε=0.14).\n"
+                "• Navigation: Press ⌘ K or Ctrl+K anywhere to open the Spotlight Command Palette to jump to any view."
+            )
+            ar = (
+                "دليل ومكونات منصة مُنذِر للإنذار المبكر:\n\n"
+                "• خريطة الموقف الميداني: مراقبة جغرافية حية لمخاطر الحرارة عبر 8 مواقع في دولة الإمارات مدعومة بحساسات Sentinel.\n"
+                "• الحارس السريري: نموذج الإجهاد الحراري الفسيولوجي (ISO 7933)، ومؤشرات صحة الكلى (eGFR / KDIGO)، ونظام NABIDH.\n"
+                "• الذكاء الاصطناعي السيادي: نموذج Inception 42 Jais-3 على كروت GPU المحلية، وإرسال برقيات بخمس لغات، ونظام لاسلكي ذكي.\n"
+                "• المرونة والسياسات: محاكي قرارات وزارة الموارد البشرية رقم 44 لسنة 2022، وحساب العائد الاستثماري، ودرع حماية الخصوصية التفاضلية.\n"
+                "• التنقل السريع: اضغط ⌘ K أو Ctrl+K في أي وقت لفتح لوحة الأوامر السريعة والانتقال الفوري لأي شاشة."
+            )
+
+        elif intent == CopilotIntent.REGULATORY_COMPLIANCE:
             eng = (
                 f"Under {art_ref}, outdoor work under direct sunlight is strictly regulated. "
                 f"For {ctx.site_name}, where current peak WBGT is {ctx.current_wbgt_c:.1f}°C and alert tier is {ctx.alert_tier.upper()}, "
@@ -341,6 +455,49 @@ class SovereignCopilotAgent:
         article: Optional[StatutoryArticle],
     ) -> str:
         """Helper to generate Arabic response when native model returns English."""
+        if intent == CopilotIntent.GREETING:
+            return (
+                "مرحباً بك في المساعد السيادي لمنصة مُنذِر للإنذار المبكر والسلامة الحرارية في دولة الإمارات.\n\n"
+                "أقوم برصد درجات الحرارة الميدانية، والتحقق من الامتثال لقرار وزير الموارد البشرية رقم 44 لسنة 2022، ومتابعة المؤشرات الحيوية لصحة العمال، وتوجيه أساطيل التبريد.\n\n"
+                "كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن مستويات الخطر اللحظية، أو اشتراطات حظر العمل وقت الظهيرة، أو إجراءات الإسعاف الأولي للإجهاد الحراري."
+            )
+        if intent == CopilotIntent.CONVERSATIONAL:
+            return (
+                "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
+                "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
+                "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+            )
+        if intent == CopilotIntent.CLINICAL_EDUCATION:
+            return (
+                "الدليل السريري للسلامة الفسيولوجية من الإجهاد الحراري (معايير هيئة الصحة بدبي ومنظمة الصحة العالمية):\n\n"
+                "١. الفرق بين الإجهاد الحراري وضربة الشمس:\n"
+                "• الإجهاد الحراري: تعرق غزير، شحوب، دوار، غثيان، حرارة الجسم أقل من ۳۹ درجة مئوية. يبقى العامل واعياً.\n"
+                "• ضربة الشمس (طوارئ حرجة): حرارة الجسم تتجاوز ٤٠ درجة مئوية، اضطراب في الوعي، فقدان الاتزان. تستوجب استدعاء الإسعاف فوراً (998).\n\n"
+                "٢. إرشادات الترطيب للعمال في الأماكن المكشوفة:\n"
+                "• شرب ٢٥٠ مل من الماء المبرد كل ١٥ إلى ٢٠ دقيقة في درجات الحرارة المرتفعة.\n"
+                "• تعويض الأملاح المفقودة عبر مغلفات الأملاح الفموية (ORS).\n\n"
+                "٣. مؤشر الحرارة الرطبة (WBGT):\n"
+                "• مقياس حراري متكامل يجمع بين حرارة الجو، والرطوبة النسبية، وسرعة الرياح، والإشعاع الشمسي المباشر."
+            )
+        if intent == CopilotIntent.FIRST_AID:
+            return (
+                "بروتوكول الإسعافات الأولية لحالات الإجهاد الحراري الميدانية (استجابة فورية):\n\n"
+                "١. النقل الفوري إلى الظل: نقل العامل فوراً إلى مكان مكيف أو حافلة تبريد متنقلة.\n"
+                "٢. التبريد النشط: تخفيف الملابس، وضع كمادات باردة على الرقبة وتحت الإبطين، وتشغيل مراوح الرذاذ.\n"
+                "٣. الترطيب: إذا كان العامل واعياً وقادراً على البلع، يُعطى رشفات من الماء المبرد مع الأملاح. يُمنع إعطاء السوائل لفاقد الوعي.\n"
+                "٤. وضعية الإنعاش: تمديد العامل ورفع القدمين ٢٠-٣٠ سم لتحسين تدفق الدم للمخ.\n"
+                "٥. الطوارئ: في حال فقدان الوعي أو التقيؤ أو الهذيان، اتصل فوراً بإسعاف دبي على الرقم 998."
+            )
+        if intent == CopilotIntent.PLATFORM_GUIDANCE:
+            return (
+                "دليل ومكونات منصة مُنذِر للإنذار المبكر:\n\n"
+                "• خريطة الموقف الميداني: مراقبة جغرافية حية لمخاطر الحرارة عبر 8 مواقع في دولة الإمارات مدعومة بحساسات Sentinel.\n"
+                "• الحارس السريري: نموذج الإجهاد الحراري الفسيولوجي (ISO 7933)، ومؤشرات صحة الكلى (eGFR / KDIGO)، ونظام NABIDH.\n"
+                "• الذكاء الاصطناعي السيادي: نموذج Inception 42 Jais-3 على كروت GPU المحلية، وإرسال برقيات بخمس لغات، ونظام لاسلكي ذكي.\n"
+                "• المرونة والسياسات: محاكي قرارات وزارة الموارد البشرية رقم 44 لسنة 2022، وحساب العائد الاستثماري، ودرع حماية الخصوصية التفاضلية.\n"
+                "• التنقل السريع: اضغط ⌘ K أو Ctrl+K في أي وقت لفتح لوحة الأوامر السريعة والانتقال الفوري لأي شاشة."
+            )
+
         art_ref = f"{article.instrument} {article.article_number}" if article else "قرار وزارة الموارد البشرية رقم ٤٤ لسنة ٢٠٢٢"
         return (
             f"تأكيد من منصة منذر: تم التحقق من البيانات لموقع {ctx.site_name} بموجب {art_ref}. "

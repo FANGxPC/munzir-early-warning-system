@@ -65,6 +65,11 @@ class VoiceIntercomResponse:
                 "ar": self.spoken_response_ar,
                 "ur": self.spoken_response_ur,
             },
+            "audio_phonetic": {
+                "en": self.spoken_response_en,
+                "ar": f"Tam ta'keed al-tawaari' li-{self.zone_identified}. Darajat al-hararah {round(self.in_situ_wbgt_c, 1)} C. Inqil al-ummaal fowran.",
+                "ur": f"{self.zone_identified} mein alert log ho gaya hai. Garmi {round(self.in_situ_wbgt_c, 1)} degree hai. Workers ko AC shelter le jayein.",
+            },
             "interop": {
                 "fhir_task_id": self.fhir_task_id,
                 "execution_mode": self.execution_mode,

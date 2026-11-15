@@ -63,6 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setupRoleSwitcher();
   setupDateSelector();
   setupDemoToggles();
+  if (window.SovereignAudioEngine) {
+    window.SovereignAudioEngine.init();
+  }
   handleHashNavigation();
   loadCurrentView();
 });
@@ -3198,46 +3201,196 @@ function switchJaisLanguage(lang) {
   }
 }
 
+// =========================================================================
+// --- Sovereign Multilingual Audio Synthesis Engine (SovereignAudioEngine) ---
+// Guarantees reliable, intelligible speech synthesis across Arabic, English,
+// Urdu, Hindi, and Malayalam on all browsers and operating systems.
+// Routes to calibrated phonetic transliterations if host OS lacks native voices.
+// =========================================================================
+const SovereignAudioEngine = {
+  voices: [],
+  isReady: false,
+  activeUtterance: null,
+  activeCallback: null,
+
+  init() {
+    if (!("speechSynthesis" in window)) {
+      console.warn("SpeechSynthesis API not supported in this browser.");
+      return;
+    }
+    this.updateVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = () => this.updateVoices();
+    }
+  },
+
+  updateVoices() {
+    if (!("speechSynthesis" in window)) return;
+    this.voices = window.speechSynthesis.getVoices() || [];
+    if (this.voices.length > 0) {
+      this.isReady = true;
+    }
+  },
+
+  findBestVoice(langCode) {
+    if (!this.voices || this.voices.length === 0) {
+      this.updateVoices();
+    }
+    const cleanLang = (langCode || "en").toLowerCase();
+
+    const matchers = {
+      "ar": (v) => v.lang.toLowerCase().startsWith("ar") || /arabic|maged|tarik|laila|salma|zeina/i.test(v.name),
+      "ur": (v) => v.lang.toLowerCase().startsWith("ur") || /urdu|pakistan|kalam/i.test(v.name),
+      "hi": (v) => v.lang.toLowerCase().startsWith("hi") || /hindi|kalpana|hemant|lekha/i.test(v.name),
+      "ml": (v) => v.lang.toLowerCase().startsWith("ml") || /malayalam/i.test(v.name),
+      "en": (v) => v.lang.toLowerCase().startsWith("en") || /english|us|uk|natural/i.test(v.name),
+    };
+
+    const matcher = matchers[cleanLang];
+    if (matcher) {
+      const match = this.voices.find(matcher);
+      if (match) return match;
+    }
+
+    const prefixMatch = this.voices.find(v => v.lang.toLowerCase().startsWith(cleanLang));
+    if (prefixMatch) return prefixMatch;
+
+    return null;
+  },
+
+  speak({ nativeText, phoneticText, langCode = "en", rate = 0.95, pitch = 1.0, onStart, onEnd, onError }) {
+    if (!("speechSynthesis" in window)) {
+      if (onError) onError(new Error("Speech synthesis not supported in this browser"));
+      return false;
+    }
+
+    this.stop();
+
+    const voice = this.findBestVoice(langCode);
+    let textToSpeak = "";
+    let finalLang = "en-US";
+    let effectiveRate = rate;
+
+    if (voice) {
+      textToSpeak = nativeText || phoneticText || "";
+      finalLang = voice.lang || langCode;
+    } else {
+      textToSpeak = phoneticText || nativeText || "";
+      finalLang = "en-US";
+      effectiveRate = Math.min(rate, 0.90);
+    }
+
+    const cleaned = textToSpeak.replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
+    if (!cleaned) {
+      if (onEnd) onEnd();
+      return false;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(cleaned);
+    utterance.lang = finalLang;
+    utterance.rate = effectiveRate;
+    utterance.pitch = pitch;
+
+    if (voice) {
+      utterance.voice = voice;
+    } else {
+      const defaultEn = this.findBestVoice("en");
+      if (defaultEn) utterance.voice = defaultEn;
+    }
+
+    this.activeCallback = { onStart, onEnd, onError };
+
+    utterance.onstart = () => {
+      if (onStart) onStart();
+    };
+
+    utterance.onend = () => {
+      this.activeUtterance = null;
+      if (onEnd) onEnd();
+    };
+
+    utterance.onerror = (e) => {
+      this.activeUtterance = null;
+      if (onError) onError(e);
+      if (onEnd) onEnd();
+    };
+
+    this.activeUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+    return true;
+  },
+
+  stop() {
+    if (!("speechSynthesis" in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {
+      console.warn("speechSynthesis cancel error:", e);
+    }
+    if (this.activeCallback && this.activeCallback.onEnd) {
+      this.activeCallback.onEnd();
+    }
+    this.activeUtterance = null;
+    this.activeCallback = null;
+  },
+
+  isSpeaking() {
+    if (!("speechSynthesis" in window)) return false;
+    return window.speechSynthesis.speaking;
+  }
+};
+window.SovereignAudioEngine = SovereignAudioEngine;
+
 function playCurrentVoiceNote() {
   if (!currentJaisCard || !currentJaisCard.audio_scripts) {
-    alert("Please click 'Generate Jais Dispatch' first to prepare spoken voice scripts.");
+    showToast("Please click 'Generate Jais Dispatch' first to prepare spoken voice scripts.", "warning");
     return;
   }
 
-  const script = currentJaisCard.audio_scripts[currentLanguage] || currentJaisCard.audio_scripts["en"];
+  const nativeScript = currentJaisCard.audio_scripts[currentLanguage] || currentJaisCard.audio_scripts["en"] || "";
+  const phoneticScript = (currentJaisCard.audio_phonetic && currentJaisCard.audio_phonetic[currentLanguage])
+    ? currentJaisCard.audio_phonetic[currentLanguage]
+    : nativeScript;
+
   const waveform = document.getElementById("jaisAudioWaveform");
+  const btn = document.getElementById("btnPlayJaisVoice");
+  const label = document.getElementById("lblPlayJaisVoice") || btn;
 
-  if (!("speechSynthesis" in window)) {
-    alert(`Voice script for [${currentLanguage.toUpperCase()}]:\n\n"${script}"\n\n(Web Speech API not supported in this browser window)`);
+  if (SovereignAudioEngine.isSpeaking()) {
+    SovereignAudioEngine.stop();
+    if (waveform) waveform.style.display = "none";
+    if (label) label.textContent = "Play Spoken Voice Note";
+    if (btn) btn.classList.remove("btn-warning");
     return;
   }
 
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(script);
+  if (waveform) waveform.style.display = "flex";
+  if (label) label.textContent = "Stop Voice Note";
+  if (btn) btn.classList.add("btn-warning");
 
-  const langMap = {
-    "ar": "ar-AE",
-    "en": "en-US",
-    "ur": "ur-PK",
-    "hi": "hi-IN",
-    "ml": "ml-IN"
-  };
-  utterance.lang = langMap[currentLanguage] || "en-US";
-  utterance.rate = 0.95;
-  utterance.pitch = 1.0;
-
-  utterance.onstart = () => {
-    if (waveform) waveform.style.display = "flex";
-  };
-  utterance.onend = () => {
-    if (waveform) waveform.style.display = "none";
-  };
-  utterance.onerror = () => {
-    if (waveform) waveform.style.display = "none";
-  };
-
-  window.speechSynthesis.speak(utterance);
+  SovereignAudioEngine.speak({
+    nativeText: nativeScript,
+    phoneticText: phoneticScript,
+    langCode: currentLanguage,
+    rate: 0.95,
+    onStart: () => {
+      if (waveform) waveform.style.display = "flex";
+      if (label) label.textContent = "Stop Voice Note";
+      if (btn) btn.classList.add("btn-warning");
+    },
+    onEnd: () => {
+      if (waveform) waveform.style.display = "none";
+      if (label) label.textContent = "Play Spoken Voice Note";
+      if (btn) btn.classList.remove("btn-warning");
+    },
+    onError: () => {
+      if (waveform) waveform.style.display = "none";
+      if (label) label.textContent = "Play Spoken Voice Note";
+      if (btn) btn.classList.remove("btn-warning");
+    }
+  });
 }
+window.playCurrentVoiceNote = playCurrentVoiceNote;
 
 // --- Frontline Multilingual Broadcast: Real WhatsApp Action Feedback ---
 async function simulateWhatsAppAction(actionType) {
@@ -3579,42 +3732,57 @@ function playCopilotBubbleAudio(msgId) {
   }
 
   if (item.isSpeaking) {
-    window.speechSynthesis.cancel();
+    if (window.SovereignAudioEngine) {
+      window.SovereignAudioEngine.stop();
+    } else {
+      window.speechSynthesis.cancel();
+    }
     item.isSpeaking = false;
     if (audioLabel) audioLabel.textContent = "Listen Voice";
     if (audioBtn) audioBtn.classList.remove("active");
     return;
   }
 
-  window.speechSynthesis.cancel();
+  if (window.SovereignAudioEngine) {
+    window.SovereignAudioEngine.stop();
+  } else {
+    window.speechSynthesis.cancel();
+  }
   store.forEach(other => { other.isSpeaking = false; });
   document.querySelectorAll("[id$='_audioLabel']").forEach(lbl => lbl.textContent = "Listen Voice");
   document.querySelectorAll("[id$='_audioBtn']").forEach(btn => btn.classList.remove("active"));
 
   const rawText = item.activeLang === "ar" ? item.arabic : item.english;
-  const cleanSpoken = rawText.replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
-
-  const utterance = new SpeechSynthesisUtterance(cleanSpoken);
-  utterance.lang = item.activeLang === "ar" ? "ar-AE" : "en-US";
-  utterance.rate = 0.95;
+  const langCode = item.activeLang === "ar" ? "ar" : "en";
 
   item.isSpeaking = true;
   if (audioLabel) audioLabel.textContent = "Speaking... (Stop)";
   if (audioBtn) audioBtn.classList.add("active");
 
-  utterance.onend = () => {
+  const onComplete = () => {
     item.isSpeaking = false;
     if (audioLabel) audioLabel.textContent = "Listen Voice";
     if (audioBtn) audioBtn.classList.remove("active");
   };
 
-  utterance.onerror = () => {
-    item.isSpeaking = false;
-    if (audioLabel) audioLabel.textContent = "Listen Voice";
-    if (audioBtn) audioBtn.classList.remove("active");
-  };
-
-  window.speechSynthesis.speak(utterance);
+  if (window.SovereignAudioEngine) {
+    window.SovereignAudioEngine.speak({
+      nativeText: rawText,
+      phoneticText: rawText,
+      langCode: langCode,
+      rate: 0.95,
+      onEnd: onComplete,
+      onError: onComplete,
+    });
+  } else {
+    const cleanSpoken = rawText.replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
+    const utterance = new SpeechSynthesisUtterance(cleanSpoken);
+    utterance.lang = langCode === "ar" ? "ar-AE" : "en-US";
+    utterance.rate = 0.95;
+    utterance.onend = onComplete;
+    utterance.onerror = onComplete;
+    window.speechSynthesis.speak(utterance);
+  }
 }
 window.playCopilotBubbleAudio = playCopilotBubbleAudio;
 
@@ -3623,12 +3791,21 @@ function playCopilotVoice(text, lang) {
     showToast("Speech synthesis not supported in this browser.", "warning");
     return;
   }
-  window.speechSynthesis.cancel();
-  const cleanSpoken = (text || "").replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
-  const utterance = new SpeechSynthesisUtterance(cleanSpoken);
-  utterance.lang = lang === "ar" ? "ar-AE" : "en-US";
-  utterance.rate = 0.95;
-  window.speechSynthesis.speak(utterance);
+  if (window.SovereignAudioEngine) {
+    window.SovereignAudioEngine.speak({
+      nativeText: text,
+      phoneticText: text,
+      langCode: lang || "en",
+      rate: 0.95
+    });
+  } else {
+    window.speechSynthesis.cancel();
+    const cleanSpoken = (text || "").replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
+    const utterance = new SpeechSynthesisUtterance(cleanSpoken);
+    utterance.lang = lang === "ar" ? "ar-AE" : "en-US";
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  }
 }
 window.playCopilotVoice = playCopilotVoice;
 
@@ -4432,47 +4609,82 @@ window.sendVoiceTurn = sendVoiceTurn;
 
 function playSynthesizedVoiceAudio() {
   if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
 
   const lang = currentVoiceResponse ? currentVoiceResponse.detected_language : 'en';
-  let script = "";
+  let nativeScript = "";
+  let phoneticScript = "";
+
   if (currentVoiceResponse && currentVoiceResponse.spoken_audio) {
     if (lang === 'ar' && currentVoiceResponse.spoken_audio.ar) {
-      script = currentVoiceResponse.spoken_audio.ar;
+      nativeScript = currentVoiceResponse.spoken_audio.ar;
     } else if (lang === 'ur' && currentVoiceResponse.spoken_audio.ur) {
-      script = currentVoiceResponse.spoken_audio.ur;
+      nativeScript = currentVoiceResponse.spoken_audio.ur;
     } else {
-      script = currentVoiceResponse.spoken_audio.en || currentVoiceResponse.spoken_audio_script || "";
+      nativeScript = currentVoiceResponse.spoken_audio.en || currentVoiceResponse.spoken_audio_script || "";
     }
   }
-  if (!script) {
-    script = currentVoiceResponse && currentVoiceResponse.spoken_audio_script
-      ? currentVoiceResponse.spoken_audio_script
-      : "Noted Tariq Mansoor. Emergency heat distress protocol activated for Deepwater Berth 4. DCAS Ambulance notified.";
+
+  if (currentVoiceResponse && currentVoiceResponse.audio_phonetic) {
+    phoneticScript = currentVoiceResponse.audio_phonetic[lang] || nativeScript;
+  } else {
+    phoneticScript = nativeScript;
   }
 
-  const utterance = new SpeechSynthesisUtterance(script);
-  utterance.rate = 1.0;
-  utterance.pitch = 1.0;
-  if (lang === 'ar') {
-    utterance.lang = 'ar-SA';
-  } else if (lang === 'ur') {
-    utterance.lang = 'ur-PK';
-  } else {
-    utterance.lang = 'en-US';
+  if (!nativeScript) {
+    nativeScript = (currentVoiceResponse && currentVoiceResponse.spoken_audio_script)
+      ? currentVoiceResponse.spoken_audio_script
+      : "Noted Tariq Mansoor. Emergency heat distress protocol activated for Deepwater Berth 4. DCAS Ambulance notified.";
+    phoneticScript = nativeScript;
   }
 
   const waveform = document.getElementById("intercomWaveform");
+  const btn = document.getElementById("btnPlayVoiceAudio");
+
+  if (window.SovereignAudioEngine && window.SovereignAudioEngine.isSpeaking()) {
+    window.SovereignAudioEngine.stop();
+    if (waveform) waveform.style.display = "none";
+    if (btn) btn.textContent = "Play Spoken Response";
+    return;
+  }
+
   if (waveform) waveform.style.display = "flex";
+  if (btn) btn.textContent = "Stop Spoken Response";
 
-  utterance.onend = () => {
-    if (waveform) waveform.style.display = "none";
-  };
-  utterance.onerror = () => {
-    if (waveform) waveform.style.display = "none";
-  };
-
-  window.speechSynthesis.speak(utterance);
+  if (window.SovereignAudioEngine) {
+    window.SovereignAudioEngine.speak({
+      nativeText: nativeScript,
+      phoneticText: phoneticScript,
+      langCode: lang,
+      rate: 0.95,
+      onStart: () => {
+        if (waveform) waveform.style.display = "flex";
+        if (btn) btn.textContent = "Stop Spoken Response";
+      },
+      onEnd: () => {
+        if (waveform) waveform.style.display = "none";
+        if (btn) btn.textContent = "Play Spoken Response";
+      },
+      onError: () => {
+        if (waveform) waveform.style.display = "none";
+        if (btn) btn.textContent = "Play Spoken Response";
+      }
+    });
+  } else {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(nativeScript);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.lang = lang === 'ar' ? 'ar-SA' : (lang === 'ur' ? 'ur-PK' : 'en-US');
+    utterance.onend = () => {
+      if (waveform) waveform.style.display = "none";
+      if (btn) btn.textContent = "Play Spoken Response";
+    };
+    utterance.onerror = () => {
+      if (waveform) waveform.style.display = "none";
+      if (btn) btn.textContent = "Play Spoken Response";
+    };
+    window.speechSynthesis.speak(utterance);
+  }
 }
 window.playSynthesizedVoiceAudio = playSynthesizedVoiceAudio;
 

@@ -2438,8 +2438,8 @@
  <span class="waveform-bar"></span>
  <span class="waveform-bar"></span>
  </div>
- <button class="btn btn-success" onclick="playCurrentVoiceNote()" style="display:flex; align-items:center; gap:0.4rem;">
- Play Spoken Voice Note
+ <button class="btn btn-success" id="btnPlayJaisVoice" onclick="playCurrentVoiceNote()" style="display:flex; align-items:center; gap:0.4rem;">
+ <span id="lblPlayJaisVoice">Play Spoken Voice Note</span>
  </button>
  </div>
  </div>
@@ -2564,6 +2564,8 @@
  <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.75rem;">
  <button class="btn btn-secondary" onclick="sendSuggestedQuery('What should I do right now for outdoor workers?')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">What should I do right now?</button>
  <button class="btn btn-secondary" onclick="sendSuggestedQuery('Explain Jebel Ali risk')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Explain Jebel Ali risk</button>
+ <button class="btn btn-secondary" onclick="sendSuggestedQuery('What is heat stroke vs exhaustion?')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Heat stroke vs exhaustion</button>
+ <button class="btn btn-secondary" onclick="sendSuggestedQuery('First aid protocol for heat collapse')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Heat first aid</button>
  <button class="btn btn-secondary" onclick="sendSuggestedQuery('What is the legal fine under UAE Resolution 44?')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Check Resolution 44 mandate</button>
  <button class="btn btn-secondary" onclick="sendSuggestedQuery('Show municipal cooling fleet staging')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Show fleet staging</button>
  <button class="btn btn-secondary" onclick="sendSuggestedQuery('What are renal biomarkers saying?')" style="font-size:0.72rem; padding:0.3rem 0.6rem;">Check renal biomarkers</button>
@@ -5211,6 +5213,8 @@
     <div class="copilot-drawer-suggestions">
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('What should I do right now for outdoor workers?')">30-Min Directives</button>
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('Explain Jebel Ali risk')">Jebel Ali Risk Context</button>
+      <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('What is heat stroke vs exhaustion?')">Heat Stroke vs Exhaustion</button>
+      <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('First aid protocol for heat collapse')">Heat First Aid</button>
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('What is the legal fine under UAE Resolution 44?')">Resolution 44 Penalty</button>
       <button class="btn btn-secondary drawer-chip" onclick="sendDrawerQuery('Show municipal cooling fleet staging')">Municipal Fleet Staging</button>
     </div>
