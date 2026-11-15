@@ -228,6 +228,7 @@ function loadCurrentView() {
   else if (state.activeTab === "intercom") { if (typeof initIntercomView === "function") initIntercomView(); }
   else if (state.activeTab === "policystudio") { if (typeof runPolicySimulation === "function") runPolicySimulation(); }
   else if (state.activeTab === "nabidh") { if (typeof loadNabidhBundle === "function") loadNabidhBundle(); }
+  else if (state.activeTab === "demo") { /* Interactive missing-data stream gating controls active */ }
 }
 
 // --- 1. Situation Map View ---
