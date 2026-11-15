@@ -2392,6 +2392,13 @@ function switchToWhatIfSimulator(siteId, scenario, workforce) {
 }
 
 async function runWhatIfSimulation() {
+  const btn = document.getElementById("btnRunWhatIfSimulation") || document.querySelector("button[onclick*='runWhatIfSimulation']");
+  const origHtml = btn ? btn.innerHTML : "▶ Run Simulation";
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="login-spinner" style="width:13px; height:13px; border-width:2px; display:inline-block; vertical-align:middle; margin-right:6px;"></span> Simulating (N=1,000)...`;
+  }
+
   const siteSelect = document.getElementById("whatifSiteSelect");
   const scenarioSelect = document.getElementById("whatifScenarioSelect");
   const workforceInput = document.getElementById("whatifWorkforceInput");
@@ -2411,9 +2418,36 @@ async function runWhatIfSimulation() {
     const data = await apiFetch(url);
     whatifData = data;
     renderWhatIfResults(data);
+
+    // Visual feedback on KPI cards to show live recomputation
+    document.querySelectorAll("#view-whatif .kpi-card").forEach(c => {
+      c.style.transition = "transform 0.22s ease, box-shadow 0.22s ease";
+      c.style.boxShadow = "0 0 14px rgba(101, 223, 205, 0.45)";
+      c.style.transform = "scale(1.02)";
+      setTimeout(() => {
+        c.style.boxShadow = "";
+        c.style.transform = "";
+      }, 350);
+    });
+
+    if (typeof showToast === "function") {
+      const scenName = scenarioSelect && scenarioSelect.options && scenarioSelect.selectedIndex >= 0
+        ? scenarioSelect.options[scenarioSelect.selectedIndex].text.split("(")[0].trim()
+        : scenario;
+      showToast(`Simulation complete: ${scenName} (Monte Carlo N=1,000)`, "normal");
+    }
   } catch (err) {
     console.error("Simulation error:", err);
-    alert(`Simulation Error: ${err.message}`);
+    if (typeof showToast === "function") {
+      showToast(`Simulation Error: ${err.message}`, "error");
+    } else {
+      alert(`Simulation Error: ${err.message}`);
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origHtml;
+    }
   }
 }
 
@@ -2771,6 +2805,17 @@ function closeWhatifAssumptionsModal() {
   const modal = document.getElementById("whatifAssumptionsModal");
   if (modal) modal.classList.remove("active");
 }
+window.closeWhatifAssumptionsModal = closeWhatifAssumptionsModal;
+window.openWhatifAssumptionsModal = openWhatifAssumptionsModal;
+window.runWhatIfSimulation = runWhatIfSimulation;
+window.loadWhatIfView = loadWhatIfView;
+window.debounceRunWhatIf = debounceRunWhatIf;
+window.onWhatifSiteChange = onWhatifSiteChange;
+window.onSliderWorkforceInput = onSliderWorkforceInput;
+window.onSliderShadeInput = onSliderShadeInput;
+window.onSliderBreakInput = onSliderBreakInput;
+window.switchToWhatIfSimulator = switchToWhatIfSimulator;
+window.renderWhatIfResults = renderWhatIfResults;
 
 
 // =========================================================================
