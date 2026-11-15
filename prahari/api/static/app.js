@@ -268,7 +268,7 @@ async function loadSituationMap() {
         </div>
         <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.73rem; color:#94a3b8; font-family:var(--font-mono, monospace);">
           <span>ID: <b>${feat.geo_id}</b> (${feat.geo_level})</span>
-          <span>Confidence: <b style="color:#38bdf8;">${feat.location_confidence.toUpperCase()}</b></span>
+          <span>Confidence: <b style="color:#65dfcd;">${feat.location_confidence.toUpperCase()}</b></span>
         </div>
         <div style="margin-top:0.35rem; font-size:0.75rem; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
           <span>Outbreak Prob: <b style="color:#f8fafc; font-family:var(--font-mono, monospace);">${(feat.calibrated_prob * 100).toFixed(1)}%</b></span>
@@ -282,7 +282,7 @@ async function loadSituationMap() {
     renderSvgMap(svgMap, data.features, data.clusters);
 
   } catch (err) {
-    container.innerHTML = `<div style="padding:1rem;color:#ef4444;">Failed to load map: ${err.message}</div>`;
+    container.innerHTML = `<div style="padding:1rem;color:#f17971;">Failed to load map: ${err.message}</div>`;
   }
 }
 
@@ -325,7 +325,7 @@ function renderSvgMap(svgElement, features, clusters) {
         <stop offset="100%" stop-color="#060a14" />
       </linearGradient>
       <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <line x1="0" y1="0" x2="0" y2="8" style="stroke:#38bdf8; stroke-width:2.5; opacity:0.35" />
+        <line x1="0" y1="0" x2="0" y2="8" style="stroke:#65dfcd; stroke-width:2.5; opacity:0.35" />
       </pattern>
       <filter id="nodeGlow" x="-30%" y="-30%" width="160%" height="160%">
         <feGaussianBlur stdDeviation="3" result="blur" />
@@ -338,31 +338,31 @@ function renderSvgMap(svgElement, features, clusters) {
 
     <!-- Arabian Gulf Maritime Wash (Northwest Coastal Domain) -->
     <path d="M 0,0 L ${width * 0.45},0 Q ${width * 0.32},${height * 0.4} 0,${height * 0.65} Z" 
-          fill="rgba(14, 165, 233, 0.04)" stroke="rgba(56, 189, 248, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
-    <text x="24" y="55" fill="rgba(56, 189, 248, 0.35)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
+          fill="rgba(14, 165, 233, 0.04)" stroke="rgba(101, 223, 205, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
+    <text x="24" y="55" fill="rgba(101, 223, 205, 0.35)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
       ARABIAN GULF (MARITIME DOMAIN)
     </text>
 
     <!-- Concentric Tactical Radar Range Rings -->
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="80" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="160" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
-    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="80" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="160" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+    <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
     <text x="${centerDubai.x + 84}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">15 KM</text>
     <text x="${centerDubai.x + 164}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
     <text x="${centerDubai.x + 244}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
 
     <!-- Coordinate Grid & Mesh -->
-    <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#1e293b" stroke-width="0.8" stroke-dasharray="2,3" />
-    <line x1="${width/2}" y1="40" x2="${width/2}" y2="${height - 40}" stroke="#1e293b" stroke-width="0.8" stroke-dasharray="2,3" />
+    <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+    <line x1="${width/2}" y1="40" x2="${width/2}" y2="${height - 40}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
 
     <!-- Corner Reticles (L-brackets) -->
-    <path d="M 16,28 L 16,16 L 28,16" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
-    <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M 16,28 L 16,16 L 28,16" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+    <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
 
     <!-- Telemetry HUD Header / Footer Overlay -->
-    <text x="36" y="24" fill="#38bdf8" font-size="9.5" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
+    <text x="36" y="24" fill="#65dfcd" font-size="9.5" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
       TACTICAL RADAR &bull; DUBAI COMMAND HUB &bull; H3 RES-7 GRID
     </text>
     <text x="${width - 36}" y="24" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)" text-anchor="end">
@@ -372,7 +372,7 @@ function renderSvgMap(svgElement, features, clusters) {
     <text x="36" y="${height - 14}" fill="#64748b" font-size="8.5" font-family="var(--font-mono, monospace)">
       SENSOR MESH: ESP32 TWIN ACTIVE &bull; SCAN RATE: 10s
     </text>
-    <text x="${width - 36}" y="${height - 14}" fill="#38bdf8" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
+    <text x="${width - 36}" y="${height - 14}" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
       [N] AZIMUTH 000&deg;
     </text>
   `;
@@ -383,9 +383,9 @@ function renderSvgMap(svgElement, features, clusters) {
       const center = toXY(c.centroid_lat, c.centroid_lon);
       svgHtml += `
         <!-- Outer radiating shockwave ring -->
-        <circle cx="${center.x}" cy="${center.y}" r="54" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85" />
-        <circle cx="${center.x}" cy="${center.y}" r="46" fill="rgba(239, 68, 68, 0.16)" stroke="#ef4444" stroke-width="1.2" />
-        <rect x="${center.x - 95}" y="${center.y - 68}" width="190" height="20" rx="3" fill="#180c10" stroke="#ef4444" stroke-width="1" />
+        <circle cx="${center.x}" cy="${center.y}" r="54" fill="none" stroke="#f17971" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85" />
+        <circle cx="${center.x}" cy="${center.y}" r="46" fill="rgba(239, 68, 68, 0.16)" stroke="#f17971" stroke-width="1.2" />
+        <rect x="${center.x - 95}" y="${center.y - 68}" width="190" height="20" rx="3" fill="#180c10" stroke="#f17971" stroke-width="1" />
         <text x="${center.x}" y="${center.y - 54}" fill="#fca5a5" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
           L3 CLUSTER (RR: ${c.relative_risk}x &bull; p &lt; 0.05)
         </text>
@@ -396,10 +396,10 @@ function renderSvgMap(svgElement, features, clusters) {
   // Draw features
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
-    let color = "#10b981"; // normal
-    if (f.risk_tier === "watch") color = "#38bdf8";
-    else if (f.risk_tier === "warning") color = "#f59e0b";
-    else if (f.risk_tier === "alert") color = "#ef4444";
+    let color = "#66d9af"; // normal
+    if (f.risk_tier === "watch") color = "#65dfcd";
+    else if (f.risk_tier === "warning") color = "#e9aa62";
+    else if (f.risk_tier === "alert") color = "#f17971";
 
     const isSite = f.geo_level === "site";
     const displayName = f.geo_name.split(" ")[0];
@@ -483,7 +483,7 @@ async function loadAlertInbox() {
         <td><span class="badge ${statusBadge}">${a.status}</span></td>
         <td>
           <button class="btn btn-primary" onclick="viewEvidenceCard('${a.alert_id}')">Evidence Card</button>
-          <button class="btn btn-secondary" onclick="openActionDossier('${a.geo_id}')" style="margin-left:0.3rem; background:#0284c7; color:#fff;" title="Generate 7-Section Executive Action Dossier">Dossier</button>
+          <button class="btn btn-secondary" onclick="openActionDossier('${a.geo_id}')" style="margin-left:0.3rem; background:#1c4b42; color:#fff;" title="Generate 7-Section Executive Action Dossier">Dossier</button>
           ${a.can_acknowledge && a.status === 'PENDING' ? `
             <button class="btn btn-secondary" onclick="openAcknowledgeModal('${a.alert_id}')" style="margin-left:0.3rem;">Triage</button>
           ` : ''}
@@ -492,7 +492,7 @@ async function loadAlertInbox() {
       tbody.appendChild(tr);
     });
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="7" style="color:#ef4444;text-align:center;">Failed to load alerts: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="color:#f17971;text-align:center;">Failed to load alerts: ${err.message}</td></tr>`;
   }
 }
 
@@ -511,7 +511,7 @@ async function viewEvidenceCard(alertId) {
     const latencyMs = Math.round(performance.now() - t0);
 
     modalBody.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:1rem; margin-bottom:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #283531; padding-bottom:1rem; margin-bottom:1.5rem;">
         <div>
           <span class="badge badge-${card.severity.toLowerCase()}">${card.severity.toUpperCase()}</span>
           <h2 style="font-size:1.35rem; margin-top:0.25rem;">${card.alert_id}: ${card.geo_name}</h2>
@@ -519,14 +519,14 @@ async function viewEvidenceCard(alertId) {
         </div>
         <div style="text-align:right;">
           <div style="font-size:0.75rem; color:#94a3b8;">Decision Card Generation Latency</div>
-          <div style="font-size:1.2rem; font-weight:700; color:#10b981;">${card.generation_time_ms.toFixed(1)} ms</div>
+          <div style="font-size:1.2rem; font-weight:700; color:#66d9af;">${card.generation_time_ms.toFixed(1)} ms</div>
           <div style="font-size:0.7rem; color:#64748b;">(SLA: &lt; 2,000 ms)</div>
         </div>
       </div>
 
       <!-- Fenced Situational Briefing Narrative -->
-      <div style="background-color:rgba(15,23,42,0.6); border-left:4px solid #38bdf8; padding:1rem; border-radius:4px; margin-bottom:1.5rem;">
-        <div style="font-size:0.75rem; text-transform:uppercase; color:#38bdf8; font-weight:700; letter-spacing:0.05em; margin-bottom:0.25rem;">
+      <div style="background-color:rgba(15,23,42,0.6); border-left:4px solid #65dfcd; padding:1rem; border-radius:4px; margin-bottom:1.5rem;">
+        <div style="font-size:0.75rem; text-transform:uppercase; color:#65dfcd; font-weight:700; letter-spacing:0.05em; margin-bottom:0.25rem;">
           Verified Situational Briefing (Zero-Hallucination Gate Verified)
         </div>
         <p style="font-size:0.9rem; line-height:1.6; color:#f1f5f9;">${card.narrative_summary}</p>
@@ -541,9 +541,9 @@ async function viewEvidenceCard(alertId) {
           <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem; font-size:0.85rem;">
             <span>Observed Today: <b style="color:#f87171;">${card.time_series_comparison.observed_today}</b></span>
             <span>Historical Baseline: <b style="color:#94a3b8;">${card.time_series_comparison.historical_baseline}</b></span>
-            <span>Exposure-Adjusted: <b style="color:#38bdf8;">${card.time_series_comparison.exposure_adjusted_expected}</b></span>
+            <span>Exposure-Adjusted: <b style="color:#65dfcd;">${card.time_series_comparison.exposure_adjusted_expected}</b></span>
           </div>
-          <div style="height:120px; background:#0b1120; border-radius:6px; display:flex; align-items:flex-end; gap:8px; padding:10px 15px;">
+          <div style="height:120px; background:#131c1a; border-radius:6px; display:flex; align-items:flex-end; gap:8px; padding:10px 15px;">
             ${renderTimeSeriesMiniBars(card.time_series_comparison.trailing_14d_observed)}
           </div>
           <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:0.4rem;">Trailing 14-day observed incidence surge</div>
@@ -564,17 +564,17 @@ async function viewEvidenceCard(alertId) {
       <div class="kpi-card" style="margin-bottom:1.5rem;">
         <div class="kpi-title">3-Day Environmental Exposure Forecast (Open-Meteo & OpenAQ)</div>
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:0.5rem; text-align:center;">
-          <div style="background:#0b1120; padding:0.75rem; border-radius:6px;">
+          <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
             <div style="font-size:0.75rem; color:#94a3b8;">Today</div>
             <div style="font-size:1.1rem; font-weight:700; color:#fbbf24;">WBGT ${card.environmental_forecast.wbgt_today}°C</div>
             <div style="font-size:0.75rem; color:#cbd5e1;">PM2.5: ${card.environmental_forecast.pm25_today} µg/m³</div>
           </div>
-          <div style="background:#0b1120; padding:0.75rem; border-radius:6px;">
+          <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
             <div style="font-size:0.75rem; color:#94a3b8;">Tomorrow (+1d)</div>
             <div style="font-size:1.1rem; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[0]}°C</div>
             <div style="font-size:0.75rem; color:#cbd5e1;">Thermal Danger</div>
           </div>
-          <div style="background:#0b1120; padding:0.75rem; border-radius:6px;">
+          <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
             <div style="font-size:0.75rem; color:#94a3b8;">Day +2</div>
             <div style="font-size:1.1rem; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[1]}°C</div>
             <div style="font-size:0.75rem; color:#cbd5e1;">Thermal Danger</div>
@@ -599,14 +599,14 @@ async function viewEvidenceCard(alertId) {
             const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
             const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
             return `
-            <div style="background:#0b1120; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #1e293b;">
+            <div style="background:#131c1a; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #222f2b;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="color:#f472b6; font-weight:700;">${c.class_name}</span>
                 <span class="badge ${lvl === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem; padding:2px 6px;">${lvl}</span>
               </div>
               <div style="color:#94a3b8; font-size:0.75rem; margin-top:3px;"><b>Rx Classes:</b> ${(c.representative_drugs || []).slice(0, 3).join(", ")}</div>
               <div style="color:#cbd5e1; font-size:0.72rem; margin-top:3px; line-height:1.4;">${c.physiological_mechanism}</div>
-              <div style="color:#38bdf8; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
+              <div style="color:#65dfcd; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
             </div>
             `;
           }).join("")}
@@ -631,7 +631,7 @@ async function viewEvidenceCard(alertId) {
         <div class="kpi-title">Proportionality Ladder Verified Action Checklist</div>
         <ul style="list-style:none; padding:0; margin-top:0.5rem;">
           ${card.action_checklist.map(action => `
-            <li style="padding:0.6rem 0.75rem; background:rgba(15,23,42,0.4); border-left:3px solid #10b981; margin-bottom:0.4rem; border-radius:4px; font-size:0.875rem;">
+            <li style="padding:0.6rem 0.75rem; background:rgba(15,23,42,0.4); border-left:3px solid #66d9af; margin-bottom:0.4rem; border-radius:4px; font-size:0.875rem;">
               • ${action}
             </li>
           `).join("")}
@@ -661,14 +661,14 @@ async function viewEvidenceCard(alertId) {
       ` : ''}
 
       <!-- Explicit Stated Assumptions -->
-      <div style="font-size:0.75rem; color:#94a3b8; border-top:1px solid #334155; padding-top:0.75rem;">
+      <div style="font-size:0.75rem; color:#94a3b8; border-top:1px solid #283531; padding-top:0.75rem;">
         <strong>Explicit Operational Assumptions:</strong>
         ${card.assumptions.map(asm => `<span style="display:inline-block; margin-right:1rem;">• ${asm}</span>`).join("")}
       </div>
     `;
 
   } catch (err) {
-    modalBody.innerHTML = `<div style="padding:2rem;color:#ef4444;text-align:center;">Failed to generate Evidence Card: ${err.message}</div>`;
+    modalBody.innerHTML = `<div style="padding:2rem;color:#f17971;text-align:center;">Failed to generate Evidence Card: ${err.message}</div>`;
   }
 }
 
@@ -677,7 +677,7 @@ function renderTimeSeriesMiniBars(points) {
   const max = Math.max(...points, 1);
   return points.map(v => {
     const heightPct = Math.round((v / max) * 100);
-    const color = heightPct > 70 ? "#ef4444" : heightPct > 40 ? "#f59e0b" : "#3b82f6";
+    const color = heightPct > 70 ? "#f17971" : heightPct > 40 ? "#e9aa62" : "#3b82f6";
     return `<div style="flex:1; height:${heightPct}%; background:${color}; border-radius:3px 3px 0 0;" title="${v} cases"></div>`;
   }).join("");
 }
@@ -767,7 +767,7 @@ async function loadEmployerSafetyView() {
 
         <div class="kpi-card">
           <div class="kpi-title">Heat Illness Rate</div>
-          <div class="kpi-val" style="color:#f59e0b;">${data.heat_incident_rate_per_1000} <span style="font-size:0.9rem;color:#94a3b8;">/ 1k workers</span></div>
+          <div class="kpi-val" style="color:#e9aa62;">${data.heat_incident_rate_per_1000} <span style="font-size:0.9rem;color:#94a3b8;">/ 1k workers</span></div>
           <div class="kpi-sub">Aggregated site-level rate only</div>
         </div>
 
@@ -779,7 +779,7 @@ async function loadEmployerSafetyView() {
 
         <div class="kpi-card">
           <div class="kpi-title">Peak Thermal Stress (WBGT)</div>
-          <div class="kpi-val" style="color:#ef4444;">${data.wbgt_max}°C</div>
+          <div class="kpi-val" style="color:#f17971;">${data.wbgt_max}°C</div>
           <div class="kpi-sub">${data.wbgt_hours_danger} Danger Hours Today</div>
         </div>
       </div>
@@ -806,31 +806,31 @@ async function loadEmployerSafetyView() {
     `;
 
   } catch (err) {
-    container.innerHTML = `<div style="padding:2rem;color:#ef4444;">Failed to load employer safety view: ${err.message}</div>`;
+    container.innerHTML = `<div style="padding:2rem;color:#f17971;">Failed to load employer safety view: ${err.message}</div>`;
   }
 }
 
 async function testClinicalAccessRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
   if (!resultDiv) return;
-  resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing clinical feed access boundary...</span>`;
+  resultDiv.innerHTML = `<span style="color:#65dfcd;">Testing clinical feed access boundary...</span>`;
   try {
     await apiFetch(`/api/v1/clinical/syndromic?geo_id=DXB-JA`);
-    resultDiv.innerHTML = `<span style="color:#ef4444;">Security Boundary Failed: Endpoint unexpectedly returned data!</span>`;
+    resultDiv.innerHTML = `<span style="color:#f17971;">Security Boundary Failed: Endpoint unexpectedly returned data!</span>`;
   } catch (err) {
-    resultDiv.innerHTML = `<span style="color:#10b981;">Privacy Gate Enforced: <b>${err.message}</b></span>`;
+    resultDiv.innerHTML = `<span style="color:#66d9af;">Privacy Gate Enforced: <b>${err.message}</b></span>`;
   }
 }
 
 async function testSubsiteParamRejection() {
   const resultDiv = document.getElementById("privacyProbeResult");
   if (!resultDiv) return;
-  resultDiv.innerHTML = `<span style="color:#38bdf8;">Testing prohibited sub-site parameter (gang_id=CREW-04)...</span>`;
+  resultDiv.innerHTML = `<span style="color:#65dfcd;">Testing prohibited sub-site parameter (gang_id=CREW-04)...</span>`;
   try {
     await apiFetch(`/api/v1/workplace/site-rates?site_id=${state.employerId}&gang_id=CREW-04`);
-    resultDiv.innerHTML = `<span style="color:#ef4444;">Security Boundary Failed: Sub-site parameter was accepted!</span>`;
+    resultDiv.innerHTML = `<span style="color:#f17971;">Security Boundary Failed: Sub-site parameter was accepted!</span>`;
   } catch (err) {
-    resultDiv.innerHTML = `<span style="color:#10b981;">Privacy Gate Enforced: <b>${err.message}</b></span>`;
+    resultDiv.innerHTML = `<span style="color:#66d9af;">Privacy Gate Enforced: <b>${err.message}</b></span>`;
   }
 }
 
@@ -872,14 +872,14 @@ async function loadDataHealthView() {
           <div>Freshness: <b>${f.freshness_minutes.toFixed(0)} min</b> ago</div>
           <div>Ingestion Latency: <b>${f.latency_hours.toFixed(1)} hrs</b></div>
         </div>
-        <div style="margin-top:0.5rem; height:6px; background:#334155; border-radius:3px; overflow:hidden;">
-          <div style="width:${f.completeness_pct}%; height:100%; background:${f.status === 'HEALTHY' ? '#10b981' : '#ef4444'};"></div>
+        <div style="margin-top:0.5rem; height:6px; background:#283531; border-radius:3px; overflow:hidden;">
+          <div style="width:${f.completeness_pct}%; height:100%; background:${f.status === 'HEALTHY' ? '#66d9af' : '#f17971'};"></div>
         </div>
       `;
       container.appendChild(card);
     });
   } catch (err) {
-    container.innerHTML = `<div style="padding:2rem;color:#ef4444;">Failed to load data health: ${err.message}</div>`;
+    container.innerHTML = `<div style="padding:2rem;color:#f17971;">Failed to load data health: ${err.message}</div>`;
   }
 }
 
@@ -901,7 +901,7 @@ function setupDemoToggles() {
         const enabled = e.target.checked;
         const resultBox = document.getElementById("demoToggleResult");
         resultBox.style.display = "block";
-        resultBox.innerHTML = `<span style="color:#38bdf8;">Applying telemetry stream gate on '${t.feed}'...</span>`;
+        resultBox.innerHTML = `<span style="color:#65dfcd;">Applying telemetry stream gate on '${t.feed}'...</span>`;
 
         try {
           const res = await apiFetch(`/api/v1/demo/toggle-feed`, {
@@ -910,8 +910,8 @@ function setupDemoToggles() {
           });
 
           resultBox.innerHTML = `
-            <div style="border-left:3px solid ${enabled ? '#10b981' : '#f59e0b'}; padding-left:0.75rem;">
-              <strong style="color:${enabled ? '#10b981' : '#f59e0b'};">${res.message}</strong>
+            <div style="border-left:3px solid ${enabled ? '#66d9af' : '#e9aa62'}; padding-left:0.75rem;">
+              <strong style="color:${enabled ? '#66d9af' : '#e9aa62'};">${res.message}</strong>
               <div style="font-size:0.85rem; color:#e2e8f0; margin-top:0.35rem;">${res.alert_impact}</div>
               <div style="margin-top:0.35rem; font-size:0.8rem; color:#94a3b8;">
                 Composite DQ: ${(res.before_composite_dq * 100).toFixed(0)}% &rarr; <b>${(res.after_composite_dq * 100).toFixed(0)}%</b> |
@@ -926,7 +926,7 @@ function setupDemoToggles() {
           if (state.activeTab === "inbox") loadAlertInbox();
 
         } catch (err) {
-          resultBox.innerHTML = `<span style="color:#ef4444;">Toggle failed: ${err.message}</span>`;
+          resultBox.innerHTML = `<span style="color:#f17971;">Toggle failed: ${err.message}</span>`;
         }
       });
     }
@@ -961,7 +961,7 @@ async function loadAuditLogs() {
       tbody.appendChild(tr);
     });
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" style="color:#ef4444;text-align:center;">${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="color:#f17971;text-align:center;">${err.message}</td></tr>`;
   }
 }
 
@@ -1081,30 +1081,30 @@ async function recalculateImpact() {
           <td><strong style="color:#94a3b8;">Conservative Lower Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">1.8% rate, 40% prev</span></td>
           <td>${scen.low_conservative.total_baseline_cases.toLocaleString()}</td>
           <td>${scen.low_conservative.cases_prevented.toLocaleString()}</td>
-          <td><strong style="color:#38bdf8;">${scen.low_conservative.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td><strong style="color:#65dfcd;">${scen.low_conservative.lost_workdays_averted.toLocaleString()} d</strong></td>
           <td>AED ${scen.low_conservative.gross_economic_benefit_aed.toLocaleString()}</td>
           <td style="color:#f87171;">AED ${scen.low_conservative.false_alarm_response_cost_aed.toLocaleString()}</td>
-          <td><strong style="color:#10b981;">AED ${scen.low_conservative.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><strong style="color:#66d9af;">AED ${scen.low_conservative.net_economic_benefit_aed.toLocaleString()}</strong></td>
           <td><span class="badge badge-gray">${scen.low_conservative.benefit_cost_ratio.toFixed(1)}x</span></td>
         </tr>
-        <tr style="background:#0f2942; border-left:3px solid #0284c7;">
-          <td><strong style="color:#38bdf8;">Central Expected (Baseline)</strong><br><span style="font-size:0.7rem;color:#94a3b8;">2.5% rate, 65% prev (+3.4d lead)</span></td>
+        <tr style="background:#152c26; border-left:3px solid #1c4b42;">
+          <td><strong style="color:#65dfcd;">Central Expected (Baseline)</strong><br><span style="font-size:0.7rem;color:#94a3b8;">2.5% rate, 65% prev (+3.4d lead)</span></td>
           <td>${central.total_baseline_cases.toLocaleString()}</td>
           <td>${central.cases_prevented.toLocaleString()}</td>
-          <td><strong style="color:#38bdf8;">${central.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td><strong style="color:#65dfcd;">${central.lost_workdays_averted.toLocaleString()} d</strong></td>
           <td>AED ${central.gross_economic_benefit_aed.toLocaleString()}</td>
           <td style="color:#f87171;">AED ${central.false_alarm_response_cost_aed.toLocaleString()}</td>
-          <td><strong style="color:#10b981; font-size:1.05rem;">AED ${central.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><strong style="color:#66d9af; font-size:1.05rem;">AED ${central.net_economic_benefit_aed.toLocaleString()}</strong></td>
           <td><span class="badge badge-normal">${central.benefit_cost_ratio.toFixed(1)}x</span></td>
         </tr>
         <tr>
           <td><strong style="color:#a855f7;">Optimistic Upper Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">3.2% rate, 82% prev</span></td>
           <td>${scen.high_optimistic.total_baseline_cases.toLocaleString()}</td>
           <td>${scen.high_optimistic.cases_prevented.toLocaleString()}</td>
-          <td><strong style="color:#38bdf8;">${scen.high_optimistic.lost_workdays_averted.toLocaleString()} d</strong></td>
+          <td><strong style="color:#65dfcd;">${scen.high_optimistic.lost_workdays_averted.toLocaleString()} d</strong></td>
           <td>AED ${scen.high_optimistic.gross_economic_benefit_aed.toLocaleString()}</td>
           <td style="color:#f87171;">AED ${scen.high_optimistic.false_alarm_response_cost_aed.toLocaleString()}</td>
-          <td><strong style="color:#10b981;">AED ${scen.high_optimistic.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><strong style="color:#66d9af;">AED ${scen.high_optimistic.net_economic_benefit_aed.toLocaleString()}</strong></td>
           <td><span class="badge badge-watch">${scen.high_optimistic.benefit_cost_ratio.toFixed(1)}x</span></td>
         </tr>
       `;
@@ -1131,7 +1131,7 @@ async function recalculateImpact() {
           const isOperatingPoint = isOperatingRow && Math.abs(cell.preventability_pct - 65.0) < 0.1;
           const bgOpacity = Math.min(0.85, Math.max(0.15, cell.net_benefit_aed / (central.net_economic_benefit_aed * 1.5)));
           const cellStyle = isOperatingPoint
-            ? "border:2px solid #38bdf8; background:#0369a1; font-weight:800; color:#fff;"
+            ? "border:2px solid #65dfcd; background:#1c4b42; font-weight:800; color:#fff;"
             : `background:rgba(16, 185, 129, ${bgOpacity.toFixed(2)}); color:#fff;`;
 
           bodyHtml += `
@@ -1194,14 +1194,14 @@ async function loadPolicyEvidence() {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><strong>${d.district_name}</strong><br><span style="font-size:0.7rem;color:#64748b;">${d.district_id}</span></td>
-        <td><strong style="color:#f59e0b;">${d.extreme_wbgt_hours_gt_32c}h</strong></td>
-        <td><strong style="color:#ef4444;">${d.danger_wbgt_hours_gt_34c}h</strong></td>
+        <td><strong style="color:#e9aa62;">${d.extreme_wbgt_hours_gt_32c}h</strong></td>
+        <td><strong style="color:#f17971;">${d.danger_wbgt_hours_gt_34c}h</strong></td>
         <td>${d.pm25_exceedance_days} days</td>
         <td>${d.midday_high_heat_days} days</td>
         <td>
           ${isSuppressed
             ? '<span class="badge badge-gray" title="Small-cell suppression applied (<=10)">≤ 10 (Suppressed)</span>'
-            : `<strong style="color:#38bdf8;">${d.attributable_heat_stress_cases_suppressed} cases</strong>`
+            : `<strong style="color:#65dfcd;">${d.attributable_heat_stress_cases_suppressed} cases</strong>`
           }
         </td>
         <td><span class="badge badge-normal">DP Laplace ε=1.0</span></td>
@@ -1223,10 +1223,10 @@ async function loadPolicyEvidence() {
           <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc;">${r.action_title}</h4>
           <span class="badge ${badgeClass}">${r.priority_level}</span>
         </div>
-        <div style="font-size:0.75rem; color:#38bdf8; font-weight:600;">Domain: ${r.policy_domain}</div>
+        <div style="font-size:0.75rem; color:#65dfcd; font-weight:600;">Domain: ${r.policy_domain}</div>
         <div style="font-size:0.75rem; color:#94a3b8;">Target Jurisdictions: <strong>${r.target_districts.join(", ")}</strong></div>
         <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">${r.statutory_justification}</p>
-        <div style="font-size:0.75rem; color:#10b981; margin-top:0.25rem;">
+        <div style="font-size:0.75rem; color:#66d9af; margin-top:0.25rem;">
           Protection Impact: ${r.expected_workforce_protection}
         </div>
       `;
@@ -1242,7 +1242,7 @@ async function loadPolicyEvidence() {
     });
 
   } catch (err) {
-    distTableBody.innerHTML = `<tr><td colspan="7" style="color:#ef4444;text-align:center;">Failed to load policy data: ${err.message}</td></tr>`;
+    distTableBody.innerHTML = `<tr><td colspan="7" style="color:#f17971;text-align:center;">Failed to load policy data: ${err.message}</td></tr>`;
   }
 }
 
@@ -1311,7 +1311,7 @@ async function loadSentinelView(isSilent = false) {
       if (elTwinSensor) elTwinSensor.textContent = `${sWbgt.toFixed(1)}°C`;
       if (elTwinBias) {
         elTwinBias.textContent = `${deltaSign}°C`;
-        elTwinBias.style.color = delta > 0 ? "#ef4444" : "#10b981";
+        elTwinBias.style.color = delta > 0 ? "#f17971" : "#66d9af";
       }
     }
 
@@ -1343,8 +1343,8 @@ async function loadSentinelView(isSilent = false) {
       else if (node.current_level === "Alert") lvlBadge = `<span class="badge badge-alert">ALERT</span>`;
 
       // Sensors
-      const dhtOk = (node.sensor_health && node.sensor_health.dht) ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#10b981;">DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#ef4444;"> DHT</span>`;
-      const globeOk = (node.sensor_health && node.sensor_health.globe) ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#10b981;">Globe</span>` : `<span title="Globe Sensor Fault" style="color:#ef4444;"> Globe</span>`;
+      const dhtOk = (node.sensor_health && node.sensor_health.dht) ? `<span title="DHT22 Air Temp & Humidity Healthy" style="color:#66d9af;">DHT</span>` : `<span title="DHT22 Sensor Fault" style="color:#f17971;"> DHT</span>`;
+      const globeOk = (node.sensor_health && node.sensor_health.globe) ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#66d9af;">Globe</span>` : `<span title="Globe Sensor Fault" style="color:#f17971;"> Globe</span>`;
 
       // Loc Confidence
       let locBadge = `<span class="badge badge-normal" style="font-size:0.65rem;">EXACT</span>`;
@@ -1360,10 +1360,10 @@ async function loadSentinelView(isSilent = false) {
 
       return `
         <tr>
-          <td><code style="color:#38bdf8; font-weight:700;">${node.node_id}</code></td>
+          <td><code style="color:#65dfcd; font-weight:700;">${node.node_id}</code></td>
           <td><span style="font-weight:600;">${node.site_id}</span></td>
           <td>${statusBadge}</td>
-          <td style="color:#f59e0b; font-size:0.95rem;">${wbgtStr}</td>
+          <td style="color:#e9aa62; font-size:0.95rem;">${wbgtStr}</td>
           <td>${airStr}</td>
           <td>${rhStr}</td>
           <td>${globeStr}</td>
@@ -1395,11 +1395,11 @@ async function loadSentinelView(isSilent = false) {
         const isHotspot = delta > 0.5;
 
         return `
-          <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:0.85rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+          <div style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
             <div>
               <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.5rem;">
                 <span>${node.site_id}</span>
-                <code style="font-size:0.75rem; color:#38bdf8;">(${node.node_id})</code>
+                <code style="font-size:0.75rem; color:#65dfcd;">(${node.node_id})</code>
                 ${isHotspot ? `<span class="badge badge-warning" style="font-size:0.65rem;">MICROCLIMATE HOTSPOT</span>` : `<span class="badge badge-normal" style="font-size:0.65rem;">NOMINAL</span>`}
               </div>
               <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.25rem;">
@@ -1410,15 +1410,15 @@ async function loadSentinelView(isSilent = false) {
             <div style="display:flex; gap:1.25rem; align-items:center;">
               <div style="text-align:right;">
                 <div style="font-size:0.7rem; color:#94a3b8;">On-Site (ESP32)</div>
-                <div style="font-size:1.1rem; font-weight:700; color:#f59e0b;">${measured.toFixed(1)}°C</div>
+                <div style="font-size:1.1rem; font-weight:700; color:#e9aa62;">${measured.toFixed(1)}°C</div>
               </div>
               <div style="text-align:right;">
                 <div style="font-size:0.7rem; color:#94a3b8;">Open-Meteo Model</div>
-                <div style="font-size:1.1rem; font-weight:700; color:#38bdf8;">${modelled.toFixed(1)}°C</div>
+                <div style="font-size:1.1rem; font-weight:700; color:#65dfcd;">${modelled.toFixed(1)}°C</div>
               </div>
               <div style="text-align:right; min-width:65px;">
                 <div style="font-size:0.7rem; color:#94a3b8;">Microclimate Δ</div>
-                <div style="font-size:1.1rem; font-weight:700; color:${delta > 0 ? '#ef4444' : '#10b981'};">${deltaSign}°C</div>
+                <div style="font-size:1.1rem; font-weight:700; color:${delta > 0 ? '#f17971' : '#66d9af'};">${deltaSign}°C</div>
               </div>
             </div>
           </div>
@@ -1427,7 +1427,7 @@ async function loadSentinelView(isSilent = false) {
     }
 
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#ef4444;">Failed to load Sentinel nodes: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#f17971;">Failed to load Sentinel nodes: ${err.message}</td></tr>`;
   }
 }
 
@@ -1643,14 +1643,14 @@ async function simulatePhysicalBootPress(nodeId = "SENT-001") {
     twinBuzzer.textContent = "BUZZER: SILENCED (15m)";
     twinBuzzer.style.background = "rgba(16, 185, 129, 0.2)";
     twinBuzzer.style.color = "#34d399";
-    twinBuzzer.style.border = "1px solid #10b981";
+    twinBuzzer.style.border = "1px solid #66d9af";
   }
 
   if (twinLed) {
     twinLed.textContent = "LED: GREEN ACK";
     twinLed.style.background = "rgba(16, 185, 129, 0.2)";
     twinLed.style.color = "#34d399";
-    twinLed.style.border = "1px solid #10b981";
+    twinLed.style.border = "1px solid #66d9af";
   }
 
   const nowTime = new Date().toISOString().substring(11, 19);
@@ -1734,9 +1734,9 @@ async function loadBiasCorrectionView() {
           <tr>
             <td style="font-weight:600; text-transform:capitalize;">${r}</td>
             <td>${rb.mae !== undefined ? rb.mae.toFixed(2) : '--'}°C</td>
-            <td style="color:#10b981; font-weight:600;">${ra.mae !== undefined ? ra.mae.toFixed(2) : '--'}°C</td>
+            <td style="color:#66d9af; font-weight:600;">${ra.mae !== undefined ? ra.mae.toFixed(2) : '--'}°C</td>
             <td>${rb.rmse !== undefined ? rb.rmse.toFixed(2) : '--'}°C</td>
-            <td style="color:#10b981; font-weight:600;">${ra.rmse !== undefined ? ra.rmse.toFixed(2) : '--'}°C</td>
+            <td style="color:#66d9af; font-weight:600;">${ra.rmse !== undefined ? ra.rmse.toFixed(2) : '--'}°C</td>
           </tr>
         `;
       });
@@ -1749,7 +1749,7 @@ async function loadBiasCorrectionView() {
       let sHtml = "";
       transferRes.spatial_register.slice(0, 5).forEach(site => {
         const flag = site.confidence_flag;
-        const color = flag === "SENSED" ? "#10b981" : (flag === "LOSO-VALIDATED" ? "#38bdf8" : "#f59e0b");
+        const color = flag === "SENSED" ? "#66d9af" : (flag === "LOSO-VALIDATED" ? "#65dfcd" : "#e9aa62");
         sHtml += `
           <tr>
             <td><code>${site.site_id}</code></td>
@@ -1818,7 +1818,7 @@ function renderBiasCorrectionChart(diurnalProfile) {
   for (let t = 24; t <= 36; t += 4) {
     const y = getY(t);
     gridSvg += `
-      <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />
+      <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="#283531" stroke-dasharray="3,3" stroke-width="1" />
       <text x="${padLeft - 8}" y="${y + 4}" fill="#64748b" font-size="11" text-anchor="end">${t}°</text>
     `;
   }
@@ -1835,13 +1835,13 @@ function renderBiasCorrectionChart(diurnalProfile) {
   svg.innerHTML = `
     ${gridSvg}
     <!-- Conformal Prediction Ribbon -->
-    <polygon points="${ribbonPoints}" fill="#10b981" fill-opacity="0.15" />
+    <polygon points="${ribbonPoints}" fill="#66d9af" fill-opacity="0.15" />
     <!-- Raw Model Line (Amber dashed) -->
-    <polyline points="${modelPts.join(' ')}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4" />
+    <polyline points="${modelPts.join(' ')}" fill="none" stroke="#e9aa62" stroke-width="2" stroke-dasharray="4,4" />
     <!-- Corrected Model Line (Green solid) -->
-    <polyline points="${corrPts.join(' ')}" fill="none" stroke="#10b981" stroke-width="2.5" />
+    <polyline points="${corrPts.join(' ')}" fill="none" stroke="#66d9af" stroke-width="2.5" />
     <!-- Sensor Ground Truth Line (Red solid) -->
-    <polyline points="${sensorPts.join(' ')}" fill="none" stroke="#ef4444" stroke-width="2" />
+    <polyline points="${sensorPts.join(' ')}" fill="none" stroke="#f17971" stroke-width="2" />
   `;
 }
 
@@ -1862,12 +1862,12 @@ async function openSourcesModal() {
 
     res.citations.forEach(c => {
       html += `
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem; margin-bottom:0.75rem;">
-          <div style="font-weight:700; color:#38bdf8;">${c.title}</div>
+        <div style="background:#17211f; border:1px solid #283531; border-radius:6px; padding:0.75rem 1rem; margin-bottom:0.75rem;">
+          <div style="font-weight:700; color:#65dfcd;">${c.title}</div>
           <div style="font-size:0.75rem; color:#94a3b8; margin:0.25rem 0;">
             ${c.author || c.authors || c.organization || ''} (${c.year || ''}) &bull; ${c.journal || c.standard || ''} ${c.doi ? '&bull; DOI: ' + c.doi : ''}
           </div>
-          ${c.formulas ? `<div style="font-family:monospace; font-size:0.75rem; background:#1e293b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
+          ${c.formulas ? `<div style="font-family:monospace; font-size:0.75rem; background:#222f2b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
         </div>
       `;
     });
@@ -1876,7 +1876,7 @@ async function openSourcesModal() {
       </div>
       <div style="margin-bottom:1.25rem;">
         <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">Sensor Hardware &amp; Measurement Bounds</h4>
-        <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:0.75rem 1rem;">
+        <div style="background:#17211f; border:1px solid #283531; border-radius:6px; padding:0.75rem 1rem;">
           <p><strong>DHT22 / AM2302:</strong> Air temp -40°C to 80°C (±0.5°C), RH 0-100% (±2-5%). <em>Known limitation:</em> condensation saturation drift above 99% RH.</p>
           <p><strong>Maxim DS18B20:</strong> 1-Wire thermal probe in 150mm matte-black copper globe (±0.5°C accuracy).</p>
           <p><strong>Stull (2011) Wet-Bulb Screening:</strong> Empirical psychrometric approximation equation carries ±0.5°C to ±1.0°C screening uncertainty relative to an actively aspirated natural wet-bulb.</p>
@@ -1886,7 +1886,7 @@ async function openSourcesModal() {
 
     content.innerHTML = html;
   } catch (err) {
-    content.innerHTML = `<div style="color:#ef4444;">Failed to load sources: ${err.message}</div>`;
+    content.innerHTML = `<div style="color:#f17971;">Failed to load sources: ${err.message}</div>`;
   }
 }
 
@@ -2010,9 +2010,9 @@ function renderTimeMachineDay(index) {
   const sevBadge = document.getElementById("tmAlertSeverityBadge");
   if (sevBadge) {
     if (day.alert_severity === "Alert") {
-      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#ef4444; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">CRITICAL ALERT</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#f17971; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">CRITICAL ALERT</span>`;
     } else if (day.alert_severity === "Warning") {
-      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#f59e0b; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">PREVENTIVE WARNING</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#e9aa62; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">PREVENTIVE WARNING</span>`;
     } else if (day.alert_severity === "Watch") {
       sevBadge.innerHTML = `<span class="badge badge-thresh" style="font-size:0.85rem; padding:0.3rem 0.75rem;">ACTIVE WATCH</span>`;
     } else {
@@ -2023,7 +2023,7 @@ function renderTimeMachineDay(index) {
   const riskScore = document.getElementById("tmRiskScore");
   if (riskScore) {
     riskScore.textContent = `${(day.calibrated_risk * 100).toFixed(1)}%`;
-    riskScore.style.color = day.calibrated_risk >= 0.75 ? "#ef4444" : (day.calibrated_risk >= 0.5 ? "#f59e0b" : "#34d399");
+    riskScore.style.color = day.calibrated_risk >= 0.75 ? "#f17971" : (day.calibrated_risk >= 0.5 ? "#e9aa62" : "#34d399");
   }
 
   const confBand = document.getElementById("tmConformalBand");
@@ -2071,7 +2071,7 @@ function renderTimeMachineDay(index) {
   if (threshStatus) {
     if (day.threshold_alert) {
       threshStatus.textContent = "ALERT ACTIVE (>=35°C)";
-      threshStatus.style.color = "#ef4444";
+      threshStatus.style.color = "#f17971";
     } else {
       threshStatus.textContent = "NORMAL (< 35°C)";
       threshStatus.style.color = "#64748b";
@@ -2098,10 +2098,10 @@ function renderTimeMachineTimeline(selectedIndex) {
   const nPoints = focusEnd - focusStart + 1;
   const stepX = (w - 100) / (nPoints - 1);
 
-  let svg = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="background:#0f172a;">`;
+  let svg = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="background:#17211f;">`;
 
   // Draw grid baseline
-  svg += `<line x1="50" y1="180" x2="${w - 50}" y2="180" stroke="#334155" stroke-width="2"/>`;
+  svg += `<line x1="50" y1="180" x2="${w - 50}" y2="180" stroke="#283531" stroke-width="2"/>`;
 
   // Max visits for scaling
   const maxVisits = 1038;
@@ -2113,7 +2113,7 @@ function renderTimeMachineTimeline(selectedIndex) {
     const barHeight = Math.min(140, Math.max(4, (d.observed_visits_today / maxVisits) * 140));
     const y = 180 - barHeight;
 
-    const barColor = d.is_observed_peak ? "#38bdf8" : (d.observed_visits_today > 100 ? "#f87171" : "#475569");
+    const barColor = d.is_observed_peak ? "#65dfcd" : (d.observed_visits_today > 100 ? "#f87171" : "#475569");
     svg += `<rect x="${x - 6}" y="${y}" width="12" height="${barHeight}" fill="${barColor}" rx="2" opacity="0.8"/>`;
 
     // Date tick (every 2-3 days or key days)
@@ -2124,9 +2124,9 @@ function renderTimeMachineTimeline(selectedIndex) {
     // Flag Pins
     if (d.as_of_date === metrics.first_munzir_alert_date) {
       svg += `
-        <circle cx="${x}" cy="35" r="5" fill="#f59e0b"/>
-        <line x1="${x}" y1="35" x2="${x}" y2="180" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
-        <text x="${x}" y="24" fill="#f59e0b" font-size="10" font-weight="bold" text-anchor="middle">MUNZIR ALERT (${d.as_of_date.substring(5)})</text>
+        <circle cx="${x}" cy="35" r="5" fill="#e9aa62"/>
+        <line x1="${x}" y1="35" x2="${x}" y2="180" stroke="#e9aa62" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="${x}" y="24" fill="#e9aa62" font-size="10" font-weight="bold" text-anchor="middle">MUNZIR ALERT (${d.as_of_date.substring(5)})</text>
       `;
     }
     if (d.as_of_date === metrics.first_threshold_alert_date) {
@@ -2138,8 +2138,8 @@ function renderTimeMachineTimeline(selectedIndex) {
     }
     if (d.is_observed_peak) {
       svg += `
-        <circle cx="${x}" cy="20" r="6" fill="#38bdf8"/>
-        <text x="${x}" y="15" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">HISTORIC PEAK (1,038 visits)</text>
+        <circle cx="${x}" cy="20" r="6" fill="#65dfcd"/>
+        <text x="${x}" y="15" fill="#65dfcd" font-size="11" font-weight="bold" text-anchor="middle">HISTORIC PEAK (1,038 visits)</text>
       `;
     }
   }
@@ -2169,7 +2169,7 @@ function renderTimeMachineTimeline(selectedIndex) {
       svg += `
         <defs>
           <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="#1e293b" stroke-width="3" />
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#222f2b" stroke-width="3" />
           </pattern>
         </defs>
         <rect x="${curX}" y="20" width="${rightW}" height="160" fill="url(#hatch)" opacity="0.6"/>
@@ -2181,9 +2181,9 @@ function renderTimeMachineTimeline(selectedIndex) {
     }
 
     svg += `
-      <line x1="${curX}" y1="10" x2="${curX}" y2="215" stroke="#38bdf8" stroke-width="2.5"/>
-      <circle cx="${curX}" cy="180" r="6" fill="#38bdf8" stroke="#fff" stroke-width="2"/>
-      <text x="${curX}" y="230" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">▲ As-Of: ${timeline[selectedIndex].as_of_date}</text>
+      <line x1="${curX}" y1="10" x2="${curX}" y2="215" stroke="#65dfcd" stroke-width="2.5"/>
+      <circle cx="${curX}" cy="180" r="6" fill="#65dfcd" stroke="#fff" stroke-width="2"/>
+      <text x="${curX}" y="230" fill="#65dfcd" font-size="10" font-weight="bold" text-anchor="middle">▲ As-Of: ${timeline[selectedIndex].as_of_date}</text>
     `;
   }
 
@@ -2357,7 +2357,7 @@ function renderWhatIfResults(data) {
   if (elCasesMedian) {
     if (data.metadata && data.metadata.is_suppressed) {
       elCasesMedian.textContent = "< 10 (Suppressed)";
-      elCasesMedian.style.color = "#f59e0b";
+      elCasesMedian.style.color = "#e9aa62";
     } else {
       elCasesMedian.textContent = `${(casesObj.median || 0).toFixed(1)} cases`;
       elCasesMedian.style.color = "#34d399";
@@ -2436,8 +2436,8 @@ function renderWhatIfExposureChart(det) {
   const svg = `
     <svg width="100%" height="200" viewBox="0 0 460 200" style="overflow:visible; font-family:system-ui, sans-serif;">
       <!-- Grid Lines -->
-      <line x1="40" y1="20" x2="440" y2="20" stroke="#334155" stroke-dasharray="3,3" opacity="0.4"/>
-      <line x1="40" y1="80" x2="440" y2="80" stroke="#334155" stroke-dasharray="3,3" opacity="0.4"/>
+      <line x1="40" y1="20" x2="440" y2="20" stroke="#283531" stroke-dasharray="3,3" opacity="0.4"/>
+      <line x1="40" y1="80" x2="440" y2="80" stroke="#283531" stroke-dasharray="3,3" opacity="0.4"/>
       <line x1="40" y1="145" x2="440" y2="145" stroke="#475569" stroke-width="1.5"/>
 
       <!-- Y Axis Labels -->
@@ -2447,11 +2447,11 @@ function renderWhatIfExposureChart(det) {
 
       <!-- Group 1: Danger Hours (>=32°C) -->
       <!-- Baseline Danger Bar -->
-      <rect x="75" y="${yBaseDanger}" width="42" height="${hBaseDanger}" fill="#ef4444" rx="4"/>
-      <text x="96" y="${yBaseDanger - 6}" fill="#ef4444" font-size="11" font-weight="700" text-anchor="middle">${baseDanger.toFixed(0)}h</text>
+      <rect x="75" y="${yBaseDanger}" width="42" height="${hBaseDanger}" fill="#f17971" rx="4"/>
+      <text x="96" y="${yBaseDanger - 6}" fill="#f17971" font-size="11" font-weight="700" text-anchor="middle">${baseDanger.toFixed(0)}h</text>
 
       <!-- Scenario Danger Bar -->
-      <rect x="125" y="${yScenDanger}" width="42" height="${hScenDanger}" fill="#10b981" rx="4"/>
+      <rect x="125" y="${yScenDanger}" width="42" height="${hScenDanger}" fill="#66d9af" rx="4"/>
       <text x="146" y="${yScenDanger - 6}" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">${scenDanger.toFixed(0)}h</text>
 
       <text x="121" y="165" fill="#f87171" font-size="11" font-weight="700" text-anchor="middle">Danger (≥32°C WBGT)</text>
@@ -2459,20 +2459,20 @@ function renderWhatIfExposureChart(det) {
 
       <!-- Group 2: Caution Hours (>=28°C) -->
       <!-- Baseline Caution Bar -->
-      <rect x="250" y="${yBaseCaution}" width="42" height="${hBaseCaution}" fill="#f59e0b" rx="4"/>
-      <text x="271" y="${yBaseCaution - 6}" fill="#f59e0b" font-size="11" font-weight="700" text-anchor="middle">${baseCaution.toFixed(0)}h</text>
+      <rect x="250" y="${yBaseCaution}" width="42" height="${hBaseCaution}" fill="#e9aa62" rx="4"/>
+      <text x="271" y="${yBaseCaution - 6}" fill="#e9aa62" font-size="11" font-weight="700" text-anchor="middle">${baseCaution.toFixed(0)}h</text>
 
       <!-- Scenario Caution Bar -->
-      <rect x="300" y="${yScenCaution}" width="42" height="${hScenCaution}" fill="#38bdf8" rx="4"/>
-      <text x="321" y="${yScenCaution - 6}" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">${scenCaution.toFixed(0)}h</text>
+      <rect x="300" y="${yScenCaution}" width="42" height="${hScenCaution}" fill="#65dfcd" rx="4"/>
+      <text x="321" y="${yScenCaution - 6}" fill="#65dfcd" font-size="11" font-weight="700" text-anchor="middle">${scenCaution.toFixed(0)}h</text>
 
-      <text x="296" y="165" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Caution (≥28°C WBGT)</text>
+      <text x="296" y="165" fill="#65dfcd" font-size="11" font-weight="700" text-anchor="middle">Caution (≥28°C WBGT)</text>
       <text x="296" y="180" fill="#94a3b8" font-size="9" text-anchor="middle">Base vs Intervention</text>
 
       <!-- Legend -->
-      <circle cx="390" cy="40" r="5" fill="#ef4444"/>
+      <circle cx="390" cy="40" r="5" fill="#f17971"/>
       <text x="402" y="44" fill="#cbd5e1" font-size="10">Baseline</text>
-      <circle cx="390" cy="60" r="5" fill="#10b981"/>
+      <circle cx="390" cy="60" r="5" fill="#66d9af"/>
       <text x="402" y="64" fill="#cbd5e1" font-size="10">Intervention</text>
     </svg>
   `;
@@ -2500,7 +2500,7 @@ function renderWhatIfTornadoChart(tornadoList) {
     const barW = Math.max(8, Math.round((importance / maxPct) * 190));
     const status = item.verification_status || item.status || "VERIFIED";
     const isVerified = status === "VERIFIED";
-    const barColor = isVerified ? "#38bdf8" : "#f59e0b";
+    const barColor = isVerified ? "#65dfcd" : "#e9aa62";
     const swingVal = (item.swing !== undefined ? item.swing : item.swing_cases) || 0;
 
     // Truncate label for clean display
@@ -2512,7 +2512,7 @@ function renderWhatIfTornadoChart(tornadoList) {
       <text x="180" y="${y + 12}" fill="#cbd5e1" font-size="10.5" font-weight="500" text-anchor="end">${shortLabel}</text>
       
       <!-- Bar Background -->
-      <rect x="190" y="${y}" width="190" height="16" fill="#1e293b" rx="3"/>
+      <rect x="190" y="${y}" width="190" height="16" fill="#222f2b" rx="3"/>
       <!-- Active Bar -->
       <rect x="190" y="${y}" width="${barW}" height="16" fill="${barColor}" rx="3">
         <title>${label}: ±${swingVal.toFixed(1)} cases (${importance.toFixed(1)}%)</title>
@@ -2552,12 +2552,12 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Statutory Mandates -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#38bdf8; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#65dfcd; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
           Statutory Regulatory Mandates (UAE Federal Law)
         </h4>
         <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
           <thead>
-            <tr style="border-bottom:1px solid #334155; color:#94a3b8; text-align:left;">
+            <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Mandate / Parameter</th>
               <th style="padding:0.4rem;">Value / Window</th>
               <th style="padding:0.4rem;">Legal Basis &amp; Source</th>
@@ -2570,9 +2570,9 @@ async function openWhatifAssumptionsModal() {
     const stat = assumptions.statutory_regulations || {};
     for (const [k, v] of Object.entries(stat)) {
       html += `
-        <tr style="border-bottom:1px solid #1e293b;">
+        <tr style="border-bottom:1px solid #222f2b;">
           <td style="padding:0.5rem 0.4rem; font-weight:600; color:#fff;">${v.title || k}</td>
-          <td style="padding:0.5rem 0.4rem; color:#38bdf8;">${v.daily_break_window || "12:30-15:00"}</td>
+          <td style="padding:0.5rem 0.4rem; color:#65dfcd;">${v.daily_break_window || "12:30-15:00"}</td>
           <td style="padding:0.5rem 0.4rem; color:#cbd5e1;">${v.authority}: ${v.resolution_number} (${v.effective_year})</td>
           <td style="padding:0.5rem 0.4rem;"><span class="badge badge-normal">${v.status}</span></td>
         </tr>
@@ -2586,12 +2586,12 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Peer-Reviewed Interventions -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#10b981; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#66d9af; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
           Peer-Reviewed Occupational Interventions &amp; Hazard Curves
         </h4>
         <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
           <thead>
-            <tr style="border-bottom:1px solid #334155; color:#94a3b8; text-align:left;">
+            <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Intervention / Effect</th>
               <th style="padding:0.4rem;">Value / Range</th>
               <th style="padding:0.4rem;">Authors &amp; Citation</th>
@@ -2605,11 +2605,11 @@ async function openWhatifAssumptionsModal() {
     const effects = assumptions.intervention_effects || {};
     for (const [k, v] of Object.entries(effects)) {
       html += `
-        <tr style="border-bottom:1px solid #1e293b;">
+        <tr style="border-bottom:1px solid #222f2b;">
           <td style="padding:0.5rem 0.4rem; font-weight:600; color:#fff;">${v.title || k}</td>
           <td style="padding:0.5rem 0.4rem; color:#34d399;">${v.value} ${v.unit || ""}</td>
           <td style="padding:0.5rem 0.4rem; color:#cbd5e1;">${v.authors} (${v.year})</td>
-          <td style="padding:0.5rem 0.4rem;"><a href="${v.url || '#'}" target="_blank" style="color:#38bdf8; text-decoration:underline;">${v.doi || 'Link'}</a></td>
+          <td style="padding:0.5rem 0.4rem;"><a href="${v.url || '#'}" target="_blank" style="color:#65dfcd; text-decoration:underline;">${v.doi || 'Link'}</a></td>
           <td style="padding:0.5rem 0.4rem;"><span class="badge badge-normal">${v.status}</span></td>
         </tr>
       `;
@@ -2622,7 +2622,7 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Operational Costs & UNVERIFIED Disclosures -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#f59e0b; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#e9aa62; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
           Operational Intervention Costs &amp; Commercial Disclosures
         </h4>
         <div style="font-size:0.78rem; color:#94a3b8; margin-bottom:0.6rem;">
@@ -2630,7 +2630,7 @@ async function openWhatifAssumptionsModal() {
         </div>
         <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
           <thead>
-            <tr style="border-bottom:1px solid #334155; color:#94a3b8; text-align:left;">
+            <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Cost Item</th>
               <th style="padding:0.4rem;">Assumed Cost</th>
               <th style="padding:0.4rem;">Contractor Note &amp; Basis</th>
@@ -2645,7 +2645,7 @@ async function openWhatifAssumptionsModal() {
       const isUnv = (v.verification_status || v.status) === "UNVERIFIED";
       const statusText = v.verification_status || v.status || "UNVERIFIED";
       html += `
-        <tr style="border-bottom:1px solid #1e293b;">
+        <tr style="border-bottom:1px solid #222f2b;">
           <td style="padding:0.5rem 0.4rem; font-weight:600; color:#fff;">${v.name || v.title || k}</td>
           <td style="padding:0.5rem 0.4rem; color:#fbbf24;">AED ${v.value} ${v.unit || ""}</td>
           <td style="padding:0.5rem 0.4rem; color:#cbd5e1;">${v.notes || v.source_title || ""}</td>
@@ -2662,7 +2662,7 @@ async function openWhatifAssumptionsModal() {
 
     content.innerHTML = html;
   } catch (err) {
-    content.innerHTML = `<div style="padding:2rem; color:#ef4444; text-align:center;">Failed to load assumptions ledger: ${err.message}</div>`;
+    content.innerHTML = `<div style="padding:2rem; color:#f17971; text-align:center;">Failed to load assumptions ledger: ${err.message}</div>`;
   }
 }
 
@@ -2757,32 +2757,32 @@ function renderRenalTrajectoryChart(cohort, alert) {
   let gridSvg = "";
   for (let d = -14; d <= 2; d += 2) {
     const x = getX(d);
-    gridSvg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />`;
+    gridSvg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="#222f2b" stroke-width="1" stroke-dasharray="3,3" />`;
     const label = d === 0 ? "Day 0 (ED Peak)" : (d === -11.5 ? "Day -11.5" : `Day ${d}`);
     gridSvg += `<text x="${x}" y="${padT + chartH + 18}" fill="#64748b" font-size="10" text-anchor="middle" font-family="sans-serif">${label}</text>`;
   }
 
   for (let g = 40; g <= 120; g += 20) {
     const y = getYEgfr(g);
-    gridSvg += `<line x1="${padL}" y1="${y}" x2="${padL + chartW}" stroke="#1e293b" stroke-width="1" />`;
-    gridSvg += `<text x="${padL - 8}" y="${y + 3}" fill="#38bdf8" font-size="10" text-anchor="end" font-family="sans-serif">${g}</text>`;
+    gridSvg += `<line x1="${padL}" y1="${y}" x2="${padL + chartW}" stroke="#222f2b" stroke-width="1" />`;
+    gridSvg += `<text x="${padL - 8}" y="${y + 3}" fill="#65dfcd" font-size="10" text-anchor="end" font-family="sans-serif">${g}</text>`;
   }
 
   for (let pct = 0; pct <= 60; pct += 20) {
     const y = getYDehyd(pct);
-    gridSvg += `<text x="${padL + chartW + 8}" y="${y + 3}" fill="#f59e0b" font-size="10" text-anchor="start" font-family="sans-serif">${pct}%</text>`;
+    gridSvg += `<text x="${padL + chartW + 8}" y="${y + 3}" fill="#e9aa62" font-size="10" text-anchor="start" font-family="sans-serif">${pct}%</text>`;
   }
 
   container.innerHTML = `
     <svg class="renal-chart-svg" viewBox="0 0 ${w} ${h}">
       <defs>
         <linearGradient id="earlyZoneGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#10b981" stop-opacity="0.14" />
-          <stop offset="100%" stop-color="#10b981" stop-opacity="0.04" />
+          <stop offset="0%" stop-color="#66d9af" stop-opacity="0.14" />
+          <stop offset="100%" stop-color="#66d9af" stop-opacity="0.04" />
         </linearGradient>
         <linearGradient id="dangerZoneGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#ef4444" stop-opacity="0.06" />
-          <stop offset="100%" stop-color="#ef4444" stop-opacity="0.22" />
+          <stop offset="0%" stop-color="#f17971" stop-opacity="0.06" />
+          <stop offset="100%" stop-color="#f17971" stop-opacity="0.22" />
         </linearGradient>
       </defs>
 
@@ -2794,26 +2794,26 @@ function renderRenalTrajectoryChart(cohort, alert) {
       ${gridSvg}
 
       <!-- eGFR Decline Curve (Cyan) -->
-      <polyline fill="none" stroke="#38bdf8" stroke-width="3" points="${egfrPoints}" />
+      <polyline fill="none" stroke="#65dfcd" stroke-width="3" points="${egfrPoints}" />
 
       <!-- Dehydration Surge Curve (Amber) -->
-      <polyline fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="6,3" points="${dehydPoints}" />
+      <polyline fill="none" stroke="#e9aa62" stroke-width="3" stroke-dasharray="6,3" points="${dehydPoints}" />
 
       <!-- Munzir Alert Marker at Day -11.5 -->
-      <line x1="${munzirTriggerX}" y1="${padT - 10}" x2="${munzirTriggerX}" y2="${padT + chartH}" stroke="#10b981" stroke-width="2" />
-      <circle cx="${munzirTriggerX}" cy="${getYEgfr(97.7)}" r="7" fill="#10b981" stroke="#0f172a" stroke-width="2" />
-      <rect x="${munzirTriggerX - 70}" y="${padT - 10}" width="140" height="20" rx="4" fill="#065f46" stroke="#10b981" />
+      <line x1="${munzirTriggerX}" y1="${padT - 10}" x2="${munzirTriggerX}" y2="${padT + chartH}" stroke="#66d9af" stroke-width="2" />
+      <circle cx="${munzirTriggerX}" cy="${getYEgfr(97.7)}" r="7" fill="#66d9af" stroke="#17211f" stroke-width="2" />
+      <rect x="${munzirTriggerX - 70}" y="${padT - 10}" width="140" height="20" rx="4" fill="#065f46" stroke="#66d9af" />
       <text x="${munzirTriggerX}" y="${padT + 4}" fill="#a7f3d0" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">MUNZIR ALERT (+11.5d)</text>
 
       <!-- Hospital Clinical Surge Marker at Day 0 -->
-      <line x1="${hospitalPeakX}" y1="${padT}" x2="${hospitalPeakX}" y2="${padT + chartH}" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" />
-      <circle cx="${hospitalPeakX}" cy="${getYDehyd(58.0)}" r="7" fill="#ef4444" stroke="#0f172a" stroke-width="2" />
-      <rect x="${hospitalPeakX - 60}" y="${padT + 40}" width="120" height="20" rx="4" fill="#7f1d1d" stroke="#ef4444" />
+      <line x1="${hospitalPeakX}" y1="${padT}" x2="${hospitalPeakX}" y2="${padT + chartH}" stroke="#f17971" stroke-width="2" stroke-dasharray="4,4" />
+      <circle cx="${hospitalPeakX}" cy="${getYDehyd(58.0)}" r="7" fill="#f17971" stroke="#17211f" stroke-width="2" />
+      <rect x="${hospitalPeakX - 60}" y="${padT + 40}" width="120" height="20" rx="4" fill="#7f1d1d" stroke="#f17971" />
       <text x="${hospitalPeakX}" y="${padT + 54}" fill="#fecaca" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">RETROSPECTIVE PEAK</text>
 
       <!-- Legend -->
-      <text x="${padL + 10}" y="${padT + 20}" fill="#38bdf8" font-size="11" font-weight="700" font-family="sans-serif">― Mean eGFR Decline (CKD-EPI 2021)</text>
-      <text x="${padL + 10}" y="${padT + 36}" fill="#f59e0b" font-size="11" font-weight="700" font-family="sans-serif">--- Dehydration Rate (USG ≥ 1.025)</text>
+      <text x="${padL + 10}" y="${padT + 20}" fill="#65dfcd" font-size="11" font-weight="700" font-family="sans-serif">― Mean eGFR Decline (CKD-EPI 2021)</text>
+      <text x="${padL + 10}" y="${padT + 36}" fill="#e9aa62" font-size="11" font-weight="700" font-family="sans-serif">--- Dehydration Rate (USG ≥ 1.025)</text>
     </svg>
   `;
 }
@@ -2837,8 +2837,8 @@ async function runDeconvolution() {
     
     if (tbody) {
       tbody.innerHTML = data.candidates.map(c => `
-        <tr style="border-bottom:1px solid #1e293b;">
-          <td style="font-weight:700; color:#38bdf8;">${c.site_id}</td>
+        <tr style="border-bottom:1px solid #222f2b;">
+          <td style="font-weight:700; color:#65dfcd;">${c.site_id}</td>
           <td style="color:#fff;">${c.site_name}</td>
           <td><span class="badge ${c.posterior_probability > 0.4 ? 'badge-alert' : 'badge-watch'}">${(c.posterior_probability * 100).toFixed(1)}%</span></td>
           <td style="color:#fbbf24; font-weight:600;">${c.attributed_cases} cases</td>
@@ -2868,7 +2868,7 @@ async function runDeconvolution() {
 
   } catch (err) {
     if (tbody) {
-      tbody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">Deconvolution error: ${err.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="color:#f17971; text-align:center;">Deconvolution error: ${err.message}</td></tr>`;
     }
   }
 }
@@ -2889,34 +2889,34 @@ function renderDeconvolutionMap(candidates, ellipse, district) {
     <svg class="deconvolve-svg-canvas" viewBox="0 0 ${w} ${h}">
       <defs>
         <linearGradient id="transitLineGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#ef4444" />
-          <stop offset="50%" stop-color="#38bdf8" />
-          <stop offset="100%" stop-color="#f59e0b" />
+          <stop offset="0%" stop-color="#f17971" />
+          <stop offset="50%" stop-color="#65dfcd" />
+          <stop offset="100%" stop-color="#e9aa62" />
         </linearGradient>
       </defs>
 
       <!-- Coastline Simulation -->
-      <path d="M 0,160 Q 250,140 450,100 T ${w},30" fill="none" stroke="rgba(56,189,248,0.15)" stroke-width="2" />
-      <text x="30" y="145" fill="rgba(56,189,248,0.4)" font-size="11" font-style="italic" font-family="sans-serif">Arabian Gulf Coastline</text>
+      <path d="M 0,160 Q 250,140 450,100 T ${w},30" fill="none" stroke="rgba(101, 223, 205,0.15)" stroke-width="2" />
+      <text x="30" y="145" fill="rgba(101, 223, 205,0.4)" font-size="11" font-style="italic" font-family="sans-serif">Arabian Gulf Coastline</text>
 
       <!-- Worker Commuter Bus Vector Corridor (E11 / Sheikh Zayed Road) -->
       <line x1="${originX}" y1="${originY}" x2="${destX}" y2="${destY}" stroke="url(#transitLineGrad)" stroke-width="3" stroke-dasharray="8,5" />
       
       <!-- Midpoint Bus Indicator -->
-      <circle cx="${(originX + destX) / 2}" cy="${(originY + destY) / 2}" r="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
-      <text x="${(originX + destX) / 2}" y="${(originY + destY) / 2 + 4}" fill="#38bdf8" font-size="12" text-anchor="middle"></text>
+      <circle cx="${(originX + destX) / 2}" cy="${(originY + destY) / 2}" r="14" fill="#17211f" stroke="#65dfcd" stroke-width="2" />
+      <text x="${(originX + destX) / 2}" y="${(originY + destY) / 2 + 4}" fill="#65dfcd" font-size="12" text-anchor="middle"></text>
       <text x="${(originX + destX) / 2}" y="${(originY + destY) / 2 + 22}" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="sans-serif">Sheikh Zayed Road Corridor (42 km &bull; 6.5h lag)</text>
 
       <!-- 95% Confidence Spatial Ellipse around Jebel Ali -->
-      <ellipse cx="${originX + 30}" cy="${originY - 15}" rx="95" ry="45" transform="rotate(-28 ${originX + 30} ${originY - 15})" fill="rgba(245, 158, 11, 0.08)" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" />
-      <text x="${originX + 30}" y="${originY - 45}" fill="#f59e0b" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif"> 95% Spatial Confidence Ellipse (~5.16 km²)</text>
+      <ellipse cx="${originX + 30}" cy="${originY - 15}" rx="95" ry="45" transform="rotate(-28 ${originX + 30} ${originY - 15})" fill="rgba(245, 158, 11, 0.08)" stroke="#e9aa62" stroke-width="2" stroke-dasharray="5,4" />
+      <text x="${originX + 30}" y="${originY - 45}" fill="#e9aa62" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif"> 95% Spatial Confidence Ellipse (~5.16 km²)</text>
 
       <!-- Exposure Source Marker: Jebel Ali (Red) -->
-      <circle cx="${originX}" cy="${originY}" r="18" fill="rgba(239, 68, 68, 0.25)" stroke="#ef4444" stroke-width="2" />
-      <circle cx="${originX}" cy="${originY}" r="7" fill="#ef4444" />
-      <rect x="${originX - 85}" y="${originY + 14}" width="170" height="34" rx="4" fill="#0f172a" stroke="#ef4444" />
+      <circle cx="${originX}" cy="${originY}" r="18" fill="rgba(239, 68, 68, 0.25)" stroke="#f17971" stroke-width="2" />
+      <circle cx="${originX}" cy="${originY}" r="7" fill="#f17971" />
+      <rect x="${originX - 85}" y="${originY + 14}" width="170" height="34" rx="4" fill="#17211f" stroke="#f17971" />
       <text x="${originX}" y="${originY + 28}" fill="#fecaca" font-size="10" font-weight="800" text-anchor="middle" font-family="sans-serif">SITE-JA-01 (Jebel Ali Port)</text>
-      <text x="${originX}" y="${originY + 41}" fill="#38bdf8" font-size="9" font-weight="700" text-anchor="middle" font-family="sans-serif">53.4% Posterior Hazard Origin</text>
+      <text x="${originX}" y="${originY + 41}" fill="#65dfcd" font-size="9" font-weight="700" text-anchor="middle" font-family="sans-serif">53.4% Posterior Hazard Origin</text>
 
       <!-- Secondary Sources: Al Quoz & Dubai South -->
       <circle cx="340" cy="150" r="5" fill="#64748b" />
@@ -2926,9 +2926,9 @@ function renderDeconvolutionMap(candidates, ellipse, district) {
       <text x="190" y="271" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="sans-serif">SITE-DS-01 (Dubai South 18.4%)</text>
 
       <!-- Destination Marker: Muhaisnah Clinic Hub (Amber) -->
-      <circle cx="${destX}" cy="${destY}" r="14" fill="rgba(245, 158, 11, 0.25)" stroke="#f59e0b" stroke-width="2" />
-      <circle cx="${destX}" cy="${destY}" r="6" fill="#f59e0b" />
-      <rect x="${destX - 90}" y="${destY + 12}" width="180" height="34" rx="4" fill="#0f172a" stroke="#f59e0b" />
+      <circle cx="${destX}" cy="${destY}" r="14" fill="rgba(245, 158, 11, 0.25)" stroke="#e9aa62" stroke-width="2" />
+      <circle cx="${destX}" cy="${destY}" r="6" fill="#e9aa62" />
+      <rect x="${destX - 90}" y="${destY + 12}" width="180" height="34" rx="4" fill="#17211f" stroke="#e9aa62" />
       <text x="${destX}" y="${destY + 26}" fill="#fef3c7" font-size="10" font-weight="800" text-anchor="middle" font-family="sans-serif">${district} Labor Dorms</text>
       <text x="${destX}" y="${destY + 39}" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="sans-serif">45 Delayed Clinic Presentations</text>
     </svg>
@@ -2969,12 +2969,12 @@ async function optimizeDispatch() {
 
     if (tbody) {
       tbody.innerHTML = data.allocations.map(a => `
-        <tr style="border-bottom:1px solid #1e293b;">
+        <tr style="border-bottom:1px solid #222f2b;">
           <td style="font-weight:700; color:#fff;">${a.depot_name}</td>
           <td style="color:#94a3b8;">${a.distance_km} km</td>
-          <td style="color:#38bdf8; font-weight:600;">${a.cooling_buses} buses</td>
-          <td style="color:#10b981;">${a.misting_trailers} trailers</td>
-          <td style="color:#f59e0b;">${a.water_tons} Tons</td>
+          <td style="color:#65dfcd; font-weight:600;">${a.cooling_buses} buses</td>
+          <td style="color:#66d9af;">${a.misting_trailers} trailers</td>
+          <td style="color:#e9aa62;">${a.water_tons} Tons</td>
           <td style="color:#cbd5e1;">~${a.transit_mins} mins</td>
         </tr>
       `).join("");
@@ -2985,7 +2985,7 @@ async function optimizeDispatch() {
 
   } catch (err) {
     if (tbody) {
-      tbody.innerHTML = `<tr><td colspan="6" style="color:#ef4444; text-align:center;">Dispatch error: ${err.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="color:#f17971; text-align:center;">Dispatch error: ${err.message}</td></tr>`;
     }
   }
 }
@@ -3010,36 +3010,36 @@ function renderDispatchRadar(data) {
     <svg class="dispatch-svg-canvas" viewBox="0 0 ${w} ${h}">
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#66d9af" />
         </marker>
       </defs>
 
       <!-- Route Vectors -->
-      <line x1="${d1X}" y1="${d1Y}" x2="${siteX + 50}" y2="${siteY - 15}" stroke="#10b981" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
-      <line x1="${d2X}" y1="${d2Y}" x2="${siteX + 50}" y2="${siteY}" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+      <line x1="${d1X}" y1="${d1Y}" x2="${siteX + 50}" y2="${siteY - 15}" stroke="#66d9af" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
+      <line x1="${d2X}" y1="${d2Y}" x2="${siteX + 50}" y2="${siteY}" stroke="#65dfcd" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
       <line x1="${d3X}" y1="${d3Y}" x2="${siteX + 50}" y2="${siteY + 15}" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3" />
 
       <!-- Target Worksite: SITE-JA-01 -->
-      <rect x="${siteX - 110}" y="${siteY - 45}" width="210" height="90" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
-      <text x="${siteX - 5}" y="${siteY - 24}" fill="#ef4444" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">TARGET HAZARD SITE</text>
+      <rect x="${siteX - 110}" y="${siteY - 45}" width="210" height="90" rx="8" fill="#222f2b" stroke="#f17971" stroke-width="2" />
+      <text x="${siteX - 5}" y="${siteY - 24}" fill="#f17971" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">TARGET HAZARD SITE</text>
       <text x="${siteX - 5}" y="${siteY - 8}" fill="#fff" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Jebel Ali Deepwater Port</text>
       <text x="${siteX - 5}" y="${siteY + 8}" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="sans-serif">1,200 Workers &bull; Peak WBGT 33.8°C</text>
-      <text x="${siteX - 5}" y="${siteY + 28}" fill="#10b981" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif">DCAS Ambulance Pre-Positioned</text>
+      <text x="${siteX - 5}" y="${siteY + 28}" fill="#66d9af" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif">DCAS Ambulance Pre-Positioned</text>
 
       <!-- Depot 1: Jebel Ali Operations Yard -->
-      <rect x="${d1X}" y="${d1Y - 25}" width="220" height="50" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
-      <text x="${d1X + 12}" y="${d1Y - 8}" fill="#10b981" font-size="11" font-weight="700" font-family="sans-serif">Jebel Ali Operations Yard</text>
+      <rect x="${d1X}" y="${d1Y - 25}" width="220" height="50" rx="6" fill="#17211f" stroke="#66d9af" stroke-width="1.5" />
+      <text x="${d1X + 12}" y="${d1Y - 8}" fill="#66d9af" font-size="11" font-weight="700" font-family="sans-serif">Jebel Ali Operations Yard</text>
       <text x="${d1X + 12}" y="${d1Y + 8}" fill="#cbd5e1" font-size="10" font-family="sans-serif">3 Cooling Buses &bull; 7 Misting Trailers</text>
-      <text x="${d1X + 12}" y="${d1Y + 20}" fill="#38bdf8" font-size="9" font-weight="700" font-family="sans-serif">ETA: ~18 min transit (Primary)</text>
+      <text x="${d1X + 12}" y="${d1Y + 20}" fill="#65dfcd" font-size="9" font-weight="700" font-family="sans-serif">ETA: ~18 min transit (Primary)</text>
 
       <!-- Depot 2: Al Quoz Fleet Yard -->
-      <rect x="${d2X}" y="${d2Y - 25}" width="210" height="50" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
-      <text x="${d2X + 12}" y="${d2Y - 8}" fill="#38bdf8" font-size="11" font-weight="700" font-family="sans-serif">Al Quoz Fleet Center</text>
+      <rect x="${d2X}" y="${d2Y - 25}" width="210" height="50" rx="6" fill="#17211f" stroke="#65dfcd" stroke-width="1.5" />
+      <text x="${d2X + 12}" y="${d2Y - 8}" fill="#65dfcd" font-size="11" font-weight="700" font-family="sans-serif">Al Quoz Fleet Center</text>
       <text x="${d2X + 12}" y="${d2Y + 8}" fill="#cbd5e1" font-size="10" font-family="sans-serif">2 Cooling Buses &bull; 5 Misting Trailers</text>
       <text x="${d2X + 12}" y="${d2Y + 20}" fill="#94a3b8" font-size="9" font-family="sans-serif">ETA: ~25 min transit</text>
 
       <!-- Depot 3: Deira Central Depot -->
-      <rect x="${d3X}" y="${d3Y - 20}" width="200" height="40" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1" />
+      <rect x="${d3X}" y="${d3Y - 20}" width="200" height="40" rx="6" fill="#17211f" stroke="#475569" stroke-width="1" />
       <text x="${d3X + 12}" y="${d3Y - 5}" fill="#94a3b8" font-size="10" font-weight="700" font-family="sans-serif">Deira Central Depot</text>
       <text x="${d3X + 12}" y="${d3Y + 10}" fill="#64748b" font-size="9" font-family="sans-serif">Strategic Reserve &bull; ~35 min</text>
     </svg>
@@ -3279,7 +3279,7 @@ async function loadCopilotView() {
     renderCodexArticles(statutoryCodexCache);
   } catch (err) {
     console.warn("Failed to load statutory codex:", err);
-    if (codexList) codexList.innerHTML = `<div style="color:#ef4444; font-size:0.8rem;">Failed to load codex: ${err.message}</div>`;
+    if (codexList) codexList.innerHTML = `<div style="color:#f17971; font-size:0.8rem;">Failed to load codex: ${err.message}</div>`;
   }
 }
 
@@ -3295,15 +3295,15 @@ function renderCodexArticles(articles) {
   codexList.innerHTML = "";
   articles.forEach(art => {
     const item = document.createElement("div");
-    item.style.cssText = "padding:0.6rem; background:#020617; border:1px solid #1e293b; border-radius:4px; font-size:0.78rem;";
+    item.style.cssText = "padding:0.6rem; background:#131c1a; border:1px solid #222f2b; border-radius:4px; font-size:0.78rem;";
     item.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
-        <span style="font-weight:700; color:#38bdf8;">${escapeHtml(art.instrument)} ${escapeHtml(art.article_number)}</span>
-        <span class="badge" style="background:#1e293b; color:#94a3b8; font-size:0.65rem;">${escapeHtml(art.authority.split('(')[0].trim())}</span>
+        <span style="font-weight:700; color:#65dfcd;">${escapeHtml(art.instrument)} ${escapeHtml(art.article_number)}</span>
+        <span class="badge" style="background:#222f2b; color:#94a3b8; font-size:0.65rem;">${escapeHtml(art.authority.split('(')[0].trim())}</span>
       </div>
       <div style="font-weight:600; color:#e2e8f0; margin-bottom:0.25rem;">${escapeHtml(art.title)}</div>
       <div style="color:#94a3b8; line-height:1.4; margin-bottom:0.35rem;">${escapeHtml(art.legal_text)}</div>
-      ${art.penalties ? `<div style="color:#f59e0b; font-size:0.72rem;"><strong>Penalties:</strong> ${escapeHtml(art.penalties)}</div>` : ''}
+      ${art.penalties ? `<div style="color:#e9aa62; font-size:0.72rem;"><strong>Penalties:</strong> ${escapeHtml(art.penalties)}</div>` : ''}
     `;
     codexList.appendChild(item);
   });
@@ -3374,7 +3374,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
   // Append typing indicator
   const loadingBubble = document.createElement("div");
-  loadingBubble.style.cssText = "align-self:flex-start; max-width:85%; background:#1e293b; color:#94a3b8; padding:0.6rem 0.9rem; border-radius:12px 12px 12px 0; font-size:0.8rem; border-left:3px solid #38bdf8;";
+  loadingBubble.style.cssText = "align-self:flex-start; max-width:85%; background:#222f2b; color:#94a3b8; padding:0.6rem 0.9rem; border-radius:12px 12px 12px 0; font-size:0.8rem; border-left:3px solid #65dfcd;";
   loadingBubble.innerHTML = `Jais Sovereign Copilot reasoning across Lakehouse state &amp; Resolution 44 codex...`;
   stream.appendChild(loadingBubble);
   stream.scrollTop = stream.scrollHeight;
@@ -3395,18 +3395,18 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
     // Append response bubble
     const botBubble = document.createElement("div");
-    botBubble.style.cssText = "align-self:flex-start; max-width:92%; background:#0f172a; border:1px solid #334155; border-left:3px solid #10b981; border-radius:12px 12px 12px 0; padding:0.85rem; font-size:0.83rem; display:flex; flex-direction:column; gap:0.5rem;";
+    botBubble.style.cssText = "align-self:flex-start; max-width:92%; background:#17211f; border:1px solid #283531; border-left:3px solid #66d9af; border-radius:12px 12px 12px 0; padding:0.85rem; font-size:0.83rem; display:flex; flex-direction:column; gap:0.5rem;";
 
     const safeEng = escapeHtml(res.response_text).replace(/\n/g, "<br>");
     const safeAr = escapeHtml(res.arabic_translation).replace(/\n/g, "<br>");
 
     botBubble.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; border-bottom:1px solid #1e293b; padding-bottom:0.4rem;">
-        <div style="font-weight:700; color:#38bdf8; font-size:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; border-bottom:1px solid #222f2b; padding-bottom:0.4rem;">
+        <div style="font-weight:700; color:#65dfcd; font-size:0.75rem;">
           Inception 42 Jais (${escapeHtml(res.execution_mode)})
         </div>
         <div style="display:flex; gap:0.35rem; align-items:center;">
-          <span class="badge" style="background:#10b981; color:#fff; font-size:0.65rem;">0% HALLUCINATION</span>
+          <span class="badge" style="background:#66d9af; color:#fff; font-size:0.65rem;">0% HALLUCINATION</span>
           <span class="badge badge-watch" style="font-size:0.65rem;">${escapeHtml(res.intent.toUpperCase())}</span>
         </div>
       </div>
@@ -3415,8 +3415,8 @@ async function executeCopilotQuery(query, siteId, streamId) {
         ${safeEng}
       </div>
 
-      <div style="direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; background:#1e293b; padding:0.5rem 0.75rem; border-radius:4px; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-right:3px solid #38bdf8;">
-        <span style="font-size:0.7rem; color:#38bdf8; font-weight:700; display:block; margin-bottom:0.2rem;">الرد السيادي المعتمد:</span>
+      <div style="direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; background:#222f2b; padding:0.5rem 0.75rem; border-radius:4px; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-right:3px solid #65dfcd;">
+        <span style="font-size:0.7rem; color:#65dfcd; font-weight:700; display:block; margin-bottom:0.2rem;">الرد السيادي المعتمد:</span>
         ${safeAr}
       </div>
 
@@ -3440,7 +3440,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
   } catch (err) {
     if (loadingBubble.parentNode) loadingBubble.parentNode.removeChild(loadingBubble);
     const errBubble = document.createElement("div");
-    errBubble.style.cssText = "align-self:flex-start; color:#ef4444; background:#1e293b; padding:0.6rem; border-radius:6px; font-size:0.8rem;";
+    errBubble.style.cssText = "align-self:flex-start; color:#f17971; background:#222f2b; padding:0.6rem; border-radius:6px; font-size:0.8rem;";
     errBubble.textContent = `Error contacting Copilot: ${err.message}`;
     stream.appendChild(errBubble);
   }
@@ -3487,7 +3487,7 @@ async function openActionDossier(siteId) {
 
     renderDossierModal(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="color:#ef4444; text-align:center; padding:2rem;">Failed to generate dossier: ${escapeHtml(err.message)}</div>`;
+    content.innerHTML = `<div style="color:#f17971; text-align:center; padding:2rem;">Failed to generate dossier: ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -3508,13 +3508,13 @@ function renderDossierModal(dossier, container) {
   let checklistHtml = "";
   (dossier.operational_checklist || []).forEach(step => {
     checklistHtml += `
-      <div style="background:#020617; border:1px solid #1e293b; border-radius:6px; padding:0.75rem; margin-bottom:0.6rem;">
+      <div style="background:#131c1a; border:1px solid #222f2b; border-radius:6px; padding:0.75rem; margin-bottom:0.6rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
-          <strong style="color:#38bdf8; font-size:0.85rem;">Step ${step.step_number}: ${escapeHtml(step.action_title)}</strong>
+          <strong style="color:#65dfcd; font-size:0.85rem;">Step ${step.step_number}: ${escapeHtml(step.action_title)}</strong>
           <span class="badge badge-warning" style="font-size:0.68rem;">${escapeHtml(step.timeline_window)}</span>
         </div>
         <div style="color:#cbd5e1; font-size:0.82rem; margin-bottom:0.4rem;">${escapeHtml(step.action_detail)}</div>
-        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#94a3b8; border-top:1px dashed #1e293b; padding-top:0.35rem;">
+        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#94a3b8; border-top:1px dashed #222f2b; padding-top:0.35rem;">
           <span><strong>Lead:</strong> ${escapeHtml(step.responsible_lead)}</span>
           <span><strong>Basis:</strong> ${escapeHtml(step.compliance_framework)}</span>
         </div>
@@ -3524,28 +3524,28 @@ function renderDossierModal(dossier, container) {
 
   let shapHtml = "";
   for (const [k, v] of Object.entries(diag.shap_attributions || {})) {
-    shapHtml += `<span class="badge" style="background:#1e293b; color:#cbd5e1; font-size:0.75rem;">${escapeHtml(k)}: ${(v * 100).toFixed(1)}%</span> `;
+    shapHtml += `<span class="badge" style="background:#222f2b; color:#cbd5e1; font-size:0.75rem;">${escapeHtml(k)}: ${(v * 100).toFixed(1)}%</span> `;
   }
 
   container.innerHTML = `
     <!-- Top Summary Banner -->
     <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:0.75rem; margin-bottom:1.25rem;">
-      <div class="kpi-card" style="background:#020617; border:1px solid #1e293b; padding:0.75rem; border-radius:6px;">
+      <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
         <div style="font-size:0.72rem; color:#94a3b8;">ALERT SEVERITY</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#ef4444;">${escapeHtml(dossier.alert_tier.toUpperCase())}</div>
+        <div style="font-size:1.3rem; font-weight:800; color:#f17971;">${escapeHtml(dossier.alert_tier.toUpperCase())}</div>
         <div style="font-size:0.7rem; color:#94a3b8;">Risk Prob: ${dossier.calibrated_probability_pct}%</div>
       </div>
-      <div class="kpi-card" style="background:#020617; border:1px solid #1e293b; padding:0.75rem; border-radius:6px;">
+      <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
         <div style="font-size:0.72rem; color:#94a3b8;">PEAK WBGT THERMAL</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#f59e0b;">${t.current_wbgt_c}°C</div>
+        <div style="font-size:1.3rem; font-weight:800; color:#e9aa62;">${t.current_wbgt_c}°C</div>
         <div style="font-size:0.7rem; color:#94a3b8;">3-Day Peak: ${t.forecast_3d_wbgt_max_c}°C</div>
       </div>
-      <div class="kpi-card" style="background:#020617; border:1px solid #1e293b; padding:0.75rem; border-radius:6px;">
+      <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
         <div style="font-size:0.72rem; color:#94a3b8;">SENTINEL ESP32 DELTA</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#38bdf8;">${t.microclimate_delta_c}</div>
+        <div style="font-size:1.3rem; font-weight:800; color:#65dfcd;">${t.microclimate_delta_c}</div>
         <div style="font-size:0.7rem; color:#94a3b8;">Hardware Node: ${t.sentinel_node_id || 'N/A'}</div>
       </div>
-      <div class="kpi-card" style="background:#020617; border:1px solid #1e293b; padding:0.75rem; border-radius:6px;">
+      <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
         <div style="font-size:0.72rem; color:#94a3b8;">WORKFORCE AT RISK</div>
         <div style="font-size:1.3rem; font-weight:800; color:#a855f7;">${t.workforce_size.toLocaleString()}</div>
         <div style="font-size:0.7rem; color:#94a3b8;">DQ Completeness: ${dossier.dq_completeness_pct}%</div>
@@ -3553,8 +3553,8 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 1. Threat Trajectory -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #1e293b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#38bdf8; margin:0 0 0.5rem 0;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 0.5rem 0;">
         1. Threat Trajectory &amp; Microclimate Exposure
       </h4>
       <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.5;">
@@ -3565,12 +3565,12 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 2. Diagnostic Attribution (SHAP & Renal) -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #1e293b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#10b981; margin:0 0 0.5rem 0;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
         2. Multi-Signal Diagnostic Attribution (SHAP) &amp; Renal Surveillance
       </h4>
       <div style="margin-bottom:0.75rem;">${shapHtml}</div>
-      <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.5; background:#020617; padding:0.6rem; border-radius:4px;">
+      <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.5; background:#131c1a; padding:0.6rem; border-radius:4px;">
         <strong>Sub-Clinical Renal Panel (CKD-EPI &amp; KDIGO):</strong>
         Screened cohort of ${diag.renal_surveillance.screened_cohort} workers demonstrates mean eGFR of ${diag.renal_surveillance.mean_egfr_ml_min} mL/min,
         dehydration prevalence of ${diag.renal_surveillance.dehydration_rate_pct}%, and KDIGO Stage 1 incidence of ${diag.renal_surveillance.kdigo_stage1_rate_per_1k} per 1k.
@@ -3579,7 +3579,7 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 3. Statutory Trigger -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #4338ca;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #4338ca;">
       <h4 style="font-size:0.95rem; font-weight:700; color:#818cf8; margin:0 0 0.5rem 0;">
         3. Statutory Mandate &amp; Regulatory Trigger
       </h4>
@@ -3594,16 +3594,16 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 4. Immediate 30-Minute Operational Checklist -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #1e293b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#38bdf8; margin:0 0 0.75rem 0;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 0.75rem 0;">
         4. Immediate 30-Minute Operational Checklist
       </h4>
       ${checklistHtml}
     </div>
 
     <!-- 5. Municipal Fleet Directive -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #1e293b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#f59e0b; margin:0 0 0.5rem 0;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#e9aa62; margin:0 0 0.5rem 0;">
         5. Municipal Cooling Fleet &amp; Logistics Directive
       </h4>
       <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; font-size:0.8rem; color:#cbd5e1;">
@@ -3620,7 +3620,7 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 6. RACI Matrix -->
-    <div style="margin-bottom:1.5rem; background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #1e293b;">
+    <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
       <h4 style="font-size:0.95rem; font-weight:700; color:#a855f7; margin:0 0 0.5rem 0;">
         6. RACI Stakeholder Accountability Matrix
       </h4>
@@ -3633,11 +3633,11 @@ function renderDossierModal(dossier, container) {
     </div>
 
     <!-- 7. Frontline WhatsApp Preview -->
-    <div style="background:#0f172a; padding:1rem; border-radius:6px; border:1px solid #10b981;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#10b981; margin:0 0 0.5rem 0;">
+    <div style="background:#17211f; padding:1rem; border-radius:6px; border:1px solid #66d9af;">
+      <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
         7. Frontline WhatsApp &amp; Multilingual Broadcast Preview
       </h4>
-      <pre style="background:#020617; padding:0.75rem; border-radius:4px; font-size:0.75rem; line-height:1.4; color:#a7f3d0; overflow-x:auto; margin:0;">${escapeHtml(prev.whatsapp_preview_markdown || prev.english_text)}</pre>
+      <pre style="background:#131c1a; padding:0.75rem; border-radius:4px; font-size:0.75rem; line-height:1.4; color:#a7f3d0; overflow-x:auto; margin:0;">${escapeHtml(prev.whatsapp_preview_markdown || prev.english_text)}</pre>
     </div>
   `;
 }
@@ -3677,9 +3677,9 @@ async function loadSafeHarborView() {
 
     if (statListEl && data.statutory_guarantees) {
       statListEl.innerHTML = data.statutory_guarantees.map(g => `
-        <div style="background:#1e293b; padding:1rem; border-radius:6px; border-left:3px solid #38bdf8;">
+        <div style="background:#222f2b; padding:1rem; border-radius:6px; border-left:3px solid #65dfcd;">
           <div style="font-size:0.85rem; font-weight:700; color:#fff;">${escapeHtml(g.decree)}</div>
-          <div style="font-size:0.75rem; color:#38bdf8; margin:0.25rem 0;">${escapeHtml(g.article)} (${escapeHtml(g.jurisdiction)})</div>
+          <div style="font-size:0.75rem; color:#65dfcd; margin:0.25rem 0;">${escapeHtml(g.article)} (${escapeHtml(g.jurisdiction)})</div>
           <div style="font-size:0.78rem; color:#cbd5e1; line-height:1.5;">${escapeHtml(g.mandate)}</div>
         </div>
       `).join("");
@@ -3697,7 +3697,7 @@ async function testDisciplinaryQuery() {
 
   if (placeholder) placeholder.style.display = "none";
   resultBox.style.display = "block";
-  resultBox.innerHTML = `<div style="color:#38bdf8; font-size:0.82rem;">Transmitting employer disciplinary query to API gateway...</div>`;
+  resultBox.innerHTML = `<div style="color:#65dfcd; font-size:0.82rem;">Transmitting employer disciplinary query to API gateway...</div>`;
 
   try {
     const res = await apiFetch("/api/v1/privacy/test-disciplinary-query", {
@@ -3714,22 +3714,22 @@ async function testDisciplinaryQuery() {
     });
 
     resultBox.innerHTML = `
-      <div style="font-weight:700; color:#ef4444; font-size:0.9rem; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
+      <div style="font-weight:700; color:#f17971; font-size:0.9rem; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
         <span></span> HTTP 403 FORBIDDEN: SAFE-HARBOR DEFENSE ACTIVATED
       </div>
       <div style="font-size:0.78rem; color:#fca5a5; line-height:1.5; margin-bottom:0.6rem;">
         ${escapeHtml(res.reason || "Disciplinary query blocked.")}
       </div>
-      <div style="background:#020617; padding:0.6rem; border-radius:4px; font-size:0.72rem; color:#94a3b8; font-family:monospace; line-height:1.6;">
+      <div style="background:#131c1a; padding:0.6rem; border-radius:4px; font-size:0.72rem; color:#94a3b8; font-family:monospace; line-height:1.6;">
         <div><strong>Statutory Citation:</strong> ${escapeHtml(res.statutory_citation || "UAE Federal Decree-Law No. 33")}</div>
-        <div><strong>Quarantine Token:</strong> <span style="color:#38bdf8;">${escapeHtml(res.quarantine_token || "QT-7A9B42")}</span></div>
-        <div><strong>Audit Incident ID:</strong> <span style="color:#10b981;">${escapeHtml(res.audit_log_id || "AUDIT-SHB-1049")}</span></div>
+        <div><strong>Quarantine Token:</strong> <span style="color:#65dfcd;">${escapeHtml(res.quarantine_token || "QT-7A9B42")}</span></div>
+        <div><strong>Audit Incident ID:</strong> <span style="color:#66d9af;">${escapeHtml(res.audit_log_id || "AUDIT-SHB-1049")}</span></div>
         <div><strong>Non-Repudiation Status:</strong> Quarantined &amp; Logged to Ministry Regulatory Ledger</div>
       </div>
     `;
   } catch (err) {
     resultBox.innerHTML = `
-      <div style="font-weight:700; color:#ef4444; font-size:0.9rem; margin-bottom:0.4rem;">
+      <div style="font-weight:700; color:#f17971; font-size:0.9rem; margin-bottom:0.4rem;">
         HTTP 403 FORBIDDEN: SAFE-HARBOR DEFENSE ACTIVATED
       </div>
       <div style="font-size:0.78rem; color:#fca5a5; line-height:1.5;">
@@ -3779,11 +3779,11 @@ async function loadCompoundHazardView() {
     if (elTier) {
       elTier.textContent = risk.compound_tier || "Evaluating...";
       if (risk.compound_tier && risk.compound_tier.includes("Emergency")) {
-        elTier.style.color = "#ef4444";
+        elTier.style.color = "#f17971";
       } else if (risk.compound_tier && risk.compound_tier.includes("Alert")) {
-        elTier.style.color = "#f59e0b";
+        elTier.style.color = "#e9aa62";
       } else {
-        elTier.style.color = "#10b981";
+        elTier.style.color = "#66d9af";
       }
     }
 
@@ -3863,12 +3863,12 @@ function renderCompoundSeasonChart(records) {
   ctx.lineTo(width - paddingRight, y32);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#ef4444";
+  ctx.fillStyle = "#f17971";
   ctx.font = "10px sans-serif";
   ctx.fillText("32°C WBGT Danger Threshold", paddingLeft + 5, y32 - 4);
 
   // Draw WBGT Red Curve
-  ctx.strokeStyle = "#ef4444";
+  ctx.strokeStyle = "#f17971";
   ctx.lineWidth = 2;
   ctx.beginPath();
   records.forEach((r, i) => {
@@ -3949,8 +3949,8 @@ async function runPHSAssessment() {
       tbody.innerHTML = debtData.daily_profiles.map(p => `
         <tr>
           <td><strong>${p.date}</strong></td>
-          <td><span style="color:#ef4444; font-weight:700;">${p.peak_wbgt_c.toFixed(1)}°C</span></td>
-          <td><span style="color:#38bdf8;">${p.night_min_wbgt_c.toFixed(1)}°C</span></td>
+          <td><span style="color:#f17971; font-weight:700;">${p.peak_wbgt_c.toFixed(1)}°C</span></td>
+          <td><span style="color:#65dfcd;">${p.night_min_wbgt_c.toFixed(1)}°C</span></td>
           <td>${p.day_heat_storage_kj_m2.toFixed(1)} kJ</td>
           <td><span class="badge ${p.nocturnal_recovery_pct < 50 ? 'badge-alert' : 'badge-watch'}">${p.nocturnal_recovery_pct.toFixed(0)}%</span></td>
           <td><strong>${p.residual_debt_kj_m2.toFixed(1)} kJ</strong></td>
@@ -3969,7 +3969,7 @@ async function runPHSAssessment() {
     const elCounter = document.getElementById("phsCountermeasuresList");
     if (elCounter && debtData.mandatory_countermeasures) {
       elCounter.innerHTML = debtData.mandatory_countermeasures.map(m => `
-        <div style="font-size:0.82rem; color:#f8fafc; padding:0.35rem 0.6rem; background:#1e293b; border-left:3px solid #ef4444; border-radius:3px;">
+        <div style="font-size:0.82rem; color:#f8fafc; padding:0.35rem 0.6rem; background:#222f2b; border-left:3px solid #f17971; border-radius:3px;">
           ${m}
         </div>
       `).join("");
@@ -4031,21 +4031,21 @@ function renderPHSTrajectorySvg(profiles, day3StartT) {
   container.innerHTML = `
     <svg viewBox="0 0 ${w} ${h}" style="width:100%; height:100%;">
       <!-- Background grid lines -->
-      <line x1="${padL}" y1="${y3685}" x2="${w - padR}" y2="${y3685}" stroke="#334155" stroke-dasharray="3,3" />
+      <line x1="${padL}" y1="${y3685}" x2="${w - padR}" y2="${y3685}" stroke="#283531" stroke-dasharray="3,3" />
       <text x="${padL - 5}" y="${y3685 + 3}" fill="#94a3b8" font-size="9" text-anchor="end">36.85°C (Norm)</text>
 
-      <line x1="${padL}" y1="${y385}" x2="${w - padR}" y2="${y385}" stroke="#ef4444" stroke-dasharray="4,2" />
-      <text x="${padL - 5}" y="${y385 + 3}" fill="#ef4444" font-size="9" text-anchor="end">38.50°C (Limit)</text>
+      <line x1="${padL}" y1="${y385}" x2="${w - padR}" y2="${y385}" stroke="#f17971" stroke-dasharray="4,2" />
+      <text x="${padL - 5}" y="${y385 + 3}" fill="#f17971" font-size="9" text-anchor="end">38.50°C (Limit)</text>
 
       <!-- Danger Zone shading above 38.5C -->
       <rect x="${padL}" y="${getY(40.5)}" width="${w - padL - padR}" height="${y385 - getY(40.5)}" fill="rgba(239,68,68,0.12)" />
 
       <!-- Curve Path -->
-      <path d="${pathD}" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="${pathD}" fill="none" stroke="#e9aa62" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 
       <!-- Nodes -->
       ${pts.map((p, i) => `
-        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${p.y <= y385 ? '#ef4444' : '#10b981'}" stroke="#0f172a" stroke-width="1.5" />
+        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${p.y <= y385 ? '#f17971' : '#66d9af'}" stroke="#17211f" stroke-width="1.5" />
         <text x="${p.x}" y="${p.y - 7}" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">
           ${(minT + (1 - (p.y - padT) / (h - padT - padB)) * (maxT - minT)).toFixed(1)}°C
         </text>
@@ -4117,7 +4117,7 @@ function togglePushToTalk() {
         if (btn) btn.classList.add("recording");
         if (status) {
           status.textContent = "LISTENING... SPEAK NOW (Urdu, Arabic, English)";
-          status.style.color = "#ef4444";
+          status.style.color = "#f17971";
         }
       };
 
@@ -4136,7 +4136,7 @@ function togglePushToTalk() {
         if (btn) btn.classList.remove("recording");
         if (status) {
           status.textContent = "TRANSMIT COMPLETED (Click to speak again)";
-          status.style.color = "#10b981";
+          status.style.color = "#66d9af";
         }
         const input = document.getElementById("voiceTranscriptInput");
         if (input && input.value.trim().length > 3) {
@@ -4493,13 +4493,13 @@ async function auditReidentificationRisk() {
     const elK = document.getElementById("reidKVal");
     if (elK) {
       elK.textContent = `k = ${data.k_anonymity}`;
-      elK.style.color = data.risk_level === 'SAFE' ? '#10b981' : (data.risk_level === 'ELEVATED' ? '#f59e0b' : '#ef4444');
+      elK.style.color = data.risk_level === 'SAFE' ? '#66d9af' : (data.risk_level === 'ELEVATED' ? '#e9aa62' : '#f17971');
     }
 
     const elRisk = document.getElementById("reidRiskIdx");
     if (elRisk) {
       elRisk.textContent = `${data.risk_index.toFixed(3)} (${(data.risk_index * 100).toFixed(1)}%)`;
-      elRisk.style.color = data.risk_level === 'SAFE' ? '#38bdf8' : (data.risk_level === 'ELEVATED' ? '#f59e0b' : '#ef4444');
+      elRisk.style.color = data.risk_level === 'SAFE' ? '#65dfcd' : (data.risk_level === 'ELEVATED' ? '#e9aa62' : '#f17971');
     }
 
     const elRec = document.getElementById("reidRecommendationText");
@@ -4544,7 +4544,7 @@ async function verifyLiveTelemetry() {
         statusEl.style.color = "#34d399";
       } else {
         statusEl.textContent = "CRYPTOGRAPHICALLY VERIFIED TELEMETRY: AUTHENTIC LAKEHOUSE ARCHIVE";
-        statusEl.style.color = "#38bdf8";
+        statusEl.style.color = "#65dfcd";
       }
     }
     if (timeEl) {
@@ -4557,7 +4557,7 @@ async function verifyLiveTelemetry() {
           <div>Ambient Temp: <strong>${tel.ambient_temperature_c}°C</strong></div>
           <div>Relative Humidity: <strong>${tel.relative_humidity_pct}%</strong></div>
           <div>Wind Speed: <strong>${tel.wind_speed_kmh} km/h</strong></div>
-          <div>Live Stull WBGT: <strong style="color:#f59e0b;">${tel.live_calculated_wbgt_c}°C</strong></div>
+          <div>Live Stull WBGT: <strong style="color:#e9aa62;">${tel.live_calculated_wbgt_c}°C</strong></div>
         </div>
         <div style="margin-top:0.6rem; font-size:0.75rem; color:#94a3b8;">
           <strong>Data Foundation:</strong> ${data.data_source}<br>
@@ -4640,10 +4640,10 @@ function renderCausalResult(res) {
   if (coMorbidNotice) {
     if (res.is_multi_causal_co_morbidity) {
       coMorbidNotice.innerHTML = `<strong>Multi-Causal Co-Morbidity Active:</strong> Dual Agency Intervention Required!`;
-      coMorbidNotice.style.color = "#f59e0b";
+      coMorbidNotice.style.color = "#e9aa62";
     } else {
       coMorbidNotice.innerHTML = `Isolated Single Etiology (High Statistical Confidence)`;
-      coMorbidNotice.style.color = "#10b981";
+      coMorbidNotice.style.color = "#66d9af";
     }
   }
 
@@ -4651,14 +4651,14 @@ function renderCausalResult(res) {
   const barsContainer = document.getElementById("causalBarsContainer");
   if (barsContainer && res.posteriors) {
     const colors = {
-      heat_hyperthermia: "#ef4444",
+      heat_hyperthermia: "#f17971",
       food_enteric: "#eab308",
       toxic_aerosol: "#f97316",
       respiratory_viral: "#a855f7",
     };
 
     barsContainer.innerHTML = res.posteriors.map(p => {
-      const color = colors[p.cause_id] || "#38bdf8";
+      const color = colors[p.cause_id] || "#65dfcd";
       return `
         <div class="causal-bar-row">
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -4688,7 +4688,7 @@ function renderCausalResult(res) {
   const ordersList = document.getElementById("causalActionOrdersList");
   if (ordersList && res.action_orders) {
     ordersList.innerHTML = res.action_orders.map(o => `
-      <div style="padding:0.6rem 0.8rem; background:#020617; border-left:4px solid ${o.priority === 'IMMEDIATE_URGENT' ? '#ef4444' : '#eab308'}; border-radius:4px; font-size:0.78rem;">
+      <div style="padding:0.6rem 0.8rem; background:#131c1a; border-left:4px solid ${o.priority === 'IMMEDIATE_URGENT' ? '#f17971' : '#eab308'}; border-radius:4px; font-size:0.78rem;">
         <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
           <strong style="color:#fff;">${o.agency}</strong>
           <span class="badge ${o.priority === 'IMMEDIATE_URGENT' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem;">${o.priority}</span>

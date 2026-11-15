@@ -6,7 +6,7 @@
  <title>Munzir (منذر) | Population &amp; Workforce Health Early Warning Platform</title>
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -14,10 +14,13 @@
  <!-- Master Executive Header (Tier 1 - 52px) -->
  <header class="master-header">
    <div class="brand-lockup">
-     <div class="brand-badge">MUNZIR</div>
+     <div class="brand-badge" title="Munzir Early Warning System">
+       <svg class="brand-mark-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+       <span>MUNZIR</span>
+     </div>
      <div class="brand-meta">
-       <div class="brand-title">منذر &bull; Dubai Health &amp; Biosurveillance</div>
-       <div class="brand-beacon"><span class="beacon-dot"></span>OPERATIONAL &bull; GST</div>
+       <div class="brand-title">munzir<span class="wave">.</span> <span class="brand-arabic">منذر</span> &bull; <span class="brand-sub">Dubai Health &amp; Biosurveillance</span></div>
+       <div class="brand-beacon"><span class="uae-flag" title="United Arab Emirates Operations">AE</span><span class="beacon-dot"></span>OPERATIONAL &bull; GST</div>
      </div>
    </div>
 
@@ -111,7 +114,7 @@
 
    <div class="kpi-card" onclick="activateTab('inbox')" title="Inspect active industrial worksite alerts">
      <div class="kpi-label">ACTIVE WORKSITE ALERTS</div>
-     <div class="kpi-val"><span style="color:#ef4444;">3 CRITICAL</span> <span style="font-size:0.9rem; color:#94a3b8;">/ 8 WATCH</span></div>
+     <div class="kpi-val"><span style="color:#f17971;">3 CRITICAL</span> <span style="font-size:0.9rem; color:#94a3b8;">/ 8 WATCH</span></div>
      <div class="kpi-sub"><span class="kpi-indicator-dot alert"></span>Jebel Ali &bull; Al Quoz &bull; Ras Al Khor</div>
    </div>
 
@@ -123,7 +126,7 @@
 
    <div class="kpi-card" onclick="openSystemDossierModal('ai')" title="Inspect Inception 42 Jais sovereign bilingual inference and Safe-Harbor shield">
      <div class="kpi-label">SOVEREIGN AI &amp; PRIVACY</div>
-     <div class="kpi-val" style="color:#38bdf8;">JAIS-3-0.9B DUAL</div>
+     <div class="kpi-val" style="color:#65dfcd;">JAIS-3-0.9B DUAL</div>
      <div class="kpi-sub"><span class="kpi-indicator-dot normal"></span>Inception 42 &bull; Safe-Harbor &epsilon;=0.142</div>
    </div>
  </div>
@@ -211,7 +214,7 @@
  </div>
  <div style="display:flex; gap:0.75rem; align-items:center;">
  <span style="font-size:0.85rem; color:#94a3b8;">Composite Platform DQ:</span>
- <span id="compositeDqScore" style="font-size:1.25rem; font-weight:700; color:#10b981;">--</span>
+ <span id="compositeDqScore" style="font-size:1.25rem; font-weight:700; color:#66d9af;">--</span>
  <span id="dqGatingBadge" class="badge badge-normal">STREAMS HEALTHY</span>
  </div>
  </div>
@@ -345,7 +348,7 @@
  <!-- Left Column: User-Editable Assumptions Panel (ALWAYS VISIBLE) -->
  <div class="card assumptions-panel">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
- <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8;">Assumptions & Parameters</h3>
+ <h3 style="font-size:1.05rem; font-weight:700; color:#65dfcd;">Assumptions & Parameters</h3>
  <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.25rem 0.5rem;" onclick="resetImpactDefaults()">Reset Defaults</button>
  </div>
  <p style="font-size:0.78rem; color:#94a3b8; margin-bottom:1.25rem;">
@@ -423,12 +426,12 @@
  </div>
 
  <!-- Validated Empirical Anchors -->
- <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:0.75rem; margin-top:1rem;">
+ <div style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.75rem; margin-top:1rem;">
  <div style="font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:0.4rem;">Validated Empirical Anchors (Phase 6):</div>
  <div style="font-size:0.72rem; color:#94a3b8; display:flex; flex-direction:column; gap:0.25rem;">
- <div>• Validated Lead Time: <strong style="color:#10b981;">+3.4 days</strong> ahead of peak</div>
- <div>• Validated True Sensitivity: <strong style="color:#10b981;">92.5%</strong></div>
- <div>• Validated False Alarm Rate: <strong style="color:#10b981;">0.32</strong> alerts/district/mo</div>
+ <div>• Validated Lead Time: <strong style="color:#66d9af;">+3.4 days</strong> ahead of peak</div>
+ <div>• Validated True Sensitivity: <strong style="color:#66d9af;">92.5%</strong></div>
+ <div>• Validated False Alarm Rate: <strong style="color:#66d9af;">0.32</strong> alerts/district/mo</div>
  </div>
  </div>
  </div>
@@ -439,19 +442,19 @@
  <div class="impact-kpi-grid">
  <div class="card kpi-card highlight-kpi">
  <div class="kpi-title">Net Economic Benefit (Expected)</div>
- <div id="kpiNetBenefit" class="kpi-value" style="color:#10b981;">-- AED</div>
+ <div id="kpiNetBenefit" class="kpi-value" style="color:#66d9af;">-- AED</div>
  <div id="kpiBenefitRange" class="kpi-sub">Range: -- to -- AED</div>
  </div>
 
  <div class="card kpi-card">
  <div class="kpi-title">Lost Workdays Averted</div>
- <div id="kpiWorkdays" class="kpi-value" style="color:#38bdf8;">--</div>
+ <div id="kpiWorkdays" class="kpi-value" style="color:#65dfcd;">--</div>
  <div class="kpi-sub">Across 4-month heat season</div>
  </div>
 
  <div class="card kpi-card">
  <div class="kpi-title">Severe Incidents Prevented</div>
- <div id="kpiSevereCases" class="kpi-value" style="color:#f59e0b;">--</div>
+ <div id="kpiSevereCases" class="kpi-value" style="color:#e9aa62;">--</div>
  <div class="kpi-sub">Heat stroke & ICU admissions</div>
  </div>
 
@@ -499,7 +502,7 @@
  <h4 style="font-size:0.95rem; font-weight:700;">2D Sensitivity Matrix: Lead Time vs. Preventability</h4>
  <div style="font-size:0.75rem; color:#94a3b8;">Net Economic Benefit in AED (Workdays Saved in parentheses)</div>
  </div>
- <div style="font-size:0.75rem; color:#10b981;">
+ <div style="font-size:0.75rem; color:#66d9af;">
  Empirical Operating Point: 3.4d / 65%
  </div>
  </div>
@@ -598,7 +601,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <button class="btn btn-primary" style="background:#dc2626; border-color:#ef4444; font-weight:700;" onclick="toggleTestBuzzer('SENT-001')" id="globalBuzzerBtn">Test Hardware Buzzer</button>
+ <button class="btn btn-primary" style="background:#d9534f; border-color:#f17971; font-weight:700;" onclick="toggleTestBuzzer('SENT-001')" id="globalBuzzerBtn">Test Hardware Buzzer</button>
  <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh</button>
  <button class="btn btn-primary" onclick="openCommissionModal()">Commission New Node</button>
  </div>
@@ -614,26 +617,26 @@
  </div>
  <div class="card kpi-card">
  <div class="kpi-title">Online Status</div>
- <div id="sentinelKpiOnline" class="kpi-value" style="color:#10b981;">0</div>
+ <div id="sentinelKpiOnline" class="kpi-value" style="color:#66d9af;">0</div>
  <div class="kpi-sub">Heartbeat &lt; 180s</div>
  </div>
  <div class="card kpi-card">
  <div class="kpi-title">Max Measured WBGT</div>
- <div id="sentinelKpiMaxWbgt" class="kpi-value" style="color:#f59e0b;">--</div>
+ <div id="sentinelKpiMaxWbgt" class="kpi-value" style="color:#e9aa62;">--</div>
  <div class="kpi-sub">On-site ground truth</div>
  </div>
  <div class="card kpi-card">
  <div class="kpi-title">Microclimate Alerts</div>
- <div id="sentinelKpiAlerts" class="kpi-value" style="color:#ef4444;">0</div>
+ <div id="sentinelKpiAlerts" class="kpi-value" style="color:#f17971;">0</div>
  <div class="kpi-sub">Active LED alert states</div>
  </div>
  </div>
 
  <!-- High-Impact Physical Hardware Digital Twin (Phase 11, 14 & 19 WOW Visualization) -->
  <div class="hardware-twin-box" id="sentinelHardwareTwinCard" style="margin-bottom:1.25rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div>
- <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h3 style="font-size:1.05rem; font-weight:700; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Munzir Sentinel ESP32 Hardware Digital Twin
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.2rem;">
@@ -641,10 +644,10 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <span class="badge" id="twinLedBadge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid #38bdf8; font-size:0.75rem;">
+ <span class="badge" id="twinLedBadge" style="background:rgba(101, 223, 205,0.15); color:#65dfcd; border:1px solid #65dfcd; font-size:0.75rem;">
  LED: CYAN PULSE
  </span>
- <span class="badge" id="twinBuzzerBadge" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981; font-size:0.75rem;">
+ <span class="badge" id="twinBuzzerBadge" style="background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af; font-size:0.75rem;">
  BUZZER: MUTED
  </span>
  <span class="badge badge-normal" style="font-size:0.75rem;">
@@ -663,7 +666,7 @@
  <div>
  <div style="font-size:0.88rem; font-weight:700; color:#fff;">Node: SENT-001 (Port Terminal Yard)</div>
  <div style="font-size:0.74rem; color:#94a3b8; margin-top:0.15rem;">Firmware: v2.4-Buzzer-Signed &bull; Battery: Solar (4.18V)</div>
- <div id="twinAckReceiptText" style="font-size:0.72rem; color:#10b981; margin-top:0.35rem; font-weight:600;">
+ <div id="twinAckReceiptText" style="font-size:0.72rem; color:#66d9af; margin-top:0.35rem; font-weight:600;">
  Compliant: Regulatory acknowledgement verified in Lakehouse
  </div>
  </div>
@@ -679,7 +682,7 @@
  </div>
 
  <!-- Right: Side-by-Side Model vs Sensed Bias Dial -->
- <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:1rem;">
+ <div style="background:#17211f; border:1px solid #283531; border-radius:10px; padding:1rem;">
  <div style="font-size:0.72rem; text-transform:uppercase; color:#94a3b8; font-weight:700; letter-spacing:0.05em; margin-bottom:0.5rem;">
  Microclimate Canopy Heat Retention Bias
  </div>
@@ -692,12 +695,12 @@
  <div style="font-size:1.4rem; color:#64748b;">vs</div>
  <div style="text-align:center;">
  <div style="font-size:0.72rem; color:#94a3b8;">On-Site Black Globe</div>
- <div id="twinSensorWbgt" style="font-size:1.45rem; font-weight:800; color:#f59e0b;">33.4°C</div>
- <div style="font-size:0.68rem; color:#10b981;">Physical ESP32</div>
+ <div id="twinSensorWbgt" style="font-size:1.45rem; font-weight:800; color:#e9aa62;">33.4°C</div>
+ <div style="font-size:0.68rem; color:#66d9af;">Physical ESP32</div>
  </div>
- <div style="text-align:center; background:#1e293b; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #ef4444;">
- <div style="font-size:0.7rem; color:#ef4444; font-weight:700;">Canopy Bias</div>
- <div id="twinBiasDelta" style="font-size:1.45rem; font-weight:800; color:#ef4444;">+1.6°C</div>
+ <div style="text-align:center; background:#222f2b; padding:0.4rem 0.75rem; border-radius:6px; border:1px solid #f17971;">
+ <div style="font-size:0.7rem; color:#f17971; font-weight:700;">Canopy Bias</div>
+ <div id="twinBiasDelta" style="font-size:1.45rem; font-weight:800; color:#f17971;">+1.6°C</div>
  <div style="font-size:0.65rem; color:#cbd5e1;">Asphalt Heat Trap</div>
  </div>
  </div>
@@ -751,7 +754,7 @@
  </div>
 
  <!-- 8b. WBGT Microclimate Bias Correction & Model Calibration Panel -->
- <div class="card" style="margin-bottom:1.25rem; border-left: 4px solid #10b981;">
+ <div class="card" style="margin-bottom:1.25rem; border-left: 4px solid #66d9af;">
  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
  <div>
  <h3 style="font-size:1.1rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin:0;">
@@ -762,7 +765,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <select id="bcSiteSelect" class="form-control" style="font-size:0.8rem; padding:0.35rem 0.75rem; background:#1e293b; color:#f1f5f9; border:1px solid #334155; border-radius:6px;" onchange="loadBiasCorrectionView()">
+ <select id="bcSiteSelect" class="form-control" style="font-size:0.8rem; padding:0.35rem 0.75rem; background:#222f2b; color:#f1f5f9; border:1px solid #283531; border-radius:6px;" onchange="loadBiasCorrectionView()">
  <option value="SITE-JA-01">Jebel Ali Port (SITE-JA-01) - SENSED</option>
  <option value="SITE-AQ-01">Al Quoz Steel Yard (SITE-AQ-01) - LOSO-VALIDATED</option>
  </select>
@@ -773,22 +776,22 @@
 
  <!-- Bias Correction Metrics Grid -->
  <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:1.25rem;">
- <div class="card kpi-card" style="background:#0f172a;">
+ <div class="card kpi-card" style="background:#17211f;">
  <div class="kpi-title">MAE Improvement</div>
- <div id="bcKpiMaeImp" class="kpi-value" style="color:#10b981;">-83.7%</div>
+ <div id="bcKpiMaeImp" class="kpi-value" style="color:#66d9af;">-83.7%</div>
  <div id="bcKpiMaeSub" class="kpi-sub">0.98°C → 0.16°C (Held-Out)</div>
  </div>
- <div class="card kpi-card" style="background:#0f172a;">
+ <div class="card kpi-card" style="background:#17211f;">
  <div class="kpi-title">RMSE Improvement</div>
- <div id="bcKpiRmseImp" class="kpi-value" style="color:#10b981;">-82.0%</div>
+ <div id="bcKpiRmseImp" class="kpi-value" style="color:#66d9af;">-82.0%</div>
  <div id="bcKpiRmseSub" class="kpi-sub">1.16°C → 0.21°C (Held-Out)</div>
  </div>
- <div class="card kpi-card" style="background:#0f172a;">
+ <div class="card kpi-card" style="background:#17211f;">
  <div class="kpi-title">Model Bias Removed</div>
- <div id="bcKpiBiasImp" class="kpi-value" style="color:#38bdf8;">+0.97°C</div>
+ <div id="bcKpiBiasImp" class="kpi-value" style="color:#65dfcd;">+0.97°C</div>
  <div id="bcKpiBiasSub" class="kpi-sub">-0.97°C → +0.00°C MBE</div>
  </div>
- <div class="card kpi-card" style="background:#0f172a;">
+ <div class="card kpi-card" style="background:#17211f;">
  <div class="kpi-title">Conformal Coverage</div>
  <div id="bcKpiCoverage" class="kpi-value" style="color:#a855f7;">100.0%</div>
  <div class="kpi-sub">Held-Out 90% Target (z=1.645)</div>
@@ -796,15 +799,15 @@
  </div>
 
  <!-- Comparative Chart: Sensor vs Raw Model vs Corrected Model -->
- <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+ <div style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
  <div style="font-weight:600; font-size:0.9rem; color:#f8fafc;">
  24-Hour Diurnal Curve: Ground-Truth Sensor vs. Raw Model vs. Corrected Model
  </div>
  <div style="display:flex; gap:1rem; font-size:0.75rem; flex-wrap:wrap;">
- <span style="color:#ef4444;">● On-Site Sensor (Ground Truth)</span>
- <span style="color:#f59e0b;">● Raw Regional Model (ERA5)</span>
- <span style="color:#10b981;">● Corrected Model ± 90% Conformal Band</span>
+ <span style="color:#f17971;">● On-Site Sensor (Ground Truth)</span>
+ <span style="color:#e9aa62;">● Raw Regional Model (ERA5)</span>
+ <span style="color:#66d9af;">● Corrected Model ± 90% Conformal Band</span>
  </div>
  </div>
  <div style="position:relative; width:100%; height:200px;" id="bcChartContainer">
@@ -895,7 +898,7 @@
 
  <div style="display:flex; align-items:center; gap:0.75rem;">
  <label style="font-size:0.85rem; color:#cbd5e1; font-weight:600;">Replay Event:</label>
- <select id="tmEventSelect" style="padding:0.55rem 0.9rem; background:#0f172a; border:1px solid #38bdf8; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="onTimeMachineEventChange()">
+ <select id="tmEventSelect" style="padding:0.55rem 0.9rem; background:#17211f; border:1px solid #65dfcd; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="onTimeMachineEventChange()">
  <option value="pnw_2021">Pacific Northwest Heat Dome (June 2021) — 100% Real CDC Outcomes</option>
  <option value="dubai_2024">Dubai Industrial Corridor (August 2024) — Hybrid Regional Case Study</option>
  </select>
@@ -903,15 +906,15 @@
  </div>
 
  <!-- Single Case Study Disclosure Banner -->
- <div class="banner banner-privacy" style="background:rgba(245, 158, 11, 0.1); border-left:4px solid #f59e0b; margin-bottom:1.5rem;">
+ <div class="banner banner-privacy" style="background:rgba(245, 158, 11, 0.1); border-left:4px solid #e9aa62; margin-bottom:1.5rem;">
  
  <div style="font-size:0.82rem; line-height:1.5; color:#cbd5e1;">
- <strong>SINGLE CASE STUDY NOTICE:</strong> This replay evaluates platform performance on a specific historical extreme heat event (N=1). Timeliness and precision metrics are derived under empirical reporting latency. General multi-scenario benchmark metrics must be referenced to the 100-injection validation report (<a href="/validation/report.html" target="_blank" style="color:#38bdf8; text-decoration:underline;">report.html</a>).
+ <strong>SINGLE CASE STUDY NOTICE:</strong> This replay evaluates platform performance on a specific historical extreme heat event (N=1). Timeliness and precision metrics are derived under empirical reporting latency. General multi-scenario benchmark metrics must be referenced to the 100-injection validation report (<a href="/validation/report.html" target="_blank" style="color:#65dfcd; text-decoration:underline;">report.html</a>).
  </div>
  </div>
 
  <!-- Playback Control Center -->
- <div class="card" style="margin-bottom:1.5rem; background:#1e293b; border:1px solid #334155;">
+ <div class="card" style="margin-bottom:1.5rem; background:#222f2b; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
  <div style="display:flex; align-items:center; gap:0.75rem;">
  <button id="tmPlayBtn" class="btn btn-primary" style="padding:0.5rem 1.25rem; font-weight:700;" onclick="toggleTimeMachinePlay()">
@@ -923,9 +926,9 @@
 
  <div style="display:flex; align-items:center; gap:1rem;">
  <div style="font-size:0.85rem; color:#94a3b8;">
- As-Of Date: <strong id="tmAsOfDateText" style="color:#38bdf8; font-size:1.05rem; font-family:monospace;">2021-06-26</strong> (06:00 AM UTC)
+ As-Of Date: <strong id="tmAsOfDateText" style="color:#65dfcd; font-size:1.05rem; font-family:monospace;">2021-06-26</strong> (06:00 AM UTC)
  </div>
- <span class="badge badge-normal" style="background:rgba(16, 185, 129, 0.15); color:#34d399; border:1px solid #10b981;">
+ <span class="badge badge-normal" style="background:rgba(16, 185, 129, 0.15); color:#34d399; border:1px solid #66d9af;">
  Zero Hindsight Leakage
  </span>
  </div>
@@ -933,12 +936,12 @@
 
  <!-- Date Scrubber Slider -->
  <div style="position:relative; margin-bottom:0.5rem;">
- <input type="range" id="tmDateSlider" min="0" max="65" value="56" style="width:100%; accent-color:#38bdf8; cursor:pointer;" oninput="onTimeMachineSliderInput(this.value)">
+ <input type="range" id="tmDateSlider" min="0" max="65" value="56" style="width:100%; accent-color:#65dfcd; cursor:pointer;" oninput="onTimeMachineSliderInput(this.value)">
  </div>
  <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#64748b; font-family:monospace;">
  <span id="tmSliderMinLabel">2021-05-01 (Baseline)</span>
- <span style="color:#f59e0b;">2021-06-25 (Onset)</span>
- <span style="color:#ef4444; font-weight:bold;">2021-06-28 (Peak 1,038 Visits)</span>
+ <span style="color:#e9aa62;">2021-06-25 (Onset)</span>
+ <span style="color:#f17971; font-weight:bold;">2021-06-28 (Peak 1,038 Visits)</span>
  <span id="tmSliderMaxLabel">2021-07-05 (Recovery)</span>
  </div>
  </div>
@@ -947,7 +950,7 @@
  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
  <div class="card" style="text-align:center; padding:1.25rem;">
  <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em;">Lead Time vs Peak</div>
- <div id="tmKpiLeadPeak" style="font-size:2.2rem; font-weight:800; color:#38bdf8; margin:0.3rem 0;">+5.0 <span style="font-size:1rem;">days</span></div>
+ <div id="tmKpiLeadPeak" style="font-size:2.2rem; font-weight:800; color:#65dfcd; margin:0.3rem 0;">+5.0 <span style="font-size:1rem;">days</span></div>
  <div id="tmKpiPeakSub" style="font-size:0.75rem; color:#94a3b8;">Peak: 2021-06-28 (1,038 ED Visits)</div>
  </div>
 
@@ -976,7 +979,7 @@
  <span>Multi-Signal Timeline & Advance Lead-Time Bracket</span>
  <span style="font-size:0.8rem; font-weight:normal; color:#94a3b8;">Hatched area = Data not yet reported as of D</span>
  </h3>
- <div id="tmTimelineContainer" style="width:100%; height:260px; position:relative; background:#0f172a; border-radius:6px; overflow:hidden;">
+ <div id="tmTimelineContainer" style="width:100%; height:260px; position:relative; background:#17211f; border-radius:6px; overflow:hidden;">
  <!-- SVG timeline rendered dynamically -->
  </div>
  </div>
@@ -995,7 +998,7 @@
  <div style="margin-bottom:1rem;">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.25rem;">Calibrated Outbreak Probability:</div>
  <div style="display:flex; align-items:baseline; gap:0.5rem;">
- <span id="tmRiskScore" style="font-size:1.8rem; font-weight:800; color:#ef4444;">98.0%</span>
+ <span id="tmRiskScore" style="font-size:1.8rem; font-weight:800; color:#f17971;">98.0%</span>
  <span id="tmConformalBand" style="font-size:0.85rem; color:#94a3b8;">90% CI: [90.0%, 100.0%]</span>
  </div>
  </div>
@@ -1009,8 +1012,8 @@
  <span>Environmental Thermal Exposure (WBGT):</span>
  <span id="tmShapEnv">65%</span>
  </div>
- <div style="width:100%; background:#334155; height:6px; border-radius:3px; overflow:hidden;">
- <div id="tmShapEnvBar" style="width:65%; background:#f59e0b; height:100%;"></div>
+ <div style="width:100%; background:#283531; height:6px; border-radius:3px; overflow:hidden;">
+ <div id="tmShapEnvBar" style="width:65%; background:#e9aa62; height:100%;"></div>
  </div>
  </div>
  <div>
@@ -1018,8 +1021,8 @@
  <span>Clinical Syndromic Acceleration:</span>
  <span id="tmShapSyn">25%</span>
  </div>
- <div style="width:100%; background:#334155; height:6px; border-radius:3px; overflow:hidden;">
- <div id="tmShapSynBar" style="width:25%; background:#38bdf8; height:100%;"></div>
+ <div style="width:100%; background:#283531; height:6px; border-radius:3px; overflow:hidden;">
+ <div id="tmShapSynBar" style="width:25%; background:#65dfcd; height:100%;"></div>
  </div>
  </div>
  <div>
@@ -1027,15 +1030,15 @@
  <span>Data Quality Completeness:</span>
  <span id="tmShapDq">10%</span>
  </div>
- <div style="width:100%; background:#334155; height:6px; border-radius:3px; overflow:hidden;">
- <div id="tmShapDqBar" style="width:10%; background:#10b981; height:100%;"></div>
+ <div style="width:100%; background:#283531; height:6px; border-radius:3px; overflow:hidden;">
+ <div id="tmShapDqBar" style="width:10%; background:#66d9af; height:100%;"></div>
  </div>
  </div>
  </div>
  </div>
 
  <!-- RACI Directive -->
- <div style="background:#0f172a; padding:0.85rem; border-radius:6px; border-left:3px solid #38bdf8; margin-bottom:1rem;">
+ <div style="background:#17211f; padding:0.85rem; border-radius:6px; border-left:3px solid #65dfcd; margin-bottom:1rem;">
  <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase;">Accountable Role: <strong id="tmResponsibleRole" style="color:#fff;">Incident Commander</strong></div>
  <div id="tmActionDirective" style="font-size:0.85rem; color:#e2e8f0; margin-top:0.35rem; line-height:1.4;">
  Activate Emergency Heat Protocols: mandatory shaded rest rotations, mobile hydration replenishment, suspend heavy outdoor shifts.
@@ -1052,29 +1055,29 @@
  <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:1rem;">Telemetry & Reporting Vintages as of Day D</h4>
 
  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1rem;">
- <div style="background:#0f172a; padding:0.75rem; border-radius:6px;">
+ <div style="background:#17211f; padding:0.75rem; border-radius:6px;">
  <div style="font-size:0.75rem; color:#94a3b8;">Observed Max Temp</div>
  <div id="tmDayTemp" style="font-size:1.4rem; font-weight:700; color:#fff; margin-top:0.2rem;">37.1°C</div>
  </div>
- <div style="background:#0f172a; padding:0.75rem; border-radius:6px;">
+ <div style="background:#17211f; padding:0.75rem; border-radius:6px;">
  <div style="font-size:0.75rem; color:#94a3b8;">Observed Max WBGT</div>
- <div id="tmDayWbgt" style="font-size:1.4rem; font-weight:700; color:#f59e0b; margin-top:0.2rem;">32.4°C</div>
+ <div id="tmDayWbgt" style="font-size:1.4rem; font-weight:700; color:#e9aa62; margin-top:0.2rem;">32.4°C</div>
  </div>
  </div>
 
- <div style="background:#0f172a; padding:0.75rem; border-radius:6px; margin-bottom:1rem;">
+ <div style="background:#17211f; padding:0.75rem; border-radius:6px; margin-bottom:1rem;">
  <div style="font-size:0.75rem; color:#94a3b8;">Forward 48-Hour WBGT Forecast (NWP Model)</div>
  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.2rem;">
- <div id="tmDayFcst" style="font-size:1.4rem; font-weight:700; color:#ef4444;">34.8°C</div>
+ <div id="tmDayFcst" style="font-size:1.4rem; font-weight:700; color:#f17971;">34.8°C</div>
  <span class="badge badge-alert">EXTREME HEAT PREDICTED</span>
  </div>
  </div>
 
- <div style="background:#0f172a; padding:0.75rem; border-radius:6px;">
+ <div style="background:#17211f; padding:0.75rem; border-radius:6px;">
  <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:0.35rem;">Clinical Syndromic Reporting Status:</div>
  <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.25rem;">
  <span>Cumulative Visible Cases Reported:</span>
- <strong id="tmVisCases" style="color:#38bdf8;">142</strong>
+ <strong id="tmVisCases" style="color:#65dfcd;">142</strong>
  </div>
  <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.25rem;">
  <span>In-Flight / Unreported Cases (Hidden as of D):</span>
@@ -1089,13 +1092,13 @@
  </div>
 
  <!-- Provenance & Methodological Limitations -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
  Authentic Data Provenance & Limitations Statement
  </h4>
  <div style="font-size:0.8rem; color:#94a3b8; line-height:1.6;">
  <strong>1. Authentic Weather Source:</strong> Open-Meteo Archived Forecast API (<code>historical-forecast-api.open-meteo.com</code>). Uses numerical weather prediction model runs (ECMWF IFS / NOAA GFS) archived at that time, rather than post-hoc assimilated ERA5 reanalysis.<br>
- <strong>2. Authentic Clinical Ground Truth:</strong> U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP), published in MMWR Vol. 70, No. 29 (Schramm et al., 2021; DOI: <a href="https://doi.org/10.15585/mmwr.mm7029e1" target="_blank" style="color:#38bdf8;">10.15585/mmwr.mm7029e1</a>).<br>
+ <strong>2. Authentic Clinical Ground Truth:</strong> U.S. Centers for Disease Control and Prevention (CDC) National Syndromic Surveillance Program (NSSP), published in MMWR Vol. 70, No. 29 (Schramm et al., 2021; DOI: <a href="https://doi.org/10.15585/mmwr.mm7029e1" target="_blank" style="color:#65dfcd;">10.15585/mmwr.mm7029e1</a>).<br>
  <strong>3. Reporting Delay Simulation:</strong> Clinical transmission latency is modeled using an empirical geometric distribution (70% D+1, 20% D+2, 10% D+3; mean lag: 1.4 days), adhering to CDC NSSP facility latency guidelines.<br>
  <strong>4. Zero Hindsight Leakage:</strong> All baselines, standard deviations, and thresholds are fitted strictly on pre-event data prior to 2021-06-24. Zero parameter tuning was performed on the replay event window.
  </div>
@@ -1126,11 +1129,11 @@
  </div>
 
  <!-- Controls & Parameter Selection Card -->
- <div class="card" style="margin-bottom:1.5rem; background:#1e293b; border:1px solid #334155;">
+ <div class="card" style="margin-bottom:1.5rem; background:#222f2b; border:1px solid #283531;">
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:end;">
  <div>
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Target Worksite</label>
- <select id="whatifSiteSelect" style="width:100%; padding:0.55rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff; font-size:0.85rem;" onchange="onWhatifSiteChange()">
+ <select id="whatifSiteSelect" style="width:100%; padding:0.55rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff; font-size:0.85rem;" onchange="onWhatifSiteChange()">
  <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Port Terminal (3,200 workers)</option>
  <option value="SITE-JA-02">SITE-JA-02: Jebel Ali Heavy Fabrication Yard (1,850 workers)</option>
  <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Structural Steel Yard (850 workers)</option>
@@ -1144,7 +1147,7 @@
 
  <div>
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Intervention Scenario</label>
- <select id="whatifScenarioSelect" style="width:100%; padding:0.55rem; background:#0f172a; border:1px solid #38bdf8; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="runWhatIfSimulation()">
+ <select id="whatifScenarioSelect" style="width:100%; padding:0.55rem; background:#17211f; border:1px solid #65dfcd; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="runWhatIfSimulation()">
  <option value="combined_protocol">Comprehensive Multi-Layer Protection Protocol</option>
  <option value="shift_hours">Shift Working Hours (Split Shift: 05:30-11:30 &amp; 16:30-18:30)</option>
  <option value="extend_break">Extend Midday Heat Break (11:30-15:30, 4.0h)</option>
@@ -1155,23 +1158,23 @@
 
  <div>
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Monitored Workforce Cohort</label>
- <input type="number" id="whatifWorkforceInput" value="3200" min="50" step="50" style="width:100%; padding:0.55rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff; font-size:0.85rem;" onchange="runWhatIfSimulation()">
+ <input type="number" id="whatifWorkforceInput" value="3200" min="50" step="50" style="width:100%; padding:0.55rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff; font-size:0.85rem;" onchange="runWhatIfSimulation()">
  </div>
 
  <div>
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Evaluation Window</label>
- <div style="font-size:0.85rem; color:#cbd5e1; padding:0.55rem; background:#0f172a; border:1px solid #334155; border-radius:6px;">
+ <div style="font-size:0.85rem; color:#cbd5e1; padding:0.55rem; background:#17211f; border:1px solid #283531; border-radius:6px;">
  June 2024 (Peak Heat Corridor, 30 days)
  </div>
  </div>
  </div>
 
  <!-- Privacy & Statutory Banner -->
- <div style="margin-top:1rem; padding:0.6rem 0.85rem; background:rgba(15,23,42,0.6); border-left:4px solid #10b981; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+ <div style="margin-top:1rem; padding:0.6rem 0.85rem; background:rgba(15,23,42,0.6); border-left:4px solid #66d9af; border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
  <div style="font-size:0.8rem; color:#cbd5e1;">
- <strong>Occupational Privacy Architecture Enforced:</strong> Minimum group size ≥ 50 workers; small-cell suppression (<span style="color:#f59e0b;">k &lt; 10</span>) active. No individual or disciplinary queries permitted.
+ <strong>Occupational Privacy Architecture Enforced:</strong> Minimum group size ≥ 50 workers; small-cell suppression (<span style="color:#e9aa62;">k &lt; 10</span>) active. No individual or disciplinary queries permitted.
  </div>
- <div style="font-size:0.75rem; color:#38bdf8;">
+ <div style="font-size:0.75rem; color:#65dfcd;">
  UAE MOHRE Ministerial Resolution No. 44 (2022) Compliant
  </div>
  </div>
@@ -1196,12 +1199,12 @@
  </div>
 
  <!-- Card 2: Worker-Hours in Danger Averted -->
- <div class="kpi-card" style="border-top:3px solid #38bdf8;">
+ <div class="kpi-card" style="border-top:3px solid #65dfcd;">
  <div style="display:flex; justify-content:space-between; align-items:center;">
  <div class="kpi-title">Worker-Hours Danger Averted</div>
  <span class="badge badge-watch" style="font-size:0.65rem;">POPULATION RISK</span>
  </div>
- <div class="kpi-value" style="color:#38bdf8;" id="whatifWorkerHoursDanger">--</div>
+ <div class="kpi-value" style="color:#65dfcd;" id="whatifWorkerHoursDanger">--</div>
  <div style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">
  Mean Working WBGT: <strong id="whatifMeanWBGTDrop" style="color:#34d399;">--°C</strong>
  </div>
@@ -1226,12 +1229,12 @@
  </div>
 
  <!-- Card 4: Economic Balance & BCR -->
- <div class="kpi-card" style="border-top:3px solid #f59e0b;">
+ <div class="kpi-card" style="border-top:3px solid #e9aa62;">
  <div style="display:flex; justify-content:space-between; align-items:center;">
  <div class="kpi-title">Net Savings &amp; BCR (90% CI)</div>
  <span class="badge badge-warning" style="font-size:0.65rem;">ECONOMIC MODEL</span>
  </div>
- <div class="kpi-value" style="color:#f59e0b;" id="whatifGrossSavings">--</div>
+ <div class="kpi-value" style="color:#e9aa62;" id="whatifGrossSavings">--</div>
  <div style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">
  BCR: <strong id="whatifBCR" style="color:#fbbf24;">--</strong> (90% CI: <span id="whatifBCRCI">[--, --]</span>)
  </div>
@@ -1243,9 +1246,9 @@
  </div>
 
  <!-- Interactive Parameter Sliders -->
- <div class="card" style="margin-bottom:1.5rem; background:#1e293b; border:1px solid #334155;">
+ <div class="card" style="margin-bottom:1.5rem; background:#222f2b; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
- <h3 style="font-size:0.95rem; font-weight:700; color:#38bdf8;">
+ <h3 style="font-size:0.95rem; font-weight:700; color:#65dfcd;">
  Interactive Parameter Sensitivity Sliders
  </h3>
  <span style="font-size:0.75rem; color:#94a3b8;">Re-runs deterministic exposure and Monte Carlo simulation dynamically</span>
@@ -1256,9 +1259,9 @@
  <div>
  <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.3rem;">
  <span>Workforce Size:</span>
- <strong id="sliderWorkforceVal" style="color:#38bdf8;">3,200 workers</strong>
+ <strong id="sliderWorkforceVal" style="color:#65dfcd;">3,200 workers</strong>
  </div>
- <input type="range" id="sliderWorkforce" min="50" max="6000" step="50" value="3200" style="width:100%; accent-color:#38bdf8; cursor:pointer;" oninput="onSliderWorkforceInput(this.value)">
+ <input type="range" id="sliderWorkforce" min="50" max="6000" step="50" value="3200" style="width:100%; accent-color:#65dfcd; cursor:pointer;" oninput="onSliderWorkforceInput(this.value)">
  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#64748b;">
  <span>50 (Min Privacy Gate)</span>
  <span>6,000 workers</span>
@@ -1269,9 +1272,9 @@
  <div>
  <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.3rem;">
  <span>Modular Shade Reduction:</span>
- <strong id="sliderShadeVal" style="color:#38bdf8;">2.5°C WBGT</strong>
+ <strong id="sliderShadeVal" style="color:#65dfcd;">2.5°C WBGT</strong>
  </div>
- <input type="range" id="sliderShade" min="0.0" max="5.0" step="0.5" value="2.5" style="width:100%; accent-color:#38bdf8; cursor:pointer;" oninput="onSliderShadeInput(this.value)">
+ <input type="range" id="sliderShade" min="0.0" max="5.0" step="0.5" value="2.5" style="width:100%; accent-color:#65dfcd; cursor:pointer;" oninput="onSliderShadeInput(this.value)">
  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#64748b;">
  <span>0.0°C (No shade)</span>
  <span>5.0°C (Hall &amp; Horta Max)</span>
@@ -1282,9 +1285,9 @@
  <div>
  <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.3rem;">
  <span>Midday Break Extension:</span>
- <strong id="sliderBreakVal" style="color:#38bdf8;">+0 mins</strong>
+ <strong id="sliderBreakVal" style="color:#65dfcd;">+0 mins</strong>
  </div>
- <input type="range" id="sliderBreak" min="0" max="120" step="15" value="0" style="width:100%; accent-color:#38bdf8; cursor:pointer;" oninput="onSliderBreakInput(this.value)">
+ <input type="range" id="sliderBreak" min="0" max="120" step="15" value="0" style="width:100%; accent-color:#65dfcd; cursor:pointer;" oninput="onSliderBreakInput(this.value)">
  <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#64748b;">
  <span>0m (Standard Break)</span>
  <span>+120m (+2.0 hrs)</span>
@@ -1297,7 +1300,7 @@
  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.5rem;">
  
  <!-- Left Column: Deterministic Exposure Recomputation Chart -->
- <div class="card" style="background:#1e293b; border:1px solid #334155;">
+ <div class="card" style="background:#222f2b; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
  <h3 style="font-size:0.95rem; font-weight:700;">
  Working-Hour Heat Exposure Recomputation
@@ -1308,13 +1311,13 @@
  Side-by-side comparison between Standard Baseline shift and selected Intervention schedule.
  </div>
 
- <div id="whatifExposureChartContainer" style="min-height:220px; display:flex; align-items:center; justify-content:center; background:#0f172a; border-radius:6px; padding:0.75rem;">
+ <div id="whatifExposureChartContainer" style="min-height:220px; display:flex; align-items:center; justify-content:center; background:#17211f; border-radius:6px; padding:0.75rem;">
  <div style="color:#94a3b8; font-size:0.85rem;">Loading exposure chart...</div>
  </div>
  </div>
 
  <!-- Right Column: Tornado Sensitivity Ranking Chart -->
- <div class="card" style="background:#1e293b; border:1px solid #334155;">
+ <div class="card" style="background:#222f2b; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
  <h3 style="font-size:0.95rem; font-weight:700;">
  Tornado Sensitivity Ranking (Outcome Variance Drivers)
@@ -1325,7 +1328,7 @@
  Shows parameter influence on projected cases averted swing (± cases).
  </div>
 
- <div id="whatifTornadoChartContainer" style="min-height:220px; display:flex; align-items:center; justify-content:center; background:#0f172a; border-radius:6px; padding:0.75rem;">
+ <div id="whatifTornadoChartContainer" style="min-height:220px; display:flex; align-items:center; justify-content:center; background:#17211f; border-radius:6px; padding:0.75rem;">
  <div style="color:#94a3b8; font-size:0.85rem;">Loading tornado chart...</div>
  </div>
  </div>
@@ -1336,22 +1339,22 @@
  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.5rem;">
  
  <!-- Feasibility & Operational Logistics -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem; color:#38bdf8;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem; color:#65dfcd;">
  Operational Feasibility &amp; Playbook Alignment
  </h4>
  <div id="whatifFeasibilityText" style="font-size:0.82rem; color:#cbd5e1; line-height:1.6; margin-bottom:0.75rem;">
  Loading feasibility notes...
  </div>
- <div style="font-size:0.78rem; color:#94a3b8; border-top:1px solid #1e293b; padding-top:0.5rem;">
+ <div style="font-size:0.78rem; color:#94a3b8; border-top:1px solid #222f2b; padding-top:0.5rem;">
  <strong>MOHRE Resolution 44 (2022) Alignment:</strong> Prohibits labor performed directly under sunlight from 12:30 PM to 3:00 PM daily between June 15 and September 15.
  </div>
  </div>
 
  <!-- Cost & Scientific Rigor Disclosure -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
- <h4 style="font-size:0.9rem; font-weight:700; display:flex; align-items:center; gap:0.4rem; color:#f59e0b; margin:0;">
+ <h4 style="font-size:0.9rem; font-weight:700; display:flex; align-items:center; gap:0.4rem; color:#e9aa62; margin:0;">
  Cost Notes &amp; Truth in Science Disclosure
  </h4>
  <span id="whatifCostStatusBadge" class="badge badge-warning" style="font-size:0.68rem;">UNVERIFIED</span>
@@ -1359,7 +1362,7 @@
  <div id="whatifCostNotesText" style="font-size:0.82rem; color:#cbd5e1; line-height:1.6; margin-bottom:0.75rem;">
  Loading cost assessment...
  </div>
- <div style="font-size:0.78rem; color:#94a3b8; border-top:1px solid #1e293b; padding-top:0.5rem;">
+ <div style="font-size:0.78rem; color:#94a3b8; border-top:1px solid #222f2b; padding-top:0.5rem;">
  <strong>BCR Reality Check:</strong> The legacy 758:1 ratio reflected zero-intervention assumptions (counting only false alarm inspection triage). Munzir now incorporates realistic capital/operational intervention expenses, generating a rigorous distribution.
  </div>
  </div>
@@ -1393,17 +1396,17 @@
  <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:1.5rem;">
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Mean eGFR (CKD-EPI 2021)</div>
- <div id="renalMeanEgfr" style="font-size:1.6rem; font-weight:700; color:#38bdf8;">--</div>
+ <div id="renalMeanEgfr" style="font-size:1.6rem; font-weight:700; color:#65dfcd;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Normal baseline &gt; 90 mL/min/1.73m²</div>
  </div>
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Dehydration Rate (USG ≥ 1.025)</div>
- <div id="renalDehydrationRate" style="font-size:1.6rem; font-weight:700; color:#f59e0b;">--</div>
+ <div id="renalDehydrationRate" style="font-size:1.6rem; font-weight:700; color:#e9aa62;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Urine Specific Gravity hyperconcentration</div>
  </div>
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">KDIGO Stage 1 AKI Rate</div>
- <div id="renalKdigoRate" style="font-size:1.6rem; font-weight:700; color:#ef4444;">--</div>
+ <div id="renalKdigoRate" style="font-size:1.6rem; font-weight:700; color:#f17971;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Creatinine rise ≥ 1.5x / ≥0.3 mg/dL</div>
  </div>
  <div class="card">
@@ -1415,9 +1418,9 @@
 
  <!-- High-Impact Biological Trajectory Curve (Phase 13 & 19 WOW Visualization) -->
  <div class="renal-trajectory-card">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #1e293b; padding-bottom:0.6rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #222f2b; padding-bottom:0.6rem;">
  <div>
- <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h3 style="font-size:1.05rem; font-weight:700; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Sub-Clinical Renal Strain Trajectory &amp; 11.5-Day Advance Lead Window
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.2rem;">
@@ -1425,10 +1428,10 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <span class="badge" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af; font-size:0.75rem;">
  Munzir Early Window: +11.5 Days
  </span>
- <span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid #ef4444; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(239,68,68,0.15); color:#f17971; border:1px solid #f17971; font-size:0.75rem;">
  Hospital ED Peak: Day 0
  </span>
  </div>
@@ -1438,15 +1441,15 @@
  <!-- SVG rendered dynamically via renderRenalTrajectoryChart() -->
  </div>
 
- <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #1e293b; padding-top:0.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #222f2b; padding-top:0.5rem;">
  <span>Green Band: Asymptomatic Sub-Clinical Stage (Actionable Oral Electrolyte Hydration)</span>
  <span>Red Band: Tubular Damage &amp; Hospital Clinical Collapse Threshold</span>
  </div>
  </div>
 
  <!-- Clinical Alert & Downstream Projection Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div style="display:flex; align-items:center; gap:0.5rem;">
  
  <h3 style="font-size:1rem; font-weight:700; margin:0; color:#f8fafc;">Sub-Clinical Physiological Early Warning</h3>
@@ -1463,14 +1466,14 @@
  Loading physiological mechanism...
  </div>
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Recommended Preventive Action (RACI Grounding):</div>
- <div id="renalActionText" style="font-size:0.88rem; color:#38bdf8; line-height:1.6;">
+ <div id="renalActionText" style="font-size:0.88rem; color:#65dfcd; line-height:1.6;">
  Loading clinical action...
  </div>
  </div>
 
- <div style="background:#1e293b; border-radius:8px; padding:1rem; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+ <div style="background:#222f2b; border-radius:8px; padding:1rem; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
  <div style="font-size:0.75rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Validated Advance Lead Time</div>
- <div id="renalLeadTimeVal" style="font-size:2.2rem; font-weight:800; color:#10b981;">+11.5d</div>
+ <div id="renalLeadTimeVal" style="font-size:2.2rem; font-weight:800; color:#66d9af;">+11.5d</div>
  <div style="font-size:0.78rem; color:#cbd5e1; margin-top:0.25rem;">ahead of emergency hospital ICU presentation</div>
  </div>
  </div>
@@ -1501,9 +1504,9 @@
 
  <!-- High-Impact Spatial Deconvolution Interactive Radar Map (Phase 15 & 19) -->
  <div class="deconvolve-map-container" style="margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #1e293b; padding-bottom:0.6rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #222f2b; padding-bottom:0.6rem;">
  <div>
- <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h3 style="font-size:1.05rem; font-weight:700; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Spatio-Temporal Exposure Back-Projection &amp; Transit Corridor
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.2rem;">
@@ -1511,10 +1514,10 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid #ef4444; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(239,68,68,0.15); color:#f17971; border:1px solid #f17971; font-size:0.75rem;">
  Exposure Origin: Jebel Ali (53.4%)
  </span>
- <span class="badge" style="background:rgba(245,158,11,0.15); color:#f59e0b; border:1px solid #f59e0b; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(245,158,11,0.15); color:#e9aa62; border:1px solid #e9aa62; font-size:0.75rem;">
  Delayed Clinic: Muhaisnah (6.5h lag)
  </span>
  </div>
@@ -1524,7 +1527,7 @@
  <!-- Rendered dynamically via renderDeconvolutionMap() -->
  </div>
 
- <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #1e293b; padding-top:0.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #222f2b; padding-top:0.5rem;">
  <span>Red Marker: Upstream Industrial Exposure Origin (Morning Shift, WBGT &gt; 33°C)</span>
  <span>Cyan Dashed Vector: Sheikh Zayed Road (E11) Commuter Transit Corridor</span>
  <span>Orange Dashed Ring: 95% Spatial Confidence Ellipse (~5.16 km² resolution)</span>
@@ -1533,8 +1536,8 @@
 
  <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
  <!-- Left: Deconvolved Source Candidates Table -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#38bdf8;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#65dfcd;">
  Upstream Industrial Source Attribution
  </h3>
  <table class="data-table">
@@ -1554,8 +1557,8 @@
  </div>
 
  <!-- Right: Spatial Uncertainty Ellipse Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#f59e0b;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#e9aa62;">
  95% Spatial Uncertainty Ellipse
  </h3>
  <div style="font-size:0.82rem; color:#cbd5e1; line-height:1.7;">
@@ -1584,8 +1587,8 @@
  </div>
 
  <!-- Synthesis Narrative -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h4 style="font-size:0.9rem; font-weight:700; color:#38bdf8; margin-bottom:0.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h4 style="font-size:0.9rem; font-weight:700; color:#65dfcd; margin-bottom:0.5rem;">
  Epidemiological Deconvolution Synthesis
  </h4>
  <div id="deconvolveExplanationText" style="font-size:0.85rem; color:#cbd5e1; line-height:1.6;">
@@ -1615,17 +1618,17 @@
  <div class="metrics-grid" style="grid-template-columns: repeat(5, 1fr); margin-bottom:1.5rem;">
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Mobile Cooling Buses</div>
- <div id="dispatchBuses" style="font-size:1.6rem; font-weight:700; color:#38bdf8;">--</div>
+ <div id="dispatchBuses" style="font-size:1.6rem; font-weight:700; color:#65dfcd;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Air-conditioned shelters</div>
  </div>
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Misting Fan Trailers</div>
- <div id="dispatchTrailers" style="font-size:1.6rem; font-weight:700; color:#10b981;">--</div>
+ <div id="dispatchTrailers" style="font-size:1.6rem; font-weight:700; color:#66d9af;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Evaporative cooling units</div>
  </div>
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Potable Water Supply</div>
- <div id="dispatchWater" style="font-size:1.6rem; font-weight:700; color:#f59e0b;">--</div>
+ <div id="dispatchWater" style="font-size:1.6rem; font-weight:700; color:#e9aa62;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">3.5L chilled water / worker</div>
  </div>
  <div class="card">
@@ -1635,16 +1638,16 @@
  </div>
  <div class="card">
  <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Mobilization Budget</div>
- <div id="dispatchCost" style="font-size:1.6rem; font-weight:700; color:#ef4444;">--</div>
+ <div id="dispatchCost" style="font-size:1.6rem; font-weight:700; color:#f17971;">--</div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.25rem;">Municipal logistics allocation</div>
  </div>
  </div>
 
  <!-- High-Impact Municipal Staging Fleet Radar (Phase 16 & 19 WOW Visualization) -->
  <div class="dispatch-network-card">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #1e293b; padding-bottom:0.6rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #222f2b; padding-bottom:0.6rem;">
  <div>
- <h3 style="font-size:1.05rem; font-weight:700; color:#10b981; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h3 style="font-size:1.05rem; font-weight:700; color:#66d9af; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Municipal Fleet Staging Network &amp; Transit Route Radar
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.2rem;">
@@ -1652,10 +1655,10 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <span class="badge" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af; font-size:0.75rem;">
  Nearest: Jebel Ali Ops Yard (~18 min)
  </span>
- <span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid #ef4444; font-size:0.75rem;">
+ <span class="badge" style="background:rgba(239,68,68,0.15); color:#f17971; border:1px solid #f17971; font-size:0.75rem;">
  DCAS Ambulance: STANDBY
  </span>
  </div>
@@ -1665,15 +1668,15 @@
  <!-- Rendered dynamically via renderDispatchRadar() -->
  </div>
 
- <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #1e293b; padding-top:0.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; font-size:0.75rem; color:#64748b; border-top:1px solid #222f2b; padding-top:0.5rem;">
  <span>Jebel Ali Operations Yard &bull; Al Quoz Fleet Depot &bull; Deira Central Logistics Hub</span>
  <span>HL7 FHIR R4 Direct Interoperability</span>
  </div>
  </div>
 
  <!-- Depot Route Staging Table -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#38bdf8;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#65dfcd;">
  Depot Staging &amp; Mobilization Route Orders
  </h3>
  <table class="data-table">
@@ -1751,13 +1754,13 @@
  </div>
 
  <!-- Model Execution & Governance Status Banner -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
  <div>
- <div style="font-size:0.85rem; font-weight:700; color:#38bdf8;">
+ <div style="font-size:0.85rem; font-weight:700; color:#65dfcd;">
  Model: <code id="jaisModelIdText" style="color:#fff;">inception42/Jais-3-0.9B-Chat</code>
  </div>
  <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.25rem;">
- Execution Mode: <span id="jaisExecutionMode" style="color:#10b981; font-weight:700;">JAIS_NATIVE_TORCH (cuda:0)</span> | Hardware: NVIDIA CUDA GPU (Float16)
+ Execution Mode: <span id="jaisExecutionMode" style="color:#66d9af; font-weight:700;">JAIS_NATIVE_TORCH (cuda:0)</span> | Hardware: NVIDIA CUDA GPU (Float16)
  </div>
  </div>
  <div id="jaisFencedBadge">
@@ -1766,8 +1769,8 @@
  </div>
 
  <!-- Multilingual Tab Selector & Voice Dispatch -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem; flex-wrap:wrap; gap:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; flex-wrap:wrap; gap:0.75rem;">
  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
  <button class="btn btn-secondary active" id="btnLangAr" onclick="switchJaisLanguage('ar')">العربية (Arabic)</button>
  <button class="btn btn-secondary" id="btnLangEn" onclick="switchJaisLanguage('en')">English</button>
@@ -1793,15 +1796,15 @@
  </div>
 
  <!-- Rendered Text Display -->
- <div id="jaisTextDisplay" style="font-size:0.95rem; line-height:1.7; color:#f8fafc; padding:1.25rem; background:#1e293b; border-radius:8px; min-height:120px; font-family:system-ui, -apple-system, sans-serif; border-left:4px solid #38bdf8;">
+ <div id="jaisTextDisplay" style="font-size:0.95rem; line-height:1.7; color:#f8fafc; padding:1.25rem; background:#222f2b; border-radius:8px; min-height:120px; font-family:system-ui, -apple-system, sans-serif; border-left:4px solid #65dfcd;">
  Click 'Generate Jais Dispatch' to synthesize bilingual advisory and multilingual safety cards...
  </div>
  </div>
 
  <!-- High-Impact WhatsApp Frontline Mobile Card Preview (Phase 17 & 19 WOW Visualization) -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
- <h4 style="font-size:0.95rem; font-weight:700; color:#10b981; margin:0; display:flex; align-items:center; gap:0.4rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0; display:flex; align-items:center; gap:0.4rem;">
  WhatsApp Frontline Supervisor Terminal (Site Foremen &amp; Labour Supervisors)
  </h4>
  <span class="badge" style="background:rgba(16,185,129,0.15); color:#25d366; border:1px solid #25d366; font-size:0.75rem;">
@@ -1858,7 +1861,7 @@
  </div>
  </div>
  
- <div id="whatsappActionAckNotice" style="display:none; text-align:center; padding:0.4rem; background:rgba(16,185,129,0.2); border:1px solid #10b981; border-radius:6px; font-size:0.72rem; color:#a7f3d0; margin-top:0.25rem;">
+ <div id="whatsappActionAckNotice" style="display:none; text-align:center; padding:0.4rem; background:rgba(16,185,129,0.2); border:1px solid #66d9af; border-radius:6px; font-size:0.72rem; color:#a7f3d0; margin-top:0.25rem;">
  Confirmation logged to Lakehouse non-repudiation ledger!
  </div>
  </div>
@@ -1870,7 +1873,7 @@
  <div id="view-copilot" class="tab-content">
  <div class="banner banner-info" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:linear-gradient(135deg, #0b192c 0%, #1e1b4b 100%); border:1px solid #4338ca;">
  <div>
- <h2 style="font-size:1.25rem; font-weight:800; color:#38bdf8; display:flex; align-items:center; gap:0.5rem; margin:0 0 0.35rem 0;">
+ <h2 style="font-size:1.25rem; font-weight:800; color:#65dfcd; display:flex; align-items:center; gap:0.5rem; margin:0 0 0.35rem 0;">
  Munzir Sovereign Health Copilot &amp; Action Dossier Engine
  </h2>
  <div style="font-size:0.85rem; color:#94a3b8;">
@@ -1879,8 +1882,8 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
- <span class="badge" style="background:#0284c7; color:#fff;">Inception 42 Jais-3-0.9B (GPU)</span>
- <span class="badge" style="background:#10b981; color:#fff;">Fenced Gate: 0% Hallucination</span>
+ <span class="badge" style="background:#1c4b42; color:#fff;">Inception 42 Jais-3-0.9B (GPU)</span>
+ <span class="badge" style="background:#66d9af; color:#fff;">Fenced Gate: 0% Hallucination</span>
  <span class="badge" style="background:#6366f1; color:#fff;">UAE Resolution 44/2022</span>
  </div>
  </div>
@@ -1888,8 +1891,8 @@
  <div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap:1.5rem; align-items:start;">
  
  <!-- Left Column: Interactive Sovereign Copilot Chat -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; display:flex; flex-direction:column; min-height:680px;">
- <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:0.75rem; margin-bottom:1rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; display:flex; flex-direction:column; min-height:680px;">
+ <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; margin-bottom:1rem;">
  <div>
  <h3 style="font-size:1.05rem; font-weight:700; color:#f8fafc; margin:0;">
  Bilingual Frontline Copilot Chat
@@ -1911,10 +1914,10 @@
  </div>
 
  <!-- Chat Stream -->
- <div id="copilotChatStream" style="flex:1; overflow-y:auto; max-height:480px; padding:0.75rem; background:#020617; border:1px solid #1e293b; border-radius:6px; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+ <div id="copilotChatStream" style="flex:1; overflow-y:auto; max-height:480px; padding:0.75rem; background:#131c1a; border:1px solid #222f2b; border-radius:6px; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.75rem;">
  <!-- Initial welcome message -->
- <div style="padding:0.75rem; background:#1e293b; border-left:3px solid #38bdf8; border-radius:4px;">
- <div style="font-size:0.75rem; font-weight:700; color:#38bdf8; margin-bottom:0.25rem;">MUNZIR SOVEREIGN COPILOT (Inception 42 Jais)</div>
+ <div style="padding:0.75rem; background:#222f2b; border-left:3px solid #65dfcd; border-radius:4px;">
+ <div style="font-size:0.75rem; font-weight:700; color:#65dfcd; margin-bottom:0.25rem;">MUNZIR SOVEREIGN COPILOT (Inception 42 Jais)</div>
  <div style="font-size:0.85rem; color:#cbd5e1; line-height:1.5;">
  مرحباً بكم في منصة مُنذِر للإنذار المبكر. أنا مساعد الذكاء الاصطناعي السيادي المدعوم بنموذج Inception 42 Jais، ومربوط مباشرة بقاعدة بيانات البحيرة اللحظية والقرارات الوزارية لدولة الإمارات.<br><br>
  Welcome to Munzir Sovereign Health Copilot. I provide verified, zero-hallucination operational guidance grounded in live Lakehouse telemetry and UAE MOHRE Ministerial Resolution No. 44 of 2022. Select a quick query above or type below.
@@ -1931,7 +1934,7 @@
  <option value="SITE-DIFC-01">DIFC Financial Phase 2</option>
  <option value="SITE-DSO-01">Silicon Oasis Tech Park</option>
  </select>
- <input type="text" id="copilotInput" placeholder="Ask about site risks, legal decrees, or emergency procedures..." style="flex:1; padding:0.6rem 0.8rem; background:#1e293b; border:1px solid #334155; border-radius:6px; color:#fff; font-size:0.85rem;">
+ <input type="text" id="copilotInput" placeholder="Ask about site risks, legal decrees, or emergency procedures..." style="flex:1; padding:0.6rem 0.8rem; background:#222f2b; border:1px solid #283531; border-radius:6px; color:#fff; font-size:0.85rem;">
  <button type="submit" class="btn btn-primary" id="btnCopilotSend" style="white-space:nowrap; padding:0.6rem 1rem;">
  <span>Send </span>
  </button>
@@ -1942,10 +1945,10 @@
  <div style="display:flex; flex-direction:column; gap:1.5rem;">
  
  <!-- Dossier Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div>
- <h3 style="font-size:1.05rem; font-weight:700; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1.05rem; font-weight:700; color:#65dfcd; margin:0;">
  Executive Action Dossier
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8;">1-Click comprehensive 7-section operational action report</div>
@@ -1974,21 +1977,21 @@
  <option value="SITE-DIFC-01">DIFC Financial District Expansion</option>
  <option value="SITE-DSO-01">Dubai Silicon Oasis Tech Park</option>
  </select>
- <button class="btn btn-primary" onclick="generateDossierFromUI()" style="white-space:nowrap; background:#0284c7; padding:0.55rem 1.1rem; font-weight:700;">
+ <button class="btn btn-primary" onclick="generateDossierFromUI()" style="white-space:nowrap; background:#1c4b42; padding:0.55rem 1.1rem; font-weight:700;">
  Generate Dossier
  </button>
  </div>
 
- <div id="dossierQuickPreview" style="display:none; padding:0.75rem; background:#1e293b; border-radius:6px; font-size:0.8rem; color:#94a3b8;">
+ <div id="dossierQuickPreview" style="display:none; padding:0.75rem; background:#222f2b; border-radius:6px; font-size:0.8rem; color:#94a3b8;">
  <!-- Populated after generation -->
  </div>
  </div>
 
  <!-- Statutory Codex Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #1e293b; padding-bottom:0.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; border-bottom:1px solid #222f2b; padding-bottom:0.5rem;">
  <div>
- <h4 style="font-size:0.95rem; font-weight:700; color:#10b981; margin:0; display:flex; align-items:center; gap:0.4rem;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0; display:flex; align-items:center; gap:0.4rem;">
  Statutory Codex &amp; Decrees
  </h4>
  <div style="font-size:0.72rem; color:#94a3b8;">Official occupational safety decrees and penalty articles</div>
@@ -1997,7 +2000,7 @@
  </div>
 
  <div style="margin-bottom:0.75rem;">
- <input type="text" id="codexSearchInput" placeholder="Filter articles (e.g. midday, fine, rest, OSHA)..." oninput="filterCodexArticles()" style="width:100%; padding:0.45rem 0.75rem; background:#020617; border:1px solid #334155; border-radius:4px; color:#fff; font-size:0.8rem;">
+ <input type="text" id="codexSearchInput" placeholder="Filter articles (e.g. midday, fine, rest, OSHA)..." oninput="filterCodexArticles()" style="width:100%; padding:0.45rem 0.75rem; background:#131c1a; border:1px solid #283531; border-radius:4px; color:#fff; font-size:0.8rem;">
  </div>
 
  <div id="codexArticlesList" style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
@@ -2022,7 +2025,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge" style="background:#451a03; color:#f59e0b; border:1px solid #d97706; font-size:0.75rem;">
+ <span class="badge" style="background:#451a03; color:#e9aa62; border:1px solid #d97706; font-size:0.75rem;">
  AUTHENTIC LAKEHOUSE TELEMETRY (155 COMPOUND DAYS)
  </span>
  <button class="btn btn-primary" onclick="loadCompoundHazardView()">Evaluate Compound Hazard</button>
@@ -2030,7 +2033,7 @@
  </div>
 
  <!-- Controls Row -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:flex-end;">
  <div>
  <label style="font-size:0.75rem; color:#94a3b8; display:block; margin-bottom:0.35rem;">Target Industrial Worksite</label>
@@ -2051,7 +2054,7 @@
  </div>
  <div>
  <label style="font-size:0.75rem; color:#94a3b8; display:block; margin-bottom:0.35rem;">Synergistic Model</label>
- <div style="padding:0.5rem 0.75rem; background:#1e293b; border-radius:6px; font-size:0.8rem; color:#38bdf8;">
+ <div style="padding:0.5rem 0.75rem; background:#222f2b; border-radius:6px; font-size:0.8rem; color:#65dfcd;">
  Lancet Planetary Health (γ = 0.35 Multiplicative Synergy)
  </div>
  </div>
@@ -2060,41 +2063,41 @@
 
  <!-- 4 Key Compound Metric Tiles -->
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-left:4px solid #ef4444;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-left:4px solid #f17971;">
  <div style="font-size:0.75rem; color:#94a3b8;">Peak Wet-Bulb Globe Temp</div>
- <div id="compoundValWbgt" style="font-size:1.6rem; font-weight:800; color:#ef4444; margin:0.35rem 0;">--°C</div>
+ <div id="compoundValWbgt" style="font-size:1.6rem; font-weight:800; color:#f17971; margin:0.35rem 0;">--°C</div>
  <div id="compoundSubWbgt" style="font-size:0.7rem; color:#94a3b8;">Heat RR: --</div>
  </div>
 
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-left:4px solid #f59e0b;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-left:4px solid #e9aa62;">
  <div style="font-size:0.75rem; color:#94a3b8;">Airborne Particulate (PM10)</div>
- <div id="compoundValPm10" style="font-size:1.6rem; font-weight:800; color:#f59e0b; margin:0.35rem 0;">-- µg/m³</div>
+ <div id="compoundValPm10" style="font-size:1.6rem; font-weight:800; color:#e9aa62; margin:0.35rem 0;">-- µg/m³</div>
  <div id="compoundSubPm10" style="font-size:0.7rem; color:#94a3b8;">Particulate RR: --</div>
  </div>
 
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-left:4px solid #a855f7;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-left:4px solid #a855f7;">
  <div style="font-size:0.75rem; color:#94a3b8;">Synergistic Relative Risk</div>
  <div id="compoundValRisk" style="font-size:1.6rem; font-weight:800; color:#c084fc; margin:0.35rem 0;">--x</div>
  <div id="compoundSubRisk" style="font-size:0.7rem; color:#94a3b8;">Non-linear synergy: +--%</div>
  </div>
 
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-left:4px solid #10b981;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-left:4px solid #66d9af;">
  <div style="font-size:0.75rem; color:#94a3b8;">Compound Severity Tier</div>
- <div id="compoundValTier" style="font-size:1.15rem; font-weight:800; color:#10b981; margin:0.5rem 0;">Evaluating...</div>
+ <div id="compoundValTier" style="font-size:1.15rem; font-weight:800; color:#66d9af; margin:0.5rem 0;">Evaluating...</div>
  <div id="compoundSubTier" style="font-size:0.7rem; color:#94a3b8;">Pulmonary-Thermal Coupling</div>
  </div>
  </div>
 
  <!-- Real-Time Seasonal Chart Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div>
  <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc; margin:0;">
  Summer 2024 Co-Occurrence Profile (Real Lakehouse Telemetry)
  </h4>
  <div style="font-size:0.72rem; color:#94a3b8;">Red line: Daily WBGT Max (°C) | Amber bars: Daily PM10 (µg/m³) | Purple: Synergistic Risk Peaks</div>
  </div>
- <span class="badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; font-size:0.72rem;">122 Daily Observations</span>
+ <span class="badge" style="background:rgba(101, 223, 205,0.15); color:#65dfcd; font-size:0.72rem;">122 Daily Observations</span>
  </div>
  <div style="height:220px; position:relative;">
  <canvas id="chartCompoundSeason" height="220" style="width:100%; height:100%;"></canvas>
@@ -2103,8 +2106,8 @@
 
  <!-- Directives & Contraindications 2-Column Grid -->
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:1.25rem;">
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-top:3px solid #10b981;">
- <h4 style="font-size:0.9rem; font-weight:700; color:#10b981; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-top:3px solid #66d9af;">
+ <h4 style="font-size:0.9rem; font-weight:700; color:#66d9af; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
  Mandatory Dual-Hazard Directives
  </h4>
  <ul id="compoundDirectivesList" style="margin:0; padding-left:1.25rem; font-size:0.8rem; line-height:1.7; color:#cbd5e1;">
@@ -2112,8 +2115,8 @@
  </ul>
  </div>
 
- <div class="card" style="background:#0f172a; border:1px solid #334155; border-top:3px solid #ef4444;">
- <h4 style="font-size:0.9rem; font-weight:700; color:#ef4444; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; border-top:3px solid #f17971;">
+ <h4 style="font-size:0.9rem; font-weight:700; color:#f17971; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
  Critical Operational Contraindications
  </h4>
  <ul id="compoundContraindicationsList" style="margin:0; padding-left:1.25rem; font-size:0.8rem; line-height:1.7; color:#fca5a5;">
@@ -2183,7 +2186,7 @@
  <div class="card" style="background:linear-gradient(135deg, #091322 0%, #0c1a2e 100%); border:1px solid #1e3a8a; margin-bottom:1.5rem;">
  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
  <div>
- <div style="font-size:0.75rem; color:#38bdf8; text-transform:uppercase; font-weight:700; letter-spacing:0.05em;">
+ <div style="font-size:0.75rem; color:#65dfcd; text-transform:uppercase; font-weight:700; letter-spacing:0.05em;">
  OFFICIAL STATUTORY CERTIFICATE OF NON-PUNITIVE SAFE-HARBOR
  </div>
  <div id="shCertIdText" style="font-size:1.25rem; font-weight:800; color:#fff; margin:0.35rem 0; font-family:monospace;">
@@ -2195,24 +2198,24 @@
  </div>
  <div style="text-align:right;">
  <div style="font-size:0.72rem; color:#94a3b8;">Immutable SHA-256 Audit Seal:</div>
- <div id="shCertSealText" style="font-size:0.72rem; color:#38bdf8; font-family:monospace; word-break:break-all; max-width:320px;">
+ <div id="shCertSealText" style="font-size:0.72rem; color:#65dfcd; font-family:monospace; word-break:break-all; max-width:320px;">
  --
  </div>
  </div>
  </div>
 
- <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #1e293b; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
+ <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #222f2b; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Differential Privacy Budget</div>
- <div style="font-size:1rem; font-weight:700; color:#10b981;">ε = 1.0 (Laplace OpenDP)</div>
+ <div style="font-size:1rem; font-weight:700; color:#66d9af;">ε = 1.0 (Laplace OpenDP)</div>
  </div>
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Small-Cell Privacy Threshold</div>
- <div style="font-size:1rem; font-weight:700; color:#38bdf8;">k ≥ 50 Workers</div>
+ <div style="font-size:1rem; font-weight:700; color:#65dfcd;">k ≥ 50 Workers</div>
  </div>
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Individual Disciplinary Access</div>
- <div style="font-size:1rem; font-weight:700; color:#ef4444;">CRYPTOGRAPHICALLY BLOCKED</div>
+ <div style="font-size:1rem; font-weight:700; color:#f17971;">CRYPTOGRAPHICALLY BLOCKED</div>
  </div>
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Worker Pseudonymization</div>
@@ -2225,7 +2228,7 @@
  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
  
  <!-- Left: Interactive Test Disciplinary Query Trigger -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
  Live Safe-Harbor Attack Defense Demonstration
  </h4>
@@ -2235,11 +2238,11 @@
 
  <div style="margin-bottom:0.75rem;">
  <label style="font-size:0.72rem; color:#94a3b8; display:block; margin-bottom:0.25rem;">Query Target</label>
- <input type="text" id="shWorkerTargetInput" class="form-control" value="WRK-DXB-1049 (Labour Gang 4)" readonly style="background:#1e293b; color:#94a3b8; cursor:not-allowed;">
+ <input type="text" id="shWorkerTargetInput" class="form-control" value="WRK-DXB-1049 (Labour Gang 4)" readonly style="background:#222f2b; color:#94a3b8; cursor:not-allowed;">
  </div>
  <div style="margin-bottom:1rem;">
  <label style="font-size:0.72rem; color:#94a3b8; display:block; margin-bottom:0.25rem;">Disciplinary Query Payload</label>
- <code style="display:block; padding:0.6rem; background:#020617; border-radius:4px; font-size:0.75rem; color:#f43f5e;">
+ <code style="display:block; padding:0.6rem; background:#131c1a; border-radius:4px; font-size:0.75rem; color:#f43f5e;">
  SELECT break_count, hydration_ml FROM worker_telemetry WHERE worker_id='WRK-DXB-1049'
  </code>
  </div>
@@ -2250,14 +2253,14 @@
  </div>
 
  <!-- Right: Cryptographic Quarantine Live Defense Log -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; display:flex; flex-direction:column;">
- <h4 style="font-size:0.95rem; font-weight:700; color:#38bdf8; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; display:flex; flex-direction:column;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
  Cryptographic Defense Log
  </h4>
  <div id="shDefenseLogPlaceholder" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#64748b; font-size:0.82rem; text-align:center; padding:1.5rem;">
  <div>Click 'Test Employer Disciplinary Query' to observe real-time cryptographic quarantine enforcement.</div>
  </div>
- <div id="shDefenseLogResult" style="display:none; padding:1rem; background:rgba(239,68,68,0.1); border:1px solid #ef4444; border-radius:6px;">
+ <div id="shDefenseLogResult" style="display:none; padding:1rem; background:rgba(239,68,68,0.1); border:1px solid #f17971; border-radius:6px;">
  <!-- Dynamically populated -->
  </div>
  </div>
@@ -2265,10 +2268,10 @@
  </div>
 
  <!-- Live Re-Identification Risk Meter & k-Anonymity Auditor -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div>
- <h4 style="font-size:1rem; font-weight:700; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h4 style="font-size:1rem; font-weight:700; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Live Re-Identification Risk Meter &amp; k-Anonymity Auditor
  </h4>
  <div style="font-size:0.75rem; color:#94a3b8;">
@@ -2301,15 +2304,15 @@
  </div>
  </div>
 
- <div style="background:#1e293b; padding:1rem; border-radius:6px; display:flex; flex-direction:column; justify-content:space-between;">
+ <div style="background:#222f2b; padding:1rem; border-radius:6px; display:flex; flex-direction:column; justify-content:space-between;">
  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Effective k-Anonymity:</div>
- <div id="reidKVal" style="font-size:1.3rem; font-weight:800; color:#10b981;">k = 31</div>
+ <div id="reidKVal" style="font-size:1.3rem; font-weight:800; color:#66d9af;">k = 31</div>
  </div>
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Re-Identification Index:</div>
- <div id="reidRiskIdx" style="font-size:1.3rem; font-weight:800; color:#38bdf8;">0.032 (3.2%)</div>
+ <div id="reidRiskIdx" style="font-size:1.3rem; font-weight:800; color:#65dfcd;">0.032 (3.2%)</div>
  </div>
  </div>
  <div id="reidRecommendationText" style="font-size:0.75rem; color:#cbd5e1; margin-top:0.5rem; line-height:1.4;">
@@ -2320,7 +2323,7 @@
  </div>
 
  <!-- Statutory Citations & Legal Mandates -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
  Statutory Legal Foundations (United Arab Emirates Labor Code)
  </h4>
@@ -2384,11 +2387,11 @@
  </div>
 
  <!-- Controls & Input Bar -->
- <div class="card" style="margin-bottom:1.5rem; background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="margin-bottom:1.5rem; background:#17211f; border:1px solid #283531;">
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;">Target Site</label>
- <select id="phsSiteSelect" class="form-control" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:0.4rem; border-radius:4px; width:100%;">
+ <select id="phsSiteSelect" class="form-control" style="background:#222f2b; color:#fff; border:1px solid #283531; padding:0.4rem; border-radius:4px; width:100%;">
  <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Port</option>
  <option value="SITE-JA-02">SITE-JA-02: Jebel Ali Heavy Fabrication</option>
  <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Structural Steel</option>
@@ -2398,7 +2401,7 @@
  </div>
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;">Occupational Activity</label>
- <select id="phsActivitySelect" class="form-control" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:0.4rem; border-radius:4px; width:100%;">
+ <select id="phsActivitySelect" class="form-control" style="background:#222f2b; color:#fff; border:1px solid #283531; padding:0.4rem; border-radius:4px; width:100%;">
  <option value="heavy_rigging">Heavy Structural Rigging (415 W/m²)</option>
  <option value="masonry_concreting">Concrete Pouring &amp; Masonry (330 W/m²)</option>
  <option value="routine_maintenance">Plant Maintenance Patrol (240 W/m²)</option>
@@ -2407,34 +2410,34 @@
  </div>
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;">Ambient Dry Bulb (T_a)</label>
- <input type="number" id="phsAmbientTempInput" value="43.5" step="0.5" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:0.4rem; border-radius:4px; width:100%;">
+ <input type="number" id="phsAmbientTempInput" value="43.5" step="0.5" style="background:#222f2b; color:#fff; border:1px solid #283531; padding:0.4rem; border-radius:4px; width:100%;">
  </div>
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;">Relative Humidity (%)</label>
- <input type="number" id="phsHumidityInput" value="65.0" step="1" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:0.4rem; border-radius:4px; width:100%;">
+ <input type="number" id="phsHumidityInput" value="65.0" step="1" style="background:#222f2b; color:#fff; border:1px solid #283531; padding:0.4rem; border-radius:4px; width:100%;">
  </div>
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;">Air Velocity (m/s)</label>
- <input type="number" id="phsWindInput" value="0.5" step="0.1" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:0.4rem; border-radius:4px; width:100%;">
+ <input type="number" id="phsWindInput" value="0.5" step="0.1" style="background:#222f2b; color:#fff; border:1px solid #283531; padding:0.4rem; border-radius:4px; width:100%;">
  </div>
  </div>
  </div>
 
  <!-- KPI Summary Cards -->
  <div class="metrics-grid" style="grid-template-columns: repeat(6, 1fr); margin-bottom:1.5rem;">
- <div class="card" style="border-top:3px solid #ef4444;">
+ <div class="card" style="border-top:3px solid #f17971;">
  <div style="font-size:0.75rem; color:#94a3b8;">Core Temp Rise (dT/dt)</div>
- <div id="phsDtdtKpi" style="font-size:1.35rem; font-weight:800; color:#ef4444; margin-top:0.25rem;">+11.16°C/h</div>
+ <div id="phsDtdtKpi" style="font-size:1.35rem; font-weight:800; color:#f17971; margin-top:0.25rem;">+11.16°C/h</div>
  <div style="font-size:0.7rem; color:#94a3b8;">Uncompensable rate</div>
  </div>
- <div class="card" style="border-top:3px solid #f59e0b;">
+ <div class="card" style="border-top:3px solid #e9aa62;">
  <div style="font-size:0.75rem; color:#94a3b8;">Safe Limit (D_lim)</div>
- <div id="phsDlimKpi" style="font-size:1.35rem; font-weight:800; color:#f59e0b; margin-top:0.25rem;">10 mins</div>
+ <div id="phsDlimKpi" style="font-size:1.35rem; font-weight:800; color:#e9aa62; margin-top:0.25rem;">10 mins</div>
  <div style="font-size:0.7rem; color:#94a3b8;">Until 38.5°C threshold</div>
  </div>
- <div class="card" style="border-top:3px solid #38bdf8;">
+ <div class="card" style="border-top:3px solid #65dfcd;">
  <div style="font-size:0.75rem; color:#94a3b8;">Required Sweat Loss</div>
- <div id="phsSweatKpi" style="font-size:1.35rem; font-weight:800; color:#38bdf8; margin-top:0.25rem;">2.42 L/hr</div>
+ <div id="phsSweatKpi" style="font-size:1.35rem; font-weight:800; color:#65dfcd; margin-top:0.25rem;">2.42 L/hr</div>
  <div style="font-size:0.7rem; color:#94a3b8;">Fluid replenishment rate</div>
  </div>
  <div class="card" style="border-top:3px solid #f43f5e;">
@@ -2457,8 +2460,8 @@
  <!-- Detail Grid: Trajectory & 72-Hour Table -->
  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
  <!-- Left: 72-Hour Telemetry Table -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#38bdf8;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#65dfcd;">
  72-Hour Consecutive Shift Telemetry (Lakehouse Grounded)
  </h3>
  <table class="data-table">
@@ -2480,8 +2483,8 @@
  </div>
 
  <!-- Right: SVG Visualizer of Thermal Debt Kinetics -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#f59e0b;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.75rem; color:#e9aa62;">
  Core Body Temperature Kinetic Drift (72-Hour Trajectory)
  </h3>
  <div id="phsTrajectorySvgContainer" style="width:100%; height:240px; display:flex; align-items:center; justify-content:center;">
@@ -2491,8 +2494,8 @@
  </div>
 
  <!-- Clinical Mechanism & Actions Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h4 style="font-size:0.95rem; font-weight:700; color:#ef4444; margin-bottom:0.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#f17971; margin-bottom:0.5rem;">
  Clinical Pathology &amp; Mandatory Countermeasures
  </h4>
  <div id="phsClinicalMechanismText" style="font-size:0.85rem; color:#cbd5e1; line-height:1.6; margin-bottom:1rem;">
@@ -2516,7 +2519,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge badge-normal" style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981;">
+ <span class="badge badge-normal" style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af;">
  Jais-3-0.9B Active (cuda:0)
  </span>
  </div>
@@ -2525,7 +2528,7 @@
  <!-- Interactive Push-to-Talk Console -->
  <div style="display:grid; grid-template-columns: 1.1fr 1.3fr; gap:1.5rem; margin-bottom:1.5rem;">
  <!-- Left: Push-to-Talk & Quick Sample Calls -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; display:flex; flex-direction:column; align-items:center; text-align:center; padding:1.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; display:flex; flex-direction:column; align-items:center; text-align:center; padding:1.5rem;">
  <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:1rem; font-weight:600;">
  FRONT-LINE PUSH-TO-TALK RADIO HANDSET
  </div>
@@ -2544,10 +2547,10 @@
 
  <div style="width:100%; margin-top:1.25rem; text-align:left;">
  <label style="font-size:0.75rem; color:#94a3b8; display:block; margin-bottom:0.35rem;">Live Spoken Speech Transcript</label>
- <textarea id="voiceTranscriptInput" rows="3" style="width:100%; padding:0.6rem; background:#1e293b; border:1px solid #334155; border-radius:6px; color:#fff; font-size:0.85rem;" placeholder="Spoken transcript will appear here, or type/click sample below..."></textarea>
+ <textarea id="voiceTranscriptInput" rows="3" style="width:100%; padding:0.6rem; background:#222f2b; border:1px solid #283531; border-radius:6px; color:#fff; font-size:0.85rem;" placeholder="Spoken transcript will appear here, or type/click sample below..."></textarea>
  
  <div style="display:flex; justify-content:space-between; margin-top:0.5rem;">
- <select id="voiceSiteSelect" style="background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:0.3rem 0.6rem; border-radius:4px; font-size:0.75rem;">
+ <select id="voiceSiteSelect" style="background:#222f2b; color:#cbd5e1; border:1px solid #283531; padding:0.3rem 0.6rem; border-radius:4px; font-size:0.75rem;">
  <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Port</option>
  <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Steel</option>
  </select>
@@ -2558,8 +2561,8 @@
  </div>
 
  <!-- Rapid 1-Click Judge Sample Dispatches -->
- <div style="width:100%; margin-top:1.25rem; border-top:1px solid #1e293b; padding-top:1rem; text-align:left;">
- <div style="font-size:0.75rem; color:#38bdf8; font-weight:700; margin-bottom:0.5rem;">
+ <div style="width:100%; margin-top:1.25rem; border-top:1px solid #222f2b; padding-top:1rem; text-align:left;">
+ <div style="font-size:0.75rem; color:#65dfcd; font-weight:700; margin-bottom:0.5rem;">
  Rapid Judge Demonstration Presets (Click to Load &amp; Transmit):
  </div>
  <div style="display:flex; flex-direction:column; gap:0.4rem;">
@@ -2577,10 +2580,10 @@
  </div>
 
  <!-- Right: Intercom Response & Audio Synthesizer -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
  <div>
- <h3 style="font-size:1rem; font-weight:700; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1rem; font-weight:700; color:#65dfcd; margin:0;">
  Live Intercom Radio Dispatch
  </h3>
  <div id="voiceIncidentIdText" style="font-size:0.72rem; color:#94a3b8;">
@@ -2594,10 +2597,10 @@
  </div>
 
  <!-- Corroboration Context -->
- <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:1rem; background:#1e293b; padding:0.75rem; border-radius:6px;">
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:1rem; background:#222f2b; padding:0.75rem; border-radius:6px;">
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Corroborated In-Situ WBGT</div>
- <div id="voiceWbgtText" style="font-size:1.15rem; font-weight:800; color:#f59e0b;">45.5°C</div>
+ <div id="voiceWbgtText" style="font-size:1.15rem; font-weight:800; color:#e9aa62;">45.5°C</div>
  </div>
  <div>
  <div style="font-size:0.72rem; color:#94a3b8;">Triage Location &amp; Count</div>
@@ -2606,7 +2609,7 @@
  </div>
 
  <!-- Spoken Audio Player Bar -->
- <div style="background:#020617; border:1px solid #1e293b; border-radius:6px; padding:0.75rem 1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+ <div style="background:#131c1a; border:1px solid #222f2b; border-radius:6px; padding:0.75rem 1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
  <div style="display:flex; align-items:center; gap:0.75rem;">
  <button id="btnPlayVoiceAudio" class="btn btn-primary" onclick="playSynthesizedVoiceAudio()" style="padding:0.4rem 0.8rem; font-size:0.8rem; display:flex; align-items:center; gap:0.4rem;">
  Play Spoken Response
@@ -2626,15 +2629,15 @@
  <div style="margin-bottom:1rem;">
  <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:0.35rem; font-weight:600;">Spoken Dispatches:</div>
  <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.82rem;">
- <div style="padding:0.5rem; background:#1e293b; border-left:3px solid #38bdf8; border-radius:4px;">
- <span style="font-size:0.7rem; color:#38bdf8; font-weight:700; display:block;">ENGLISH:</span>
+ <div style="padding:0.5rem; background:#222f2b; border-left:3px solid #65dfcd; border-radius:4px;">
+ <span style="font-size:0.7rem; color:#65dfcd; font-weight:700; display:block;">ENGLISH:</span>
  <span id="voiceScriptEnText">"Noted. Emergency heat distress protocol activated for Deepwater Berth 4. DCAS Ambulance notified."</span>
  </div>
- <div style="padding:0.5rem; background:#1e293b; border-left:3px solid #10b981; border-radius:4px;">
- <span style="font-size:0.7rem; color:#10b981; font-weight:700; display:block;">ARABIC (العربية):</span>
+ <div style="padding:0.5rem; background:#222f2b; border-left:3px solid #66d9af; border-radius:4px;">
+ <span style="font-size:0.7rem; color:#66d9af; font-weight:700; display:block;">ARABIC (العربية):</span>
  <span id="voiceScriptArText">"تم تفعيل بروتوكول الطوارئ في الرصيف 4. تم إخطار إسعاف دبي."</span>
  </div>
- <div style="padding:0.5rem; background:#1e293b; border-left:3px solid #a855f7; border-radius:4px;">
+ <div style="padding:0.5rem; background:#222f2b; border-left:3px solid #a855f7; border-radius:4px;">
  <span style="font-size:0.7rem; color:#a855f7; font-weight:700; display:block;">URDU (اردو):</span>
  <span id="voiceScriptUrText">"ڈیپ واٹر برتھ 4 کے لیے ایمرجنسی پروٹوکول چالو کر دیا گیا ہے۔ ایمبولینس کو مطلع کر دیا گیا ہے۔"</span>
  </div>
@@ -2642,8 +2645,8 @@
  </div>
 
  <!-- Directives & Safe Harbor Tag -->
- <div style="border-top:1px solid #1e293b; padding-top:0.75rem;">
- <div style="font-size:0.75rem; color:#ef4444; font-weight:700; margin-bottom:0.35rem;">Field Directives:</div>
+ <div style="border-top:1px solid #222f2b; padding-top:0.75rem;">
+ <div style="font-size:0.75rem; color:#f17971; font-weight:700; margin-bottom:0.35rem;">Field Directives:</div>
  <ul id="voiceDirectivesList" style="margin-left:1.2rem; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">
  <li>Move affected workers into AC rest shelter immediately.</li>
  <li>Apply active cooling (ice packs on groin/axillae; high-velocity misting).</li>
@@ -2712,8 +2715,8 @@
  <div style="display:grid; grid-template-columns: 1fr 1.6fr; gap:1.5rem; margin-bottom:1.5rem;">
  
  <!-- Left: Configurable Policy Knobs -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem; color:#38bdf8;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem; color:#65dfcd;">
  Configurable Statutory Levers
  </h3>
 
@@ -2757,7 +2760,7 @@
  <input type="range" class="policy-slider" id="sliderShelter" min="50" max="300" step="25" value="150" oninput="updatePolicyKnobLabels()">
  </div>
 
- <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #1e293b; display:flex; align-items:center; justify-content:space-between;">
+ <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #222f2b; display:flex; align-items:center; justify-content:space-between;">
  <div>
  <div style="font-size:0.85rem; font-weight:600; color:#fff;">Biomarker Screening Mandate</div>
  <div style="font-size:0.72rem; color:#94a3b8;">Mandate daily urine specific gravity (USG) dipstick</div>
@@ -2771,30 +2774,30 @@
  
  <!-- Epidemiological KPIs -->
  <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
- <div class="card" style="border-top:3px solid #10b981;">
+ <div class="card" style="border-top:3px solid #66d9af;">
  <div style="font-size:0.75rem; color:#94a3b8;">Admissions Avoided</div>
- <div id="policyAvoidedKpi" style="font-size:1.6rem; font-weight:800; color:#10b981; margin-top:0.25rem;">183 cases</div>
+ <div id="policyAvoidedKpi" style="font-size:1.6rem; font-weight:800; color:#66d9af; margin-top:0.25rem;">183 cases</div>
  <div id="policyAvoidedSubKpi" style="font-size:0.72rem; color:#94a3b8;">-67.3% reduction</div>
  </div>
- <div class="card" style="border-top:3px solid #38bdf8;">
+ <div class="card" style="border-top:3px solid #65dfcd;">
  <div style="font-size:0.75rem; color:#94a3b8;">Workdays Saved</div>
- <div id="policyWorkdaysKpi" style="font-size:1.6rem; font-weight:800; color:#38bdf8; margin-top:0.25rem;">3,819 days</div>
+ <div id="policyWorkdaysKpi" style="font-size:1.6rem; font-weight:800; color:#65dfcd; margin-top:0.25rem;">3,819 days</div>
  <div style="font-size:0.72rem; color:#94a3b8;">Across Dubai sites</div>
  </div>
- <div class="card" style="border-top:3px solid #f59e0b;">
+ <div class="card" style="border-top:3px solid #e9aa62;">
  <div style="font-size:0.75rem; color:#94a3b8;">Severe ICU Heatstroke Prevented</div>
- <div id="policyIcuKpi" style="font-size:1.6rem; font-weight:800; color:#f59e0b; margin-top:0.25rem;">33 cases</div>
+ <div id="policyIcuKpi" style="font-size:1.6rem; font-weight:800; color:#e9aa62; margin-top:0.25rem;">33 cases</div>
  <div style="font-size:0.72rem; color:#94a3b8;">Zero mortality achieved</div>
  </div>
  </div>
 
  <!-- Macroeconomic Financial Waterfall Card -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
- <h3 style="font-size:1rem; font-weight:700; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1rem; font-weight:700; color:#65dfcd; margin:0;">
  Macroeconomic Dividend &amp; Benefit-Cost Ratio (BCR)
  </h3>
- <div style="font-size:0.75rem; color:#10b981; font-weight:700;" id="policyBcrBadge">
+ <div style="font-size:0.75rem; color:#66d9af; font-weight:700;" id="policyBcrBadge">
  10.94x ROI
  </div>
  </div>
@@ -2803,28 +2806,28 @@
  <div class="waterfall-bar-row">
  <span style="color:#94a3b8; width:170px;">Gross Productivity Saved:</span>
  <div class="waterfall-fill-track">
- <div class="waterfall-fill-bar" style="width:75%; background:#10b981;"></div>
+ <div class="waterfall-fill-bar" style="width:75%; background:#66d9af;"></div>
  </div>
- <strong id="wfProductivityText" style="color:#10b981; width:110px; text-align:right;">+AED 1,983,689</strong>
+ <strong id="wfProductivityText" style="color:#66d9af; width:110px; text-align:right;">+AED 1,983,689</strong>
  </div>
  <div class="waterfall-bar-row">
  <span style="color:#94a3b8; width:170px;">Medical Costs Saved:</span>
  <div class="waterfall-fill-track">
- <div class="waterfall-fill-bar" style="width:85%; background:#38bdf8;"></div>
+ <div class="waterfall-fill-bar" style="width:85%; background:#65dfcd;"></div>
  </div>
- <strong id="wfMedicalText" style="color:#38bdf8; width:110px; text-align:right;">+AED 2,298,241</strong>
+ <strong id="wfMedicalText" style="color:#65dfcd; width:110px; text-align:right;">+AED 2,298,241</strong>
  </div>
  <div class="waterfall-bar-row">
  <span style="color:#94a3b8; width:170px;">Program Compliance Cost:</span>
  <div class="waterfall-fill-track">
- <div class="waterfall-fill-bar" style="width:20%; background:#ef4444;"></div>
+ <div class="waterfall-fill-bar" style="width:20%; background:#f17971;"></div>
  </div>
- <strong id="wfCostText" style="color:#ef4444; width:110px; text-align:right;">-AED 401,250</strong>
+ <strong id="wfCostText" style="color:#f17971; width:110px; text-align:right;">-AED 401,250</strong>
  </div>
- <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed #334155; display:flex; justify-content:space-between; align-items:center;">
+ <div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed #283531; display:flex; justify-content:space-between; align-items:center;">
  <span style="font-size:0.9rem; font-weight:700; color:#fff;">NET PUBLIC BENEFIT:</span>
  <div style="text-align:right;">
- <span id="wfNetBenefitText" style="font-size:1.3rem; font-weight:800; color:#10b981;">AED 3,988,323</span>
+ <span id="wfNetBenefitText" style="font-size:1.3rem; font-weight:800; color:#66d9af;">AED 3,988,323</span>
  <div id="wfCiText" style="font-size:0.7rem; color:#94a3b8;">90% CI: AED 2.78M – AED 4.96M</div>
  </div>
  </div>
@@ -2832,12 +2835,12 @@
  </div>
 
  <!-- Draft Statutory Resolution Text -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
  <span style="font-size:0.85rem; font-weight:700; color:#f8fafc;">Official Ministerial Decree Amendment Language</span>
  <span class="badge badge-normal" style="font-size:0.65rem;">MOHRE / DHA Codified</span>
  </div>
- <pre id="policyDecreeText" style="background:#020617; border:1px solid #1e293b; padding:0.75rem; border-radius:4px; font-size:0.72rem; color:#cbd5e1; white-space:pre-wrap; line-height:1.5; max-height:140px; overflow-y:auto;">Loading draft decree...</pre>
+ <pre id="policyDecreeText" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:4px; font-size:0.72rem; color:#cbd5e1; white-space:pre-wrap; line-height:1.5; max-height:140px; overflow-y:auto;">Loading draft decree...</pre>
  </div>
 
  </div>
@@ -2863,31 +2866,31 @@
 
  <!-- Resource Grid -->
  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem; margin-bottom:1.5rem;">
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
- <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;">RiskAssessment</span>
+ <span style="font-size:0.75rem; color:#65dfcd; font-weight:700;">RiskAssessment</span>
  <span class="badge badge-warning" style="font-size:0.65rem;">High Risk</span>
  </div>
  <div style="font-size:0.8rem; color:#fff; font-weight:600;">Heat Stroke Risk</div>
  <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.25rem;">SNOMED CT 403190006 (88% Prob)</div>
  </div>
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
- <span style="font-size:0.75rem; color:#ef4444; font-weight:700;">Flag</span>
+ <span style="font-size:0.75rem; color:#f17971; font-weight:700;">Flag</span>
  <span class="badge badge-alert" style="font-size:0.65rem;">Active Safety</span>
  </div>
  <div style="font-size:0.8rem; color:#fff; font-weight:600;">Critical Hyperthermia</div>
  <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.25rem;">Predicted Tre ≥ 38.8°C</div>
  </div>
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
- <span style="font-size:0.75rem; color:#10b981; font-weight:700;">CarePlan</span>
+ <span style="font-size:0.75rem; color:#66d9af; font-weight:700;">CarePlan</span>
  <span class="badge badge-normal" style="font-size:0.65rem;">Protocol</span>
  </div>
  <div style="font-size:0.8rem; color:#fff; font-weight:600;">Work-Rest &amp; ORS Titration</div>
  <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.25rem;">15m shade rest / 1.45 L/h ORS</div>
  </div>
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
  <span style="font-size:0.75rem; color:#a855f7; font-weight:700;">Provenance</span>
  <span class="badge badge-normal" style="font-size:0.65rem;">SHA-256 Seal</span>
@@ -2898,30 +2901,30 @@
  </div>
 
  <!-- JSON Viewer -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
- <h3 style="font-size:1rem; font-weight:700; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1rem; font-weight:700; color:#65dfcd; margin:0;">
  HL7 FHIR R4 Validated JSON Resource Payload
  </h3>
  <span style="font-size:0.75rem; color:#94a3b8;" id="nabidhBundleIdText">Bundle ID: --</span>
  </div>
- <pre id="nabidhJsonViewer" style="background:#020617; border:1px solid #1e293b; padding:1rem; border-radius:6px; font-size:0.75rem; color:#a5f3fc; font-family:monospace; max-height:480px; overflow:auto; line-height:1.45;">Loading live FHIR R4 Bundle from /api/v1/fhir/nabidh-bundle...</pre>
+ <pre id="nabidhJsonViewer" style="background:#131c1a; border:1px solid #222f2b; padding:1rem; border-radius:6px; font-size:0.75rem; color:#a5f3fc; font-family:monospace; max-height:480px; overflow:auto; line-height:1.45;">Loading live FHIR R4 Bundle from /api/v1/fhir/nabidh-bundle...</pre>
  </div>
  </div>
 
  <!-- 22. Bayesian Causal De-Mixing & Multi-Signal Outbreak Attribution (Phase 26) -->
  <div id="view-causal" class="tab-content">
- <div class="card" style="background:linear-gradient(135deg, #0b1329 0%, #071927 100%); border:1px solid #0284c7; margin-bottom:1.5rem;">
+ <div class="card" style="background:linear-gradient(135deg, #101817 0%, #071927 100%); border:1px solid #1c4b42; margin-bottom:1.5rem;">
  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
  <div>
- <h2 style="font-size:1.25rem; font-weight:800; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <h2 style="font-size:1.25rem; font-weight:800; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Bayesian Causal De-Mixing &amp; Multi-Signal Outbreak Attribution (Phase 26)
  </h2>
  <p style="font-size:0.82rem; color:#94a3b8; margin:0.35rem 0 0 0; max-width:850px;">
  Solves the core challenge of ambiguous syndromic clusters in worker camps and worksites. Disentangles <strong>Occupational Hyperthermia</strong> from <strong>Camp Canteen Foodborne Gastroenteritis</strong>, <strong>Shamal Toxic Dust Inhalation</strong>, and <strong>Respiratory Pathogens</strong> using evidence-based clinical likelihood ratios (<KaTeX>LR</KaTeX>) and Dirichlet 90% Credible Intervals.
  </p>
  </div>
- <button class="btn btn-primary" onclick="runCausalDemix()" style="background:#0284c7; border-color:#38bdf8; font-weight:700;">
+ <button class="btn btn-primary" onclick="runCausalDemix()" style="background:#1c4b42; border-color:#65dfcd; font-weight:700;">
  Run Bayesian De-Mixing
  </button>
  </div>
@@ -2964,12 +2967,12 @@
  </div>
 
  <!-- 1-Click Judge Demonstration Presets -->
- <div style="margin-top:1.25rem; border-top:1px solid #1e293b; padding-top:1rem;">
- <div style="font-size:0.75rem; color:#38bdf8; font-weight:700; margin-bottom:0.5rem;">
+ <div style="margin-top:1.25rem; border-top:1px solid #222f2b; padding-top:1rem;">
+ <div style="font-size:0.75rem; color:#65dfcd; font-weight:700; margin-bottom:0.5rem;">
  1-Click Grand Jury Demonstration Presets:
  </div>
  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:0.5rem;">
- <button class="btn btn-secondary" onclick="loadCausalPreset('heat')" style="font-size:0.75rem; text-align:left; padding:0.45rem 0.65rem; border-color:#ef4444;">
+ <button class="btn btn-secondary" onclick="loadCausalPreset('heat')" style="font-size:0.75rem; text-align:left; padding:0.45rem 0.65rem; border-color:#f17971;">
  <strong>Scenario A: Heat Stroke Outbreak</strong><br>
  <span style="font-size:0.68rem; color:#94a3b8;">WBGT 34.5°C, Oliguria 90%, Afebrile MOHRE Lead</span>
  </button>
@@ -2991,8 +2994,8 @@
 
  <div class="causal-grid">
  <!-- Left: Input Control Console -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h3 style="font-size:0.95rem; font-weight:700; color:#38bdf8; margin:0 0 1rem 0; border-bottom:1px solid #1e293b; padding-bottom:0.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h3 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 1rem 0; border-bottom:1px solid #222f2b; padding-bottom:0.5rem;">
  Cluster Clinical &amp; Exposure Signals
  </h3>
 
@@ -3009,12 +3012,12 @@
  <div style="margin-bottom:0.85rem;">
  <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:0.25rem;">
  <span>Affected Cluster Size (Ill Workers):</span>
- <strong id="causalClusterLabel" style="color:#38bdf8;">18 workers</strong>
+ <strong id="causalClusterLabel" style="color:#65dfcd;">18 workers</strong>
  </div>
  <input type="range" id="causalClusterSlider" class="policy-slider" min="5" max="100" value="18" oninput="document.getElementById('causalClusterLabel').textContent = this.value + ' workers'">
  </div>
 
- <div style="border-top:1px solid #1e293b; padding-top:0.75rem; margin-top:0.75rem;">
+ <div style="border-top:1px solid #222f2b; padding-top:0.75rem; margin-top:0.75rem;">
  <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:0.5rem;">
  CLINICAL SYMPTOM PREVALENCE (% of Cluster):
  </div>
@@ -3075,23 +3078,23 @@
  </div>
  </div>
 
- <div style="border-top:1px solid #1e293b; padding-top:0.75rem; margin-top:0.75rem;">
+ <div style="border-top:1px solid #222f2b; padding-top:0.75rem; margin-top:0.75rem;">
  <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:0.5rem;">
  ENVIRONMENTAL CONDITIONS:
  </div>
  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
  <div>
  <label style="font-size:0.7rem; color:#cbd5e1;">Peak WBGT (°C):</label>
- <input type="number" id="causalWbgtInput" value="34.0" step="0.1" style="width:100%; padding:0.35rem; background:#020617; border:1px solid #334155; border-radius:4px; color:#fff; font-size:0.8rem;">
+ <input type="number" id="causalWbgtInput" value="34.0" step="0.1" style="width:100%; padding:0.35rem; background:#131c1a; border:1px solid #283531; border-radius:4px; color:#fff; font-size:0.8rem;">
  </div>
  <div>
  <label style="font-size:0.7rem; color:#cbd5e1;">PM10 (µg/m³):</label>
- <input type="number" id="causalPm10Input" value="95.0" step="1.0" style="width:100%; padding:0.35rem; background:#020617; border:1px solid #334155; border-radius:4px; color:#fff; font-size:0.8rem;">
+ <input type="number" id="causalPm10Input" value="95.0" step="1.0" style="width:100%; padding:0.35rem; background:#131c1a; border:1px solid #283531; border-radius:4px; color:#fff; font-size:0.8rem;">
  </div>
  </div>
  </div>
 
- <button class="btn btn-primary" onclick="runCausalDemix()" style="width:100%; margin-top:1rem; font-weight:700; padding:0.5rem; background:#0284c7; border-color:#38bdf8;">
+ <button class="btn btn-primary" onclick="runCausalDemix()" style="width:100%; margin-top:1rem; font-weight:700; padding:0.5rem; background:#1c4b42; border-color:#65dfcd;">
  Run Bayesian De-Mixing
  </button>
  </div>
@@ -3099,17 +3102,17 @@
  <!-- Right: Diagnostic Attribution Output -->
  <div style="display:flex; flex-direction:column; gap:1.25rem;">
  <!-- Dominant Etiology Hero Card -->
- <div class="card" style="background:#0f172a; border:1px solid #0284c7;">
+ <div class="card" style="background:#17211f; border:1px solid #1c4b42;">
  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
  <div>
- <span class="badge" id="causalDominantBadge" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#f87171; font-size:0.75rem; margin-bottom:0.5rem;">
+ <span class="badge" id="causalDominantBadge" style="background:rgba(239,68,68,0.2); border:1px solid #f17971; color:#f87171; font-size:0.75rem; margin-bottom:0.5rem;">
  DOMINANT OUTBREAK CAUSE
  </span>
  <h3 id="causalDominantTitle" style="font-size:1.15rem; font-weight:800; color:#fff; margin:0.3rem 0;">
  Occupational Hyperthermia &amp; Exertional Dehydration
  </h3>
  <div style="font-size:0.8rem; color:#94a3b8;">
- Lead Regulatory Authority: <strong id="causalLeadAgency" style="color:#38bdf8;">MOHRE (Ministry of Human Resources &amp; Emiratisation)</strong>
+ Lead Regulatory Authority: <strong id="causalLeadAgency" style="color:#65dfcd;">MOHRE (Ministry of Human Resources &amp; Emiratisation)</strong>
  </div>
  <div style="font-size:0.72rem; color:#64748b; margin-top:0.2rem;" id="causalStatuteText">
  UAE Ministerial Resolution No. 44 of 2022 (Midday Work Ban)
@@ -3118,10 +3121,10 @@
 
  <div style="text-align:right;">
  <div style="font-size:0.72rem; color:#94a3b8;">Posterior Probability:</div>
- <div id="causalDominantPct" style="font-size:2.2rem; font-weight:900; color:#38bdf8; line-height:1;">
+ <div id="causalDominantPct" style="font-size:2.2rem; font-weight:900; color:#65dfcd; line-height:1;">
  99.8%
  </div>
- <div id="causalCoMorbidNotice" style="font-size:0.72rem; color:#10b981; margin-top:0.35rem; font-weight:700;">
+ <div id="causalCoMorbidNotice" style="font-size:0.72rem; color:#66d9af; margin-top:0.35rem; font-weight:700;">
  Isolated Single Etiology
  </div>
  </div>
@@ -3129,8 +3132,8 @@
  </div>
 
  <!-- 4-Bar Posterior Probability Distribution Meter -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h4 style="font-size:0.95rem; font-weight:700; color:#38bdf8; margin:0 0 1rem 0; border-bottom:1px solid #1e293b; padding-bottom:0.5rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 1rem 0; border-bottom:1px solid #222f2b; padding-bottom:0.5rem;">
  Bayesian Posterior Probability Distribution &amp; 90% Credible Intervals (N=1,000 Draws)
  </h4>
 
@@ -3140,8 +3143,8 @@
  </div>
 
  <!-- Tri-Agency Coordinated Directives & RACI Matrix -->
- <div class="card" style="background:#0f172a; border:1px solid #334155;">
- <h4 style="font-size:0.95rem; font-weight:700; color:#10b981; margin:0 0 0.75rem 0;">
+ <div class="card" style="background:#17211f; border:1px solid #283531;">
+ <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0 0 0.75rem 0;">
  Tri-Agency Coordinated Directives &amp; RACI Action Plan
  </h4>
  <div id="causalActionOrdersList" style="display:flex; flex-direction:column; gap:0.5rem;">
@@ -3180,12 +3183,12 @@
  
  <div style="margin-bottom:1rem;">
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Operational Comment</label>
- <input type="text" id="ackComment" placeholder="Enter incident response log or investigation findings..." style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff;">
+ <input type="text" id="ackComment" placeholder="Enter incident response log or investigation findings..." style="width:100%; padding:0.6rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff;">
  </div>
 
  <div style="margin-bottom:1.5rem;">
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Mandatory Dismissal Reason (Required if Dismissing)</label>
- <select id="ackDismissReason" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff;">
+ <select id="ackDismissReason" style="width:100%; padding:0.6rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff;">
  <option value="">Select reason if dismissing...</option>
  <option value="benign_local_event">Benign Local Event (False Positive)</option>
  <option value="data_artefact_backlog">Data Artefact / Reporting Backlog Dump</option>
@@ -3216,12 +3219,12 @@
  <div class="modal-body">
  <div style="margin-bottom:1rem;">
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Node Identifier</label>
- <input type="text" id="commNodeId" placeholder="e.g. SENT-001" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff; font-family:monospace;">
+ <input type="text" id="commNodeId" placeholder="e.g. SENT-001" style="width:100%; padding:0.6rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff; font-family:monospace;">
  </div>
 
  <div style="margin-bottom:1rem;">
  <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:0.35rem;">Assigned Worksite</label>
- <select id="commSiteId" style="width:100%; padding:0.6rem; background:#0f172a; border:1px solid #334155; border-radius:6px; color:#fff;">
+ <select id="commSiteId" style="width:100%; padding:0.6rem; background:#17211f; border:1px solid #283531; border-radius:6px; color:#fff;">
  <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Deepwater Port Terminal</option>
  <option value="SITE-JA-02">SITE-JA-02: Jebel Ali Heavy Fabrication Yard</option>
  <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Structural Steel Yard</option>
@@ -3239,7 +3242,7 @@
  <label for="commIndoorMode" style="font-size:0.85rem; color:#cbd5e1;">Indoor / Canteen Mode (uses formula without radiant sun term)</label>
  </div>
 
- <div class="card" style="margin-bottom:1.25rem; background:#0f172a; border:1px dashed #475569;">
+ <div class="card" style="margin-bottom:1.25rem; background:#17211f; border:1px dashed #475569;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
  <span style="font-size:0.85rem; font-weight:700;">Geolocation Fix</span>
  <button type="button" class="btn btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="useCurrentDeviceLocation()">
@@ -3250,11 +3253,11 @@
  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.75rem;">
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.25rem;">Latitude</label>
- <input type="number" step="0.0001" id="commLat" placeholder="24.9920" style="width:100%; padding:0.5rem; background:#1e293b; border:1px solid #334155; border-radius:4px; color:#fff;">
+ <input type="number" step="0.0001" id="commLat" placeholder="24.9920" style="width:100%; padding:0.5rem; background:#222f2b; border:1px solid #283531; border-radius:4px; color:#fff;">
  </div>
  <div>
  <label style="display:block; font-size:0.75rem; color:#94a3b8; margin-bottom:0.25rem;">Longitude</label>
- <input type="number" step="0.0001" id="commLon" placeholder="55.0410" style="width:100%; padding:0.5rem; background:#1e293b; border:1px solid #334155; border-radius:4px; color:#fff;">
+ <input type="number" step="0.0001" id="commLon" placeholder="55.0410" style="width:100%; padding:0.5rem; background:#222f2b; border:1px solid #283531; border-radius:4px; color:#fff;">
  </div>
  </div>
 
@@ -3280,8 +3283,8 @@
  <!-- Traceable Literature & Methodology Modal -->
  <div id="sourcesModal" class="modal-overlay">
  <div class="modal-box" style="max-width:760px; max-height:85vh; overflow-y:auto;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #334155; padding-bottom:0.75rem;">
- <h3 style="font-size:1.1rem; font-weight:700; color:#38bdf8; margin:0;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #283531; padding-bottom:0.75rem;">
+ <h3 style="font-size:1.1rem; font-weight:700; color:#65dfcd; margin:0;">
  Traceable Academic Standards &amp; Formula Sources
  </h3>
  <button class="close-btn" onclick="closeSourcesModal()">&times;</button>
@@ -3298,8 +3301,8 @@
  <!-- What-If Assumptions Ledger & Audit Modal -->
  <div id="whatifAssumptionsModal" class="modal-overlay">
  <div class="modal-box" style="max-width:850px; max-height:85vh; overflow-y:auto;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #334155; padding-bottom:0.75rem;">
- <h3 style="font-size:1.15rem; font-weight:700; color:#38bdf8; margin:0; display:flex; align-items:center; gap:0.5rem;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #283531; padding-bottom:0.75rem;">
+ <h3 style="font-size:1.15rem; font-weight:700; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
  Sourced Assumptions &amp; UNVERIFIED Disclosures Ledger
  </h3>
  <button class="close-btn" onclick="closeWhatifAssumptionsModal()">&times;</button>
@@ -3315,12 +3318,12 @@
 
  <!-- Executive Action Dossier Modal (Phase 18) -->
  <div id="actionDossierModal" class="modal-overlay">
- <div class="modal-box" style="max-width:920px; max-height:88vh; overflow-y:auto; background:#0b1329; border:1px solid #38bdf8;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #334155; padding-bottom:0.75rem; position:sticky; top:0; background:#0b1329; z-index:10;">
+ <div class="modal-box" style="max-width:920px; max-height:88vh; overflow-y:auto; background:#101817; border:1px solid #65dfcd;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #283531; padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div style="display:flex; align-items:center; gap:0.6rem;">
  
  <div>
- <h3 style="font-size:1.15rem; font-weight:800; color:#38bdf8; margin:0;" id="dossierModalTitle">
+ <h3 style="font-size:1.15rem; font-weight:800; color:#65dfcd; margin:0;" id="dossierModalTitle">
  Munzir Executive Action Dossier
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8;" id="dossierModalSubtitle">
@@ -3332,7 +3335,7 @@
  <button class="btn btn-secondary" onclick="copyDossierMarkdown()" style="font-size:0.75rem; padding:0.35rem 0.75rem;">
  Copy Markdown
  </button>
- <button class="btn btn-primary" onclick="window.print()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#0284c7;">
+ <button class="btn btn-primary" onclick="window.print()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#1c4b42;">
  Print / PDF
  </button>
  <button class="close-btn" onclick="closeActionDossierModal()">&times;</button>
@@ -3346,8 +3349,8 @@
 
  <!-- Zero-Mock Provenance & Live Telemetry Modal -->
  <div id="zeroMockModal" class="modal-overlay">
- <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#0b1329; border:1px solid #10b981;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem; position:sticky; top:0; background:#0b1329; z-index:10;">
+ <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#101817; border:1px solid #66d9af;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div style="display:flex; align-items:center; gap:0.6rem;">
  
  <div>
@@ -3360,7 +3363,7 @@
  </div>
  </div>
  <div style="display:flex; align-items:center; gap:0.5rem;">
- <button class="btn btn-primary" onclick="verifyLiveTelemetry()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#059669; border-color:#10b981;">
+ <button class="btn btn-primary" onclick="verifyLiveTelemetry()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#059669; border-color:#66d9af;">
  Probe Live Telemetry Now
  </button>
  <button class="close-btn" onclick="closeZeroMockModal()">&times;</button>
@@ -3371,7 +3374,7 @@
  <div id="liveTelemetryBanner" style="padding:1rem; background:#042f2e; border:1px solid #059669; border-radius:8px; margin-bottom:1.25rem;">
  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
  <div style="display:flex; align-items:center; gap:0.5rem;">
- <span class="pulse-dot" style="background:#10b981;"></span>
+ <span class="pulse-dot" style="background:#66d9af;"></span>
  <strong style="color:#6ee7b7; font-size:0.88rem;" id="liveProbeStatus">LIVE TELEMETRY PROBE: STANDBY</strong>
  </div>
  <span style="font-size:0.72rem; color:#a7f3d0; font-family:monospace;" id="liveProbeTimestamp">Timestamp: Pending live probe</span>
@@ -3388,8 +3391,8 @@
  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
  
  <!-- Card 1 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  1. Open-Meteo European NWP &amp; ERA5
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3399,8 +3402,8 @@
  </div>
 
  <!-- Card 2 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  2. OpenAQ v3 Dubai Ground Network
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3410,8 +3413,8 @@
  </div>
 
  <!-- Card 3 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  3. ESP32 Sentinel Physical IoT Nodes
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3421,8 +3424,8 @@
  </div>
 
  <!-- Card 4 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  4. US DOL OSHA Severe Injury Registry
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3432,8 +3435,8 @@
  </div>
 
  <!-- Card 5 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  5. US FDA openFDA Drug Label Database
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3443,8 +3446,8 @@
  </div>
 
  <!-- Card 6 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  6. CDC MMWR Pacific Northwest Heat Surge
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3454,8 +3457,8 @@
  </div>
 
  <!-- Card 7 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  7. Inception 42 Jais-3-0.9B on GPU
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3465,8 +3468,8 @@
  </div>
 
  <!-- Card 8 -->
- <div class="card" style="background:#0f172a; border:1px solid #334155; padding:0.85rem;">
- <div style="font-size:0.82rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; padding:0.85rem;">
+ <div style="font-size:0.82rem; font-weight:700; color:#65dfcd; display:flex; align-items:center; gap:0.35rem;">
  8. Sovereign UAE Statutory Codex
  </div>
  <p style="font-size:0.75rem; color:#94a3b8; margin:0.35rem 0 0.5rem 0;">
@@ -3485,10 +3488,10 @@
 
  <!-- Lakehouse Parquet Medallion Storage Modal -->
  <div id="lakehouseInspectionModal" class="modal-overlay">
- <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#070a13; z-index:10;">
+ <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div>
- <h3 style="font-size:1.15rem; font-weight:800; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1.15rem; font-weight:800; color:#65dfcd; margin:0;">
  Medallion Parquet Lakehouse Telemetry &amp; Partition Inspector
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8;">
@@ -3542,8 +3545,8 @@
 
  <!-- Local Sovereign GPU Inference Modal -->
  <div id="cudaInferenceInspectionModal" class="modal-overlay">
- <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#070a13; z-index:10;">
+ <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div>
  <h3 style="font-size:1.15rem; font-weight:800; color:#34d399; margin:0;">
  Sovereign AI &amp; Local GPU Telemetry Inspector
@@ -3589,7 +3592,7 @@
  </div>
 
  <div style="display:flex; justify-content:space-between; align-items:center;">
- <button class="btn btn-primary" onclick="closeCudaInspectorModal(); activateTab('jais');" style="font-size:0.75rem; padding:0.4rem 0.85rem; background:#059669; border-color:#10b981;">
+ <button class="btn btn-primary" onclick="closeCudaInspectorModal(); activateTab('jais');" style="font-size:0.75rem; padding:0.4rem 0.85rem; background:#059669; border-color:#66d9af;">
  Jump to Jais Bilingual LLM View
  </button>
  <button class="btn btn-secondary" onclick="closeCudaInspectorModal()" style="font-size:0.75rem; padding:0.4rem 0.85rem;">Close Inspector</button>
@@ -3599,8 +3602,8 @@
 
  <!-- Automated Regression Test Suite & Integrity Ledger Modal -->
  <div id="testIntegrityModal" class="modal-overlay">
- <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#070a13; z-index:10;">
+ <div class="modal-box" style="max-width:960px; max-height:88vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.1); box-shadow:0 12px 40px rgba(0,0,0,0.8);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div>
  <h3 style="font-size:1.15rem; font-weight:800; color:#a855f7; margin:0;">
  Automated Test Suite &amp; Algorithmic Integrity Ledger
@@ -3659,10 +3662,10 @@
 
  <!-- In-App Technical Evaluation Dossier Modal -->
  <div id="technicalDossierModal" class="modal-overlay">
- <div class="modal-box" style="max-width:1080px; max-height:90vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.12); box-shadow:0 12px 40px rgba(0,0,0,0.85);">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#070a13; z-index:10;">
+ <div class="modal-box" style="max-width:1080px; max-height:90vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.12); box-shadow:0 12px 40px rgba(0,0,0,0.85);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div>
- <h3 style="font-size:1.25rem; font-weight:800; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1.25rem; font-weight:800; color:#65dfcd; margin:0;">
  Munzir (منذر) &bull; Grand Jury Technical Evaluation Dossier
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8;">
@@ -3670,7 +3673,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center;">
- <button class="btn btn-primary" onclick="window.print()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#0284c7;">
+ <button class="btn btn-primary" onclick="window.print()" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#1c4b42;">
  Print / Export PDF
  </button>
  <button class="close-btn" onclick="closeTechnicalDossierModal()">&times;</button>
@@ -3678,40 +3681,40 @@
  </div>
 
  <div style="font-size:0.85rem; color:#cbd5e1; line-height:1.7;">
- <div style="background:#0b111e; border-left:3px solid #38bdf8; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
+ <div style="background:#0b111e; border-left:3px solid #65dfcd; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
  <h4 style="font-size:0.95rem; font-weight:700; color:#fff; margin:0 0 0.5rem 0;">1. Executive Summary &amp; Gulf Operational Problem</h4>
  <p style="margin:0; font-size:0.82rem; color:#94a3b8;">
  In the Arabian Gulf, extreme summer conditions (ambient dry-bulb &gt; 46°C, humidity &gt; 70%, solar globe &gt; 52°C) generate lethal wet-bulb globe temperatures (WBGT &gt; 34°C). The statutory UAE Midday Work Ban (Resolution 44 of 2022) protects workers between 12:30 and 15:00. However, cumulative nocturnal heat debt and delayed hyperthermic dehydration frequently trigger acute kidney injury (AKI) and cardiac arrest outside statutory hours. Munzir is the first national-scale early warning and biosurveillance system that unifies physical IoT edge sensing, rational heat balance physics, Bayesian causal outbreak deconvolution, and local sovereign LLMs under strict privacy-preserving law.
  </p>
  </div>
 
- <div style="background:#0b111e; border-left:3px solid #10b981; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
+ <div style="background:#0b111e; border-left:3px solid #66d9af; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
  <h4 style="font-size:0.95rem; font-weight:700; color:#fff; margin:0 0 0.5rem 0;">2. Core Mathematical Formulations &amp; Algorithmic Engines</h4>
  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:0.75rem; margin-top:0.5rem;">
- <div style="background:#060911; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
- <strong style="color:#38bdf8; font-size:0.78rem;">ISO 7933 Rational Heat Balance</strong>
+ <div style="background:#0d1514; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+ <strong style="color:#65dfcd; font-size:0.78rem;">ISO 7933 Rational Heat Balance</strong>
  <div style="font-family:monospace; font-size:0.72rem; color:#a5f3fc; margin:0.25rem 0;">H_bal = M - W - (R + C) - E_req - S_w</div>
  <div style="font-size:0.75rem; color:#94a3b8;">Closed-form human thermodynamics calculating time to 38.5°C core rectal cutoff.</div>
  </div>
- <div style="background:#060911; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
- <strong style="color:#38bdf8; font-size:0.78rem;">Bayesian Causal De-Mixing</strong>
+ <div style="background:#0d1514; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+ <strong style="color:#65dfcd; font-size:0.78rem;">Bayesian Causal De-Mixing</strong>
  <div style="font-family:monospace; font-size:0.72rem; color:#a5f3fc; margin:0.25rem 0;">P(&theta; | D) &prop; &prod; LR_i^{w_i} &times; Dir(&alpha;)</div>
  <div style="font-size:0.75rem; color:#94a3b8;">Disentangles thermal heat stroke (73%) from food poisoning (27%) with 90% CIs.</div>
  </div>
- <div style="background:#060911; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
- <strong style="color:#38bdf8; font-size:0.78rem;">Differential Privacy &bull; Laplace Mechanism</strong>
+ <div style="background:#0d1514; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+ <strong style="color:#65dfcd; font-size:0.78rem;">Differential Privacy &bull; Laplace Mechanism</strong>
  <div style="font-family:monospace; font-size:0.72rem; color:#a5f3fc; margin:0.25rem 0;">b = &Delta;f / &epsilon; = (1 / N) / 0.142 &approx; 0.00014</div>
  <div style="font-size:0.75rem; color:#94a3b8;">Formal mathematical privacy guarantee (&epsilon;=0.142) verified via OpenDP.</div>
  </div>
- <div style="background:#060911; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
- <strong style="color:#38bdf8; font-size:0.78rem;">Monte Carlo Policy Studio</strong>
+ <div style="background:#0d1514; padding:0.75rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+ <strong style="color:#65dfcd; font-size:0.78rem;">Monte Carlo Policy Studio</strong>
  <div style="font-family:monospace; font-size:0.72rem; color:#a5f3fc; margin:0.25rem 0;">&Delta;Dividend = &sum; (&Delta;Admissions &times; C_ICU) - C_cost</div>
  <div style="font-size:0.75rem; color:#94a3b8;">10,000 draws predicting AED 32M+ net public dividend and 4.2x-6.8x BCR.</div>
  </div>
  </div>
  </div>
 
- <div style="background:#0b111e; border-left:3px solid #f59e0b; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
+ <div style="background:#0b111e; border-left:3px solid #e9aa62; padding:1rem; border-radius:0 4px 4px 0; margin-bottom:1.25rem;">
  <h4 style="font-size:0.95rem; font-weight:700; color:#fff; margin:0 0 0.5rem 0;">3. Sovereign AI &amp; Regulatory Alignment</h4>
  <p style="margin:0; font-size:0.82rem; color:#94a3b8;">
  Powered by Inception 42 Jais-3-0.9B on local NVIDIA GeForce RTX 2050 GPU (CUDA:0). Produces 5-language dispatches (Arabic, English, Urdu, Hindi, Malayalam) with zero foreign API leaks. Incorporates full statutory codex for UAE Federal Decree-Law No. 33 of 2021 (Labor Relations), Personal Data Protection Law No. 45 of 2021, and DHA NABIDH / Malaffi HL7 FHIR R4 exchange standards.
@@ -3727,12 +3730,12 @@
 
  <!-- Grand Engineering Showcase & Innovations Matrix Modal (Phase 32) -->
  <div id="innovationsMatrixModal" class="modal-overlay">
- <div class="modal-box" style="max-width:1100px; max-height:90vh; overflow-y:auto; background:#0b1329; border:2px solid #38bdf8; box-shadow:0 0 35px rgba(2,132,199,0.35);">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem; position:sticky; top:0; background:#0b1329; z-index:10;">
+ <div class="modal-box" style="max-width:1100px; max-height:90vh; overflow-y:auto; background:#101817; border:2px solid #65dfcd; box-shadow:0 0 35px rgba(2,132,199,0.35);">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
  <div style="display:flex; align-items:center; gap:0.6rem;">
  
  <div>
- <h3 style="font-size:1.25rem; font-weight:800; color:#38bdf8; margin:0;">
+ <h3 style="font-size:1.25rem; font-weight:800; color:#65dfcd; margin:0;">
  Munzir System Capabilities &amp; Hackathon Rubric Matrix
  </h3>
  <div style="font-size:0.75rem; color:#94a3b8;">
@@ -3743,7 +3746,7 @@
  <button class="close-btn" onclick="closeInnovationsMatrixModal()">&times;</button>
  </div>
 
- <div style="background:#070c18; border-left:4px solid #f59e0b; padding:0.85rem 1.1rem; border-radius:0 6px 6px 0; margin-bottom:1rem;">
+ <div style="background:#0d1514; border-left:4px solid #e9aa62; padding:0.85rem 1.1rem; border-radius:0 6px 6px 0; margin-bottom:1rem;">
  <div style="font-size:0.82rem; color:#e2e8f0; line-height:1.45;">
  <strong>Championship Engineering Depth:</strong> Click any <strong>"Run Proof Now"</strong> button below to instantly navigate to that subsystem and run genuine backend computations against our 57MB Parquet Lakehouse and local RTX 2050 GPU.
  </div>
@@ -3905,7 +3908,7 @@
  </div>
  </div>
 
- <div style="display:flex; justify-content:flex-end; margin-top:1.5rem; border-top:1px solid #1e293b; padding-top:1rem;">
+ <div style="display:flex; justify-content:flex-end; margin-top:1.5rem; border-top:1px solid #222f2b; padding-top:1rem;">
  <button class="btn btn-secondary" onclick="closeInnovationsMatrixModal()">Close Matrix</button>
  </div>
  </div>
@@ -3913,10 +3916,10 @@
 
  <!-- System Architecture & End-to-End Pipeline Modal -->
  <div id="systemArchitectureModal" class="modal-overlay">
-   <div class="modal-box" style="max-width:1080px; max-height:90vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.12); box-shadow:0 12px 40px rgba(0,0,0,0.85);">
-     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1e293b; padding-bottom:0.75rem; position:sticky; top:0; background:#070a13; z-index:10;">
+   <div class="modal-box" style="max-width:1080px; max-height:90vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.12); box-shadow:0 12px 40px rgba(0,0,0,0.85);">
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; position:sticky; top:0; background:#101817; z-index:10;">
        <div>
-         <h3 style="font-size:1.25rem; font-weight:800; color:#38bdf8; margin:0;">
+         <h3 style="font-size:1.25rem; font-weight:800; color:#65dfcd; margin:0;">
            Munzir 5-Layer Biosurveillance Architecture &amp; Data Pipeline
          </h3>
          <div style="font-size:0.75rem; color:#94a3b8;">
@@ -4010,10 +4013,10 @@
 
  <!-- Consolidated Munzir Technical Dossier & Systems Ledger Modal -->
  <div id="systemDossierModal" class="modal-overlay">
-   <div class="modal-box system-dossier-dialog" style="max-width:1120px; max-height:90vh; overflow-y:auto; background:#070a13; border:1px solid rgba(255,255,255,0.12); box-shadow:0 16px 48px rgba(0,0,0,0.85); border-radius:8px;">
-     <div class="dossier-header" style="display:flex; justify-content:space-between; align-items:center; padding:1rem 1.25rem 0.75rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.08); position:sticky; top:0; background:#070a13; z-index:15;">
+   <div class="modal-box system-dossier-dialog" style="max-width:1120px; max-height:90vh; overflow-y:auto; background:#101817; border:1px solid rgba(255,255,255,0.12); box-shadow:0 16px 48px rgba(0,0,0,0.85); border-radius:8px;">
+     <div class="dossier-header" style="display:flex; justify-content:space-between; align-items:center; padding:1rem 1.25rem 0.75rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.08); position:sticky; top:0; background:#101817; z-index:15;">
        <div>
-         <h3 style="font-size:1.2rem; font-weight:800; color:#38bdf8; margin:0; letter-spacing:-0.01em;">
+         <h3 style="font-size:1.2rem; font-weight:800; color:#65dfcd; margin:0; letter-spacing:-0.01em;">
            Munzir Technical Dossier &amp; Systems Ledger
          </h3>
          <div style="font-size:0.74rem; color:#94a3b8; margin-top:2px;">
@@ -4276,7 +4279,7 @@
        </div>
      </div>
 
-     <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1.25rem; border-top:1px solid rgba(255,255,255,0.08); background:#070a13;">
+     <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1.25rem; border-top:1px solid rgba(255,255,255,0.08); background:#101817;">
        <span style="font-size:0.72rem; color:#64748b; font-family:var(--font-mono, monospace);">Authentic Data Provenance &bull; 0 Mock Values Verified &bull; 258/258 Tests Passing</span>
        <button class="btn btn-secondary" onclick="closeSystemDossierModal()" style="font-size:0.72rem; padding:0.35rem 0.85rem;">Close Dossier</button>
      </div>
