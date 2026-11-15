@@ -24,9 +24,9 @@
         </button>
       </a>
 
-      <button class="region-select" type="button" title="United Arab Emirates Operations">
-        <span class="uae-flag" aria-label="United Arab Emirates">AE</span>
-        <span><b>UAE Operations</b><small>Dubai &amp; Northern Emirates</small></span>
+      <button class="region-select" id="btnRegionSelect" type="button" title="United Arab Emirates Operations" onclick="openRegionSelectorModal()">
+        <span class="uae-flag" aria-label="United Arab Emirates" id="regionFlag">AE</span>
+        <span><b id="regionTitle">UAE Operations</b><small id="regionSubtitle">Dubai &amp; Northern Emirates</small></span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
 
@@ -153,11 +153,11 @@
       </div>
 
       <div class="sidebar-bottom">
-        <div class="privacy-note" title="Sealed per UAE Federal Decree-Law No. 33/2021">
+        <div class="privacy-note" onclick="activateTab('safeharbor')" role="button" tabindex="0" title="Inspect UAE Law No. 45/2021 Safe-Harbor Shield (&epsilon;=0.14)" style="cursor:pointer;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
           <span><b>Privacy by design</b><small>Aggregated signals only (&epsilon;=0.14)</small></span>
         </div>
-        <div class="profile">
+        <div class="profile" onclick="openOfficerProfileModal()" role="button" tabindex="0" title="Inspect Officer Profile &amp; Sovereign Session" style="cursor:pointer;">
           <div class="avatar">AK</div>
           <span><b>Amira Khalid</b><small>Public Health Lead</small></span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
@@ -246,7 +246,7 @@
 
           <div id="topSearchWrapper" style="position:relative; display:inline-flex; align-items:center;">
             <input type="text" id="topSearchInput" class="top-search-input" placeholder="Search sites, alerts..." style="display:none;" onkeyup="handleQuickSearch(event)">
-            <button class="icon-button search-button" id="btnTopSearch" aria-label="Quick Command Search" onclick="toggleQuickSearch()">
+            <button class="icon-button search-button" id="btnTopSearch" aria-label="Quick Command Search" onclick="openCommandPalette()" title="Spotlight Command Search (⌘ K)">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               <kbd>⌘ K</kbd>
             </button>
@@ -4915,7 +4915,179 @@
    </div>
  </div>
 
- <!-- Persistent Minimalist Footer Status Strip (26px) -->
+  <!-- Region Selector Modal -->
+  <div id="regionSelectorModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 640px; background:#131c1a; border:1px solid #283531;">
+      <div class="modal-header" style="border-bottom:1px solid #283531;">
+        <div>
+          <div class="eyebrow" style="color:var(--primary); font-size:0.7rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">SOVEREIGN OPERATIONS &bull; JURISDICTION</div>
+          <h2 style="font-size:1.15rem; font-weight:800; color:#e9f0ed; margin-top:2px;">Select Operational Jurisdiction</h2>
+          <div style="font-size:0.75rem; color:#87978f;">Filter real-time telemetry, IoT sensors, and MOHRE statutory alerts across UAE Emirates</div>
+        </div>
+        <button class="close-btn" onclick="closeRegionSelectorModal()">&times;</button>
+      </div>
+      <div style="padding:1.25rem; display:flex; flex-direction:column; gap:0.75rem;">
+        <div class="region-card active" onclick="selectRegion('all')" id="regionCard_all" style="background:#17211f; border:1px solid #316d60; border-radius:8px; padding:0.85rem 1rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:36px; height:36px; border-radius:6px; background:#1c4b42; border:1px solid #316d60; display:grid; place-items:center; color:#65dfcd; font-weight:800; font-size:0.85rem;">AE</div>
+            <div>
+              <div style="font-weight:700; color:#f0f7f2; font-size:0.9rem;">All UAE Operations</div>
+              <div style="font-size:0.75rem; color:#87978f;">Full Federal Grid &bull; 8 Real-time Monitored Sites</div>
+            </div>
+          </div>
+          <span class="badge" style="background:#1c4b42; color:#65dfcd; font-size:0.7rem;">Active (8 Sites)</span>
+        </div>
+
+        <div class="region-card" onclick="selectRegion('dubai')" id="regionCard_dubai" style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem 1rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:36px; height:36px; border-radius:6px; background:#1e293b; border:1px solid #334155; display:grid; place-items:center; color:#93c5fd; font-weight:800; font-size:0.85rem;">DXB</div>
+            <div>
+              <div style="font-weight:700; color:#f0f7f2; font-size:0.9rem;">Dubai Operations</div>
+              <div style="font-size:0.75rem; color:#87978f;">Jebel Ali Port, Al Quoz, Dubai South, Business Bay</div>
+            </div>
+          </div>
+          <span class="badge badge-normal" style="font-size:0.7rem;">4 Sites</span>
+        </div>
+
+        <div class="region-card" onclick="selectRegion('abudhabi')" id="regionCard_abudhabi" style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem 1rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:36px; height:36px; border-radius:6px; background:#1e293b; border:1px solid #334155; display:grid; place-items:center; color:#93c5fd; font-weight:800; font-size:0.85rem;">AUH</div>
+            <div>
+              <div style="font-weight:700; color:#f0f7f2; font-size:0.9rem;">Abu Dhabi Operations</div>
+              <div style="font-size:0.75rem; color:#87978f;">Khalifa Port Industrial Zone</div>
+            </div>
+          </div>
+          <span class="badge badge-normal" style="font-size:0.7rem;">1 Site</span>
+        </div>
+
+        <div class="region-card" onclick="selectRegion('sharjah')" id="regionCard_sharjah" style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem 1rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:36px; height:36px; border-radius:6px; background:#1e293b; border:1px solid #334155; display:grid; place-items:center; color:#93c5fd; font-weight:800; font-size:0.85rem;">SHJ</div>
+            <div>
+              <div style="font-weight:700; color:#f0f7f2; font-size:0.9rem;">Sharjah Operations</div>
+              <div style="font-size:0.75rem; color:#87978f;">Hamriyah Free Zone Logistics Hub</div>
+            </div>
+          </div>
+          <span class="badge badge-normal" style="font-size:0.7rem;">1 Site</span>
+        </div>
+
+        <div class="region-card" onclick="selectRegion('northern')" id="regionCard_northern" style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem 1rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:36px; height:36px; border-radius:6px; background:#1e293b; border:1px solid #334155; display:grid; place-items:center; color:#93c5fd; font-weight:800; font-size:0.85rem;">NE</div>
+            <div>
+              <div style="font-weight:700; color:#f0f7f2; font-size:0.9rem;">Northern Emirates Operations</div>
+              <div style="font-size:0.75rem; color:#87978f;">Ras Al Khaimah Quarry &amp; Fujairah Port Terminal</div>
+            </div>
+          </div>
+          <span class="badge badge-normal" style="font-size:0.7rem;">2 Sites</span>
+        </div>
+      </div>
+      <div style="padding:0.75rem 1.25rem 1.25rem; border-top:1px solid #283531; display:flex; justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeRegionSelectorModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Officer Profile Modal -->
+  <div id="officerProfileModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 660px; background:#131c1a; border:1px solid #283531;">
+      <div class="modal-header" style="border-bottom:1px solid #283531;">
+        <div>
+          <div class="eyebrow" style="color:var(--primary); font-size:0.7rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">SOVEREIGN SURVEILLANCE &bull; OFFICER CREDENTIALS</div>
+          <h2 style="font-size:1.15rem; font-weight:800; color:#e9f0ed; margin-top:2px;">Officer Profile &amp; Sovereign Session</h2>
+          <div style="font-size:0.75rem; color:#87978f;">Dubai Health Authority (DHA) / MOHRE Joint Health Command</div>
+        </div>
+        <button class="close-btn" onclick="closeOfficerProfileModal()">&times;</button>
+      </div>
+      <div style="padding:1.25rem; display:flex; flex-direction:column; gap:1.25rem;">
+        <!-- Officer Identity Card -->
+        <div style="display:flex; align-items:center; gap:1rem; background:#17211f; border:1px solid #283531; border-radius:8px; padding:1rem;">
+          <div style="width:52px; height:52px; border-radius:50%; background:#1c4b42; border:2px solid #65dfcd; display:grid; place-items:center; color:#65dfcd; font-weight:800; font-size:1.2rem;">AK</div>
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <h3 style="font-size:1.05rem; font-weight:800; color:#f0f7f2; margin:0;">Amira Khalid</h3>
+              <span class="badge badge-normal" style="font-size:0.65rem;">ACTIVE SESSION</span>
+            </div>
+            <div style="font-size:0.8rem; color:#8db7a8; margin-top:2px;">Public Health Lead &bull; Sovereign Biosurveillance Commander</div>
+            <div style="font-size:0.72rem; color:#87978f; margin-top:4px;">Officer ID: <strong style="color:#f0f7f2;">AE-DHA-94821</strong> &bull; Agency: <strong style="color:#f0f7f2;">DHA / MOHRE Public Health</strong></div>
+          </div>
+        </div>
+
+        <!-- Credentials & Cryptography Grid -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem;">
+            <div style="font-size:0.7rem; color:#87978f; text-transform:uppercase; font-weight:700;">Clearance Level</div>
+            <div style="font-weight:700; color:#65dfcd; font-size:0.85rem; margin-top:4px;">Tier 1 Sovereign Directives</div>
+            <div style="font-size:0.7rem; color:#87978f; margin-top:2px;">UAE Resolution 44/2022 Statutory Dispatch Authorized</div>
+          </div>
+          <div style="background:#17211f; border:1px solid #283531; border-radius:8px; padding:0.85rem;">
+            <div style="font-size:0.7rem; color:#87978f; text-transform:uppercase; font-weight:700;">DP Privacy Budget</div>
+            <div style="font-weight:700; color:#65dfcd; font-size:0.85rem; margin-top:4px;">&epsilon; = 0.142 | &delta; = 1e-5</div>
+            <div style="font-size:0.7rem; color:#87978f; margin-top:2px;">UAE Federal Law No. 45/2021 Safe-Harbor Enforced</div>
+          </div>
+        </div>
+
+        <!-- Quick Role Switcher -->
+        <div>
+          <div style="font-size:0.75rem; font-weight:700; color:#f0f7f2; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.04em;">Operational Role Simulation</div>
+          <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:0.5rem;">
+            <button class="btn btn-secondary" onclick="switchRoleFromProfile('surveillance_officer')" style="justify-content:flex-start; font-size:0.78rem; padding:0.5rem 0.75rem;">
+              Surveillance Officer (Default)
+            </button>
+            <button class="btn btn-secondary" onclick="switchRoleFromProfile('field_commander')" style="justify-content:flex-start; font-size:0.78rem; padding:0.5rem 0.75rem;">
+              Field Commander
+            </button>
+            <button class="btn btn-secondary" onclick="switchRoleFromProfile('clinical_epi')" style="justify-content:flex-start; font-size:0.78rem; padding:0.5rem 0.75rem;">
+              Clinical Epidemiologist
+            </button>
+            <button class="btn btn-secondary" onclick="switchRoleFromProfile('mohre_auditor')" style="justify-content:flex-start; font-size:0.78rem; padding:0.5rem 0.75rem;">
+              MOHRE Policy Auditor
+            </button>
+          </div>
+        </div>
+
+        <!-- Direct Navigation Shortcuts -->
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; border-top:1px solid #283531; padding-top:0.85rem;">
+          <button class="btn btn-secondary" onclick="closeOfficerProfileModal(); activateTab('safeharbor');" style="font-size:0.75rem; padding:0.4rem 0.75rem;">
+            Inspect Safe-Harbor Shield
+          </button>
+          <button class="btn btn-secondary" onclick="closeOfficerProfileModal(); activateTab('audit');" style="font-size:0.75rem; padding:0.4rem 0.75rem;">
+            View Security Audit Trail
+          </button>
+          <button class="btn btn-secondary" onclick="closeOfficerProfileModal(); openSystemDossierModal('models');" style="font-size:0.75rem; padding:0.4rem 0.75rem;">
+            System Models &amp; Dossier
+          </button>
+        </div>
+      </div>
+      <div style="padding:0.75rem 1.25rem 1.25rem; border-top:1px solid #283531; display:flex; justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeOfficerProfileModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spotlight Command Palette Modal (⌘ K) -->
+  <div id="commandPaletteModal" class="modal-overlay" onclick="if(event.target === this) closeCommandPalette()">
+    <div class="modal-content" style="max-width: 640px; background:#131c1a; border:1px solid #31443e; box-shadow:0 25px 50px -12px rgba(0, 0, 0, 0.7);">
+      <div style="padding:0.75rem 1rem; border-bottom:1px solid #283531; display:flex; align-items:center; gap:0.75rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#65dfcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="commandPaletteInput" placeholder="Jump to view, site, alert, or action... (Type or use arrow keys)" style="flex:1; background:transparent; border:none; outline:none; color:#f0f7f2; font-size:0.95rem; font-family:var(--font-sans);" oninput="filterCommandPalette(this.value)" onkeydown="handleCommandPaletteKey(event)">
+        <kbd style="font-size:0.65rem; background:#1c2b27; border:1px solid #283531; border-radius:4px; padding:2px 6px; color:#91a29b;">ESC</kbd>
+        <button class="close-btn" onclick="closeCommandPalette()">&times;</button>
+      </div>
+      <div id="commandPaletteResults" style="max-height: 380px; overflow-y:auto; padding:0.5rem; display:flex; flex-direction:column; gap:4px;">
+        <!-- Populated dynamically by filterCommandPalette() -->
+      </div>
+      <div style="padding:0.5rem 1rem; border-top:1px solid #283531; display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:#71817a;">
+        <div>Navigate with <kbd>↑</kbd> <kbd>↓</kbd> &bull; Select with <kbd>ENTER</kbd></div>
+        <div>22 Views &bull; 8 Sites &bull; Sovereign Actions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Executive Dynamic Toast Container -->
+  <div id="executiveToastContainer" style="position:fixed; bottom:34px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:8px; pointer-events:none;"></div>
+
+  <!-- Persistent Minimalist Footer Status Strip (26px) -->
  <footer class="minimal-footer-strip" id="minimalFooterStrip">
    <div class="footer-left">
      <span class="footer-badge">[VERIFIED]</span>

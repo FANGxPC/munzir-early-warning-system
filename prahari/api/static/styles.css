@@ -3157,3 +3157,96 @@ input:checked + .slider:before {
   .metric-grid { grid-template-columns: 1fr; }
   .page-heading { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
+
+/* Sovereign Executive Modals, Command Palette & Interactive Pointers */
+.region-card {
+  transition: all 0.18s ease;
+}
+.region-card:hover {
+  background: #1c2b27 !important;
+  border-color: #65dfcd !important;
+  transform: translateY(-1px);
+}
+.region-card.active {
+  background: #1a2d28 !important;
+  border-color: #65dfcd !important;
+  box-shadow: 0 0 12px rgba(101, 223, 205, 0.15);
+}
+
+.command-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #e9f0ed;
+}
+.command-item:hover, .command-item.selected {
+  background: #1c2b27;
+  border-color: #316d60;
+  color: #65dfcd;
+}
+.command-item .command-badge {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #17211f;
+  border: 1px solid #283531;
+  color: #87978f;
+}
+
+.executive-toast {
+  pointer-events: auto;
+  min-width: 260px;
+  max-width: 420px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #131c1a;
+  border: 1px solid #316d60;
+  color: #e9f0ed;
+  font-size: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(101, 223, 205, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideInToast 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 0.2s ease;
+}
+@keyframes slideInToast {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.executive-toast.toast-warning {
+  border-color: #e9aa62;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(233, 170, 98, 0.2);
+}
+.executive-toast.toast-error {
+  border-color: #f17971;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(241, 121, 113, 0.2);
+}
+
+.copilot-action-pill {
+  font-size: 0.68rem;
+  padding: 0.22rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+.copilot-action-pill.active {
+  background: #1c4b42 !important;
+  border-color: #65dfcd !important;
+  color: #65dfcd !important;
+  box-shadow: 0 0 8px rgba(101, 223, 205, 0.3);
+}

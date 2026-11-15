@@ -3465,6 +3465,15 @@ async function executeCopilotQuery(query, siteId, streamId) {
     const isGreeting = res.intent === "greeting";
     const hasDifferentArabic = res.arabic_translation && res.arabic_translation.trim() !== res.response_text.trim();
 
+    const msgId = "copilot_msg_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+    window.copilotMessageStore = window.copilotMessageStore || new Map();
+    window.copilotMessageStore.set(msgId, {
+      english: res.response_text || "",
+      arabic: res.arabic_translation || "",
+      activeLang: (res.response_text && !isRtl) ? "en" : "ar",
+      isSpeaking: false,
+    });
+
     const arabicDrawerHtml = (!isGreeting && hasDifferentArabic) ? `
       <div style="margin-top:0.4rem; border:1px solid #283531; border-radius:6px; background:#131c1a; overflow:hidden;">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.35rem 0.65rem; background:#1c2b27; cursor:pointer;" onclick="const d = this.nextElementSibling; d.style.display = d.style.display === 'none' ? 'block' : 'none';">
@@ -3488,22 +3497,26 @@ async function executeCopilotQuery(query, siteId, streamId) {
         </div>
       </div>
 
-      <div style="color:#f8fafc; line-height:1.5; ${isRtl ? 'direction:rtl; text-align:right;' : ''}">
+      <div id="${msgId}_text" style="color:#f8fafc; line-height:1.5; ${isRtl ? 'direction:rtl; text-align:right;' : ''}">
         ${formattedMain}
       </div>
 
       ${arabicDrawerHtml}
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-        <div style="font-size:0.7rem; color:#94a3b8;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; margin-top:0.35rem; padding-top:0.4rem; border-top:1px solid #222f2b;">
+        <div style="font-size:0.7rem; color:#94a3b8; max-width:62%;">
           <strong>Citations:</strong> ${escapeHtml(res.citations.slice(0, 2).join(' | '))}
         </div>
-        <div style="display:flex; gap:0.3rem;">
-          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml((res.arabic_translation || '').replace(/'/g, "\\'"))}', 'ar')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
-            Arabic
-          </button>
-          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml((res.response_text || '').replace(/'/g, "\\'"))}', 'en')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
-            English
+        <div style="display:flex; gap:0.35rem; align-items:center;">
+          ${hasDifferentArabic ? `
+            <button type="button" class="btn btn-secondary copilot-action-pill" id="${msgId}_langBtn" onclick="toggleCopilotBubbleLang('${msgId}')" title="Toggle between English and Arabic view">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+              <span>${isRtl ? 'English View' : 'العربية (Arabic)'}</span>
+            </button>
+          ` : ''}
+          <button type="button" class="btn btn-secondary copilot-action-pill" id="${msgId}_audioBtn" onclick="playCopilotBubbleAudio('${msgId}')" title="Play speech synthesis voice">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <span id="${msgId}_audioLabel">Listen Voice</span>
           </button>
         </div>
       </div>
@@ -3520,17 +3533,103 @@ async function executeCopilotQuery(query, siteId, streamId) {
   }
 }
 
+function toggleCopilotBubbleLang(msgId) {
+  const store = window.copilotMessageStore || new Map();
+  const item = store.get(msgId);
+  if (!item) return;
+  const textEl = document.getElementById(msgId + "_text");
+  const langBtn = document.getElementById(msgId + "_langBtn");
+  if (!textEl) return;
+
+  if (item.activeLang === "ar") {
+    item.activeLang = "en";
+    textEl.style.direction = "ltr";
+    textEl.style.textAlign = "left";
+    textEl.innerHTML = formatCopilotMarkdown(item.english);
+    if (langBtn) {
+      const lbl = langBtn.querySelector("span");
+      if (lbl) lbl.textContent = "العربية (Arabic)";
+    }
+    showToast("Switched Copilot view to English", "normal");
+  } else {
+    item.activeLang = "ar";
+    textEl.style.direction = "rtl";
+    textEl.style.textAlign = "right";
+    textEl.innerHTML = formatCopilotMarkdown(item.arabic);
+    if (langBtn) {
+      const lbl = langBtn.querySelector("span");
+      if (lbl) lbl.textContent = "English View";
+    }
+    showToast("تم تحويل الرد إلى اللغة العربية المعتمدة", "normal");
+  }
+}
+window.toggleCopilotBubbleLang = toggleCopilotBubbleLang;
+
+function playCopilotBubbleAudio(msgId) {
+  const store = window.copilotMessageStore || new Map();
+  const item = store.get(msgId);
+  if (!item) return;
+  const audioBtn = document.getElementById(msgId + "_audioBtn");
+  const audioLabel = document.getElementById(msgId + "_audioLabel");
+
+  if (!("speechSynthesis" in window)) {
+    showToast("Speech synthesis is not supported in this browser.", "warning");
+    return;
+  }
+
+  if (item.isSpeaking) {
+    window.speechSynthesis.cancel();
+    item.isSpeaking = false;
+    if (audioLabel) audioLabel.textContent = "Listen Voice";
+    if (audioBtn) audioBtn.classList.remove("active");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  store.forEach(other => { other.isSpeaking = false; });
+  document.querySelectorAll("[id$='_audioLabel']").forEach(lbl => lbl.textContent = "Listen Voice");
+  document.querySelectorAll("[id$='_audioBtn']").forEach(btn => btn.classList.remove("active"));
+
+  const rawText = item.activeLang === "ar" ? item.arabic : item.english;
+  const cleanSpoken = rawText.replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
+
+  const utterance = new SpeechSynthesisUtterance(cleanSpoken);
+  utterance.lang = item.activeLang === "ar" ? "ar-AE" : "en-US";
+  utterance.rate = 0.95;
+
+  item.isSpeaking = true;
+  if (audioLabel) audioLabel.textContent = "Speaking... (Stop)";
+  if (audioBtn) audioBtn.classList.add("active");
+
+  utterance.onend = () => {
+    item.isSpeaking = false;
+    if (audioLabel) audioLabel.textContent = "Listen Voice";
+    if (audioBtn) audioBtn.classList.remove("active");
+  };
+
+  utterance.onerror = () => {
+    item.isSpeaking = false;
+    if (audioLabel) audioLabel.textContent = "Listen Voice";
+    if (audioBtn) audioBtn.classList.remove("active");
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+window.playCopilotBubbleAudio = playCopilotBubbleAudio;
+
 function playCopilotVoice(text, lang) {
   if (!("speechSynthesis" in window)) {
-    alert("Speech Synthesis not supported in this browser.");
+    showToast("Speech synthesis not supported in this browser.", "warning");
     return;
   }
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const cleanSpoken = (text || "").replace(/[*#_`>]/g, " ").replace(/\s+/g, " ").trim();
+  const utterance = new SpeechSynthesisUtterance(cleanSpoken);
   utterance.lang = lang === "ar" ? "ar-AE" : "en-US";
   utterance.rate = 0.95;
   window.speechSynthesis.speak(utterance);
 }
+window.playCopilotVoice = playCopilotVoice;
 
 function toggleFloatingCopilotDrawer() {
   const drawer = document.getElementById("floatingCopilotDrawer");
@@ -5458,35 +5557,327 @@ function loadSavedView(view) {
 window.loadSavedView = loadSavedView;
 
 function toggleQuickSearch() {
-  const input = document.getElementById("topSearchInput");
-  if (input) {
-    if (input.style.display === "none" || !input.style.display) {
-      input.style.display = "inline-block";
-      input.focus();
-    } else {
-      input.style.display = "none";
-    }
-  }
+  openCommandPalette();
 }
 window.toggleQuickSearch = toggleQuickSearch;
 
 function handleQuickSearch(event) {
-  if (event.key === "Escape") {
-    const input = document.getElementById("topSearchInput");
-    if (input) input.style.display = "none";
-    return;
-  }
-  const q = (event.target.value || "").toLowerCase();
-  document.querySelectorAll(".site-entry").forEach(row => {
-    const text = row.textContent.toLowerCase();
-    row.style.display = text.includes(q) ? "block" : "none";
-  });
+  openCommandPalette();
 }
 window.handleQuickSearch = handleQuickSearch;
 
+// Executive Dynamic Toast System
+function showToast(message, type = "normal") {
+  const container = document.getElementById("executiveToastContainer");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = `executive-toast ${type === "warning" ? "toast-warning" : type === "error" ? "toast-error" : ""}`;
+  
+  const icon = type === "error" 
+    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f17971" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
+    : type === "warning"
+    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e9aa62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#65dfcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+  toast.innerHTML = `
+    <div>${icon}</div>
+    <div style="flex:1; line-height:1.4;">${escapeHtml(message)}</div>
+  `;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 250);
+  }, 3200);
+}
+window.showToast = showToast;
+
+// Operational Jurisdiction & Region Switcher
+const REGION_SITE_MAP = {
+  all: {
+    flag: "AE",
+    title: "UAE Operations",
+    subtitle: "Federal Grid (8 Sites)",
+    sites: ["SITE-JA-01", "SITE-AQ-02", "SITE-DS-03", "SITE-BB-04", "SITE-AD-05", "SITE-SH-06", "SITE-RAK-07", "SITE-FUJ-08"]
+  },
+  dubai: {
+    flag: "DXB",
+    title: "Dubai Operations",
+    subtitle: "Dubai Metro Grid (4 Sites)",
+    sites: ["SITE-JA-01", "SITE-AQ-02", "SITE-DS-03", "SITE-BB-04"]
+  },
+  abudhabi: {
+    flag: "AUH",
+    title: "Abu Dhabi Ops",
+    subtitle: "Khalifa Port Hub (1 Site)",
+    sites: ["SITE-AD-05"]
+  },
+  sharjah: {
+    flag: "SHJ",
+    title: "Sharjah Ops",
+    subtitle: "Hamriyah Free Zone (1 Site)",
+    sites: ["SITE-SH-06"]
+  },
+  northern: {
+    flag: "NE",
+    title: "Northern Emirates",
+    subtitle: "RAK & Fujairah (2 Sites)",
+    sites: ["SITE-RAK-07", "SITE-FUJ-08"]
+  }
+};
+
+let currentOperationalRegion = "all";
+
+function openRegionSelectorModal() {
+  const modal = document.getElementById("regionSelectorModal");
+  if (modal) modal.classList.add("active");
+}
+window.openRegionSelectorModal = openRegionSelectorModal;
+
+function closeRegionSelectorModal() {
+  const modal = document.getElementById("regionSelectorModal");
+  if (modal) modal.classList.remove("active");
+}
+window.closeRegionSelectorModal = closeRegionSelectorModal;
+
+function selectRegion(regionKey) {
+  const reg = REGION_SITE_MAP[regionKey];
+  if (!reg) return;
+
+  currentOperationalRegion = regionKey;
+
+  const flagEl = document.getElementById("regionFlag");
+  const titleEl = document.getElementById("regionTitle");
+  const subEl = document.getElementById("regionSubtitle");
+  if (flagEl) flagEl.textContent = reg.flag;
+  if (titleEl) titleEl.textContent = reg.title;
+  if (subEl) subEl.textContent = reg.subtitle;
+
+  document.querySelectorAll(".region-card").forEach(c => c.classList.remove("active"));
+  const activeCard = document.getElementById(`regionCard_${regionKey}`);
+  if (activeCard) activeCard.classList.add("active");
+
+  const siteSelect = document.getElementById("siteSelect");
+  if (siteSelect) {
+    Array.from(siteSelect.options).forEach(opt => {
+      const match = reg.sites.includes(opt.value);
+      opt.style.display = match ? "" : "none";
+      opt.disabled = !match;
+    });
+
+    const firstValid = reg.sites[0];
+    if (firstValid) {
+      siteSelect.value = firstValid;
+      state.site = firstValid;
+      onSiteChange();
+    }
+  }
+
+  document.querySelectorAll(".site-entry").forEach(row => {
+    const geoId = row.getAttribute("data-geo") || "";
+    row.style.display = reg.sites.includes(geoId) ? "block" : "none";
+  });
+
+  closeRegionSelectorModal();
+  showToast(`Operational Jurisdiction updated to: ${reg.title}`, "normal");
+}
+window.selectRegion = selectRegion;
+
+// Officer Profile & Session Management
+function openOfficerProfileModal() {
+  const modal = document.getElementById("officerProfileModal");
+  if (modal) modal.classList.add("active");
+}
+window.openOfficerProfileModal = openOfficerProfileModal;
+
+function closeOfficerProfileModal() {
+  const modal = document.getElementById("officerProfileModal");
+  if (modal) modal.classList.remove("active");
+}
+window.closeOfficerProfileModal = closeOfficerProfileModal;
+
+function switchRoleFromProfile(roleKey) {
+  state.role = roleKey;
+  const roleSelect = document.getElementById("roleSelect");
+  if (roleSelect) roleSelect.value = roleKey;
+  updateRoleIndicator();
+  loadCurrentView();
+  closeOfficerProfileModal();
+  showToast(`Switched active operational role to: ${roleKey.replace('_', ' ').toUpperCase()}`, "normal");
+}
+window.switchRoleFromProfile = switchRoleFromProfile;
+
+// Global Spotlight Command Palette (⌘ K)
+const PALETTE_COMMANDS = [
+  // 22 Views
+  { id: "v_map", title: "Situation Map", category: "Command Hub", type: "view", target: "map" },
+  { id: "v_inbox", title: "Alert Inbox", category: "Command Hub", type: "view", target: "inbox" },
+  { id: "v_employer", title: "Employer Safety View", category: "Command Hub", type: "view", target: "employer" },
+  { id: "v_dispatch", title: "Municipal Staging & Cooling", category: "Field Operations", type: "view", target: "dispatch" },
+  { id: "v_sentinel", title: "Sentinel Hardware Twin", category: "Field Operations", type: "view", target: "sentinel" },
+  { id: "v_phs", title: "Heat Strain & Debt (ISO 7933)", category: "Clinical Sentinel", type: "view", target: "phs" },
+  { id: "v_renal", title: "Renal Biomarkers (AKI Risk)", category: "Clinical Sentinel", type: "view", target: "renal" },
+  { id: "v_deconvolve", title: "Spatial Deconvolution", category: "Clinical Sentinel", type: "view", target: "deconvolve" },
+  { id: "v_compound", title: "Compound Multi-Hazard Index", category: "Clinical Sentinel", type: "view", target: "compound" },
+  { id: "v_causal", title: "Bayesian Causal De-Mixing", category: "Clinical Sentinel", type: "view", target: "causal" },
+  { id: "v_nabidh", title: "NABIDH FHIR CDS Integration", category: "Clinical Sentinel", type: "view", target: "nabidh" },
+  { id: "v_intercom", title: "Two-Way Voice Intercom (Radio)", category: "Sovereign AI", type: "view", target: "intercom" },
+  { id: "v_jais", title: "Jais Dispatch Generator (GPU)", category: "Sovereign AI", type: "view", target: "jais" },
+  { id: "v_copilot", title: "Sovereign Copilot & Codex", category: "Sovereign AI", type: "view", target: "copilot" },
+  { id: "v_policy", title: "MOHRE Policy Studio", category: "Policy & Resilience", type: "view", target: "policystudio" },
+  { id: "v_impact", title: "Health Impact & Economic ROI", category: "Policy & Resilience", type: "view", target: "impact" },
+  { id: "v_timemachine", title: "Time Machine Replay", category: "Policy & Resilience", type: "view", target: "timemachine" },
+  { id: "v_whatif", title: "What-If Interventions", category: "Policy & Resilience", type: "view", target: "whatif" },
+  { id: "v_safeharbor", title: "Safe-Harbor Shield (ε=0.14)", category: "Policy & Resilience", type: "view", target: "safeharbor" },
+  { id: "v_health", title: "Data Health & Parquet Inspector", category: "Policy & Resilience", type: "view", target: "health" },
+  { id: "v_demo", title: "Missing-Data Validation Matrix", category: "Policy & Resilience", type: "view", target: "demo" },
+  { id: "v_audit", title: "Security Audit Logs (HMAC)", category: "Policy & Resilience", type: "view", target: "audit" },
+
+  // Sites
+  { id: "s_ja", title: "Jebel Ali Deepwater Port Terminal", category: "Operational Site", type: "site", target: "SITE-JA-01" },
+  { id: "s_aq", title: "Al Quoz Industrial Fabrication", category: "Operational Site", type: "site", target: "SITE-AQ-02" },
+  { id: "s_ds", title: "Dubai South Expo Construction Grid", category: "Operational Site", type: "site", target: "SITE-DS-03" },
+  { id: "s_bb", title: "Business Bay Commercial Grid", category: "Operational Site", type: "site", target: "SITE-BB-04" },
+  { id: "s_ad", title: "Khalifa Port Industrial Zone (Abu Dhabi)", category: "Operational Site", type: "site", target: "SITE-AD-05" },
+  { id: "s_sh", title: "Hamriyah Free Zone Logistics (Sharjah)", category: "Operational Site", type: "site", target: "SITE-SH-06" },
+  { id: "s_rak", title: "Ras Al Khaimah Stevin Rock Quarry", category: "Operational Site", type: "site", target: "SITE-RAK-07" },
+  { id: "s_fuj", title: "Fujairah Bunkering & Crude Terminal", category: "Operational Site", type: "site", target: "SITE-FUJ-08" },
+
+  // Sovereign Actions
+  { id: "a_copilot_drawer", title: "Open Floating Sovereign Copilot", category: "Action", type: "action", action: "toggleFloatingCopilotDrawer" },
+  { id: "a_dossier", title: "Inspect System Architecture & Models Dossier", category: "Action", type: "action", action: "openSystemDossierModal" },
+  { id: "a_ack", title: "Acknowledge Critical Alert Directive", category: "Action", type: "action", action: "handleHazardAcknowledge" },
+  { id: "a_export", title: "Export Regional Briefing CSV", category: "Action", type: "action", action: "exportRegionalBriefingCSV" },
+  { id: "a_region", title: "Select Operational Jurisdiction", category: "Action", type: "action", action: "openRegionSelectorModal" },
+  { id: "a_profile", title: "Inspect Officer Profile & Session", category: "Action", type: "action", action: "openOfficerProfileModal" },
+  { id: "a_privacy_probe", title: "Probe Safe-Harbor Privacy Boundary", category: "Action", type: "action", action: "testClinicalAccessRejection" }
+];
+
+let selectedCommandIndex = 0;
+let currentPaletteResults = [];
+
+function openCommandPalette() {
+  const modal = document.getElementById("commandPaletteModal");
+  const input = document.getElementById("commandPaletteInput");
+  if (!modal) return;
+  modal.classList.add("active");
+  if (input) {
+    input.value = "";
+    input.focus();
+  }
+  filterCommandPalette("");
+}
+window.openCommandPalette = openCommandPalette;
+
+function closeCommandPalette() {
+  const modal = document.getElementById("commandPaletteModal");
+  if (modal) modal.classList.remove("active");
+}
+window.closeCommandPalette = closeCommandPalette;
+
+function filterCommandPalette(q) {
+  const query = (q || "").trim().toLowerCase();
+  const container = document.getElementById("commandPaletteResults");
+  if (!container) return;
+
+  currentPaletteResults = PALETTE_COMMANDS.filter(c => {
+    if (!query) return true;
+    return c.title.toLowerCase().includes(query) || c.category.toLowerCase().includes(query) || (c.target && c.target.toLowerCase().includes(query));
+  });
+
+  selectedCommandIndex = 0;
+  renderPaletteResults();
+}
+window.filterCommandPalette = filterCommandPalette;
+
+function renderPaletteResults() {
+  const container = document.getElementById("commandPaletteResults");
+  if (!container) return;
+
+  if (currentPaletteResults.length === 0) {
+    container.innerHTML = `<div style="padding:1.5rem; text-align:center; color:#87978f; font-size:0.85rem;">No matching commands, views, or sites found.</div>`;
+    return;
+  }
+
+  container.innerHTML = currentPaletteResults.map((cmd, idx) => `
+    <div class="command-item ${idx === selectedCommandIndex ? 'selected' : ''}" onclick="executePaletteCommand(${idx})">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:0.85rem; font-weight:600;">${escapeHtml(cmd.title)}</span>
+      </div>
+      <span class="command-badge">${escapeHtml(cmd.category)}</span>
+    </div>
+  `).join("");
+
+  const selectedEl = container.children[selectedCommandIndex];
+  if (selectedEl) selectedEl.scrollIntoView({ block: "nearest" });
+}
+
+function handleCommandPaletteKey(event) {
+  if (event.key === "Escape") {
+    closeCommandPalette();
+    return;
+  }
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    if (currentPaletteResults.length > 0) {
+      selectedCommandIndex = (selectedCommandIndex + 1) % currentPaletteResults.length;
+      renderPaletteResults();
+    }
+    return;
+  }
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    if (currentPaletteResults.length > 0) {
+      selectedCommandIndex = (selectedCommandIndex - 1 + currentPaletteResults.length) % currentPaletteResults.length;
+      renderPaletteResults();
+    }
+    return;
+  }
+  if (event.key === "Enter") {
+    event.preventDefault();
+    if (currentPaletteResults.length > 0) {
+      executePaletteCommand(selectedCommandIndex);
+    }
+  }
+}
+window.handleCommandPaletteKey = handleCommandPaletteKey;
+
+function executePaletteCommand(index) {
+  const cmd = currentPaletteResults[index];
+  if (!cmd) return;
+  closeCommandPalette();
+
+  if (cmd.type === "view") {
+    activateTab(cmd.target);
+    showToast(`Navigated to: ${cmd.title}`, "normal");
+  } else if (cmd.type === "site") {
+    const siteSelect = document.getElementById("siteSelect");
+    if (siteSelect) {
+      siteSelect.value = cmd.target;
+      state.site = cmd.target;
+      onSiteChange();
+      showToast(`Selected Worksite: ${cmd.title}`, "normal");
+    }
+  } else if (cmd.type === "action") {
+    if (typeof window[cmd.action] === "function") {
+      window[cmd.action]();
+    }
+  }
+}
+window.executePaletteCommand = executePaletteCommand;
+
+// Global Command Palette Keybinding (⌘ K / Ctrl + K)
 window.addEventListener("keydown", (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
     e.preventDefault();
-    toggleQuickSearch();
+    const modal = document.getElementById("commandPaletteModal");
+    if (modal && modal.classList.contains("active")) {
+      closeCommandPalette();
+    } else {
+      openCommandPalette();
+    }
   }
 });
