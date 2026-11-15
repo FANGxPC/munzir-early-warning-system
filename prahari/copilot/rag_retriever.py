@@ -21,6 +21,7 @@ class CopilotIntent(str, Enum):
     OPERATIONAL_INTERVENTION = "operational_intervention"
     FLEET_LOGISTICS = "fleet_logistics"
     CLINICAL_RENAL = "clinical_renal"
+    GREETING = "greeting"
     GENERAL_OVERVIEW = "general_overview"
 
 
@@ -99,7 +100,13 @@ class SovereignRAGRetriever:
 
     def classify_intent(self, query: str) -> CopilotIntent:
         """Classifies the primary domain of the user query."""
-        q = query.lower()
+        q = query.lower().strip()
+        greeting_words = {"hello", "hi", "hey", "salam", "salaam", "marhaba", "welcome", "greetings", "good morning", "good afternoon", "good evening"}
+        if q in greeting_words or any(q.startswith(w + " ") or q.startswith(w + "!") or q.startswith(w + ",") or q.startswith(w + "?") for w in greeting_words):
+            return CopilotIntent.GREETING
+        if any(w in q for w in ["who are you", "what can you do", "what are you", "how does this work", "help"]):
+            return CopilotIntent.GREETING
+
         if any(w in q for w in ["law", "decree", "resolution", "resolution 44", "mohre", "legal", "fine", "penalty", "illegal", "midday", "ban"]):
             return CopilotIntent.REGULATORY_COMPLIANCE
         if any(w in q for w in ["why", "cause", "driver", "explain", "attribution", "reason", "shap"]):

@@ -3411,6 +3411,18 @@ async function handleDrawerSubmit(event) {
   await executeCopilotQuery(query, "SITE-JA-01", "drawerChatStream");
 }
 
+function formatCopilotMarkdown(text) {
+  if (!text) return "";
+  let formatted = escapeHtml(text);
+  // Bold **text**
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  // Bullet points
+  formatted = formatted.replace(/^[\s]*[•\-\*]\s+(.*)$/gm, "<div style='display:flex; gap:6px; margin:3px 0;'><span style='color:#65dfcd;'>&bull;</span><span>$1</span></div>");
+  // Line breaks
+  formatted = formatted.replace(/\n/g, "<br>");
+  return formatted;
+}
+
 async function executeCopilotQuery(query, siteId, streamId) {
   const stream = document.getElementById(streamId);
   if (!stream) return;
@@ -3446,8 +3458,24 @@ async function executeCopilotQuery(query, siteId, streamId) {
     const botBubble = document.createElement("div");
     botBubble.style.cssText = "align-self:flex-start; max-width:92%; background:#17211f; border:1px solid #283531; border-left:3px solid #66d9af; border-radius:12px 12px 12px 0; padding:0.85rem; font-size:0.83rem; display:flex; flex-direction:column; gap:0.5rem;";
 
-    const safeEng = escapeHtml(res.response_text).replace(/\n/g, "<br>");
-    const safeAr = escapeHtml(res.arabic_translation).replace(/\n/g, "<br>");
+    const isRtl = /[\u0600-\u06FF]/.test(res.response_text || "");
+    const formattedMain = formatCopilotMarkdown(res.response_text);
+    const formattedArabic = formatCopilotMarkdown(res.arabic_translation);
+
+    const isGreeting = res.intent === "greeting";
+    const hasDifferentArabic = res.arabic_translation && res.arabic_translation.trim() !== res.response_text.trim();
+
+    const arabicDrawerHtml = (!isGreeting && hasDifferentArabic) ? `
+      <div style="margin-top:0.4rem; border:1px solid #283531; border-radius:6px; background:#131c1a; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.35rem 0.65rem; background:#1c2b27; cursor:pointer;" onclick="const d = this.nextElementSibling; d.style.display = d.style.display === 'none' ? 'block' : 'none';">
+          <span style="font-size:0.72rem; color:#65dfcd; font-weight:700;">الرد السيادي المعتمد (Certified Arabic Decree)</span>
+          <span style="font-size:0.65rem; color:#8db7a8;">Toggle &or;</span>
+        </div>
+        <div style="display:none; padding:0.6rem 0.75rem; direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-top:1px solid #283531;">
+          ${formattedArabic}
+        </div>
+      </div>
+    ` : "";
 
     botBubble.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; border-bottom:1px solid #222f2b; padding-bottom:0.4rem;">
@@ -3460,24 +3488,21 @@ async function executeCopilotQuery(query, siteId, streamId) {
         </div>
       </div>
 
-      <div style="color:#f8fafc; line-height:1.5;">
-        ${safeEng}
+      <div style="color:#f8fafc; line-height:1.5; ${isRtl ? 'direction:rtl; text-align:right;' : ''}">
+        ${formattedMain}
       </div>
 
-      <div style="direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; background:#222f2b; padding:0.5rem 0.75rem; border-radius:4px; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-right:3px solid #65dfcd;">
-        <span style="font-size:0.7rem; color:#65dfcd; font-weight:700; display:block; margin-bottom:0.2rem;">الرد السيادي المعتمد:</span>
-        ${safeAr}
-      </div>
+      ${arabicDrawerHtml}
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
         <div style="font-size:0.7rem; color:#94a3b8;">
           <strong>Citations:</strong> ${escapeHtml(res.citations.slice(0, 2).join(' | '))}
         </div>
         <div style="display:flex; gap:0.3rem;">
-          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml(res.arabic_translation.replace(/'/g, "\\'"))}', 'ar')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
+          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml((res.arabic_translation || '').replace(/'/g, "\\'"))}', 'ar')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
             Arabic
           </button>
-          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml(res.response_text.replace(/'/g, "\\'"))}', 'en')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
+          <button class="btn btn-secondary" onclick="playCopilotVoice('${escapeHtml((res.response_text || '').replace(/'/g, "\\'"))}', 'en')" style="font-size:0.68rem; padding:0.2rem 0.5rem;">
             English
           </button>
         </div>

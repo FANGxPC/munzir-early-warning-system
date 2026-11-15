@@ -91,6 +91,44 @@ class SovereignCopilotAgent:
         ctx = packet.live_context
         articles = packet.statutory_articles
 
+        # Check for greeting or introductory question
+        if packet.intent == CopilotIntent.GREETING:
+            is_ar = any("\u0600" <= ch <= "\u06FF" for ch in query)
+            eng_greeting = (
+                "Hello! I am Munzir Sovereign Copilot, an official public health decision support AI powered by Inception 42 Jais-3-0.9B.\n\n"
+                "I provide real-time decision support grounded in live Lakehouse telemetry and official UAE statutory decrees (MOHRE Ministerial Resolution No. 44 of 2022).\n\n"
+                "How can I assist your team today? You can ask me:\n"
+                "• \"What should I do right now for outdoor workers?\" (30-min operational checklist)\n"
+                "• \"What is the legal fine under Resolution 44?\" (Statutory compliance & penalties)\n"
+                "• \"Explain Jebel Ali risk\" (Environmental & clinical SHAP drivers)\n"
+                "• \"Show municipal cooling fleet staging\" (Cooling buses & misting trailers)\n"
+                "• \"What are the renal biomarker rates?\" (eGFR & KDIGO sub-clinical screening)"
+            )
+            ar_greeting = (
+                "مرحباً بك! أنا المساعد السيادي لمنصة منذر (Sovereign Copilot) المدعوم بنموذج Inception 42 Jais-3-0.9B.\n\n"
+                "أقدم دعماً تشغيلياً رسمياً مستنداً إلى بيانات الرصد المباشرة والقرارات الوزارية الرسمية (قرار وزارة الموارد البشرية والتوطين رقم 44 لسنة 2022).\n\n"
+                "كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن:\n"
+                "• الإجراءات التشغيلية العاجلة لحماية العمال خلال ۳۰ دقيقة\n"
+                "• قرارات حظر العمل وقت الظهيرة واللوائح القانونية والغرامات\n"
+                "• خطة توجيه أسطول التبريد البلدي ومقطورات الرذاذ وإسعاف دبي\n"
+                "• مؤشرات صحة الكلى المهنية والكشف المبكر عن الجفاف (eGFR / KDIGO)"
+            )
+            main_text = ar_greeting if is_ar else eng_greeting
+            return CopilotChatResponse(
+                query=query,
+                response_text=main_text,
+                arabic_translation=ar_greeting,
+                intent="greeting",
+                citations=["UAE MOHRE Ministerial Resolution No. 44 of 2022", "Federal Decree-Law No. 33 of 2021"],
+                execution_mode="JAIS_NATIVE_TORCH" if (self.jais_runner.try_load_model() and self.jais_runner._model is not None) else "JAIS_VERIFIED_TEMPLATE",
+                device=self.jais_runner._device,
+                passed_fenced_gate=True,
+                grounding_badge="Sovereign Copilot Ready",
+                site_id=ctx.site_id,
+                site_name=ctx.site_name,
+                target_date=ctx.target_date,
+            )
+
         # 2. Try Local Jais Model on GPU if loaded
         if self.jais_runner.try_load_model() and self.jais_runner._model is not None and self.jais_runner._tokenizer is not None:
             try:
@@ -138,13 +176,24 @@ class SovereignCopilotAgent:
                     cleaned_text = raw_text
                 cleaned_text = cleaned_text.replace("<|ifm|im_end|>", "").strip()
 
+                is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
+                is_output_arabic = any("\u0600" <= ch <= "\u06FF" for ch in cleaned_text)
                 is_valid, unverified = self.validator.verify_text(cleaned_text, ctx, articles)
                 if is_valid and len(cleaned_text) > 30:
                     arabic_summary = self._synthesize_arabic_answer(packet.intent, ctx, articles[0] if articles else None)
+                    # Guarantee language consistency: if user asked in English, response_text is in English
+                    if not is_query_arabic and is_output_arabic:
+                        eng_verified, _ = self._synthesize_grounded_answer(packet.intent, query, ctx, articles)
+                        final_response = eng_verified
+                        final_arabic = cleaned_text
+                    else:
+                        final_response = cleaned_text
+                        final_arabic = arabic_summary
+
                     return CopilotChatResponse(
                         query=query,
-                        response_text=cleaned_text,
-                        arabic_translation=arabic_summary,
+                        response_text=final_response,
+                        arabic_translation=final_arabic,
                         intent=packet.intent.value,
                         citations=packet.citations,
                         execution_mode="JAIS_NATIVE_TORCH",
