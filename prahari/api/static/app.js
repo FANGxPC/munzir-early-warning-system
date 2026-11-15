@@ -58,6 +58,7 @@ async function apiFetch(endpoint, options = {}) {
 
 // Initialization
 document.addEventListener("DOMContentLoaded", () => {
+  initLoginState();
   setupNavigation();
   setupRoleSwitcher();
   setupDateSelector();
@@ -5881,3 +5882,89 @@ window.addEventListener("keydown", (e) => {
     }
   }
 });
+
+// --- Sovereign Gateway & Demo Prototype Login ---
+function handleDemoLogin(event) {
+  if (event) event.preventDefault();
+
+  const btn = document.getElementById("btnLoginDemo");
+  const spinner = document.getElementById("loginBtnSpinner");
+  const text = document.getElementById("loginBtnText");
+  const arrow = document.getElementById("loginBtnArrow");
+  const loginScreen = document.getElementById("loginScreen");
+
+  if (btn) btn.disabled = true;
+  if (spinner) spinner.style.display = "inline-block";
+  if (arrow) arrow.style.display = "none";
+  if (text) text.textContent = "Authenticating Officer...";
+
+  setTimeout(() => {
+    if (text) text.textContent = "Clearance Granted: Welcome";
+    sessionStorage.setItem("munzir_logged_in", "true");
+
+    setTimeout(() => {
+      if (loginScreen) {
+        loginScreen.classList.add("hidden");
+      }
+      if (btn) btn.disabled = false;
+      if (spinner) spinner.style.display = "none";
+      if (arrow) arrow.style.display = "inline-block";
+      if (text) text.textContent = "Login For Demo Prototype";
+
+      showToast("Welcome, Amira Khalid. Sovereign Health Protection active.", "normal");
+      loadCurrentView();
+    }, 350);
+  }, 400);
+}
+window.handleDemoLogin = handleDemoLogin;
+
+function signOutDemo() {
+  sessionStorage.removeItem("munzir_logged_in");
+  const loginScreen = document.getElementById("loginScreen");
+  if (loginScreen) {
+    loginScreen.classList.remove("hidden");
+  }
+  closeOfficerProfileModal();
+  showToast("Officer session locked. Returned to gateway.", "normal");
+}
+window.signOutDemo = signOutDemo;
+
+function toggleLoginPassword() {
+  const pwdInput = document.getElementById("loginPassword");
+  const openIcon = document.getElementById("eyeIconOpen");
+  const closedIcon = document.getElementById("eyeIconClosed");
+
+  if (!pwdInput) return;
+  if (pwdInput.type === "password") {
+    pwdInput.type = "text";
+    if (openIcon) openIcon.style.display = "none";
+    if (closedIcon) closedIcon.style.display = "inline";
+  } else {
+    pwdInput.type = "password";
+    if (openIcon) openIcon.style.display = "inline";
+    if (closedIcon) closedIcon.style.display = "none";
+  }
+}
+window.toggleLoginPassword = toggleLoginPassword;
+
+function initLoginState() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const forceLogin = urlParams.get("login") === "1" || urlParams.get("logout") === "1";
+  const loginScreen = document.getElementById("loginScreen");
+
+  if (!loginScreen) return;
+
+  if (forceLogin) {
+    sessionStorage.removeItem("munzir_logged_in");
+    loginScreen.classList.remove("hidden");
+    return;
+  }
+
+  const isLoggedIn = sessionStorage.getItem("munzir_logged_in");
+  if (isLoggedIn === "true") {
+    loginScreen.classList.add("hidden");
+  } else {
+    loginScreen.classList.remove("hidden");
+  }
+}
+window.initLoginState = initLoginState;

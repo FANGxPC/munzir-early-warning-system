@@ -11,7 +11,87 @@
 </head>
 <body>
 
-  <div class="app-shell theme-dark">
+  <!-- Sovereign Authentication & Demo Prototype Gateway Screen -->
+  <div id="loginScreen" class="login-screen-wrapper">
+    <div class="login-bg-overlay"></div>
+    <div class="login-card-container">
+      <div class="login-glass-card">
+        <!-- Sovereign Header -->
+        <div class="login-header">
+          <div class="login-emblem">
+            <span class="uae-flag" style="width:34px; height:34px; font-size:12px; font-weight:800; border-radius:8px;">AE</span>
+            <div class="login-badge">SOVEREIGN HEALTH PROTECTION GATEWAY</div>
+          </div>
+          <h1 class="login-title">munzir<span>.</span></h1>
+          <p class="login-subtitle">Federal Workforce Biosurveillance &amp; Heat Health Early Warning Platform</p>
+          <div class="login-clearance-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            <span>DHA &bull; MOHRE Resolution No. 44/2022 Statutory Codex</span>
+          </div>
+        </div>
+
+        <!-- Pre-filled Credentials Form -->
+        <form class="login-form" onsubmit="handleDemoLogin(event)">
+          <div class="login-field-group">
+            <label class="login-label" for="loginOfficerId">
+              <span>Officer Identity / Service ID</span>
+              <span class="login-tag">Pre-filled</span>
+            </label>
+            <div class="login-input-wrapper">
+              <svg class="login-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <input type="text" id="loginOfficerId" value="AE-DHA-94821 (Amira Khalid)" readonly class="login-input" aria-label="Officer Identity">
+              <div class="login-verified-badge" title="Identity Cryptographically Verified">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#65dfcd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="login-field-group">
+            <label class="login-label" for="loginPassword">
+              <span>Cryptographic Token / Key</span>
+              <span class="login-tag">Pre-filled</span>
+            </label>
+            <div class="login-input-wrapper">
+              <svg class="login-field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <input type="password" id="loginPassword" value="ed25519:9f83ae91-sovereign-lead" readonly class="login-input" aria-label="Password">
+              <button type="button" class="login-toggle-pw" onclick="toggleLoginPassword()" aria-label="Toggle password visibility">
+                <svg id="eyeIconOpen" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg id="eyeIconClosed" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="login-credentials-strip">
+            <div class="cred-chip">
+              <span class="cred-chip-k">ROLE:</span>
+              <span class="cred-chip-v">Surveillance Lead</span>
+            </div>
+            <div class="cred-chip">
+              <span class="cred-chip-k">CLEARANCE:</span>
+              <span class="cred-chip-v">Tier 1 Sovereign</span>
+            </div>
+            <div class="cred-chip">
+              <span class="cred-chip-k">PRIVACY:</span>
+              <span class="cred-chip-v">&epsilon;=0.142 DP</span>
+            </div>
+          </div>
+
+          <!-- Login Button with EXACT user-requested text -->
+          <button type="submit" id="btnLoginDemo" class="btn-login-demo">
+            <span id="loginBtnSpinner" class="login-spinner" style="display:none;"></span>
+            <span id="loginBtnText">Login For Demo Prototype</span>
+            <svg id="loginBtnArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <span>Inception 42 Jais-3 &bull; Local GPU Execution &bull; Zero Cloud Leaks</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell theme-dark" id="appShell">
     <!-- Sovereign Left Navigation Sidebar -->
     <aside class="sidebar" id="appSidebar">
       <a class="brand" href="#map" onclick="activateTab('map'); return false;" aria-label="Munzir home">
@@ -5056,6 +5136,9 @@
           </button>
           <button class="btn btn-secondary" onclick="closeOfficerProfileModal(); openSystemDossierModal('models');" style="font-size:0.75rem; padding:0.4rem 0.75rem;">
             System Models &amp; Dossier
+          </button>
+          <button class="btn btn-secondary" onclick="signOutDemo()" style="font-size:0.75rem; padding:0.4rem 0.75rem; color:#f17971; border-color:#5c2b29;">
+            Lock Session / Sign Out
           </button>
         </div>
       </div>
