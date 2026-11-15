@@ -11,6 +11,32 @@ const state = {
   activeTab: "map",
 };
 
+// Global XSS Sanitization & Modal Utility Helpers
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+window.escapeHtml = escapeHtml;
+
+function openEvidenceCardModal(alertId) {
+  if (typeof viewEvidenceCard === "function") {
+    viewEvidenceCard(alertId);
+  }
+}
+window.openEvidenceCardModal = openEvidenceCardModal;
+
+function closeEvidenceCard() {
+  if (typeof closeModal === "function") {
+    closeModal();
+  }
+}
+window.closeEvidenceCard = closeEvidenceCard;
+
 // Common fetch wrapper injecting Entra ID authorization headers
 async function apiFetch(endpoint, options = {}) {
   const headers = {
@@ -5068,22 +5094,29 @@ function closeSystemDossierModal() {
 window.closeSystemDossierModal = closeSystemDossierModal;
 
 // Backward-compatible Modal Aliases
+function closeSystemArchitectureModal() { closeSystemDossierModal(); }
+function closeZeroMockAuditModal() { closeSystemDossierModal(); }
+function closeInnovationsMatrixModal() { closeSystemDossierModal(); }
+function closeLakehouseInspectorModal() { closeSystemDossierModal(); }
+function closeCudaInspectorModal() { closeSystemDossierModal(); }
+function closeTestIntegrityModal() { closeSystemDossierModal(); }
+
 window.openInnovationsMatrixModal = function() { openSystemDossierModal("models"); };
-window.closeInnovationsMatrixModal = closeSystemDossierModal;
+window.closeInnovationsMatrixModal = closeInnovationsMatrixModal;
 window.openSystemArchitectureModal = function() { openSystemDossierModal("arch"); };
-window.closeSystemArchitectureModal = closeSystemDossierModal;
+window.closeSystemArchitectureModal = closeSystemArchitectureModal;
 window.openLakehouseInspectorModal = function() { openSystemDossierModal("lakehouse"); };
-window.closeLakehouseInspectorModal = closeSystemDossierModal;
+window.closeLakehouseInspectorModal = closeLakehouseInspectorModal;
 window.openLakehouseInspectionModal = function() { openSystemDossierModal("lakehouse"); };
-window.closeLakehouseInspectionModal = closeSystemDossierModal;
+window.closeLakehouseInspectionModal = closeLakehouseInspectorModal;
 window.openCudaInspectorModal = function() { openSystemDossierModal("ai"); };
-window.closeCudaInspectorModal = closeSystemDossierModal;
+window.closeCudaInspectorModal = closeCudaInspectorModal;
 window.openCudaInspectionModal = function() { openSystemDossierModal("ai"); };
-window.closeCudaInspectionModal = closeSystemDossierModal;
+window.closeCudaInspectionModal = closeCudaInspectorModal;
 window.openTestIntegrityModal = function() { openSystemDossierModal("audit"); };
-window.closeTestIntegrityModal = closeSystemDossierModal;
+window.closeTestIntegrityModal = closeTestIntegrityModal;
 window.openZeroMockAuditModal = function() { openSystemDossierModal("audit"); };
-window.closeZeroMockAuditModal = closeSystemDossierModal;
+window.closeZeroMockAuditModal = closeZeroMockAuditModal;
 
 function ensureProofDrawerOpen(drawerId) {
   const drawer = document.getElementById(drawerId);

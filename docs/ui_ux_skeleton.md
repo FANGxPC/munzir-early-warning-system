@@ -419,3 +419,4 @@ When constructing or modifying frontend views, use this mapping:
 | **Data Health Panel** | `/#health` | `resilience` | `#btnRefreshHealth` | `#dataHealthFeedsTable` | `GET /api/v1/health/feeds` |
 | **Missing-Data Validation**| `/#demo` | `resilience` | `#missingDataScenarioSelect` | `#missingDataResults` | `GET /api/v1/health/feeds` |
 | **Security Audit Logs** | `/#audit` | `resilience` | `#btnRefreshAudit` | `#auditLogsTbody` | `GET /api/v1/audit/logs` |
+
