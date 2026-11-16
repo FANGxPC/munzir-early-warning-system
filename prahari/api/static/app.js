@@ -1509,16 +1509,6 @@ async function loadSentinelView(isSilent = false) {
           <td>${locBadge}</td>
           <td>${lvlBadge}</td>
           <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
-          <td>
-            <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
-              <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isAlertActive ? '#475569' : '#dc2626'};" onclick="toggleTestAlert('${node.node_id}')" id="alertBtn_${node.node_id}">
-                ${isAlertActive ? 'Reset Green LED' : 'Test Red Alert'}
-              </button>
-              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem; color:#38bdf8; border-color:#38bdf8;" onclick="testSentinelLevel('${node.node_id}', 'Warning')">
-                Test Blue Warning
-              </button>
-            </div>
-          </td>
         </tr>
       `;
     }).join("");
@@ -1565,7 +1555,7 @@ async function loadSentinelView(isSilent = false) {
     }
 
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#f17971;">Failed to load Sentinel nodes: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:1.5rem; color:#f17971;">Failed to load Sentinel nodes: ${err.message}</td></tr>`;
   }
 }
 

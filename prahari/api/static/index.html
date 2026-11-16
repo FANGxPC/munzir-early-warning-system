@@ -1182,10 +1182,7 @@
  </div>
  </div>
  <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
- <button class="btn btn-primary" style="background:#dc2626; border-color:#f17971; font-weight:700;" onclick="testSentinelLevel('SENT-001', 'Alert')" id="globalAlertBtn">Test Red Alert LED</button>
- <button class="btn btn-secondary" style="color:#38bdf8; border-color:#38bdf8; font-weight:700;" onclick="testSentinelLevel('SENT-001', 'Warning')">Test Blue LED</button>
- <button class="btn btn-secondary" style="color:#66d9af; border-color:#66d9af; font-weight:700;" onclick="testSentinelLevel('SENT-001', 'Normal')">Reset Green LED</button>
- <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh</button>
+ <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh Fleet</button>
  <button class="btn btn-primary" onclick="openCommissionModal()">Commission New Node</button>
  </div>
  </div>
@@ -1311,11 +1308,10 @@
  <th>Location Conf.</th>
  <th>LED Alert State</th>
  <th>Last Heartbeat</th>
- <th>Actions</th>
  </tr>
  </thead>
  <tbody id="sentinelNodesTableBody">
- <tr><td colspan="12" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel nodes...</td></tr>
+ <tr><td colspan="11" style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading Sentinel nodes...</td></tr>
  </tbody>
  </table>
  </div>
