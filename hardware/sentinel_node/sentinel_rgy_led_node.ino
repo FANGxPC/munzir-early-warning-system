@@ -38,9 +38,9 @@
 // =============================================================
 // 1. NETWORK & BACKEND CONFIGURATION (EDIT THESE 3 LINES)
 // =============================================================
-#define WIFI_SSID         "MOTO E13"                      // 2.4 GHz Wi-Fi or Phone Hotspot
+#define WIFI_SSID         "OPPO A77"                      // 2.4 GHz Wi-Fi or Phone Hotspot
 #define WIFI_PASSWORD     "1234567890"                  // Wi-Fi password
-#define MUNZIR_API_BASE   "http://192.168.149.27:8000"  // Your Laptop IP running backend
+#define MUNZIR_API_BASE   "http://10.46.55.27:8000"     // Laptop IP running Munzir backend (OPPO A77 subnet)
 
 // Node Parameters
 #define NODE_ID           "SENT-001"
@@ -87,36 +87,27 @@ void turnAllLedsOff() {
 }
 
 // Drive RGY LED patterns smoothly based on alert level
+// Normal condition is strictly Solid Green (no red, no yellow)
 void updateRgyLedPattern() {
   unsigned long now = millis();
 
-  if (isOfflineMode) {
-    // Offline Warning: Alternate Red & Yellow flash (500ms cycle)
-    if ((now % 1000) < 500) {
-      setLeds(true, false, false);  // Red
-    } else {
-      setLeds(false, true, false);  // Yellow
-    }
-    return;
-  }
-
   if (currentAlertLevel == "Alert") {
-    // ALERT TIER: Emergency Fast Red Flash (200ms ON / 200ms OFF)
+    // ALERT TIER (WBGT >= 32.2°C): Emergency Fast Red Flash (200ms ON / 200ms OFF)
     bool redState = (now % 400) < 200;
     setLeds(redState, false, false);
   }
   else if (currentAlertLevel == "Warning") {
-    // WARNING TIER: Double Yellow Blink
+    // WARNING TIER (WBGT 30.0°C - 32.2°C): Double Yellow Blink
     unsigned long cycle = now % 1000;
     bool yellowState = (cycle < 150) || (cycle >= 250 && cycle < 400);
     setLeds(false, yellowState, false);
   }
   else if (currentAlertLevel == "Watch") {
-    // WATCH TIER: Solid Yellow Caution
+    // WATCH TIER (WBGT 28.0°C - 30.0°C): Solid Yellow Caution
     setLeds(false, true, false);
   }
   else {
-    // NORMAL TIER: Solid Green Safe
+    // NORMAL TIER (WBGT < 28.0°C): Solid Green Safe
     setLeds(false, false, true);
   }
 }
@@ -205,13 +196,20 @@ void setup() {
     attempts++;
   }
 
+  // Clean LED states after connection phase
+  turnAllLedsOff();
+
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\n[WiFi] Connected! IP: " + WiFi.localIP().toString());
-    setLeds(false, false, true); // Solid Green when connected
+    isOfflineMode = false;
   } else {
-    Serial.println("\n[WiFi] Connection failed. Starting in OFFLINE mode.");
+    Serial.println("\n[WiFi] Connection timeout. Operating in autonomous OFFLINE edge mode.");
     isOfflineMode = true;
   }
+
+  // Ensure initial normal state is Solid Green (Safe)
+  currentAlertLevel = "Normal";
+  setLeds(false, false, true);
 }
 
 // =============================================================
@@ -328,11 +326,17 @@ void uploadTelemetry() {
       Serial.println("[Sentinel] Active Tier from Munzir Server: " + currentAlertLevel);
     }
   } else {
-    Serial.printf("[HTTP Error] Code: %d\n", httpCode);
+    Serial.printf("[HTTP Error] Code: %d - Evaluating tier locally on edge node\n", httpCode);
     failedUploadsInRow++;
     if (failedUploadsInRow >= 3) {
       isOfflineMode = true;
     }
+    // Autonomous Edge Fallback: calculate tier directly from physical sensors
+    if (wbgtEst >= 32.2) currentAlertLevel = "Alert";
+    else if (wbgtEst >= 30.0) currentAlertLevel = "Warning";
+    else if (wbgtEst >= 28.0) currentAlertLevel = "Watch";
+    else currentAlertLevel = "Normal";
+    Serial.println("[Local Fallback] Active Tier: " + currentAlertLevel);
   }
   http.end();
 }
