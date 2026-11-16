@@ -808,16 +808,26 @@ def acknowledge_sentinel_button(
 
 @app.post("/api/v1/sentinel/test-buzzer/{node_id}", response_class=JSONResponse)
 def trigger_sentinel_test_buzzer(node_id: str) -> JSONResponse:
-    """Manually forces Alert level on node to sound the buzzer for demo testing."""
+    """Manually forces Alert level on node to trigger Red LED / alert state for demo testing."""
     res = sentinel_engine.set_test_alert_level(node_id, level="Alert", duration_seconds=120)
-    return JSONResponse(content={"status": "buzzer_triggered", **res})
+    return JSONResponse(content={"status": "alert_triggered", **res})
 
 
 @app.post("/api/v1/sentinel/silence-buzzer/{node_id}", response_class=JSONResponse)
 def silence_sentinel_test_buzzer(node_id: str) -> JSONResponse:
-    """Silences the test buzzer on node."""
+    """Resets node to Normal (Green LED) state."""
     res = sentinel_engine.clear_test_alert_level(node_id)
-    return JSONResponse(content={"status": "buzzer_silenced", **res})
+    return JSONResponse(content={"status": "alert_cleared", **res})
+
+
+@app.post("/api/v1/sentinel/test-level/{node_id}", response_class=JSONResponse)
+def set_sentinel_test_level(node_id: str, level: str = Query("Alert")) -> JSONResponse:
+    """Manually forces a specific alert tier (Alert -> Red LED, Warning -> Yellow LED, Normal -> Green LED)."""
+    if level == "Normal":
+        res = sentinel_engine.clear_test_alert_level(node_id)
+    else:
+        res = sentinel_engine.set_test_alert_level(node_id, level=level, duration_seconds=120)
+    return JSONResponse(content={"status": "level_set", "level": level, **res})
 
 
 @app.get("/api/v1/sentinel/sample-packet", response_class=JSONResponse)

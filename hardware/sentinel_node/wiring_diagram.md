@@ -1,8 +1,8 @@
-# Munzir Sentinel — Hardware Wiring Diagram & Pinout
+# Munzir Sentinel — Hardware Wiring Diagram & Pinout (3-LED RGY Edition)
 
 > **Device:** ESP32 DevKit (30-pin or 38-pin standard)  
-> **Sensors:** DHT22 (Air Temp + Humidity) & DS18B20 (Waterproof Black Globe Temp)  
-> **Indicator:** Common-Cathode RGB LED  
+> **Sensors:** DHT22 (Air Temp + Humidity) & DS18B20 (Waterproof Radiant Probe in Matte-Black Box)  
+> **Indicators:** 3 Separate Alert LEDs (Red, Yellow, Green) — Traffic-Light Heat Status  
 > **Controls:** On-board BOOT Button (GPIO 0)  
 > **Power:** 3.3V Rail (Power Bank or USB 5V stepped down by onboard AMS1117 LDO)
 
@@ -10,57 +10,62 @@
 
 ## 1. Pin Connection Table
 
-| Device | Device Pin | ESP32 GPIO | Resistor Needed | Function |
+| Device | Device Pin / Wire | ESP32 Pin | Resistor Needed | Function / Placement |
 | :--- | :--- | :--- | :--- | :--- |
-| **DHT22 Sensor** | Pin 1 (VCC) | **3.3V** | None | Power (3.3V regulated) |
-| | Pin 2 (DATA) | **GPIO 4** | 10 kΩ pull-up to 3.3V *(if bare 4-pin)* | Digital bus |
-| | Pin 3 (NC) | Not connected | None | None |
-| | Pin 4 (GND) | **GND** | None | Ground rail |
-| **DS18B20 Probe** | Red wire (VCC) | **3.3V** | None | Power |
-| | Yellow/White (DATA)| **GPIO 18** | **4.7 kΩ pull-up to 3.3V** *(Mandatory)* | Dallas 1-Wire Bus |
-| | Black wire (GND) | **GND** | None | Ground |
-| **RGB LED** | Anode/Cathode | **GND** *(if cathode)* | None | Common pin |
-| | Red leg | **GPIO 25** | **220 Ω** in series | Alert & Warning visual |
-| | Green leg | **GPIO 26** | **220 Ω** in series | Normal baseline visual |
-| | Blue leg | **GPIO 27** | **220 Ω** in series | Offline blip indicator |
-| **BOOT Button** | On-board | **GPIO 0** | Internal pull-up | On-site operator acknowledgement |
+| **DHT22 Sensor** | Pin 1 (VCC) | **3V3** | None | Power (3.3V) |
+| | Pin 2 (DATA) | **GPIO 4** | None *(Built-in on 3-pin module)* | Ambient air temp & humidity (**Keep OUTSIDE box**) |
+| | Pin 3 (GND) | **GND** | None | Common Ground |
+| **DS18B20 Probe** | Red wire (VCC) | **3V3** | None | Power (3.3V) |
+| | Yellow/White (DATA)| **GPIO 18** | **4.7 kΩ pull-up to 3V3** *(Mandatory!)* | Radiant globe temp (**Suspend inside sealed matte-black box**) |
+| | Black wire (GND) | **GND** | None | Common Ground |
+| **RED LED** | Anode (+ long leg) | **GPIO 25** | **220 Ω to 330 Ω** in series | **ALERT Tier** ($> 32.2^\circ\text{C}$ WBGT) — Work Cessation |
+| | Cathode (- short leg)| **GND** | None | Common Ground |
+| **YELLOW LED** | Anode (+ long leg) | **GPIO 26** | **220 Ω to 330 Ω** in series | **WARNING / WATCH Tier** ($28^\circ - 32^\circ\text{C}$ WBGT) — Caution & Rest |
+| | Cathode (- short leg)| **GND** | None | Common Ground |
+| **GREEN LED** | Anode (+ long leg) | **GPIO 27** | **220 Ω to 330 Ω** in series | **NORMAL Tier** ($< 28^\circ\text{C}$ WBGT) — Safe Conditions |
+| | Cathode (- short leg)| **GND** | None | Common Ground |
+| **BOOT Button** | On-board | **GPIO 0** | Internal pull-up | Operator acknowledgement / manual test |
 
 ---
 
 ## 2. ASCII Breadboard Wiring Diagram
 
 ```
-                    ESP32 DevKit (30-pin)
-                  ┌──────────────────────┐
-            3.3V ─┤ [3V3]          [GND] ├─ Common Ground Rail
-                  │                      │
-                  │                      │
-  DHT22 DATA ────►┤ [GPIO 4]             │
-                  │                      │
-DS18B20 DATA ────►┤ [GPIO 18]   [GPIO 25]├─► [220Ω] ──► RGB LED (Red)
-                  │             [GPIO 26]├─► [220Ω] ──► RGB LED (Green)
-                  │             [GPIO 27]├─► [220Ω] ──► RGB LED (Blue)
-                  │                      │
-      BOOT SW ───►│ [GPIO 0]             │
-                  └──────────────────────┘
+                              ESP32 DevKit (30-pin)
+                             ┌──────────────────────┐
+       Power Rail (+3.3V) ───┤ [3V3]          [GND] ├──── Common Ground Rail (GND)
+                             │                      │
+                             │                      │
+   DHT22 DATA (Outside) ────►┤ [GPIO 4]             │
+                             │                      │
+ DS18B20 DATA (In Box)  ────►┤ [GPIO 18]   [GPIO 25]├─► [220Ω] ──► (Anode +) [ RED LED ]    (Cathode -) ──► GND
+                             │             [GPIO 26]├─► [220Ω] ──► (Anode +) [ YELLOW LED ] (Cathode -) ──► GND
+                             │             [GPIO 27]├─► [220Ω] ──► (Anode +) [ GREEN LED ]  (Cathode -) ──► GND
+                             │                      │
+     BOOT SW (Built-in) ────►┤ [GPIO 0]             │
+                             └──────────────────────┘
 
-          ┌──────────────────────────────────────────────┐
-          │ PULL-UP RESISTOR DETAILS:                    │
-          │ 1. DS18B20: Connect 4.7kΩ between DATA and   │
-          │    3.3V rail. Without this, sensor reads -127│
-          │ 2. DHT22: If on a 3-pin breakout board,     │
-          │    resistor is already built-in.             │
-          │ 3. Black Globe: Insert waterproof DS18B20   │
-          │    probe into centre of matte-black ball.   │
-          └──────────────────────────────────────────────┘
+  ┌────────────────────────────────────────────────────────────────────────────────────────┐
+  │ MANDATORY WIRING DETAILS:                                                              │
+  │ 1. DS18B20 PULL-UP: Connect a 4.7kΩ resistor between GPIO 18 and 3V3.                  │
+  │    (Without this 4.7kΩ pull-up, Dallas 1-Wire will output error -127°C or 85°C).       │
+  │ 2. LED RESISTORS: Place a 220Ω or 330Ω resistor between each GPIO pin and the LED      │
+  │    positive (anode) leg to protect the ESP32 pins from over-current.                   │
+  │ 3. SENSOR PLACEMENT:                                                                   │
+  │    • DS18B20: Suspend probe tip in the center of the sealed matte-black box.          │
+  │    • DHT22:   Keep in the open room air (outside the box) to measure ambient climate. │
+  └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Pre-Flight Verification Checklist
+## 3. Visual Heat Tier States
 
-1. **Verify 2.4 GHz Wi-Fi:** ESP32 does not support 5 GHz Wi-Fi. Ensure mobile hotspot is in 2.4 GHz mode ("Maximize Compatibility" on iOS).
-2. **Resistor check:** Ensure a 4.7 kΩ resistor bridges DS18B20 Data (GPIO 18) and 3.3V.
-3. **Data USB Cable:** Ensure your micro-USB cable carries data lines (D+/D-) rather than power-only charging.
-4. **Matte-Black Globe:** Spray ping-pong ball with flat/matte black paint to approximate standard black globe radiative absorption ($0.95$ emissivity).
-
+| Condition / WBGT Index | Green LED (GPIO 27) | Yellow LED (GPIO 26) | Red LED (GPIO 25) | Operational Meaning |
+| :--- | :--- | :--- | :--- | :--- |
+| **Power-On Test** | On (0.3s) | On (0.3s) | On (0.3s) | Self-test sweep on startup |
+| **NORMAL (< 28°C WBGT)** | **SOLID ON** | OFF | OFF | Safe conditions; normal shifts |
+| **WATCH (28°C – 30°C)** | OFF | **SOLID ON** | OFF | Monitor hydration; enforce shaded rest |
+| **WARNING (30°C – 32.2°C)**| OFF | **DOUBLE BLINK** | OFF | Heavy labor restriction; 15m rest/hr |
+| **ALERT (> 32.2°C WBGT)** | OFF | OFF | **FAST FLASH** | Mandatory Midday Work Stoppage (Res 44) |
+| **Offline / Wi-Fi Loss** | OFF | **ALT BLINK** | **ALT BLINK** | Local WBGT fallback thresholding |

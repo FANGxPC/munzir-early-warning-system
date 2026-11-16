@@ -1181,8 +1181,10 @@
  Real-time microclimate shade nodes (ESP32 + DHT22 + DS18B20 Globe) measuring local WBGT and driving on-board LED alerts
  </div>
  </div>
- <div style="display:flex; gap:0.5rem; align-items:center;">
- <button class="btn btn-primary" style="background:#d9534f; border-color:#f17971; font-weight:700;" onclick="toggleTestBuzzer('SENT-001')" id="globalBuzzerBtn">Test Hardware Buzzer</button>
+ <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+ <button class="btn btn-primary" style="background:#dc2626; border-color:#f17971; font-weight:700;" onclick="toggleTestBuzzer('SENT-001')" id="globalBuzzerBtn">Test Red Alert LED</button>
+ <button class="btn btn-secondary" style="color:#e9aa62; border-color:#e9aa62; font-weight:700;" onclick="testSentinelLevel('SENT-001', 'Warning')">Test Yellow LED</button>
+ <button class="btn btn-secondary" style="color:#66d9af; border-color:#66d9af; font-weight:700;" onclick="testSentinelLevel('SENT-001', 'Normal')">Reset Green LED</button>
  <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh</button>
  <button class="btn btn-primary" onclick="openCommissionModal()">Commission New Node</button>
  </div>

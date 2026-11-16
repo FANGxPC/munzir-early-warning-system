@@ -18,12 +18,12 @@
 // 3. Hardware Identity
 #define NODE_ID           "SENT-001"
 
-// 4. Pin Assignments (ESP32 DevKit)
-#define PIN_DHT22         4       // DHT22 Data pin
-#define PIN_DS18B20       18      // DS18B20 1-Wire Data pin (needs 4.7kΩ pull-up to 3.3V)
-#define PIN_LED_RED       25      // Red LED channel (through 220Ω resistor)
-#define PIN_LED_GREEN     26      // Green LED channel (through 220Ω resistor)
-#define PIN_LED_BLUE      27      // Blue LED channel (through 220Ω resistor)
+// 4. Pin Assignments (ESP32 DevKit - 3 Individual RGY LEDs)
+#define PIN_DHT22         4       // DHT22 Data pin (Keep outside in ambient shade)
+#define PIN_DS18B20       18      // DS18B20 1-Wire Data pin (Suspend in black box, needs 4.7kΩ pull-up to 3.3V)
+#define PIN_LED_RED       25      // Red LED (Alert / Immediate hazard stop) via 220Ω resistor
+#define PIN_LED_YELLOW    26      // Yellow LED (Warning / Caution) via 220Ω resistor
+#define PIN_LED_GREEN     27      // Green LED (Normal / Safe) via 220Ω resistor
 #define PIN_BOOT_BUTTON   0       // Built-in BOOT button (GPIO 0 on standard ESP32)
 
 // 5. LED Type Configuration

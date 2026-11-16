@@ -1510,12 +1510,15 @@ async function loadSentinelView(isSilent = false) {
           <td>${lvlBadge}</td>
           <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
           <td>
-            <div style="display:flex; gap:0.4rem; align-items:center;">
+            <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
               <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
-                ${isBuzzerActive ? 'Silence' : 'Test Buzzer'}
+                ${isBuzzerActive ? 'Reset Green' : 'Test Red Alert'}
+              </button>
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem; color:#e9aa62; border-color:#e9aa62;" onclick="testSentinelLevel('${node.node_id}', 'Warning')">
+                Yellow Warning
               </button>
               <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="triggerHardwareHeartbeat('${node.node_id}')">
-                Sample Telemetry
+                Sample
               </button>
             </div>
           </td>
@@ -1702,54 +1705,38 @@ async function triggerHardwareHeartbeat(nodeId) {
 }
 const simulateNodeUpload = triggerHardwareHeartbeat;
 
-// --- Hardware Buzzer Test Trigger (No Laptop Audio) ---
+// --- Hardware Alert LED Trigger (RGY Traffic-Light Heat Status) ---
 let isBuzzerActive = false;
 
-async function toggleTestBuzzer(nodeId = "SENT-001") {
-  const btn = document.getElementById(`buzzerBtn_${nodeId}`) || document.getElementById("globalBuzzerBtn");
-
-  if (!isBuzzerActive) {
-    // Turn ON Hardware Buzzer
-    isBuzzerActive = true;
-    if (btn) {
-      btn.textContent = "Silence Hardware Buzzer";
-      btn.style.background = "#475569";
-    }
-    const globalBtn = document.getElementById("globalBuzzerBtn");
-    if (globalBtn) {
-      globalBtn.textContent = "Silence Hardware Buzzer";
-      globalBtn.style.background = "#475569";
-    }
-
-    // Call API to set node alert level to "Alert"
-    try {
-      await apiFetch(`/api/v1/sentinel/test-buzzer/${nodeId}`, { method: "POST" });
-    } catch (err) {
-      console.warn("Hardware buzzer call:", err);
-    }
-    loadSentinelView(true);
-
-  } else {
-    // Turn OFF Hardware Buzzer
-    isBuzzerActive = false;
-
-    if (btn) {
-      btn.textContent = "Test Hardware Buzzer";
-      btn.style.background = "#dc2626";
-    }
-    const globalBtn = document.getElementById("globalBuzzerBtn");
-    if (globalBtn) {
-      globalBtn.textContent = "Test Hardware Buzzer";
-      globalBtn.style.background = "#dc2626";
-    }
-
-    try {
+async function testSentinelLevel(nodeId = "SENT-001", level = "Alert") {
+  try {
+    if (level === "Normal") {
+      isBuzzerActive = false;
       await apiFetch(`/api/v1/sentinel/silence-buzzer/${nodeId}`, { method: "POST" });
-    } catch (err) {
-      console.warn("Hardware silence call:", err);
+    } else {
+      isBuzzerActive = (level === "Alert");
+      await apiFetch(`/api/v1/sentinel/test-level/${nodeId}?level=${encodeURIComponent(level)}`, { method: "POST" });
+    }
+    const globalBtn = document.getElementById("globalBuzzerBtn");
+    if (globalBtn) {
+      globalBtn.textContent = isBuzzerActive ? "Reset to Green LED" : "Test Red Alert LED";
+      globalBtn.style.background = isBuzzerActive ? "#475569" : "#dc2626";
     }
     loadSentinelView(true);
+  } catch (err) {
+    console.warn("Hardware alert level trigger failed:", err);
   }
+}
+window.testSentinelLevel = testSentinelLevel;
+
+async function toggleTestBuzzer(nodeId = "SENT-001") {
+  if (!isBuzzerActive) {
+    await testSentinelLevel(nodeId, "Alert");
+  } else {
+    await testSentinelLevel(nodeId, "Normal");
+  }
+}
+window.toggleTestBuzzer = toggleTestBuzzer;
 }
 
 // --- Physical Digital Twin: On-Board Hardware BOOT Button Simulation ---
