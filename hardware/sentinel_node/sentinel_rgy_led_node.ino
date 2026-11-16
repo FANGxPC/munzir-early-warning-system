@@ -1,6 +1,6 @@
 /**
- * Munzir Sentinel — On-Site WBGT Microclimate Hardware Node (RGY LED Edition)
- * Firmware for ESP32 DevKit + DHT22 + DS18B20 (Black Box) + 3 Separate LEDs (Red, Green, Yellow)
+ * Munzir Sentinel — On-Site WBGT Microclimate Hardware Node (RGB LED Edition)
+ * Firmware for ESP32 DevKit + DHT22 + DS18B20 (Black Box) + 3 Separate LEDs (Red, Blue, Green)
  * 
  * ==============================================================================
  * HARDWARE CONNECTIONS & PINOUT (ESP32 DevKit)
@@ -17,10 +17,10 @@
  *    - DATA (Yellow) -> ESP32 GPIO 18
  *    ** REQUIRED: 4.7kΩ pull-up resistor connected between GPIO 18 and 3V3 **
  * 
- * 3. THREE INDIVIDUAL ALERT LEDs (RGY Traffic-Light Heat Status):
- *    - RED LED    (Alert / Hazard)    -> Anode (+) to ESP32 GPIO 25 (via 220Ω resistor) | Cathode (-) to GND
- *    - YELLOW LED (Warning / Caution) -> Anode (+) to ESP32 GPIO 26 (via 220Ω resistor) | Cathode (-) to GND
- *    - GREEN LED  (Normal / Safe)     -> Anode (+) to ESP32 GPIO 27 (via 220Ω resistor) | Cathode (-) to GND
+ * 3. THREE INDIVIDUAL ALERT LEDs (RGB Traffic-Light Heat Status):
+ *    - RED LED   (Alert / Hazard)    -> Anode (+) to ESP32 GPIO 25 (via 220Ω resistor) | Cathode (-) to GND
+ *    - BLUE LED  (Warning / Caution) -> Anode (+) to ESP32 GPIO 26 (via 220Ω resistor) | Cathode (-) to GND
+ *    - GREEN LED (Normal / Safe)     -> Anode (+) to ESP32 GPIO 27 (via 220Ω resistor) | Cathode (-) to GND
  * 
  * 4. BOOT Button (Operator Acknowledgement):
  *    - Built-in GPIO 0 on standard ESP32 DevKit
@@ -53,7 +53,8 @@
 #define PIN_DHT22         4       // DHT22 data pin
 #define PIN_DS18B20       18      // DS18B20 1-Wire data pin
 #define PIN_LED_RED       25      // Red LED (Alert tier)
-#define PIN_LED_YELLOW    26      // Yellow LED (Warning/Watch tier)
+#define PIN_LED_BLUE      26      // Blue LED (Warning/Watch tier)
+#define PIN_LED_YELLOW    PIN_LED_BLUE // Compatibility alias
 #define PIN_LED_GREEN     27      // Green LED (Normal/Safe tier)
 #define PIN_BOOT_BUTTON   0       // Built-in ESP32 BOOT button
 
@@ -74,11 +75,11 @@ unsigned long lastButtonInterrupt = 0;
 String currentAlertLevel = "Normal";
 
 // =============================================================
-// 4. RGY LED CONTROLLER (NON-BLOCKING)
+// 4. RGB/RBG LED CONTROLLER (NON-BLOCKING)
 // =============================================================
-void setLeds(bool red, bool yellow, bool green) {
+void setLeds(bool red, bool blue, bool green) {
   digitalWrite(PIN_LED_RED, red ? HIGH : LOW);
-  digitalWrite(PIN_LED_YELLOW, yellow ? HIGH : LOW);
+  digitalWrite(PIN_LED_BLUE, blue ? HIGH : LOW);
   digitalWrite(PIN_LED_GREEN, green ? HIGH : LOW);
 }
 
@@ -86,9 +87,9 @@ void turnAllLedsOff() {
   setLeds(false, false, false);
 }
 
-// Drive RGY LED patterns smoothly based on alert level
-// Normal condition is strictly Solid Green (no red, no yellow)
-void updateRgyLedPattern() {
+// Drive RGB LED patterns smoothly based on alert level
+// Normal condition is strictly Solid Green (no red, no blue)
+void updateLedPattern() {
   unsigned long now = millis();
 
   if (currentAlertLevel == "Alert") {
@@ -97,13 +98,13 @@ void updateRgyLedPattern() {
     setLeds(redState, false, false);
   }
   else if (currentAlertLevel == "Warning") {
-    // WARNING TIER (WBGT 30.0°C - 32.2°C): Double Yellow Blink
+    // WARNING TIER (WBGT 30.0°C - 32.2°C): Double Blue Blink
     unsigned long cycle = now % 1000;
-    bool yellowState = (cycle < 150) || (cycle >= 250 && cycle < 400);
-    setLeds(false, yellowState, false);
+    bool blueState = (cycle < 150) || (cycle >= 250 && cycle < 400);
+    setLeds(false, blueState, false);
   }
   else if (currentAlertLevel == "Watch") {
-    // WATCH TIER (WBGT 28.0°C - 30.0°C): Solid Yellow Caution
+    // WATCH TIER (WBGT 28.0°C - 30.0°C): Solid Blue Caution
     setLeds(false, true, false);
   }
   else {
@@ -111,12 +112,13 @@ void updateRgyLedPattern() {
     setLeds(false, false, true);
   }
 }
+void updateRgyLedPattern() { updateLedPattern(); } // Compatibility alias
 
-// Self-Test Sweep on Boot: Green -> Yellow -> Red -> Green
+// Self-Test Sweep on Boot: Green -> Blue -> Red -> All On -> Green
 void runLedSelfTest() {
   Serial.println("[LEDs] Running power-on self-test...");
   setLeds(false, false, true); delay(350); // Green
-  setLeds(false, true, false); delay(350); // Yellow
+  setLeds(false, true, false); delay(350); // Blue
   setLeds(true, false, false); delay(350); // Red
   setLeds(true, true, true);   delay(300); // All on
   turnAllLedsOff();            delay(200); // All off
@@ -191,8 +193,8 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(500);
     Serial.print(".");
-    // Blink yellow during connection attempt
-    digitalWrite(PIN_LED_YELLOW, !digitalRead(PIN_LED_YELLOW));
+    // Blink Blue during connection attempt
+    digitalWrite(PIN_LED_BLUE, !digitalRead(PIN_LED_BLUE));
     attempts++;
   }
 
@@ -373,7 +375,7 @@ void loop() {
   if (buttonPressedFlag) {
     buttonPressedFlag = false;
     Serial.println("[Event] BOOT Button pressed! Dispatching supervisor ACK...");
-    // Visual confirmation: Quick triple blink of yellow LED
+    // Visual confirmation: Quick triple blink of Blue LED
     for (int i = 0; i < 3; i++) {
       setLeds(false, true, false); delay(80);
       turnAllLedsOff(); delay(80);

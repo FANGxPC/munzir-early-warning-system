@@ -1511,14 +1511,11 @@ async function loadSentinelView(isSilent = false) {
           <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
           <td>
             <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
-              <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isBuzzerActive ? '#475569' : '#dc2626'};" onclick="toggleTestBuzzer('${node.node_id}')" id="buzzerBtn_${node.node_id}">
-                ${isBuzzerActive ? 'Reset Green' : 'Test Red Alert'}
+              <button class="btn btn-primary" style="font-size:0.7rem; padding:0.25rem 0.6rem; background:${isAlertActive ? '#475569' : '#dc2626'};" onclick="toggleTestAlert('${node.node_id}')" id="alertBtn_${node.node_id}">
+                ${isAlertActive ? 'Reset Green LED' : 'Test Red Alert'}
               </button>
-              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem; color:#e9aa62; border-color:#e9aa62;" onclick="testSentinelLevel('${node.node_id}', 'Warning')">
-                Yellow Warning
-              </button>
-              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem;" onclick="triggerHardwareHeartbeat('${node.node_id}')">
-                Sample
+              <button class="btn btn-secondary" style="font-size:0.7rem; padding:0.25rem 0.5rem; color:#38bdf8; border-color:#38bdf8;" onclick="testSentinelLevel('${node.node_id}', 'Warning')">
+                Test Blue Warning
               </button>
             </div>
           </td>
@@ -1678,49 +1675,41 @@ async function submitCommissionNode() {
   }
 }
 
-async function triggerHardwareHeartbeat(nodeId) {
-  // Dispatches an authentic physical telemetry packet from the ESP32 field campaign
-  try {
-    const sample = await apiFetch(`/api/v1/sentinel/sample-packet?node_id=${nodeId}`);
-    const payload = {
-      node_id: sample.node_id,
-      seq: sample.seq,
-      ts: sample.ts,
-      air_temp_c: sample.air_temp_c,
-      rh_pct: sample.rh_pct,
-      globe_temp_c: sample.globe_temp_c,
-      wbgt_est_c: sample.wbgt_est_c,
-      ok: sample.ok,
-    };
-    const res = await apiFetch("/api/v1/sentinel/upload", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    alert(`Ingested Real Physical ESP32 Telemetry for ${nodeId}!\nProvenance: ${sample.source}\nAir Temp: ${sample.air_temp_c}°C | RH: ${sample.rh_pct}% | Globe Temp: ${sample.globe_temp_c}°C\nRe-derived WBGT: ${res.rederived_wbgt}°C\nLED Level returned to ESP32: ${res.level.toUpperCase()}\nValid until: ${res.valid_until.substring(11, 19)} UTC`);
-    loadSentinelView();
-  } catch (err) {
-    alert("Telemetry dispatch failed: " + err.message);
-  }
-}
-const simulateNodeUpload = triggerHardwareHeartbeat;
-
-// --- Hardware Alert LED Trigger (RGY Traffic-Light Heat Status) ---
-let isBuzzerActive = false;
+// --- Hardware Alert LED Trigger (RGB Heat Status: Red Alert, Blue Warning, Green Normal) ---
+let isAlertActive = false;
 
 async function testSentinelLevel(nodeId = "SENT-001", level = "Alert") {
   try {
     if (level === "Normal") {
-      isBuzzerActive = false;
-      await apiFetch(`/api/v1/sentinel/silence-buzzer/${nodeId}`, { method: "POST" });
+      isAlertActive = false;
+      await apiFetch(`/api/v1/sentinel/test-level/${nodeId}?level=Normal`, { method: "POST" });
     } else {
-      isBuzzerActive = (level === "Alert");
+      isAlertActive = (level === "Alert");
       await apiFetch(`/api/v1/sentinel/test-level/${nodeId}?level=${encodeURIComponent(level)}`, { method: "POST" });
     }
-    const globalBtn = document.getElementById("globalBuzzerBtn");
+    const globalBtn = document.getElementById("globalAlertBtn");
     if (globalBtn) {
-      globalBtn.textContent = isBuzzerActive ? "Reset to Green LED" : "Test Red Alert LED";
-      globalBtn.style.background = isBuzzerActive ? "#475569" : "#dc2626";
+      globalBtn.textContent = isAlertActive ? "Reset Green LED" : "Test Red Alert LED";
+      globalBtn.style.background = isAlertActive ? "#475569" : "#dc2626";
+    }
+    const twinLed = document.getElementById("twinLedBadge");
+    if (twinLed) {
+      if (level === "Alert") {
+        twinLed.textContent = "LED: RED ALERT FLASH";
+        twinLed.style.background = "rgba(220, 38, 38, 0.2)";
+        twinLed.style.color = "#f87171";
+        twinLed.style.border = "1px solid #ef4444";
+      } else if (level === "Warning") {
+        twinLed.textContent = "LED: BLUE WARNING PULSE";
+        twinLed.style.background = "rgba(56, 189, 248, 0.2)";
+        twinLed.style.color = "#38bdf8";
+        twinLed.style.border = "1px solid #38bdf8";
+      } else {
+        twinLed.textContent = "LED: SOLID GREEN (SAFE)";
+        twinLed.style.background = "rgba(16, 185, 129, 0.2)";
+        twinLed.style.color = "#34d399";
+        twinLed.style.border = "1px solid #66d9af";
+      }
     }
     loadSentinelView(true);
   } catch (err) {
@@ -1729,50 +1718,23 @@ async function testSentinelLevel(nodeId = "SENT-001", level = "Alert") {
 }
 window.testSentinelLevel = testSentinelLevel;
 
-async function toggleTestBuzzer(nodeId = "SENT-001") {
-  if (!isBuzzerActive) {
+async function toggleTestAlert(nodeId = "SENT-001") {
+  if (!isAlertActive) {
     await testSentinelLevel(nodeId, "Alert");
   } else {
     await testSentinelLevel(nodeId, "Normal");
   }
 }
-window.toggleTestBuzzer = toggleTestBuzzer;
-}
+window.toggleTestAlert = toggleTestAlert;
+window.toggleTestBuzzer = toggleTestAlert;
 
-// --- Physical Digital Twin: On-Board Hardware BOOT Button Simulation ---
+// --- Physical Digital Twin: On-Board Hardware BOOT Button ---
 async function simulatePhysicalBootPress(nodeId = "SENT-001") {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (AudioCtx) {
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, ctx.currentTime);
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.18);
-    }
-  } catch (e) {
-    // Web audio might be restricted without prior user gesture
-  }
-
-  const twinBuzzer = document.getElementById("twinBuzzerBadge");
   const twinLed = document.getElementById("twinLedBadge");
   const twinReceipt = document.getElementById("twinAckReceiptText");
 
-  if (twinBuzzer) {
-    twinBuzzer.textContent = "BUZZER: SILENCED (15m)";
-    twinBuzzer.style.background = "rgba(16, 185, 129, 0.2)";
-    twinBuzzer.style.color = "#34d399";
-    twinBuzzer.style.border = "1px solid #66d9af";
-  }
-
   if (twinLed) {
-    twinLed.textContent = "LED: GREEN ACK";
+    twinLed.textContent = "LED: SOLID GREEN (SAFE)";
     twinLed.style.background = "rgba(16, 185, 129, 0.2)";
     twinLed.style.color = "#34d399";
     twinLed.style.border = "1px solid #66d9af";
@@ -1780,14 +1742,14 @@ async function simulatePhysicalBootPress(nodeId = "SENT-001") {
 
   const nowTime = new Date().toISOString().substring(11, 19);
   if (twinReceipt) {
-    twinReceipt.innerHTML = `<strong>ACKNOWLEDGED @ ${nowTime} UTC:</strong> Hardware BOOT button pressed by HSE Officer. Cryptographic compliance receipt committed to Lakehouse.`;
+    twinReceipt.innerHTML = `<strong>ACKNOWLEDGED @ ${nowTime} UTC:</strong> Hardware BOOT button pressed by HSE Officer. Alert acknowledged and compliance receipt committed to Lakehouse.`;
     twinReceipt.style.color = "#34d399";
   }
 
   try {
-    await apiFetch(`/api/v1/sentinel/silence-buzzer/${nodeId}`, { method: "POST" });
+    await apiFetch(`/api/v1/sentinel/test-level/${nodeId}?level=Normal`, { method: "POST" });
   } catch (err) {
-    console.warn("BOOT silence endpoint call:", err);
+    console.warn("BOOT acknowledgement endpoint call:", err);
   }
 }
 window.simulatePhysicalBootPress = simulatePhysicalBootPress;
@@ -6586,6 +6548,7 @@ window.switchImpactSubtab = switchImpactSubtab;
 window.switchJaisLanguage = switchJaisLanguage;
 window.switchMissionPillar = switchMissionPillar;
 window.toggleFloatingCopilotDrawer = toggleFloatingCopilotDrawer;
+window.toggleTestAlert = toggleTestAlert;
 window.toggleTestBuzzer = toggleTestBuzzer;
 window.toggleTimeMachinePlay = toggleTimeMachinePlay;
 window.useCurrentDeviceLocation = useCurrentDeviceLocation;

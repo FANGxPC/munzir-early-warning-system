@@ -1,8 +1,8 @@
-# Munzir Sentinel — Hardware Wiring Diagram & Pinout (3-LED RGY Edition)
+# Munzir Sentinel — Hardware Wiring Diagram & Pinout (3-LED RGB Edition)
 
 > **Device:** ESP32 DevKit (30-pin or 38-pin standard)  
 > **Sensors:** DHT22 (Air Temp + Humidity) & DS18B20 (Waterproof Radiant Probe in Matte-Black Box)  
-> **Indicators:** 3 Separate Alert LEDs (Red, Yellow, Green) — Traffic-Light Heat Status  
+> **Indicators:** 3 Separate Alert LEDs (Red, Blue, Green) — Traffic-Light Heat Status  
 > **Controls:** On-board BOOT Button (GPIO 0)  
 > **Power:** 3.3V Rail (Power Bank or USB 5V stepped down by onboard AMS1117 LDO)
 
@@ -20,7 +20,7 @@
 | | Black wire (GND) | **GND** | None | Common Ground |
 | **RED LED** | Anode (+ long leg) | **GPIO 25** | **220 Ω to 330 Ω** in series | **ALERT Tier** ($> 32.2^\circ\text{C}$ WBGT) — Work Cessation |
 | | Cathode (- short leg)| **GND** | None | Common Ground |
-| **YELLOW LED** | Anode (+ long leg) | **GPIO 26** | **220 Ω to 330 Ω** in series | **WARNING / WATCH Tier** ($28^\circ - 32^\circ\text{C}$ WBGT) — Caution & Rest |
+| **BLUE LED** | Anode (+ long leg) | **GPIO 26** | **220 Ω to 330 Ω** in series | **WARNING / WATCH Tier** ($28^\circ - 32^\circ\text{C}$ WBGT) — Caution & Rest |
 | | Cathode (- short leg)| **GND** | None | Common Ground |
 | **GREEN LED** | Anode (+ long leg) | **GPIO 27** | **220 Ω to 330 Ω** in series | **NORMAL Tier** ($< 28^\circ\text{C}$ WBGT) — Safe Conditions |
 | | Cathode (- short leg)| **GND** | None | Common Ground |
@@ -38,9 +38,9 @@
                              │                      │
    DHT22 DATA (Outside) ────►┤ [GPIO 4]             │
                              │                      │
- DS18B20 DATA (In Box)  ────►┤ [GPIO 18]   [GPIO 25]├─► [220Ω] ──► (Anode +) [ RED LED ]    (Cathode -) ──► GND
-                             │             [GPIO 26]├─► [220Ω] ──► (Anode +) [ YELLOW LED ] (Cathode -) ──► GND
-                             │             [GPIO 27]├─► [220Ω] ──► (Anode +) [ GREEN LED ]  (Cathode -) ──► GND
+ DS18B20 DATA (In Box)  ────►┤ [GPIO 18]   [GPIO 25]├─► [220Ω] ──► (Anode +) [ RED LED ]   (Cathode -) ──► GND
+                             │             [GPIO 26]├─► [220Ω] ──► (Anode +) [ BLUE LED ]  (Cathode -) ──► GND
+                             │             [GPIO 27]├─► [220Ω] ──► (Anode +) [ GREEN LED ] (Cathode -) ──► GND
                              │                      │
      BOOT SW (Built-in) ────►┤ [GPIO 0]             │
                              └──────────────────────┘
@@ -61,11 +61,11 @@
 
 ## 3. Visual Heat Tier States
 
-| Condition / WBGT Index | Green LED (GPIO 27) | Yellow LED (GPIO 26) | Red LED (GPIO 25) | Operational Meaning |
+| Condition / WBGT Index | Green LED (GPIO 27) | Blue LED (GPIO 26) | Red LED (GPIO 25) | Operational Meaning |
 | :--- | :--- | :--- | :--- | :--- |
 | **Power-On Test** | On (0.3s) | On (0.3s) | On (0.3s) | Self-test sweep on startup |
 | **NORMAL (< 28°C WBGT)** | **SOLID ON** | OFF | OFF | Safe conditions; normal shifts |
 | **WATCH (28°C – 30°C)** | OFF | **SOLID ON** | OFF | Monitor hydration; enforce shaded rest |
 | **WARNING (30°C – 32.2°C)**| OFF | **DOUBLE BLINK** | OFF | Heavy labor restriction; 15m rest/hr |
 | **ALERT (> 32.2°C WBGT)** | OFF | OFF | **FAST FLASH** | Mandatory Midday Work Stoppage (Res 44) |
-| **Offline / Wi-Fi Loss** | OFF | **ALT BLINK** | **ALT BLINK** | Local WBGT fallback thresholding |
+| **Offline / Standalone Edge Mode** | **Follows Local WBGT** (Solid Green if Safe) | Follows Local WBGT (Solid/Blink if Caution) | Follows Local WBGT (Fast Flash if Danger) | Autonomous Edge Fallback: Computes Stull WBGT locally from physical sensors with zero reliance on cloud/Wi-Fi |
