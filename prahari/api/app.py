@@ -36,6 +36,7 @@ from prahari.api.models import (
     VoiceIntercomRequest,
     PolicyStudioRequest,
     ActionConfirmRequest,
+    WhatIfSimulateRequest,
 )
 from prahari.api.map_service import MapLayerService
 from prahari.api.alert_service import AlertInboxService
@@ -1165,6 +1166,24 @@ def simulate_whatif(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
     return JSONResponse(content=results)
+
+
+@app.post("/api/v1/whatif/simulate", response_class=JSONResponse)
+def simulate_whatif_post(
+    req: WhatIfSimulateRequest,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> JSONResponse:
+    """Executes what-if intervention simulation via POST payload."""
+    return simulate_whatif(
+        site_id=req.site_id,
+        action=req.action,
+        workforce=req.workforce,
+        start_date=req.start_date,
+        end_date=req.end_date,
+        shade_temp_reduction_c=req.shade_temp_reduction_c,
+        break_extension_minutes=req.break_extension_minutes,
+        current_user=current_user,
+    )
 
 
 # --- 11. Championship Extensions: Renal, Spatial Deconvolution, Dispatch & Jais ---
