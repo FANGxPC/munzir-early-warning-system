@@ -38,9 +38,9 @@
 // =============================================================
 // 1. NETWORK & BACKEND CONFIGURATION (EDIT THESE 3 LINES)
 // =============================================================
-#define WIFI_SSID         "OPPO A77"                      // 2.4 GHz Wi-Fi or Phone Hotspot
+#define WIFI_SSID         "MOTO E13"                      // 2.4 GHz Wi-Fi or Phone Hotspot
 #define WIFI_PASSWORD     "1234567890"                  // Wi-Fi password
-#define MUNZIR_API_BASE   "http://10.46.55.27:8000"     // Laptop IP running Munzir backend (OPPO A77 subnet)
+#define MUNZIR_API_BASE   "http://192.168.195.27:8000"   // Laptop IP running Munzir backend (MOTO E13 subnet)
 
 // Node Parameters
 #define NODE_ID           "SENT-001"

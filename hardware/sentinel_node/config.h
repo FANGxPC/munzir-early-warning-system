@@ -6,13 +6,13 @@
 
 // 1. Wi-Fi Configuration (2.4 GHz only)
 // If using phone hotspot, enable "Maximize Compatibility" / 2.4 GHz mode
-#define WIFI_SSID         "Your_WiFi_SSID"
-#define WIFI_PASSWORD     "Your_WiFi_Password"
+#define WIFI_SSID         "MOTO E13"
+#define WIFI_PASSWORD     "1234567890"
 
 // 2. Munzir Central Platform API URL
 // For local testing: "http://<YOUR_LAPTOP_IP>:8000"
 // For live Azure Container App: "https://munzir.agreeablestone-12345.uaenorth.azurecontainerapps.io"
-#define MUNZIR_API_BASE   "http://10.46.55.27:8000"
+#define MUNZIR_API_BASE   "http://192.168.195.27:8000"
 #define SENTINEL_API_KEY  "munzir_sentinel_secret_2026"
 
 // 3. Hardware Identity
