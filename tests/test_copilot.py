@@ -270,6 +270,61 @@ class TestSovereignCopilotAgent:
         assert "welcome" in res_thanks.response_text.lower()
         assert res_thanks.passed_fenced_gate is True
 
+    def test_agent_chat_casual_inquiry_and_humor(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+
+        # 1. Casual 'how u do' should NOT trigger 30-min operational emergency directive
+        res_how = agent.chat("how u do", site_id="SITE-JA-01")
+        assert res_how.intent == "conversational"
+        assert "doing very well" in res_how.response_text.lower()
+        assert "13 mobile cooling buses" not in res_how.response_text
+        assert res_how.passed_fenced_gate is True
+
+        # 2. 'tell me a joke' should NOT fall back to raw surveillance statistics
+        res_joke = agent.chat("tell me a joke", site_id="SITE-JA-01")
+        assert res_joke.intent == "conversational"
+        assert "thermometers" in res_joke.response_text.lower() or "joke" in res_joke.response_text.lower()
+        assert "Munzir Surveillance Briefing" not in res_joke.response_text
+        # Enforce zero emojis in responses
+        assert not any(ord(ch) > 0x1F000 for ch in res_joke.response_text)
+        assert res_joke.passed_fenced_gate is True
+
+    def test_agent_chat_main_work_and_capabilities(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+
+        # 'what is your main work' must explain agent's 5 core responsibilities
+        res_work = agent.chat("what is your main work", site_id="SITE-JA-01")
+        assert res_work.intent == "conversational"
+        assert "Munzir Sovereign Health Copilot" in res_work.response_text
+        assert "Microclimate Biosurveillance" in res_work.response_text
+        assert "Resolution No. 44 of 2022" in res_work.response_text
+        assert "Renal Screening" in res_work.response_text
+        assert res_work.passed_fenced_gate is True
+
+        res_do = agent.chat("what do you do", site_id="SITE-JA-01")
+        assert res_do.intent == "conversational"
+        assert "Munzir Sovereign Health Copilot" in res_do.response_text
+
+    def test_agent_chat_shap_attribution_normalized(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_risk = agent.chat("Explain Jebel Ali risk", site_id="SITE-JA-01")
+
+        assert res_risk.intent == "alert_explanation"
+        assert res_risk.passed_fenced_gate is True
+        # Must not contain impossible unnormalized percentages > 100%
+        assert "115.0%" not in res_risk.response_text
+        assert "210.0%" not in res_risk.response_text
+        assert "SHAP attribution indicates" in res_risk.response_text
+
+    def test_agent_chat_renal_cohort_percentage(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_renal = agent.chat("what are renal biomarker rates ?", site_id="SITE-JA-01")
+
+        assert res_renal.intent == "clinical_renal"
+        assert res_renal.passed_fenced_gate is True
+        assert "KDIGO Stage 1 AKI Incidence" in res_renal.response_text
+        assert "% of screened cohort" in res_renal.response_text
+
     def test_agent_chat_clinical_first_aid(self):
         agent = SovereignCopilotAgent(region_key="uae")
         res = agent.chat("worker fainted, need first aid", site_id="SITE-JA-01")

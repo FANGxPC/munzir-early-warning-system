@@ -141,13 +141,34 @@ class SovereignRAGRetriever:
             if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
                 return CopilotIntent.GREETING
 
-        # 2. Conversational Inquiries & Gratitude
+        # 2. Conversational Inquiries, Gratitude & Humor
+        joke_phrases = ["joke", "funny", "laugh", "humor", "tell me a joke", "make me laugh", "say a joke", "crack a joke", "نكتة", "مزحة"]
+        if any(w in q for w in joke_phrases):
+            return CopilotIntent.CONVERSATIONAL
+
+        if re.search(r"\b(how\s*(are\s*you|are\s*u|r\s*u|u|do\s*you\s*do|is\s*it\s*going|are\s*things|u\s*doing|you\s*doing))\b", q):
+            return CopilotIntent.CONVERSATIONAL
+
         conv_phrases = [
-            "who are you", "what are you", "what can you do", "how are you", "how are you doing",
+            "who are you", "what are you", "what can you do", "what do you do", "what do u do",
+            "what is your main work", "what is your work", "what is your job", "what is your role",
+            "what is your purpose", "what are your tasks", "what are your main tasks",
+            "what does this bot do", "what does the copilot do", "what does munzir do", "what is munzir",
+            "tell me about munzir", "how are you", "how are you doing",
+            "how do you do", "how u do", "how are u", "how r u", "hows it going", "how's it going",
             "tell me about yourself", "who made you", "who created you", "thank you", "thanks",
             "appreciate it", "great job", "nice", "cool", "can you speak arabic", "can you speak english",
-            "how do you work", "introduce yourself"
+            "how do you work", "introduce yourself", "help", "how can you help", "how can you assist",
+            "what can i ask", "what can i ask you", "capabilities", "your capabilities"
         ]
+        conv_ar_phrases = [
+            "من أنت", "ماذا تفعل", "ما هو عملك", "ما هو عملك الرئيسي", "ما هي مهامك", "ما هي وظيفتك",
+            "كيف حالك", "شكر", "شكرا", "شكراً", "يعطيك العافية", "من صنعك", "ما هي منصة منذر",
+            "ما هي مميزاتك", "مساعدة", "كيف تساعدني"
+        ]
+        if any(w in q for w in conv_ar_phrases):
+            return CopilotIntent.CONVERSATIONAL
+
         if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in conv_phrases):
             if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
                 return CopilotIntent.CONVERSATIONAL
@@ -218,7 +239,8 @@ class SovereignRAGRetriever:
             return CopilotIntent.CLINICAL_RENAL
 
         # 11. Operational Action Checklist
-        if any(w in q for w in ["do", "action", "step", "checklist", "what should", "intervention", "protocol", "raci", "next"]):
+        op_phrases = ["action", "checklist", "what should", "intervention", "protocol", "raci", "next step", "next steps", "directives", "what to do", "what must be done", "operational checklist"]
+        if any(w in q for w in op_phrases) or re.search(r"\b(what\s+(should|must|can)\s+(i|we)\s+do|what\s+actions?|do\s+for\s+outdoor)\b", q):
             return CopilotIntent.OPERATIONAL_INTERVENTION
 
         return CopilotIntent.GENERAL_OVERVIEW
