@@ -464,11 +464,6 @@ function renderSvgMap(svgElement, features, clusters) {
         <stop offset="50%" stop-color="#050811" />
         <stop offset="100%" stop-color="#060a14" />
       </linearGradient>
-      <radialGradient id="radarBeamGrad" cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#65dfcd" stop-opacity="0.3" />
-        <stop offset="65%" stop-color="#14b8a6" stop-opacity="0.08" />
-        <stop offset="100%" stop-color="#060a14" stop-opacity="0" />
-      </radialGradient>
       <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0" x2="0" y2="8" style="stroke:#65dfcd; stroke-width:2.5; opacity:0.35" />
       </pattern>
@@ -480,13 +475,6 @@ function renderSvgMap(svgElement, features, clusters) {
 
     <!-- Canvas Background -->
     <rect width="${width}" height="${height}" fill="url(#mapBgGrad)" />
-
-    <!-- Tactical Dynamic Sweep Beam -->
-    <g class="radar-sweep-beam" style="transform-origin: ${centerDubai.x}px ${centerDubai.y}px;">
-      <path d="M ${centerDubai.x},${centerDubai.y} L ${centerDubai.x + 235},${centerDubai.y} A 235 235 0 0 0 ${centerDubai.x + 203},${centerDubai.y - 118} Z"
-            fill="url(#radarBeamGrad)" />
-      <line x1="${centerDubai.x}" y1="${centerDubai.y}" x2="${centerDubai.x + 235}" y2="${centerDubai.y}" stroke="#65dfcd" stroke-width="1.8" opacity="0.85" />
-    </g>
 
     <!-- Maritime Domain Layer -->
     <g id="layerGroupMaritime" style="display:${maritimeDisp};">
