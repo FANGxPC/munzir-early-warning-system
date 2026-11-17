@@ -319,16 +319,16 @@ async function loadSituationMap() {
       const badgeClass = `badge-${feat.risk_tier.toLowerCase()}`;
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="color:#f8fafc; font-size:0.88rem;">${feat.geo_name}</strong>
+          <strong style="color:#f8fafc; font-size:1.1remNone;">${feat.geo_name}</strong>
           <span class="badge ${badgeClass}">${feat.risk_tier.toUpperCase()}</span>
         </div>
-        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.73rem; color:#94a3b8; font-family:var(--font-mono, monospace);">
+        <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.95remNone; color:#94a3b8; font-family:var(--font-mono, monospace);">
           <span>ID: <b>${feat.geo_id}</b> (${feat.geo_level})</span>
           <span>Confidence: <b style="color:#65dfcd;">${feat.location_confidence.toUpperCase()}</b></span>
         </div>
-        <div style="margin-top:0.35rem; font-size:0.75rem; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+        <div style="margin-top:0.35rem; font-size:0.95remNone; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
           <span>Outbreak Prob: <b style="color:#f8fafc; font-family:var(--font-mono, monospace);">${(feat.calibrated_prob * 100).toFixed(1)}%</b></span>
-          <span style="font-size:0.7rem; color:#64748b;">Pop: ${feat.population ? feat.population.toLocaleString() : 'N/A'}</span>
+          <span style="font-size:0.92remNone; color:#64748b;">Pop: ${feat.population ? feat.population.toLocaleString() : 'N/A'}</span>
         </div>
       `;
       container.appendChild(card);
@@ -393,16 +393,16 @@ function showMapNodeTooltip(e, geoId, geoName, tier, wbgt, rr) {
 
   tooltip.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-      <span style="font-weight:700; color:#f8fafc; font-size:11.5px;">${geoName}</span>
-      <span style="background:${badgeColor}22; color:${badgeColor}; border:1px solid ${badgeColor}; padding:2px 6px; border-radius:4px; font-weight:800; font-size:9.5px;">${tierUpper}</span>
+      <span style="font-weight:700; color:#f8fafc; font-size:14.5pxNone;">${geoName}</span>
+      <span style="background:${badgeColor}22; color:${badgeColor}; border:1px solid ${badgeColor}; padding:2px 6px; border-radius:4px; font-weight:800; font-size:13.5pxNone;">${tierUpper}</span>
     </div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10.5px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:14pxNone;">
       <div><span style="color:#94a3b8;">Microclimate:</span> <strong style="color:${badgeColor};">${wbgt ? wbgt.toFixed(1) : "33.4"}°C</strong></div>
       <div><span style="color:#94a3b8;">Canopy Bias:</span> <strong style="color:#f17971;">${deltaStr}</strong></div>
       <div><span style="color:#94a3b8;">Relative Risk:</span> <strong style="color:#e2e8f0;">${rr ? rr.toFixed(2) : "1.42"}x</strong></div>
       <div><span style="color:#94a3b8;">Sensor Mesh:</span> <strong style="color:#66d9af;">ESP32 LIVE</strong></div>
     </div>
-    <div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.1); font-size:9.5px; color:#cbd5e1;">
+    <div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.1); font-size:13.5pxNone; color:#cbd5e1;">
       Click to lock sector &bull; Dynamic 24h kinetics &rarr;
     </div>
   `;
@@ -690,14 +690,14 @@ async function loadAlertInbox() {
 
       tr.innerHTML = `
         <td><span class="badge ${tierBadge}">${a.alert_tier.toUpperCase()}</span></td>
-        <td><strong>${a.alert_id}</strong><br><span style="font-size:0.75rem;color:#94a3b8;">${a.syndrome}</span></td>
-        <td>${a.geo_name}<br><span style="font-size:0.75rem;color:#94a3b8;">${a.geo_id}</span></td>
+        <td><strong>${a.alert_id}</strong><br><span style="font-size:0.95remNone;color:#94a3b8;">${a.syndrome}</span></td>
+        <td>${a.geo_name}<br><span style="font-size:0.95remNone;color:#94a3b8;">${a.geo_id}</span></td>
         <td>
           <b>${(a.calibrated_probability * 100).toFixed(1)}%</b>
-          <div style="font-size:0.7rem;color:#94a3b8;">90% CI: [${(a.conformal_interval[0]*100).toFixed(0)}%, ${(a.conformal_interval[1]*100).toFixed(0)}%]</div>
+          <div style="font-size:0.92remNone;color:#94a3b8;">90% CI: [${(a.conformal_interval[0]*100).toFixed(0)}%, ${(a.conformal_interval[1]*100).toFixed(0)}%]</div>
         </td>
         <td><span class="badge badge-gray">${a.dq_badge}</span></td>
-        <td><span style="font-size:0.8rem;color:#e2e8f0;">${a.primary_owner}</span></td>
+        <td><span style="font-size:1.02remNone;color:#e2e8f0;">${a.primary_owner}</span></td>
         <td><span class="badge ${statusBadge}">${a.status}</span></td>
         <td>
           <button class="btn btn-primary" onclick="viewEvidenceCard('${a.alert_id}')">Evidence Card</button>
@@ -732,22 +732,22 @@ async function viewEvidenceCard(alertId) {
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #283531; padding-bottom:1rem; margin-bottom:1.5rem;">
         <div>
           <span class="badge badge-${card.severity.toLowerCase()}">${card.severity.toUpperCase()}</span>
-          <h2 style="font-size:1.35rem; margin-top:0.25rem;">${card.alert_id}: ${card.geo_name}</h2>
-          <div style="font-size:0.85rem; color:#94a3b8;">Type: <b>${card.alert_type}</b> | Date: ${card.obs_date} | Proportionality Tier: <b>${((card.proportionality_tier || "TARGETED_PREVENTIVE") + "").toUpperCase()}</b></div>
+          <h2 style="font-size:1.35remNone; margin-top:0.25rem;">${card.alert_id}: ${card.geo_name}</h2>
+          <div style="font-size:1.06remNone; color:#94a3b8;">Type: <b>${card.alert_type}</b> | Date: ${card.obs_date} | Proportionality Tier: <b>${((card.proportionality_tier || "TARGETED_PREVENTIVE") + "").toUpperCase()}</b></div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:0.75rem; color:#94a3b8;">Decision Card Generation Latency</div>
-          <div style="font-size:1.2rem; font-weight:700; color:#66d9af;">${card.generation_time_ms.toFixed(1)} ms</div>
-          <div style="font-size:0.7rem; color:#64748b;">(SLA: &lt; 2,000 ms)</div>
+          <div style="font-size:0.95remNone; color:#94a3b8;">Decision Card Generation Latency</div>
+          <div style="font-size:1.2remNone; font-weight:700; color:#66d9af;">${card.generation_time_ms.toFixed(1)} ms</div>
+          <div style="font-size:0.92remNone; color:#64748b;">(SLA: &lt; 2,000 ms)</div>
         </div>
       </div>
 
       <!-- Fenced Situational Briefing Narrative -->
       <div style="background-color:rgba(15,23,42,0.6); border-left:4px solid #65dfcd; padding:1rem; border-radius:4px; margin-bottom:1.5rem;">
-        <div style="font-size:0.75rem; text-transform:uppercase; color:#65dfcd; font-weight:700; letter-spacing:0.05em; margin-bottom:0.25rem;">
+        <div style="font-size:0.95remNone; text-transform:uppercase; color:#65dfcd; font-weight:700; letter-spacing:0.05em; margin-bottom:0.25rem;">
           Verified Situational Briefing (Zero-Hallucination Gate Verified)
         </div>
-        <p style="font-size:0.9rem; line-height:1.6; color:#f1f5f9;">${card.narrative_summary}</p>
+        <p style="font-size:0.9remNone; line-height:1.6; color:#f1f5f9;">${card.narrative_summary}</p>
       </div>
 
       <!-- 2-Column Section: Time Series & SHAP Attribution -->
@@ -756,7 +756,7 @@ async function viewEvidenceCard(alertId) {
         <!-- Observed vs Expected vs Exposure-Adjusted -->
         <div class="kpi-card">
           <div class="kpi-title">Epidemiological Trajectory (Observed vs Expected)</div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem; font-size:0.85rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem; font-size:1.06remNone;">
             <span>Observed Today: <b style="color:#f87171;">${card.time_series_comparison.observed_today}</b></span>
             <span>Historical Baseline: <b style="color:#94a3b8;">${card.time_series_comparison.historical_baseline}</b></span>
             <span>Exposure-Adjusted: <b style="color:#65dfcd;">${card.time_series_comparison.exposure_adjusted_expected}</b></span>
@@ -764,7 +764,7 @@ async function viewEvidenceCard(alertId) {
           <div style="height:120px; background:#131c1a; border-radius:6px; display:flex; align-items:flex-end; gap:8px; padding:10px 15px;">
             ${renderTimeSeriesMiniBars(card.time_series_comparison.trailing_14d_observed)}
           </div>
-          <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:0.4rem;">Trailing 14-day observed incidence surge</div>
+          <div style="font-size:0.92remNone; color:#64748b; text-align:center; margin-top:0.4rem;">Trailing 14-day observed incidence surge</div>
         </div>
 
         <!-- SHAP 5-Group Attribution -->
@@ -773,7 +773,7 @@ async function viewEvidenceCard(alertId) {
           <div class="shap-bar-container">
             ${renderShapBars(card.shap_breakdown)}
           </div>
-          <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:0.4rem;">Top Driver: <b>${((card.primary_driver || card.primary_driver_group || "CLINICAL") + "").toUpperCase()}</b></div>
+          <div style="font-size:0.92remNone; color:#64748b; text-align:center; margin-top:0.4rem;">Top Driver: <b>${((card.primary_driver || card.primary_driver_group || "CLINICAL") + "").toUpperCase()}</b></div>
         </div>
 
       </div>
@@ -783,19 +783,19 @@ async function viewEvidenceCard(alertId) {
         <div class="kpi-title">3-Day Environmental Exposure Forecast (Open-Meteo & OpenAQ)</div>
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:0.5rem; text-align:center;">
           <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
-            <div style="font-size:0.75rem; color:#94a3b8;">Today</div>
-            <div style="font-size:1.1rem; font-weight:700; color:#fbbf24;">WBGT ${card.environmental_forecast.wbgt_today}°C</div>
-            <div style="font-size:0.75rem; color:#cbd5e1;">PM2.5: ${card.environmental_forecast.pm25_today} µg/m³</div>
+            <div style="font-size:0.95remNone; color:#94a3b8;">Today</div>
+            <div style="font-size:1.1remNone; font-weight:700; color:#fbbf24;">WBGT ${card.environmental_forecast.wbgt_today}°C</div>
+            <div style="font-size:0.95remNone; color:#cbd5e1;">PM2.5: ${card.environmental_forecast.pm25_today} µg/m³</div>
           </div>
           <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
-            <div style="font-size:0.75rem; color:#94a3b8;">Tomorrow (+1d)</div>
-            <div style="font-size:1.1rem; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[0]}°C</div>
-            <div style="font-size:0.75rem; color:#cbd5e1;">Thermal Danger</div>
+            <div style="font-size:0.95remNone; color:#94a3b8;">Tomorrow (+1d)</div>
+            <div style="font-size:1.1remNone; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[0]}°C</div>
+            <div style="font-size:0.95remNone; color:#cbd5e1;">Thermal Danger</div>
           </div>
           <div style="background:#131c1a; padding:0.75rem; border-radius:6px;">
-            <div style="font-size:0.75rem; color:#94a3b8;">Day +2</div>
-            <div style="font-size:1.1rem; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[1]}°C</div>
-            <div style="font-size:0.75rem; color:#cbd5e1;">Thermal Danger</div>
+            <div style="font-size:0.95remNone; color:#94a3b8;">Day +2</div>
+            <div style="font-size:1.1remNone; font-weight:700; color:#f87171;">WBGT ${card.environmental_forecast.wbgt_forecast_3d[1]}°C</div>
+            <div style="font-size:0.95remNone; color:#cbd5e1;">Thermal Danger</div>
           </div>
         </div>
       </div>
@@ -809,7 +809,7 @@ async function viewEvidenceCard(alertId) {
             PVI: ${(card.clinical_vulnerability.pharmacological_vulnerability_index || 0).toFixed(2)} (${card.clinical_vulnerability.vulnerability_tier})
           </span>
         </div>
-        <p style="font-size:0.75rem; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
+        <p style="font-size:0.95remNone; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
           Source: ${card.clinical_vulnerability.regulatory_source || 'US FDA Structured Product Labeling (SPL) Adverse Reactions'} — Medication classes impairing worker thermoregulation and respiratory clearance under thermal/PM2.5 stress.
         </p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
@@ -817,14 +817,14 @@ async function viewEvidenceCard(alertId) {
             const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
             const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
             return `
-            <div style="background:#131c1a; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #222f2b;">
+            <div style="background:#131c1a; padding:0.6rem; border-radius:6px; font-size:1.02remNone; border:1px solid #222f2b;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="color:#f472b6; font-weight:700;">${c.class_name}</span>
-                <span class="badge ${lvl === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem; padding:2px 6px;">${lvl}</span>
+                <span class="badge ${lvl === 'CRITICAL' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.86remNone; padding:2px 6px;">${lvl}</span>
               </div>
-              <div style="color:#94a3b8; font-size:0.75rem; margin-top:3px;"><b>Rx Classes:</b> ${(c.representative_drugs || []).slice(0, 3).join(", ")}</div>
-              <div style="color:#cbd5e1; font-size:0.72rem; margin-top:3px; line-height:1.4;">${c.physiological_mechanism}</div>
-              <div style="color:#65dfcd; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
+              <div style="color:#94a3b8; font-size:0.95remNone; margin-top:3px;"><b>Rx Classes:</b> ${(c.representative_drugs || []).slice(0, 3).join(", ")}</div>
+              <div style="color:#cbd5e1; font-size:0.92remNone; margin-top:3px; line-height:1.4;">${c.physiological_mechanism}</div>
+              <div style="color:#65dfcd; font-size:0.92remNone; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
             </div>
             `;
           }).join("")}
@@ -849,7 +849,7 @@ async function viewEvidenceCard(alertId) {
         <div class="kpi-title">Proportionality Ladder Verified Action Checklist</div>
         <ul style="list-style:none; padding:0; margin-top:0.5rem;">
           ${card.action_checklist.map(action => `
-            <li style="padding:0.6rem 0.75rem; background:rgba(15,23,42,0.4); border-left:3px solid #66d9af; margin-bottom:0.4rem; border-radius:4px; font-size:0.875rem;">
+            <li style="padding:0.6rem 0.75rem; background:rgba(15,23,42,0.4); border-left:3px solid #66d9af; margin-bottom:0.4rem; border-radius:4px; font-size:1.1remNone;">
               • ${action}
             </li>
           `).join("")}
@@ -861,17 +861,17 @@ async function viewEvidenceCard(alertId) {
       <div class="kpi-card" style="margin-bottom:1.5rem; border-left:4px solid #8b5cf6; background:rgba(139, 92, 246, 0.08);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
           <div>
-            <div style="font-size:0.75rem; text-transform:uppercase; color:#c084fc; font-weight:700; letter-spacing:0.05em;">
+            <div style="font-size:0.95remNone; text-transform:uppercase; color:#c084fc; font-weight:700; letter-spacing:0.05em;">
               Decision Support What-If Simulator
             </div>
-            <div style="font-size:0.9rem; font-weight:600; color:#fff; margin-top:2px;">
+            <div style="font-size:0.9remNone; font-weight:600; color:#fff; margin-top:2px;">
               ${card.intervention_simulation.action_prompt}
             </div>
-            <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+            <div style="font-size:0.95remNone; color:#94a3b8; margin-top:2px;">
               Recommended Action: <b>${card.intervention_simulation.recommended_scenario}</b> | Monitored Workforce: <b>${card.intervention_simulation.workforce_size} workers</b>
             </div>
           </div>
-          <button class="btn btn-primary" style="background:#8b5cf6; border-color:#8b5cf6; font-size:0.8rem; font-weight:700;" onclick="switchToWhatIfSimulator('${card.intervention_simulation.target_site}', '${card.intervention_simulation.recommended_scenario}', ${card.intervention_simulation.workforce_size})">
+          <button class="btn btn-primary" style="background:#8b5cf6; border-color:#8b5cf6; font-size:1.02remNone; font-weight:700;" onclick="switchToWhatIfSimulator('${card.intervention_simulation.target_site}', '${card.intervention_simulation.recommended_scenario}', ${card.intervention_simulation.workforce_size})">
             Simulate Recommended Action
           </button>
         </div>
@@ -879,7 +879,7 @@ async function viewEvidenceCard(alertId) {
       ` : ''}
 
       <!-- Explicit Stated Assumptions -->
-      <div style="font-size:0.75rem; color:#94a3b8; border-top:1px solid #283531; padding-top:0.75rem;">
+      <div style="font-size:0.95remNone; color:#94a3b8; border-top:1px solid #283531; padding-top:0.75rem;">
         <strong>Explicit Operational Assumptions:</strong>
         ${card.assumptions.map(asm => `<span style="display:inline-block; margin-right:1rem;">• ${asm}</span>`).join("")}
       </div>
@@ -969,10 +969,10 @@ async function loadEmployerSafetyView() {
     container.innerHTML = `
       <!-- Mandatory Statutory Banner -->
       <div class="banner banner-statutory">
-        <span style="font-size:1.25rem;"></span>
+        <span style="font-size:1.25remNone;"></span>
         <div>
           <strong>STATUTORY PRIVACY BANNER (MOHRE & EHS COMPLIANCE)</strong>
-          <div style="font-weight:normal; font-size:0.85rem;">${data.statutory_banner}</div>
+          <div style="font-weight:normal; font-size:1.06remNone;">${data.statutory_banner}</div>
         </div>
       </div>
 
@@ -985,13 +985,13 @@ async function loadEmployerSafetyView() {
 
         <div class="kpi-card">
           <div class="kpi-title">Heat Illness Rate</div>
-          <div class="kpi-val" style="color:#e9aa62;">${data.heat_incident_rate_per_1000} <span style="font-size:0.9rem;color:#94a3b8;">/ 1k workers</span></div>
+          <div class="kpi-val" style="color:#e9aa62;">${data.heat_incident_rate_per_1000} <span style="font-size:0.9remNone;color:#94a3b8;">/ 1k workers</span></div>
           <div class="kpi-sub">Aggregated site-level rate only</div>
         </div>
 
         <div class="kpi-card">
           <div class="kpi-title">Sickness Absence Rate</div>
-          <div class="kpi-val" style="color:#f87171;">${data.absence_rate_per_1000} <span style="font-size:0.9rem;color:#94a3b8;">/ 1k workers</span></div>
+          <div class="kpi-val" style="color:#f87171;">${data.absence_rate_per_1000} <span style="font-size:0.9remNone;color:#94a3b8;">/ 1k workers</span></div>
           <div class="kpi-sub">Aggregated site-level rate only</div>
         </div>
 
@@ -1004,13 +1004,13 @@ async function loadEmployerSafetyView() {
 
       <div class="kpi-card" style="margin-bottom:1.5rem;">
         <div class="kpi-title">Mandatory ACGIH / MOHRE Work-Rest Hydration Schedule</div>
-        <p style="margin-top:0.5rem; font-size:0.95rem; color:#f1f5f9; line-height:1.5;">${data.work_rest_recommendation}</p>
+        <p style="margin-top:0.5rem; font-size:0.95remNone; color:#f1f5f9; line-height:1.5;">${data.work_rest_recommendation}</p>
       </div>
 
       <!-- Test Privacy Guard Button -->
       <div class="kpi-card" style="background:rgba(15,23,42,0.5);">
         <div class="kpi-title">Privacy Boundary Verification Test</div>
-        <p style="font-size:0.85rem; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
+        <p style="font-size:1.06remNone; color:#94a3b8; margin:0.4rem 0 0.75rem 0;">
           Verify that this role cannot access district-wide clinical micro-surveillance or prohibited sub-site breakdowns.
         </p>
         <button class="btn btn-secondary" onclick="testClinicalAccessRejection()">
@@ -1019,7 +1019,7 @@ async function loadEmployerSafetyView() {
         <button class="btn btn-secondary" onclick="testSubsiteParamRejection()" style="margin-left:0.5rem;">
           Probe Prohibited Sub-site Breakdown (gang_id)
         </button>
-        <div id="privacyProbeResult" style="margin-top:0.75rem; font-size:0.85rem;"></div>
+        <div id="privacyProbeResult" style="margin-top:0.75rem; font-size:1.06remNone;"></div>
       </div>
     `;
 
@@ -1082,10 +1082,10 @@ async function loadDataHealthView() {
 
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong style="font-size:0.95rem;">${f.source_name}</strong>
+          <strong style="font-size:0.95remNone;">${f.source_name}</strong>
           <span class="badge ${statusBadge}">${f.status}</span>
         </div>
-        <div style="margin-top:0.75rem; font-size:0.85rem; color:#cbd5e1;">
+        <div style="margin-top:0.75rem; font-size:1.06remNone; color:#cbd5e1;">
           <div>Completeness: <b>${f.completeness_pct.toFixed(1)}%</b></div>
           <div>Freshness: <b>${f.freshness_minutes.toFixed(0)} min</b> ago</div>
           <div>Ingestion Latency: <b>${f.latency_hours.toFixed(1)} hrs</b></div>
@@ -1130,8 +1130,8 @@ function setupDemoToggles() {
           resultBox.innerHTML = `
             <div style="border-left:3px solid ${enabled ? '#66d9af' : '#e9aa62'}; padding-left:0.75rem;">
               <strong style="color:${enabled ? '#66d9af' : '#e9aa62'};">${res.message}</strong>
-              <div style="font-size:0.85rem; color:#e2e8f0; margin-top:0.35rem;">${res.alert_impact}</div>
-              <div style="margin-top:0.35rem; font-size:0.8rem; color:#94a3b8;">
+              <div style="font-size:1.06remNone; color:#e2e8f0; margin-top:0.35rem;">${res.alert_impact}</div>
+              <div style="margin-top:0.35rem; font-size:1.02remNone; color:#94a3b8;">
                 Composite DQ: ${(res.before_composite_dq * 100).toFixed(0)}% &rarr; <b>${(res.after_composite_dq * 100).toFixed(0)}%</b> |
                 90% Conformal Interval: [${res.before_conformal_interval[0]}, ${res.before_conformal_interval[1]}] &rarr; 
                 <b style="color:#f87171;">[${res.after_conformal_interval[0]}, ${res.after_conformal_interval[1]}]</b>
@@ -1169,7 +1169,7 @@ async function loadAuditLogs() {
     data.records.forEach(r => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td style="font-size:0.75rem;color:#94a3b8;">${r.timestamp.substring(0, 19).replace("T", " ")}</td>
+        <td style="font-size:0.95remNone;color:#94a3b8;">${r.timestamp.substring(0, 19).replace("T", " ")}</td>
         <td><span class="badge badge-gray">${r.role}</span></td>
         <td>${r.user_id}</td>
         <td><code>${r.endpoint}</code></td>
@@ -1296,7 +1296,7 @@ async function recalculateImpact() {
     if (scenBody) {
       scenBody.innerHTML = `
         <tr>
-          <td><strong style="color:#94a3b8;">Conservative Lower Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">1.8% rate, 40% prev</span></td>
+          <td><strong style="color:#94a3b8;">Conservative Lower Bound</strong><br><span style="font-size:0.92remNone;color:#64748b;">1.8% rate, 40% prev</span></td>
           <td>${scen.low_conservative.total_baseline_cases.toLocaleString()}</td>
           <td>${scen.low_conservative.cases_prevented.toLocaleString()}</td>
           <td><strong style="color:#65dfcd;">${scen.low_conservative.lost_workdays_averted.toLocaleString()} d</strong></td>
@@ -1306,17 +1306,17 @@ async function recalculateImpact() {
           <td><span class="badge badge-gray">${scen.low_conservative.benefit_cost_ratio.toFixed(1)}x</span></td>
         </tr>
         <tr style="background:#152c26; border-left:3px solid #1c4b42;">
-          <td><strong style="color:#65dfcd;">Central Expected (Baseline)</strong><br><span style="font-size:0.7rem;color:#94a3b8;">2.5% rate, 65% prev (+3.4d lead)</span></td>
+          <td><strong style="color:#65dfcd;">Central Expected (Baseline)</strong><br><span style="font-size:0.92remNone;color:#94a3b8;">2.5% rate, 65% prev (+3.4d lead)</span></td>
           <td>${central.total_baseline_cases.toLocaleString()}</td>
           <td>${central.cases_prevented.toLocaleString()}</td>
           <td><strong style="color:#65dfcd;">${central.lost_workdays_averted.toLocaleString()} d</strong></td>
           <td>AED ${central.gross_economic_benefit_aed.toLocaleString()}</td>
           <td style="color:#f87171;">AED ${central.false_alarm_response_cost_aed.toLocaleString()}</td>
-          <td><strong style="color:#66d9af; font-size:1.05rem;">AED ${central.net_economic_benefit_aed.toLocaleString()}</strong></td>
+          <td><strong style="color:#66d9af; font-size:1.05remNone;">AED ${central.net_economic_benefit_aed.toLocaleString()}</strong></td>
           <td><span class="badge badge-normal">${central.benefit_cost_ratio.toFixed(1)}x</span></td>
         </tr>
         <tr>
-          <td><strong style="color:#a855f7;">Optimistic Upper Bound</strong><br><span style="font-size:0.7rem;color:#64748b;">3.2% rate, 82% prev</span></td>
+          <td><strong style="color:#a855f7;">Optimistic Upper Bound</strong><br><span style="font-size:0.92remNone;color:#64748b;">3.2% rate, 82% prev</span></td>
           <td>${scen.high_optimistic.total_baseline_cases.toLocaleString()}</td>
           <td>${scen.high_optimistic.cases_prevented.toLocaleString()}</td>
           <td><strong style="color:#65dfcd;">${scen.high_optimistic.lost_workdays_averted.toLocaleString()} d</strong></td>
@@ -1355,7 +1355,7 @@ async function recalculateImpact() {
           bodyHtml += `
             <td class="heat-cell" style="${cellStyle}">
               AED ${(cell.net_benefit_aed / 1000.0).toFixed(0)}k<br>
-              <span style="font-size:0.7rem;opacity:0.85;">(${cell.workdays_averted.toFixed(0)}d)</span>
+              <span style="font-size:0.92remNone;opacity:0.85;">(${cell.workdays_averted.toFixed(0)}d)</span>
             </td>
           `;
         });
@@ -1411,7 +1411,7 @@ async function loadPolicyEvidence() {
       const isSuppressed = d.attributable_heat_stress_cases_suppressed === 0;
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><strong>${d.district_name}</strong><br><span style="font-size:0.7rem;color:#64748b;">${d.district_id}</span></td>
+        <td><strong>${d.district_name}</strong><br><span style="font-size:0.92remNone;color:#64748b;">${d.district_id}</span></td>
         <td><strong style="color:#e9aa62;">${d.extreme_wbgt_hours_gt_32c}h</strong></td>
         <td><strong style="color:#f17971;">${d.danger_wbgt_hours_gt_34c}h</strong></td>
         <td>${d.pm25_exceedance_days} days</td>
@@ -1438,13 +1438,13 @@ async function loadPolicyEvidence() {
       card.className = "policy-card";
       card.innerHTML = `
         <div class="policy-card-header">
-          <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc;">${r.action_title}</h4>
+          <h4 style="font-size:0.95remNone; font-weight:700; color:#f8fafc;">${r.action_title}</h4>
           <span class="badge ${badgeClass}">${r.priority_level}</span>
         </div>
-        <div style="font-size:0.75rem; color:#65dfcd; font-weight:600;">Domain: ${r.policy_domain}</div>
-        <div style="font-size:0.75rem; color:#94a3b8;">Target Jurisdictions: <strong>${r.target_districts.join(", ")}</strong></div>
-        <p style="font-size:0.8rem; color:#cbd5e1; margin-top:0.25rem;">${r.statutory_justification}</p>
-        <div style="font-size:0.75rem; color:#66d9af; margin-top:0.25rem;">
+        <div style="font-size:0.95remNone; color:#65dfcd; font-weight:600;">Domain: ${r.policy_domain}</div>
+        <div style="font-size:0.95remNone; color:#94a3b8;">Target Jurisdictions: <strong>${r.target_districts.join(", ")}</strong></div>
+        <p style="font-size:1.02remNone; color:#cbd5e1; margin-top:0.25rem;">${r.statutory_justification}</p>
+        <div style="font-size:0.95remNone; color:#66d9af; margin-top:0.25rem;">
           Protection Impact: ${r.expected_workforce_protection}
         </div>
       `;
@@ -1542,7 +1542,7 @@ async function loadSentinelView(isSilent = false) {
         </tr>
       `;
       if (compContainer) {
-        compContainer.innerHTML = `<div style="color:#94a3b8; font-size:0.85rem;">Commission nodes to enable live on-site vs regional model comparison.</div>`;
+        compContainer.innerHTML = `<div style="color:#94a3b8; font-size:1.06remNone;">Commission nodes to enable live on-site vs regional model comparison.</div>`;
       }
       return;
     }
@@ -1565,9 +1565,9 @@ async function loadSentinelView(isSilent = false) {
       const globeOk = (node.sensor_health && node.sensor_health.globe) ? `<span title="DS18B20 Globe Sensor Healthy" style="color:#66d9af;">Globe</span>` : `<span title="Globe Sensor Fault" style="color:#f17971;"> Globe</span>`;
 
       // Loc Confidence
-      let locBadge = `<span class="badge badge-normal" style="font-size:0.65rem;">EXACT</span>`;
-      if (node.location_confidence === "inferred") locBadge = `<span class="badge badge-warning" style="font-size:0.65rem;">INFERRED</span>`;
-      else if (node.location_confidence === "district_only") locBadge = `<span class="badge badge-alert" style="font-size:0.65rem;">DISTRICT</span>`;
+      let locBadge = `<span class="badge badge-normal" style="font-size:0.86remNone;">EXACT</span>`;
+      if (node.location_confidence === "inferred") locBadge = `<span class="badge badge-warning" style="font-size:0.86remNone;">INFERRED</span>`;
+      else if (node.location_confidence === "district_only") locBadge = `<span class="badge badge-alert" style="font-size:0.86remNone;">DISTRICT</span>`;
 
       // Values
       const wbgtStr = node.last_wbgt !== null && node.last_wbgt !== undefined ? `<strong>${node.last_wbgt.toFixed(1)}°C</strong>` : `<span style="color:#64748b;">--</span>`;
@@ -1581,14 +1581,14 @@ async function loadSentinelView(isSilent = false) {
           <td><code style="color:#65dfcd; font-weight:700;">${node.node_id}</code></td>
           <td><span style="font-weight:600;">${node.site_id}</span></td>
           <td>${statusBadge}</td>
-          <td style="color:#e9aa62; font-size:0.95rem;">${wbgtStr}</td>
+          <td style="color:#e9aa62; font-size:0.95remNone;">${wbgtStr}</td>
           <td>${airStr}</td>
           <td>${rhStr}</td>
           <td>${globeStr}</td>
           <td>${dhtOk} &nbsp; ${globeOk}</td>
           <td>${locBadge}</td>
           <td>${lvlBadge}</td>
-          <td style="font-size:0.75rem; color:#94a3b8;">${lastSeenStr}</td>
+          <td style="font-size:0.95remNone; color:#94a3b8;">${lastSeenStr}</td>
         </tr>
       `;
     }).join("");
@@ -1607,26 +1607,26 @@ async function loadSentinelView(isSilent = false) {
             <div>
               <div style="font-weight:700; color:#fff; display:flex; align-items:center; gap:0.5rem;">
                 <span>${node.site_id}</span>
-                <code style="font-size:0.75rem; color:#65dfcd;">(${node.node_id})</code>
-                ${isHotspot ? `<span class="badge badge-warning" style="font-size:0.65rem;">MICROCLIMATE HOTSPOT</span>` : `<span class="badge badge-normal" style="font-size:0.65rem;">NOMINAL</span>`}
+                <code style="font-size:0.95remNone; color:#65dfcd;">(${node.node_id})</code>
+                ${isHotspot ? `<span class="badge badge-warning" style="font-size:0.86remNone;">MICROCLIMATE HOTSPOT</span>` : `<span class="badge badge-normal" style="font-size:0.86remNone;">NOMINAL</span>`}
               </div>
-              <div style="font-size:0.75rem; color:#94a3b8; margin-top:0.25rem;">
+              <div style="font-size:0.95remNone; color:#94a3b8; margin-top:0.25rem;">
                 H3 Cell: <code style="color:#cbd5e1;">${node.h3_index || "8743a104effffff"}</code> &bull; Mode: ${node.indoor_mode ? "Indoor / Canteen" : "Outdoor Sun Shield"}
               </div>
             </div>
 
             <div style="display:flex; gap:1.25rem; align-items:center;">
               <div style="text-align:right;">
-                <div style="font-size:0.7rem; color:#94a3b8;">On-Site (ESP32)</div>
-                <div style="font-size:1.1rem; font-weight:700; color:#e9aa62;">${measured.toFixed(1)}°C</div>
+                <div style="font-size:0.92remNone; color:#94a3b8;">On-Site (ESP32)</div>
+                <div style="font-size:1.1remNone; font-weight:700; color:#e9aa62;">${measured.toFixed(1)}°C</div>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:0.7rem; color:#94a3b8;">Open-Meteo Model</div>
-                <div style="font-size:1.1rem; font-weight:700; color:#65dfcd;">${modelled.toFixed(1)}°C</div>
+                <div style="font-size:0.92remNone; color:#94a3b8;">Open-Meteo Model</div>
+                <div style="font-size:1.1remNone; font-weight:700; color:#65dfcd;">${modelled.toFixed(1)}°C</div>
               </div>
               <div style="text-align:right; min-width:65px;">
-                <div style="font-size:0.7rem; color:#94a3b8;">Microclimate Δ</div>
-                <div style="font-size:1.1rem; font-weight:700; color:${delta > 0 ? '#f17971' : '#66d9af'};">${deltaSign}°C</div>
+                <div style="font-size:0.92remNone; color:#94a3b8;">Microclimate Δ</div>
+                <div style="font-size:1.1remNone; font-weight:700; color:${delta > 0 ? '#f17971' : '#66d9af'};">${deltaSign}°C</div>
               </div>
             </div>
           </div>
@@ -1910,9 +1910,9 @@ async function loadBiasCorrectionView() {
         sHtml += `
           <tr>
             <td><code>${site.site_id}</code></td>
-            <td><span class="badge" style="background:${color}22; color:${color}; font-weight:600; font-size:0.75rem;">${flag}</span></td>
+            <td><span class="badge" style="background:${color}22; color:${color}; font-weight:600; font-size:0.95remNone;">${flag}</span></td>
             <td>${site.conformal_multiplier.toFixed(1)}x width</td>
-            <td style="font-size:0.75rem; color:#94a3b8;">${site.note.split('.')[0]}.</td>
+            <td style="font-size:0.95remNone; color:#94a3b8;">${site.note.split('.')[0]}.</td>
           </tr>
         `;
       });
@@ -2014,17 +2014,17 @@ async function openSourcesModal() {
     const res = await apiFetch("/api/v1/sentinel/sources");
     let html = `
       <div style="margin-bottom:1.25rem;">
-        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">Academic Standards &amp; Formulations</h4>
+        <h4 style="color:#f8fafc; font-size:0.95remNone; margin-bottom:0.5rem;">Academic Standards &amp; Formulations</h4>
     `;
 
     res.citations.forEach(c => {
       html += `
         <div style="background:#17211f; border:1px solid #283531; border-radius:6px; padding:0.75rem 1rem; margin-bottom:0.75rem;">
           <div style="font-weight:700; color:#65dfcd;">${c.title}</div>
-          <div style="font-size:0.75rem; color:#94a3b8; margin:0.25rem 0;">
+          <div style="font-size:0.95remNone; color:#94a3b8; margin:0.25rem 0;">
             ${c.author || c.authors || c.organization || ''} (${c.year || ''}) &bull; ${c.journal || c.standard || ''} ${c.doi ? '&bull; DOI: ' + c.doi : ''}
           </div>
-          ${c.formulas ? `<div style="font-family:monospace; font-size:0.75rem; background:#222f2b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
+          ${c.formulas ? `<div style="font-family:monospace; font-size:0.95remNone; background:#222f2b; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.4rem; color:#a7f3d0;">${JSON.stringify(c.formulas, null, 2)}</div>` : ''}
         </div>
       `;
     });
@@ -2032,7 +2032,7 @@ async function openSourcesModal() {
     html += `
       </div>
       <div style="margin-bottom:1.25rem;">
-        <h4 style="color:#f8fafc; font-size:0.95rem; margin-bottom:0.5rem;">Sensor Hardware &amp; Measurement Bounds</h4>
+        <h4 style="color:#f8fafc; font-size:0.95remNone; margin-bottom:0.5rem;">Sensor Hardware &amp; Measurement Bounds</h4>
         <div style="background:#17211f; border:1px solid #283531; border-radius:6px; padding:0.75rem 1rem;">
           <p><strong>DHT22 / AM2302:</strong> Air temp -40°C to 80°C (±0.5°C), RH 0-100% (±2-5%). <em>Known limitation:</em> condensation saturation drift above 99% RH.</p>
           <p><strong>Maxim DS18B20:</strong> 1-Wire thermal probe in 150mm matte-black copper globe (±0.5°C accuracy).</p>
@@ -2152,28 +2152,28 @@ function renderTimeMachineDay(index) {
 
   // Update KPIs
   const kpiLeadPeak = document.getElementById("tmKpiLeadPeak");
-  if (kpiLeadPeak) kpiLeadPeak.innerHTML = `+${metrics.lead_time_vs_peak_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+  if (kpiLeadPeak) kpiLeadPeak.innerHTML = `+${metrics.lead_time_vs_peak_days.toFixed(1)} <span style="font-size:1.0remNone;">days</span>`;
 
   const kpiLeadThresh = document.getElementById("tmKpiLeadThresh");
-  if (kpiLeadThresh) kpiLeadThresh.innerHTML = `+${metrics.lead_time_vs_threshold_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+  if (kpiLeadThresh) kpiLeadThresh.innerHTML = `+${metrics.lead_time_vs_threshold_days.toFixed(1)} <span style="font-size:1.0remNone;">days</span>`;
 
   const kpiSensitivity = document.getElementById("tmKpiSensitivity");
   if (kpiSensitivity) kpiSensitivity.textContent = `${metrics.sensitivity_pct.toFixed(1)}% / ${metrics.ppv_pct.toFixed(1)}%`;
 
   const kpiLatency = document.getElementById("tmKpiLatency");
-  if (kpiLatency) kpiLatency.innerHTML = `${metrics.mean_reporting_delay_days.toFixed(1)} <span style="font-size:1rem;">days</span>`;
+  if (kpiLatency) kpiLatency.innerHTML = `${metrics.mean_reporting_delay_days.toFixed(1)} <span style="font-size:1.0remNone;">days</span>`;
 
   // Update Day Decision Cards
   const sevBadge = document.getElementById("tmAlertSeverityBadge");
   if (sevBadge) {
     if (day.alert_severity === "Alert") {
-      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#f17971; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">CRITICAL ALERT</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-alert" style="background:#f17971; color:#fff; font-size:1.06remNone; padding:0.3rem 0.75rem;">CRITICAL ALERT</span>`;
     } else if (day.alert_severity === "Warning") {
-      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#e9aa62; color:#fff; font-size:0.85rem; padding:0.3rem 0.75rem;">PREVENTIVE WARNING</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="background:#e9aa62; color:#fff; font-size:1.06remNone; padding:0.3rem 0.75rem;">PREVENTIVE WARNING</span>`;
     } else if (day.alert_severity === "Watch") {
-      sevBadge.innerHTML = `<span class="badge badge-thresh" style="font-size:0.85rem; padding:0.3rem 0.75rem;">ACTIVE WATCH</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-thresh" style="font-size:1.06remNone; padding:0.3rem 0.75rem;">ACTIVE WATCH</span>`;
     } else {
-      sevBadge.innerHTML = `<span class="badge badge-normal" style="font-size:0.85rem; padding:0.3rem 0.75rem;">NORMAL BASELINE</span>`;
+      sevBadge.innerHTML = `<span class="badge badge-normal" style="font-size:1.06remNone; padding:0.3rem 0.75rem;">NORMAL BASELINE</span>`;
     }
   }
 
@@ -2675,7 +2675,7 @@ function renderWhatIfTornadoChart(tornadoList) {
   if (!container) return;
 
   if (!tornadoList || tornadoList.length === 0) {
-    container.innerHTML = `<div style="color:#94a3b8; font-size:0.85rem;">No sensitivity variance data available.</div>`;
+    container.innerHTML = `<div style="color:#94a3b8; font-size:1.06remNone;">No sensitivity variance data available.</div>`;
     return;
   }
 
@@ -2743,10 +2743,10 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Statutory Mandates -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#65dfcd; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#65dfcd; font-size:0.95remNone; font-weight:700; margin-bottom:0.5rem;">
           Statutory Regulatory Mandates (UAE Federal Law)
         </h4>
-        <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+        <table style="width:100%; border-collapse:collapse; font-size:1.02remNone;">
           <thead>
             <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Mandate / Parameter</th>
@@ -2777,10 +2777,10 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Peer-Reviewed Interventions -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#66d9af; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#66d9af; font-size:0.95remNone; font-weight:700; margin-bottom:0.5rem;">
           Peer-Reviewed Occupational Interventions &amp; Hazard Curves
         </h4>
-        <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+        <table style="width:100%; border-collapse:collapse; font-size:1.02remNone;">
           <thead>
             <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Intervention / Effect</th>
@@ -2813,13 +2813,13 @@ async function openWhatifAssumptionsModal() {
 
       <!-- Operational Costs & UNVERIFIED Disclosures -->
       <div style="margin-bottom:1.5rem;">
-        <h4 style="color:#e9aa62; font-size:0.95rem; font-weight:700; margin-bottom:0.5rem;">
+        <h4 style="color:#e9aa62; font-size:0.95remNone; font-weight:700; margin-bottom:0.5rem;">
           Operational Intervention Costs &amp; Commercial Disclosures
         </h4>
-        <div style="font-size:0.78rem; color:#94a3b8; margin-bottom:0.6rem;">
+        <div style="font-size:0.98remNone; color:#94a3b8; margin-bottom:0.6rem;">
           All commercial rental rates and supply quotes are explicitly labeled <code>UNVERIFIED</code> because they represent contractor cost estimates rather than peer-reviewed academic literature.
         </div>
-        <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+        <table style="width:100%; border-collapse:collapse; font-size:1.02remNone;">
           <thead>
             <tr style="border-bottom:1px solid #283531; color:#94a3b8; text-align:left;">
               <th style="padding:0.4rem;">Cost Item</th>
@@ -3617,7 +3617,7 @@ async function simulateWhatsAppAction(actionType) {
       replyDiv.innerHTML = `
         <div style="font-weight:700; color:#34d399; margin-bottom:0.2rem;">FOREMAN CONFIRMED</div>
         <div>${confirmRes.action_label || actionLabel}</div>
-        <div style="font-size:0.65rem; color:#8696a0; text-align:right; margin-top:0.3rem;">
+        <div style="font-size:0.86remNone; color:#8696a0; text-align:right; margin-top:0.3rem;">
           ${nowTime} <span style="color:#53bdeb; font-weight:800;"></span>
         </div>
       `;
@@ -3653,7 +3653,7 @@ async function loadCopilotView() {
     renderCodexArticles(statutoryCodexCache);
   } catch (err) {
     console.warn("Failed to load statutory codex:", err);
-    if (codexList) codexList.innerHTML = `<div style="color:#f17971; font-size:0.8rem;">Failed to load codex: ${err.message}</div>`;
+    if (codexList) codexList.innerHTML = `<div style="color:#f17971; font-size:1.02remNone;">Failed to load codex: ${err.message}</div>`;
   }
 }
 
@@ -3662,22 +3662,22 @@ function renderCodexArticles(articles) {
   if (!codexList) return;
 
   if (!articles || articles.length === 0) {
-    codexList.innerHTML = `<div style="color:#94a3b8; font-size:0.8rem;">No statutory articles found.</div>`;
+    codexList.innerHTML = `<div style="color:#94a3b8; font-size:1.02remNone;">No statutory articles found.</div>`;
     return;
   }
 
   codexList.innerHTML = "";
   articles.forEach(art => {
     const item = document.createElement("div");
-    item.style.cssText = "padding:0.6rem; background:#131c1a; border:1px solid #222f2b; border-radius:4px; font-size:0.78rem;";
+    item.style.cssText = "padding:0.6rem; background:#131c1a; border:1px solid #222f2b; border-radius:4px; font-size:0.98remNone;";
     item.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
         <span style="font-weight:700; color:#65dfcd;">${escapeHtml(art.instrument)} ${escapeHtml(art.article_number)}</span>
-        <span class="badge" style="background:#222f2b; color:#94a3b8; font-size:0.65rem;">${escapeHtml(art.authority.split('(')[0].trim())}</span>
+        <span class="badge" style="background:#222f2b; color:#94a3b8; font-size:0.86remNone;">${escapeHtml(art.authority.split('(')[0].trim())}</span>
       </div>
       <div style="font-weight:600; color:#e2e8f0; margin-bottom:0.25rem;">${escapeHtml(art.title)}</div>
       <div style="color:#94a3b8; line-height:1.4; margin-bottom:0.35rem;">${escapeHtml(art.legal_text)}</div>
-      ${art.penalties ? `<div style="color:#e9aa62; font-size:0.72rem;"><strong>Penalties:</strong> ${escapeHtml(art.penalties)}</div>` : ''}
+      ${art.penalties ? `<div style="color:#e9aa62; font-size:0.92remNone;"><strong>Penalties:</strong> ${escapeHtml(art.penalties)}</div>` : ''}
     `;
     codexList.appendChild(item);
   });
@@ -3754,13 +3754,13 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
   // Append user bubble
   const userBubble = document.createElement("div");
-  userBubble.style.cssText = "align-self:flex-end; max-width:85%; background:#1e3a8a; color:#fff; padding:0.6rem 0.9rem; border-radius:12px 12px 0 12px; font-size:0.83rem; line-height:1.4;";
+  userBubble.style.cssText = "align-self:flex-end; max-width:85%; background:#1e3a8a; color:#fff; padding:0.6rem 0.9rem; border-radius:12px 12px 0 12px; font-size:1.02remNone; line-height:1.4;";
   userBubble.innerHTML = `<strong>You:</strong> ${escapeHtml(query)}`;
   stream.appendChild(userBubble);
 
   // Append typing indicator
   const loadingBubble = document.createElement("div");
-  loadingBubble.style.cssText = "align-self:flex-start; max-width:85%; background:#222f2b; color:#94a3b8; padding:0.6rem 0.9rem; border-radius:12px 12px 12px 0; font-size:0.8rem; border-left:3px solid #65dfcd;";
+  loadingBubble.style.cssText = "align-self:flex-start; max-width:85%; background:#222f2b; color:#94a3b8; padding:0.6rem 0.9rem; border-radius:12px 12px 12px 0; font-size:1.02remNone; border-left:3px solid #65dfcd;";
   loadingBubble.innerHTML = `Jais Sovereign Copilot reasoning across Lakehouse state &amp; Resolution 44 codex...`;
   stream.appendChild(loadingBubble);
   stream.scrollTop = stream.scrollHeight;
@@ -3781,7 +3781,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
     // Append response bubble
     const botBubble = document.createElement("div");
-    botBubble.style.cssText = "align-self:flex-start; max-width:92%; background:#17211f; border:1px solid #283531; border-left:3px solid #66d9af; border-radius:12px 12px 12px 0; padding:0.85rem; font-size:0.83rem; display:flex; flex-direction:column; gap:0.5rem;";
+    botBubble.style.cssText = "align-self:flex-start; max-width:92%; background:#17211f; border:1px solid #283531; border-left:3px solid #66d9af; border-radius:12px 12px 12px 0; padding:0.85rem; font-size:1.02remNone; display:flex; flex-direction:column; gap:0.5rem;";
 
     const isRtl = /[\u0600-\u06FF]/.test(res.response_text || "");
     const formattedMain = formatCopilotMarkdown(res.response_text);
@@ -3802,10 +3802,10 @@ async function executeCopilotQuery(query, siteId, streamId) {
     const arabicDrawerHtml = (!isGreeting && hasDifferentArabic) ? `
       <div style="margin-top:0.4rem; border:1px solid #283531; border-radius:6px; background:#131c1a; overflow:hidden;">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.35rem 0.65rem; background:#1c2b27; cursor:pointer;" onclick="const d = this.nextElementSibling; d.style.display = d.style.display === 'none' ? 'block' : 'none';">
-          <span style="font-size:0.72rem; color:#65dfcd; font-weight:700;">الرد السيادي المعتمد (Certified Arabic Decree)</span>
-          <span style="font-size:0.65rem; color:#8db7a8;">Toggle &or;</span>
+          <span style="font-size:0.92remNone; color:#65dfcd; font-weight:700;">الرد السيادي المعتمد (Certified Arabic Decree)</span>
+          <span style="font-size:0.86remNone; color:#8db7a8;">Toggle &or;</span>
         </div>
-        <div style="display:none; padding:0.6rem 0.75rem; direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-top:1px solid #283531;">
+        <div style="display:none; padding:0.6rem 0.75rem; direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; color:#e2e8f0; font-size:1.02remNone; line-height:1.6; border-top:1px solid #283531;">
           ${formattedArabic}
         </div>
       </div>
@@ -3813,12 +3813,12 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
     botBubble.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; border-bottom:1px solid #222f2b; padding-bottom:0.4rem;">
-        <div style="font-weight:700; color:#65dfcd; font-size:0.75rem;">
+        <div style="font-weight:700; color:#65dfcd; font-size:0.95remNone;">
           Inception 42 Jais (${escapeHtml(res.execution_mode)})
         </div>
         <div style="display:flex; gap:0.35rem; align-items:center;">
-          <span class="badge" style="background:#66d9af; color:#fff; font-size:0.65rem;">0% HALLUCINATION</span>
-          <span class="badge badge-watch" style="font-size:0.65rem;">${escapeHtml(res.intent.toUpperCase())}</span>
+          <span class="badge" style="background:#66d9af; color:#fff; font-size:0.86remNone;">0% HALLUCINATION</span>
+          <span class="badge badge-watch" style="font-size:0.86remNone;">${escapeHtml(res.intent.toUpperCase())}</span>
         </div>
       </div>
 
@@ -3829,7 +3829,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
       ${arabicDrawerHtml}
 
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; margin-top:0.35rem; padding-top:0.4rem; border-top:1px solid #222f2b;">
-        <div style="font-size:0.7rem; color:#94a3b8; max-width:62%;">
+        <div style="font-size:0.92remNone; color:#94a3b8; max-width:62%;">
           <strong>Citations:</strong> ${escapeHtml(res.citations.slice(0, 2).join(' | '))}
         </div>
         <div style="display:flex; gap:0.35rem; align-items:center;">
@@ -3857,7 +3857,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
   } catch (err) {
     if (loadingBubble.parentNode) loadingBubble.parentNode.removeChild(loadingBubble);
     const errBubble = document.createElement("div");
-    errBubble.style.cssText = "align-self:flex-start; color:#f17971; background:#222f2b; padding:0.6rem; border-radius:6px; font-size:0.8rem;";
+    errBubble.style.cssText = "align-self:flex-start; color:#f17971; background:#222f2b; padding:0.6rem; border-radius:6px; font-size:1.02remNone;";
     errBubble.textContent = `Error contacting Copilot: ${err.message}`;
     stream.appendChild(errBubble);
   }
@@ -4037,11 +4037,11 @@ function renderDossierModal(dossier, container) {
     checklistHtml += `
       <div style="background:#131c1a; border:1px solid #222f2b; border-radius:6px; padding:0.75rem; margin-bottom:0.6rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
-          <strong style="color:#65dfcd; font-size:0.85rem;">Step ${step.step_number}: ${escapeHtml(step.action_title)}</strong>
-          <span class="badge badge-warning" style="font-size:0.68rem;">${escapeHtml(step.timeline_window)}</span>
+          <strong style="color:#65dfcd; font-size:1.06remNone;">Step ${step.step_number}: ${escapeHtml(step.action_title)}</strong>
+          <span class="badge badge-warning" style="font-size:0.88remNone;">${escapeHtml(step.timeline_window)}</span>
         </div>
-        <div style="color:#cbd5e1; font-size:0.82rem; margin-bottom:0.4rem;">${escapeHtml(step.action_detail)}</div>
-        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:#94a3b8; border-top:1px dashed #222f2b; padding-top:0.35rem;">
+        <div style="color:#cbd5e1; font-size:1.02remNone; margin-bottom:0.4rem;">${escapeHtml(step.action_detail)}</div>
+        <div style="display:flex; justify-content:space-between; font-size:0.92remNone; color:#94a3b8; border-top:1px dashed #222f2b; padding-top:0.35rem;">
           <span><strong>Lead:</strong> ${escapeHtml(step.responsible_lead)}</span>
           <span><strong>Basis:</strong> ${escapeHtml(step.compliance_framework)}</span>
         </div>
@@ -4051,40 +4051,40 @@ function renderDossierModal(dossier, container) {
 
   let shapHtml = "";
   for (const [k, v] of Object.entries(diag.shap_attributions || {})) {
-    shapHtml += `<span class="badge" style="background:#222f2b; color:#cbd5e1; font-size:0.75rem;">${escapeHtml(k)}: ${(v * 100).toFixed(1)}%</span> `;
+    shapHtml += `<span class="badge" style="background:#222f2b; color:#cbd5e1; font-size:0.95remNone;">${escapeHtml(k)}: ${(v * 100).toFixed(1)}%</span> `;
   }
 
   container.innerHTML = `
     <!-- Top Summary Banner -->
     <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:0.75rem; margin-bottom:1.25rem;">
       <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
-        <div style="font-size:0.72rem; color:#94a3b8;">ALERT SEVERITY</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#f17971;">${escapeHtml(dossier.alert_tier.toUpperCase())}</div>
-        <div style="font-size:0.7rem; color:#94a3b8;">Risk Prob: ${dossier.calibrated_probability_pct}%</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">ALERT SEVERITY</div>
+        <div style="font-size:1.3remNone; font-weight:800; color:#f17971;">${escapeHtml(dossier.alert_tier.toUpperCase())}</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">Risk Prob: ${dossier.calibrated_probability_pct}%</div>
       </div>
       <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
-        <div style="font-size:0.72rem; color:#94a3b8;">PEAK WBGT THERMAL</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#e9aa62;">${t.current_wbgt_c}°C</div>
-        <div style="font-size:0.7rem; color:#94a3b8;">3-Day Peak: ${t.forecast_3d_wbgt_max_c}°C</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">PEAK WBGT THERMAL</div>
+        <div style="font-size:1.3remNone; font-weight:800; color:#e9aa62;">${t.current_wbgt_c}°C</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">3-Day Peak: ${t.forecast_3d_wbgt_max_c}°C</div>
       </div>
       <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
-        <div style="font-size:0.72rem; color:#94a3b8;">SENTINEL ESP32 DELTA</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#65dfcd;">${t.microclimate_delta_c}</div>
-        <div style="font-size:0.7rem; color:#94a3b8;">Hardware Node: ${t.sentinel_node_id || 'N/A'}</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">SENTINEL ESP32 DELTA</div>
+        <div style="font-size:1.3remNone; font-weight:800; color:#65dfcd;">${t.microclimate_delta_c}</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">Hardware Node: ${t.sentinel_node_id || 'N/A'}</div>
       </div>
       <div class="kpi-card" style="background:#131c1a; border:1px solid #222f2b; padding:0.75rem; border-radius:6px;">
-        <div style="font-size:0.72rem; color:#94a3b8;">WORKFORCE AT RISK</div>
-        <div style="font-size:1.3rem; font-weight:800; color:#a855f7;">${t.workforce_size.toLocaleString()}</div>
-        <div style="font-size:0.7rem; color:#94a3b8;">DQ Completeness: ${dossier.dq_completeness_pct}%</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">WORKFORCE AT RISK</div>
+        <div style="font-size:1.3remNone; font-weight:800; color:#a855f7;">${t.workforce_size.toLocaleString()}</div>
+        <div style="font-size:0.92remNone; color:#94a3b8;">DQ Completeness: ${dossier.dq_completeness_pct}%</div>
       </div>
     </div>
 
     <!-- 1. Threat Trajectory -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#65dfcd; margin:0 0 0.5rem 0;">
         1. Threat Trajectory &amp; Microclimate Exposure
       </h4>
-      <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.5;">
+      <div style="font-size:1.02remNone; color:#cbd5e1; line-height:1.5;">
         Measured ambient WBGT is <strong>${t.current_wbgt_c}°C</strong> with 3-day projected peak reaching <strong>${t.forecast_3d_wbgt_max_c}°C</strong>.
         Ambient PM2.5 particulate concentration is <strong>${t.current_pm25_ugm3} µg/m³</strong>.
         Sentinel ESP32 hardware ground truth confirms an on-site microclimate delta of <strong>${t.microclimate_delta_c}</strong> above standard macroclimate grids.
@@ -4093,11 +4093,11 @@ function renderDossierModal(dossier, container) {
 
     <!-- 2. Diagnostic Attribution (SHAP & Renal) -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
         2. Multi-Signal Diagnostic Attribution (SHAP) &amp; Renal Surveillance
       </h4>
       <div style="margin-bottom:0.75rem;">${shapHtml}</div>
-      <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.5; background:#131c1a; padding:0.6rem; border-radius:4px;">
+      <div style="font-size:1.02remNone; color:#cbd5e1; line-height:1.5; background:#131c1a; padding:0.6rem; border-radius:4px;">
         <strong>Sub-Clinical Renal Panel (CKD-EPI &amp; KDIGO):</strong>
         Screened cohort of ${diag.renal_surveillance.screened_cohort} workers demonstrates mean eGFR of ${diag.renal_surveillance.mean_egfr_ml_min} mL/min,
         dehydration prevalence of ${diag.renal_surveillance.dehydration_rate_pct}%, and KDIGO Stage 1 incidence of ${diag.renal_surveillance.kdigo_stage1_rate_per_1k} per 1k.
@@ -4107,10 +4107,10 @@ function renderDossierModal(dossier, container) {
 
     <!-- 3. Statutory Trigger -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #4338ca;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#818cf8; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#818cf8; margin:0 0 0.5rem 0;">
         3. Statutory Mandate &amp; Regulatory Trigger
       </h4>
-      <div style="font-size:0.83rem; color:#e2e8f0; line-height:1.5;">
+      <div style="font-size:1.02remNone; color:#e2e8f0; line-height:1.5;">
         <strong>Legal Authority:</strong> ${escapeHtml(trig.authority)}<br>
         <strong>Enacted Decrees:</strong> ${escapeHtml(trig.decree)} — ${escapeHtml(trig.article_number)}: <em>${escapeHtml(trig.title)}</em><br>
         <strong>Statutory Mandate:</strong> ${escapeHtml(trig.legal_mandate)}<br>
@@ -4122,7 +4122,7 @@ function renderDossierModal(dossier, container) {
 
     <!-- 4. Immediate 30-Minute Operational Checklist -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#65dfcd; margin:0 0 0.75rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#65dfcd; margin:0 0 0.75rem 0;">
         4. Immediate 30-Minute Operational Checklist
       </h4>
       ${checklistHtml}
@@ -4130,10 +4130,10 @@ function renderDossierModal(dossier, container) {
 
     <!-- 5. Municipal Fleet Directive -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#e9aa62; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#e9aa62; margin:0 0 0.5rem 0;">
         5. Municipal Cooling Fleet &amp; Logistics Directive
       </h4>
-      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; font-size:0.8rem; color:#cbd5e1;">
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; font-size:1.02remNone; color:#cbd5e1;">
         <div>Cooling Buses: <strong>${fleet.cooling_buses_allocated} units</strong></div>
         <div>Misting Trailers: <strong>${fleet.misting_trailers_allocated} units</strong></div>
         <div>Potable Water: <strong>${fleet.potable_water_metric_tons} Metric Tons</strong></div>
@@ -4141,17 +4141,17 @@ function renderDossierModal(dossier, container) {
         <div>DCAS Ambulance: <strong>${escapeHtml(fleet.dcas_ambulance_status)}</strong></div>
         <div>Staging Depot: <strong>${escapeHtml(fleet.nearest_depot)} (${fleet.transit_time_minutes}m)</strong></div>
       </div>
-      <div style="margin-top:0.4rem; font-size:0.75rem; color:#94a3b8;">
+      <div style="margin-top:0.4rem; font-size:0.95remNone; color:#94a3b8;">
         Estimated Mobilization Cost: AED ${fleet.estimated_mobilization_cost_aed.toLocaleString()}
       </div>
     </div>
 
     <!-- 6. RACI Matrix -->
     <div style="margin-bottom:1.5rem; background:#17211f; padding:1rem; border-radius:6px; border:1px solid #222f2b;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#a855f7; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#a855f7; margin:0 0 0.5rem 0;">
         6. RACI Stakeholder Accountability Matrix
       </h4>
-      <div style="font-size:0.8rem; color:#cbd5e1; display:flex; flex-direction:column; gap:0.35rem;">
+      <div style="font-size:1.02remNone; color:#cbd5e1; display:flex; flex-direction:column; gap:0.35rem;">
         <div><strong>Responsible (R):</strong> ${escapeHtml(raci.responsible)}</div>
         <div><strong>Accountable (A):</strong> ${escapeHtml(raci.accountable)}</div>
         <div><strong>Consulted (C):</strong> ${escapeHtml((raci.consulted || []).join(', '))}</div>
@@ -4161,10 +4161,10 @@ function renderDossierModal(dossier, container) {
 
     <!-- 7. Frontline WhatsApp Preview -->
     <div style="background:#17211f; padding:1rem; border-radius:6px; border:1px solid #66d9af;">
-      <h4 style="font-size:0.95rem; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
+      <h4 style="font-size:0.95remNone; font-weight:700; color:#66d9af; margin:0 0 0.5rem 0;">
         7. Frontline WhatsApp &amp; Multilingual Broadcast Preview
       </h4>
-      <pre style="background:#131c1a; padding:0.75rem; border-radius:4px; font-size:0.75rem; line-height:1.4; color:#a7f3d0; overflow-x:auto; margin:0;">${escapeHtml(prev.whatsapp_preview_markdown || prev.english_text)}</pre>
+      <pre style="background:#131c1a; padding:0.75rem; border-radius:4px; font-size:0.95remNone; line-height:1.4; color:#a7f3d0; overflow-x:auto; margin:0;">${escapeHtml(prev.whatsapp_preview_markdown || prev.english_text)}</pre>
     </div>
   `;
 }
@@ -4205,9 +4205,9 @@ async function loadSafeHarborView() {
     if (statListEl && data.statutory_guarantees) {
       statListEl.innerHTML = data.statutory_guarantees.map(g => `
         <div style="background:#222f2b; padding:1rem; border-radius:6px; border-left:3px solid #65dfcd;">
-          <div style="font-size:0.85rem; font-weight:700; color:#fff;">${escapeHtml(g.decree)}</div>
-          <div style="font-size:0.75rem; color:#65dfcd; margin:0.25rem 0;">${escapeHtml(g.article)} (${escapeHtml(g.jurisdiction)})</div>
-          <div style="font-size:0.78rem; color:#cbd5e1; line-height:1.5;">${escapeHtml(g.mandate)}</div>
+          <div style="font-size:1.06remNone; font-weight:700; color:#fff;">${escapeHtml(g.decree)}</div>
+          <div style="font-size:0.95remNone; color:#65dfcd; margin:0.25rem 0;">${escapeHtml(g.article)} (${escapeHtml(g.jurisdiction)})</div>
+          <div style="font-size:0.98remNone; color:#cbd5e1; line-height:1.5;">${escapeHtml(g.mandate)}</div>
         </div>
       `).join("");
     }
@@ -4224,7 +4224,7 @@ async function testDisciplinaryQuery() {
 
   if (placeholder) placeholder.style.display = "none";
   resultBox.style.display = "block";
-  resultBox.innerHTML = `<div style="color:#65dfcd; font-size:0.82rem;">Transmitting employer disciplinary query to API gateway...</div>`;
+  resultBox.innerHTML = `<div style="color:#65dfcd; font-size:1.02remNone;">Transmitting employer disciplinary query to API gateway...</div>`;
 
   try {
     const res = await apiFetch("/api/v1/privacy/test-disciplinary-query", {
@@ -4241,13 +4241,13 @@ async function testDisciplinaryQuery() {
     });
 
     resultBox.innerHTML = `
-      <div style="font-weight:700; color:#f17971; font-size:0.9rem; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
+      <div style="font-weight:700; color:#f17971; font-size:0.9remNone; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
         <span></span> HTTP 403 FORBIDDEN: SAFE-HARBOR DEFENSE ACTIVATED
       </div>
-      <div style="font-size:0.78rem; color:#fca5a5; line-height:1.5; margin-bottom:0.6rem;">
+      <div style="font-size:0.98remNone; color:#fca5a5; line-height:1.5; margin-bottom:0.6rem;">
         ${escapeHtml(res.reason || "Disciplinary query blocked.")}
       </div>
-      <div style="background:#131c1a; padding:0.6rem; border-radius:4px; font-size:0.72rem; color:#94a3b8; font-family:monospace; line-height:1.6;">
+      <div style="background:#131c1a; padding:0.6rem; border-radius:4px; font-size:0.92remNone; color:#94a3b8; font-family:monospace; line-height:1.6;">
         <div><strong>Statutory Citation:</strong> ${escapeHtml(res.statutory_citation || "UAE Federal Decree-Law No. 33")}</div>
         <div><strong>Quarantine Token:</strong> <span style="color:#65dfcd;">${escapeHtml(res.quarantine_token || "QT-7A9B42")}</span></div>
         <div><strong>Audit Incident ID:</strong> <span style="color:#66d9af;">${escapeHtml(res.audit_log_id || "AUDIT-SHB-1049")}</span></div>
@@ -4256,10 +4256,10 @@ async function testDisciplinaryQuery() {
     `;
   } catch (err) {
     resultBox.innerHTML = `
-      <div style="font-weight:700; color:#f17971; font-size:0.9rem; margin-bottom:0.4rem;">
+      <div style="font-weight:700; color:#f17971; font-size:0.9remNone; margin-bottom:0.4rem;">
         HTTP 403 FORBIDDEN: SAFE-HARBOR DEFENSE ACTIVATED
       </div>
-      <div style="font-size:0.78rem; color:#fca5a5; line-height:1.5;">
+      <div style="font-size:0.98remNone; color:#fca5a5; line-height:1.5;">
         Access Denied under UAE Federal Decree-Law No. 33 of 2021 Article 13. Individual worker telemetry, break logs, and disciplinary queries are cryptographically quarantined.
       </div>
     `;
@@ -4496,7 +4496,7 @@ async function runPHSAssessment() {
     const elCounter = document.getElementById("phsCountermeasuresList");
     if (elCounter && debtData.mandatory_countermeasures) {
       elCounter.innerHTML = debtData.mandatory_countermeasures.map(m => `
-        <div style="font-size:0.82rem; color:#f8fafc; padding:0.35rem 0.6rem; background:#222f2b; border-left:3px solid #f17971; border-radius:3px;">
+        <div style="font-size:1.02remNone; color:#f8fafc; padding:0.35rem 0.6rem; background:#222f2b; border-left:3px solid #f17971; border-radius:3px;">
           ${m}
         </div>
       `).join("");
@@ -5121,7 +5121,7 @@ async function verifyLiveTelemetry() {
           <div>Wind Speed: <strong>${tel.wind_speed_kmh} km/h</strong></div>
           <div>Live Stull WBGT: <strong style="color:#e9aa62;">${tel.live_calculated_wbgt_c}°C</strong></div>
         </div>
-        <div style="margin-top:0.6rem; font-size:0.75rem; color:#94a3b8;">
+        <div style="margin-top:0.6rem; font-size:0.95remNone; color:#94a3b8;">
           <strong>Data Foundation:</strong> ${data.data_source}<br>
           <strong>Formula:</strong> ${tel.psychrometric_equation}<br>
           <strong>SHA-256 Audit Seal:</strong> <span style="font-family:monospace; color:#34d399;">${data.audit_seal_sha256}</span>
@@ -5224,12 +5224,12 @@ function renderCausalResult(res) {
       return `
         <div class="causal-bar-row">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:0.82rem; font-weight:700; color:#fff;">
+            <div style="font-size:1.02remNone; font-weight:700; color:#fff;">
               ${p.cause_name}
             </div>
-            <div style="font-size:0.85rem; font-weight:800; color:${color};">
+            <div style="font-size:1.06remNone; font-weight:800; color:${color};">
               ${p.posterior_probability_pct}%
-              <span style="font-size:0.68rem; color:#94a3b8; font-weight:normal; margin-left:0.3rem;">
+              <span style="font-size:0.88remNone; color:#94a3b8; font-weight:normal; margin-left:0.3rem;">
                 (CI90: ${p.credible_interval_90_pct[0]}% - ${p.credible_interval_90_pct[1]}%)
               </span>
             </div>
@@ -5237,7 +5237,7 @@ function renderCausalResult(res) {
           <div class="causal-meter-track">
             <div class="causal-meter-fill" style="width:${Math.max(2, p.posterior_probability_pct)}%; background:${color};"></div>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#94a3b8; margin-top:0.2rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.92remNone; color:#94a3b8; margin-top:0.2rem;">
             <span>Agency: <strong style="color:#cbd5e1;">${p.responsible_agency.split('(')[0].trim()}</strong></span>
             <span>Directive: <em>${p.recommended_playbook.split(':')[0]}</em></span>
           </div>
@@ -5250,13 +5250,13 @@ function renderCausalResult(res) {
   const ordersList = document.getElementById("causalActionOrdersList");
   if (ordersList && res.action_orders) {
     ordersList.innerHTML = res.action_orders.map(o => `
-      <div style="padding:0.6rem 0.8rem; background:#131c1a; border-left:4px solid ${o.priority === 'IMMEDIATE_URGENT' ? '#f17971' : '#eab308'}; border-radius:4px; font-size:0.78rem;">
+      <div style="padding:0.6rem 0.8rem; background:#131c1a; border-left:4px solid ${o.priority === 'IMMEDIATE_URGENT' ? '#f17971' : '#eab308'}; border-radius:4px; font-size:0.98remNone;">
         <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
           <strong style="color:#fff;">${o.agency}</strong>
-          <span class="badge ${o.priority === 'IMMEDIATE_URGENT' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.65rem;">${o.priority}</span>
+          <span class="badge ${o.priority === 'IMMEDIATE_URGENT' ? 'badge-alert' : 'badge-warning'}" style="font-size:0.86remNone;">${o.priority}</span>
         </div>
         <div style="color:#cbd5e1;">${o.action}</div>
-        <div style="font-size:0.68rem; color:#64748b; margin-top:0.25rem;">Mandate: ${o.statute}</div>
+        <div style="font-size:0.88remNone; color:#64748b; margin-top:0.25rem;">Mandate: ${o.statute}</div>
       </div>
     `).join("");
   }
@@ -6105,11 +6105,11 @@ function handleTrendChartHover(e) {
   const statusColor = item.wbgt >= 32.0 ? "#f17971" : (item.wbgt >= 30.0 ? "#e9aa62" : "#65dfcd");
   const statusLabel = item.wbgt >= 32.0 ? "SEVERE HAZARD" : (item.wbgt >= 30.0 ? "ELEVATED" : "NORMAL");
   tooltip.innerHTML = `
-    <div style="font-weight:700; color:#f8fafc; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="font-weight:700; color:#f8fafc; margin-bottom:4px; font-size:14.5pxNone; display:flex; justify-content:space-between; align-items:center;">
       <span>${item.label}</span>
-      <span style="color:${statusColor}; font-weight:800; font-size:9.5px; background:${statusColor}22; border:1px solid ${statusColor}55; padding:1px 5px; border-radius:3px;">${statusLabel}</span>
+      <span style="color:${statusColor}; font-weight:800; font-size:13.5pxNone; background:${statusColor}22; border:1px solid ${statusColor}55; padding:1px 5px; border-radius:3px;">${statusLabel}</span>
     </div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10.5px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:14pxNone;">
       <div><span style="color:#94a3b8;">On-Site:</span> <strong style="color:#65dfcd;">${item.wbgt.toFixed(1)}&deg;C</strong></div>
       <div><span style="color:#94a3b8;">Model:</span> <strong style="color:#a5bec5;">${item.model.toFixed(1)}&deg;C</strong></div>
       <div><span style="color:#94a3b8;">Bias Delta:</span> <strong style="color:#f17971;">${deltaSign}&deg;C</strong></div>
@@ -6477,14 +6477,14 @@ function renderPaletteResults() {
   if (!container) return;
 
   if (currentPaletteResults.length === 0) {
-    container.innerHTML = `<div style="padding:1.5rem; text-align:center; color:#87978f; font-size:0.85rem;">No matching commands, views, or sites found.</div>`;
+    container.innerHTML = `<div style="padding:1.5rem; text-align:center; color:#87978f; font-size:1.06remNone;">No matching commands, views, or sites found.</div>`;
     return;
   }
 
   container.innerHTML = currentPaletteResults.map((cmd, idx) => `
     <div class="command-item ${idx === selectedCommandIndex ? 'selected' : ''}" onclick="executePaletteCommand(${idx})">
       <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:0.85rem; font-weight:600;">${escapeHtml(cmd.title)}</span>
+        <span style="font-size:1.06remNone; font-weight:600;">${escapeHtml(cmd.title)}</span>
       </div>
       <span class="command-badge">${escapeHtml(cmd.category)}</span>
     </div>
