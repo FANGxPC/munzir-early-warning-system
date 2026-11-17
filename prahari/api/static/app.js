@@ -379,6 +379,52 @@ function selectGeoSite(geoId, geoName) {
 }
 window.selectGeoSite = selectGeoSite;
 
+function showMapNodeTooltip(e, geoId, geoName, tier, wbgt, rr) {
+  const tooltip = document.getElementById("mapHudTooltip");
+  if (!tooltip) return;
+  const tierUpper = (tier || "NORMAL").toUpperCase();
+  let badgeColor = "#66d9af";
+  if (tierUpper === "WATCH") badgeColor = "#65dfcd";
+  else if (tierUpper === "WARNING") badgeColor = "#e9aa62";
+  else if (tierUpper === "ALERT") badgeColor = "#f17971";
+
+  const profile = (typeof getSiteThermalProfile === "function") ? getSiteThermalProfile(geoId) : { delta: 1.6 };
+  const deltaStr = profile.delta >= 0 ? `+${profile.delta.toFixed(1)}°C` : `${profile.delta.toFixed(1)}°C`;
+
+  tooltip.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+      <span style="font-weight:700; color:#f8fafc; font-size:11.5px;">${geoName}</span>
+      <span style="background:${badgeColor}22; color:${badgeColor}; border:1px solid ${badgeColor}; padding:2px 6px; border-radius:4px; font-weight:800; font-size:9.5px;">${tierUpper}</span>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10.5px;">
+      <div><span style="color:#94a3b8;">Microclimate:</span> <strong style="color:${badgeColor};">${wbgt ? wbgt.toFixed(1) : "33.4"}°C</strong></div>
+      <div><span style="color:#94a3b8;">Canopy Bias:</span> <strong style="color:#f17971;">${deltaStr}</strong></div>
+      <div><span style="color:#94a3b8;">Relative Risk:</span> <strong style="color:#e2e8f0;">${rr ? rr.toFixed(2) : "1.42"}x</strong></div>
+      <div><span style="color:#94a3b8;">Sensor Mesh:</span> <strong style="color:#66d9af;">ESP32 LIVE</strong></div>
+    </div>
+    <div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.1); font-size:9.5px; color:#cbd5e1;">
+      Click to lock sector &bull; Dynamic 24h kinetics &rarr;
+    </div>
+  `;
+
+  const mapBody = tooltip.parentElement;
+  if (mapBody) {
+    const rect = mapBody.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    tooltip.style.left = `${Math.min(rect.width - 130, Math.max(130, x))}px`;
+    tooltip.style.top = `${Math.max(15, y - 10)}px`;
+    tooltip.style.display = "block";
+  }
+}
+
+function hideMapNodeTooltip() {
+  const tooltip = document.getElementById("mapHudTooltip");
+  if (tooltip) tooltip.style.display = "none";
+}
+window.showMapNodeTooltip = showMapNodeTooltip;
+window.hideMapNodeTooltip = hideMapNodeTooltip;
+
 function renderSvgMap(svgElement, features, clusters) {
   if (!svgElement) return;
 
@@ -418,6 +464,11 @@ function renderSvgMap(svgElement, features, clusters) {
         <stop offset="50%" stop-color="#050811" />
         <stop offset="100%" stop-color="#060a14" />
       </linearGradient>
+      <radialGradient id="radarBeamGrad" cx="${centerDubai.x}" cy="${centerDubai.y}" r="240" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#65dfcd" stop-opacity="0.3" />
+        <stop offset="65%" stop-color="#14b8a6" stop-opacity="0.08" />
+        <stop offset="100%" stop-color="#060a14" stop-opacity="0" />
+      </radialGradient>
       <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
         <line x1="0" y1="0" x2="0" y2="8" style="stroke:#65dfcd; stroke-width:2.5; opacity:0.35" />
       </pattern>
@@ -429,6 +480,13 @@ function renderSvgMap(svgElement, features, clusters) {
 
     <!-- Canvas Background -->
     <rect width="${width}" height="${height}" fill="url(#mapBgGrad)" />
+
+    <!-- Tactical Dynamic Sweep Beam -->
+    <g class="radar-sweep-beam" style="transform-origin: ${centerDubai.x}px ${centerDubai.y}px;">
+      <path d="M ${centerDubai.x},${centerDubai.y} L ${centerDubai.x + 235},${centerDubai.y} A 235 235 0 0 0 ${centerDubai.x + 203},${centerDubai.y - 118} Z"
+            fill="url(#radarBeamGrad)" />
+      <line x1="${centerDubai.x}" y1="${centerDubai.y}" x2="${centerDubai.x + 235}" y2="${centerDubai.y}" stroke="#65dfcd" stroke-width="1.8" opacity="0.85" />
+    </g>
 
     <!-- Maritime Domain Layer -->
     <g id="layerGroupMaritime" style="display:${maritimeDisp};">
@@ -529,6 +587,7 @@ function renderSvgMap(svgElement, features, clusters) {
     else if (f.risk_tier === "alert") color = "#f17971";
 
     const isSite = f.geo_level === "site";
+    const isSelected = (f.geo_id === (window.currentSiteId || "SITE-JA-01"));
     let displayName = f.geo_name
       .replace(" Deepwater Port Terminal", "")
       .replace(" Deepwater Port", "")
@@ -540,8 +599,29 @@ function renderSvgMap(svgElement, features, clusters) {
     if (displayName.length > 14) displayName = displayName.substring(0, 13) + "…";
     const nameWidth = Math.max(74, displayName.length * 7.5 + 20);
 
+    // Dynamic Pulsing Beacon Ring for Hazards
+    if (f.risk_tier === "alert") {
+      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="14" fill="none" stroke="#f17971" stroke-width="2" class="beacon-ring-alert" />`;
+    } else if (f.risk_tier === "warning") {
+      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="12" fill="none" stroke="#e9aa62" stroke-width="1.6" class="beacon-ring-warning" />`;
+    }
+
+    // Target Lock Tactical Reticle
+    if (isSelected) {
+      svgHtml += `
+        <g class="target-lock-reticle">
+          <circle cx="${pt.x}" cy="${pt.y}" r="22" fill="none" stroke="#65dfcd" stroke-width="1.4" stroke-dasharray="4,4" />
+          <path d="M ${pt.x - 26},${pt.y} L ${pt.x - 18},${pt.y} M ${pt.x + 18},${pt.y} L ${pt.x + 26},${pt.y} M ${pt.x},${pt.y - 26} L ${pt.x},${pt.y - 18} M ${pt.x},${pt.y + 18} L ${pt.x},${pt.y + 26}" stroke="#65dfcd" stroke-width="1.8" />
+        </g>
+      `;
+    }
+
     svgHtml += `
-      <g id="mapNode-${f.geo_id}" class="map-node-group" onclick="selectGeoSite('${f.geo_id}', '${escapeHtml(f.geo_name)}')" style="cursor:pointer;">
+      <g id="mapNode-${f.geo_id}" class="map-node-group ${isSelected ? 'selected' : ''}" 
+         onclick="selectGeoSite('${f.geo_id}', '${escapeHtml(f.geo_name)}')"
+         onmouseenter="showMapNodeTooltip(event, '${f.geo_id}', '${escapeHtml(f.geo_name)}', '${f.risk_tier}', ${f.current_wbgt || 33.4}, ${f.relative_risk || 1.42})"
+         onmouseleave="hideMapNodeTooltip()"
+         style="cursor:pointer;">
     `;
 
     if (isSite) {
@@ -560,7 +640,7 @@ function renderSvgMap(svgElement, features, clusters) {
 
     // Callout Label Banner
     svgHtml += `
-        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="3" fill="#060a14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" />
+        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="4" fill="#060a14" stroke="rgba(255,255,255,0.14)" stroke-width="0.8" />
         <text x="${pt.x}" y="${pt.y + 29}" fill="#f8fafc" font-size="9" font-weight="700" text-anchor="middle">
           ${escapeHtml(displayName)}
         </text>
@@ -1682,17 +1762,20 @@ async function testSentinelLevel(nodeId = "SENT-001", level = "Alert") {
     if (twinLed) {
       if (level === "Alert") {
         twinLed.textContent = "LED: RED ALERT FLASH";
-        twinLed.style.background = "rgba(220, 38, 38, 0.2)";
+        twinLed.className = "badge led-glow-red";
+        twinLed.style.background = "rgba(220, 38, 38, 0.25)";
         twinLed.style.color = "#f87171";
         twinLed.style.border = "1px solid #ef4444";
       } else if (level === "Warning") {
         twinLed.textContent = "LED: BLUE WARNING PULSE";
-        twinLed.style.background = "rgba(56, 189, 248, 0.2)";
+        twinLed.className = "badge led-glow-blue";
+        twinLed.style.background = "rgba(56, 189, 248, 0.25)";
         twinLed.style.color = "#38bdf8";
         twinLed.style.border = "1px solid #38bdf8";
       } else {
         twinLed.textContent = "LED: SOLID GREEN (SAFE)";
-        twinLed.style.background = "rgba(16, 185, 129, 0.2)";
+        twinLed.className = "badge led-glow-green";
+        twinLed.style.background = "rgba(16, 185, 129, 0.25)";
         twinLed.style.color = "#34d399";
         twinLed.style.border = "1px solid #66d9af";
       }
@@ -1721,7 +1804,8 @@ async function simulatePhysicalBootPress(nodeId = "SENT-001") {
 
   if (twinLed) {
     twinLed.textContent = "LED: SOLID GREEN (SAFE)";
-    twinLed.style.background = "rgba(16, 185, 129, 0.2)";
+    twinLed.className = "badge led-glow-green";
+    twinLed.style.background = "rgba(16, 185, 129, 0.25)";
     twinLed.style.color = "#34d399";
     twinLed.style.border = "1px solid #66d9af";
   }
@@ -2869,6 +2953,28 @@ function renderRenalTrajectoryChart(cohort, alert) {
   const munzirTriggerX = getX(-11.5);
   const hospitalPeakX = getX(0);
 
+  const egfrPts = days.map((d, i) => ({ x: getX(d), y: getYEgfr(egfrData[i]) }));
+  const dehydPts = days.map((d, i) => ({ x: getX(d), y: getYDehyd(usgDehydData[i]) }));
+
+  function ptsToSpline(pts) {
+    if (pts.length <= 1) return "";
+    let d = `M ${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i === 0 ? 0 : i - 1];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+    }
+    return d;
+  }
+
+  const egfrPath = ptsToSpline(egfrPts);
+  const dehydPath = ptsToSpline(dehydPts);
   const egfrPoints = days.map((d, i) => `${getX(d)},${getYEgfr(egfrData[i])}`).join(" ");
   const dehydPoints = days.map((d, i) => `${getX(d)},${getYDehyd(usgDehydData[i])}`).join(" ");
 
@@ -2911,11 +3017,11 @@ function renderRenalTrajectoryChart(cohort, alert) {
 
       ${gridSvg}
 
-      <!-- eGFR Decline Curve (Cyan) -->
-      <polyline fill="none" stroke="#65dfcd" stroke-width="3" points="${egfrPoints}" />
+      <!-- eGFR Decline Curve (Cyan Smooth Spline) -->
+      <path fill="none" stroke="#65dfcd" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" d="${egfrPath}" />
 
-      <!-- Dehydration Surge Curve (Amber) -->
-      <polyline fill="none" stroke="#e9aa62" stroke-width="3" stroke-dasharray="6,3" points="${dehydPoints}" />
+      <!-- Dehydration Surge Curve (Amber Smooth Spline) -->
+      <path fill="none" stroke="#e9aa62" stroke-width="3" stroke-dasharray="6,4" stroke-linecap="round" stroke-linejoin="round" d="${dehydPath}" />
 
       <!-- Munzir Alert Marker at Day -11.5 -->
       <line x1="${munzirTriggerX}" y1="${padT - 10}" x2="${munzirTriggerX}" y2="${padT + chartH}" stroke="#66d9af" stroke-width="2" />
@@ -3018,7 +3124,7 @@ function renderDeconvolutionMap(candidates, ellipse, district) {
       <text x="30" y="145" fill="rgba(101, 223, 205,0.4)" font-size="11" font-style="italic" font-family="sans-serif">Arabian Gulf Coastline</text>
 
       <!-- Worker Commuter Bus Vector Corridor (E11 / Sheikh Zayed Road) -->
-      <line x1="${originX}" y1="${originY}" x2="${destX}" y2="${destY}" stroke="url(#transitLineGrad)" stroke-width="3" stroke-dasharray="8,5" />
+      <line x1="${originX}" y1="${originY}" x2="${destX}" y2="${destY}" stroke="url(#transitLineGrad)" stroke-width="3" stroke-dasharray="8,5" class="animated-dash-flow" />
       
       <!-- Midpoint Bus Indicator -->
       <circle cx="${(originX + destX) / 2}" cy="${(originY + destY) / 2}" r="14" fill="#17211f" stroke="#65dfcd" stroke-width="2" />
@@ -3133,9 +3239,9 @@ function renderDispatchRadar(data) {
       </defs>
 
       <!-- Route Vectors -->
-      <line x1="${d1X}" y1="${d1Y}" x2="${siteX + 50}" y2="${siteY - 15}" stroke="#66d9af" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
-      <line x1="${d2X}" y1="${d2Y}" x2="${siteX + 50}" y2="${siteY}" stroke="#65dfcd" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)" />
-      <line x1="${d3X}" y1="${d3Y}" x2="${siteX + 50}" y2="${siteY + 15}" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3" />
+      <line x1="${d1X}" y1="${d1Y}" x2="${siteX + 50}" y2="${siteY - 15}" stroke="#66d9af" stroke-width="2.4" stroke-dasharray="6,4" class="animated-dash-flow" marker-end="url(#arrow)" />
+      <line x1="${d2X}" y1="${d2Y}" x2="${siteX + 50}" y2="${siteY}" stroke="#65dfcd" stroke-width="2.4" stroke-dasharray="6,4" class="animated-dash-flow" marker-end="url(#arrow)" />
+      <line x1="${d3X}" y1="${d3Y}" x2="${siteX + 50}" y2="${siteY + 15}" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4,4" class="animated-dash-flow" />
 
       <!-- Target Worksite: SITE-JA-01 -->
       <rect x="${siteX - 110}" y="${siteY - 45}" width="210" height="90" rx="8" fill="#222f2b" stroke="#f17971" stroke-width="2" />
@@ -5869,15 +5975,45 @@ function renderDynamicTrendChart(range, siteId) {
   if (rVal) rVal.innerHTML = `${currentReading.toFixed(1)}&deg; <small>WBGT</small>`;
   if (cVal) cVal.innerHTML = changeText;
 
+  function generateSmoothPath(pts, yKey) {
+    if (!pts || pts.length === 0) return "";
+    if (pts.length === 1) return `M ${pts[0].x},${pts[0][yKey]}`;
+    let d = `M ${pts[0].x},${pts[0][yKey]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i === 0 ? 0 : i - 1];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1[yKey] + (p2[yKey] - p0[yKey]) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2[yKey] - (p3[yKey] - p1[yKey]) / 6;
+      d += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2.x.toFixed(1)},${p2[yKey].toFixed(1)}`;
+    }
+    return d;
+  }
+
   const pointsWbgtStr = pointsList.map(p => `${p.x},${p.yWbgt}`).join(" ");
   const pointsModelStr = pointsList.map(p => `${p.x},${p.yModel}`).join(" ");
+  const smoothWbgt = generateSmoothPath(pointsList, "yWbgt");
+  const smoothModel = generateSmoothPath(pointsList, "yModel");
 
-  if (line) line.setAttribute("points", pointsWbgtStr);
-  if (mLine) mLine.setAttribute("points", pointsModelStr);
+  if (line) {
+    if (line.tagName.toLowerCase() === "path") {
+      line.setAttribute("d", smoothWbgt);
+    } else {
+      line.setAttribute("points", pointsWbgtStr);
+    }
+  }
+  if (mLine) {
+    if (mLine.tagName.toLowerCase() === "path") {
+      mLine.setAttribute("d", smoothModel);
+    } else {
+      mLine.setAttribute("points", pointsModelStr);
+    }
+  }
   if (area) {
-    const areaPath = `M ${pointsList[0].x},${pointsList[0].yWbgt} ` +
-      pointsList.slice(1).map(p => `L ${p.x},${p.yWbgt}`).join(" ") +
-      ` L ${chartW},${chartH} L 0,${chartH} Z`;
+    const areaPath = `${smoothWbgt} L ${chartW},${chartH} L 0,${chartH} Z`;
     area.setAttribute("d", areaPath);
   }
 
@@ -5964,17 +6100,23 @@ function handleTrendChartHover(e) {
     dotModel.style.opacity = (window.trendSeriesVisibility && window.trendSeriesVisibility.model !== false) ? "1" : "0";
   }
 
+  const delta = (item.wbgt - item.model).toFixed(1);
+  const deltaSign = delta >= 0 ? `+${delta}` : delta;
   const statusColor = item.wbgt >= 32.0 ? "#f17971" : (item.wbgt >= 30.0 ? "#e9aa62" : "#65dfcd");
   const statusLabel = item.wbgt >= 32.0 ? "SEVERE HAZARD" : (item.wbgt >= 30.0 ? "ELEVATED" : "NORMAL");
   tooltip.innerHTML = `
-    <div style="font-weight:700; color:#f8fafc; margin-bottom:2px;">${item.label}</div>
-    <div style="display:flex; gap:10px; font-size:10.5px;">
-      <span style="color:#65dfcd;">Site: <b>${item.wbgt.toFixed(1)}&deg;C</b></span>
-      <span style="color:#a5bec5;">Model: <b>${item.model.toFixed(1)}&deg;C</b></span>
-      <span style="color:${statusColor}; font-weight:700;">${statusLabel}</span>
+    <div style="font-weight:700; color:#f8fafc; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between; align-items:center;">
+      <span>${item.label}</span>
+      <span style="color:${statusColor}; font-weight:800; font-size:9.5px; background:${statusColor}22; border:1px solid ${statusColor}55; padding:1px 5px; border-radius:3px;">${statusLabel}</span>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10.5px;">
+      <div><span style="color:#94a3b8;">On-Site:</span> <strong style="color:#65dfcd;">${item.wbgt.toFixed(1)}&deg;C</strong></div>
+      <div><span style="color:#94a3b8;">Model:</span> <strong style="color:#a5bec5;">${item.model.toFixed(1)}&deg;C</strong></div>
+      <div><span style="color:#94a3b8;">Bias Delta:</span> <strong style="color:#f17971;">${deltaSign}&deg;C</strong></div>
+      <div><span style="color:#94a3b8;">MOHRE Ban:</span> <strong style="color:${item.wbgt >= 32 ? '#f17971' : '#66d9af'};">${item.wbgt >= 32 ? 'ACTIVE' : 'NOMINAL'}</strong></div>
     </div>
   `;
-  tooltip.style.left = `${mouseX}px`;
+  tooltip.style.left = `${Math.min(rect.width - 110, Math.max(110, mouseX))}px`;
   tooltip.style.display = "block";
 }
 

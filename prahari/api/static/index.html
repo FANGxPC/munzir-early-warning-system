@@ -480,13 +480,17 @@
             <svg class="trend-chart" id="trendSvgChart" viewBox="0 0 600 200" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#55d6c2" stop-opacity=".26"></stop>
-                  <stop offset="100%" stop-color="#55d6c2" stop-opacity="0"></stop>
+                  <stop offset="0%" stop-color="#65dfcd" stop-opacity="0.38"></stop>
+                  <stop offset="65%" stop-color="#14b8a6" stop-opacity="0.08"></stop>
+                  <stop offset="100%" stop-color="#101817" stop-opacity="0"></stop>
                 </linearGradient>
+                <filter id="lineGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#65dfcd" flood-opacity="0.75"/>
+                </filter>
               </defs>
               <path id="trendAreaPath" d="" fill="url(#areaGrad)"></path>
-              <polyline id="trendModelLine" points="" fill="none" stroke="#a5bec5" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"></polyline>
-              <polyline id="trendLine" points="" fill="none" stroke="#65dfcd" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+              <path id="trendModelLine" d="" fill="none" stroke="#a5bec5" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"></path>
+              <path id="trendLine" d="" fill="none" stroke="#65dfcd" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#lineGlow)"></path>
               <line id="trendHoverLine" x1="0" y1="0" x2="0" y2="200" stroke="#e9aa62" stroke-width="1.2" stroke-dasharray="3 3" opacity="0"></line>
               <circle id="trendHoverDotWbgt" cx="0" cy="0" r="5" fill="#65dfcd" stroke="#060a14" stroke-width="2" opacity="0"></circle>
               <circle id="trendHoverDotModel" cx="0" cy="0" r="4" fill="#a5bec5" stroke="#060a14" stroke-width="2" opacity="0"></circle>
@@ -546,12 +550,14 @@
           </div>
         </div>
 
-        <div class="map-body" style="height:260px; min-height:260px; position:relative; overflow:hidden; border:1px solid #283531; border-radius:6px; background:#060a14;">
+        <div class="map-body" style="height:320px; min-height:320px; position:relative; overflow:hidden; border:1px solid #283531; border-radius:8px; background:#060a14;">
           <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none; position:absolute; top:8px; left:8px; z-index:4;"></div>
           <div id="situationSvgMap" class="map-svg-container" style="width:100%; height:100%;"></div>
+          <!-- Tactical Floating HUD Tooltip -->
+          <div id="mapHudTooltip" class="map-hud-tooltip" style="display:none;"></div>
           <!-- Quick-Jump Site Chips -->
-          <div class="map-site-chips" style="position:absolute; bottom:8px; left:10px; display:flex; gap:6px; z-index:3;">
-            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-JA-01', 'Jebel Ali Port')">Jebel Ali</button>
+          <div class="map-site-chips" style="position:absolute; bottom:10px; left:12px; display:flex; gap:6px; z-index:3;">
+            <button type="button" class="site-chip-btn active" onclick="selectGeoSite('SITE-JA-01', 'Jebel Ali Port')">Jebel Ali</button>
             <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-AQ-02', 'Al Quoz Industrial')">Al Quoz</button>
             <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-CR-03', 'Dubai Creek Harbor')">Creek</button>
             <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-DS-04', 'Dubai South Logistics')">Dubai South</button>
