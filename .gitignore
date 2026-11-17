@@ -27,3 +27,11 @@ dist/
 .vscode/
 .idea/
 
+# Temporary and UI scratch experiments
+login-screen/
+munzir-ui-ux-sample/
+*.pdf
+.DS_Store
+*.log
+app_fqdn.txt
+

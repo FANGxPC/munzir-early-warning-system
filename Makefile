@@ -30,6 +30,11 @@ help:
 	@echo "  make test-biascorrect  : Run microclimate bias correction validation tests"
 	@echo "  make whatif            : Run What-If occupational intervention simulator (Monte Carlo)"
 	@echo "  make test-whatif       : Run What-If simulator and assumptions ledger tests"
+	@echo "  make docker-build      : Build production Docker container"
+	@echo "  make docker-up         : Launch container via docker-compose"
+	@echo "  make azure-up          : Deploy or warm Azure Container App (Student \$$0 tier)"
+	@echo "  make azure-status      : Inspect Azure Container App state and FQDN"
+	@echo "  make azure-sleep       : Scale Azure Container App to 0 to preserve quota"
 	@echo "  make test              : Run full unit test suite"
 	@echo "  make clean             : Clean local test caches"
 
@@ -188,6 +193,21 @@ test-championship:
 
 test:
 	$(PYTHON) -m pytest tests/ -v
+
+docker-build:
+	docker build -t munzir:latest .
+
+docker-up:
+	docker compose up -d
+
+azure-up:
+	./infra/deploy_student.sh up
+
+azure-status:
+	./infra/deploy_student.sh status
+
+azure-sleep:
+	./infra/deploy_student.sh sleep
 
 clean:
 	rm -rf .pytest_cache data/cache/*.tmp __pycache__

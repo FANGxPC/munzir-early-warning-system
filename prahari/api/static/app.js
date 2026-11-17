@@ -1677,11 +1677,7 @@ async function testSentinelLevel(nodeId = "SENT-001", level = "Alert") {
       isAlertActive = (level === "Alert");
       await apiFetch(`/api/v1/sentinel/test-level/${nodeId}?level=${encodeURIComponent(level)}`, { method: "POST" });
     }
-    const globalBtn = document.getElementById("globalAlertBtn");
-    if (globalBtn) {
-      globalBtn.textContent = isAlertActive ? "Reset Green LED" : "Test Red Alert LED";
-      globalBtn.style.background = isAlertActive ? "#475569" : "#dc2626";
-    }
+    // Alert state updated
     const twinLed = document.getElementById("twinLedBadge");
     if (twinLed) {
       if (level === "Alert") {
