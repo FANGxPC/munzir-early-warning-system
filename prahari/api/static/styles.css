@@ -1960,7 +1960,7 @@ input:checked + .slider:before {
 .copilot-drawer {
   position: fixed;
   top: 0;
-  right: -490px;
+  right: 0px;
   width: 480px;
   max-width: 92vw;
   height: 100vh;

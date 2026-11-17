@@ -3988,7 +3988,8 @@ window.playCopilotVoice = playCopilotVoice;
 function toggleFloatingCopilotDrawer() {
   const drawer = document.getElementById("floatingCopilotDrawer");
   if (!drawer) return;
-  const isOpen = drawer.style.right === "0px";
+  const currentRight = drawer.style.right || getComputedStyle(drawer).right;
+  const isOpen = currentRight === "0px" || currentRight === "0";
   drawer.style.right = isOpen ? "-490px" : "0px";
 }
 
