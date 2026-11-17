@@ -5163,15 +5163,23 @@
  </footer>
 
 
- <!-- Floating Copilot Button (Persistent Access across all views) -->
-  <div id="floatingCopilotBtn" onclick="toggleFloatingCopilotDrawer()" class="floating-copilot-pill">
-    <span class="copilot-badge-icon">AI</span>
-    <span class="copilot-pill-label">Sovereign Copilot (Jais-3)</span>
-    <span class="copilot-status-dot"></span>
+  <!-- Floating Sovereign Copilot Launcher (High-Visibility Interactive Card for Evaluators) -->
+  <div id="floatingCopilotBtn" onclick="toggleFloatingCopilotDrawer()" class="floating-copilot-pill" role="button" aria-label="Open Inception 42 Jais AI Copilot">
+    <div class="copilot-icon-container">
+      <span class="copilot-badge-icon">JAIS-3</span>
+      <span class="copilot-status-dot-pulse"></span>
+    </div>
+    <div class="copilot-pill-body">
+      <div class="copilot-pill-top">
+        <span class="copilot-pill-title">Sovereign Copilot</span>
+        <span class="copilot-chip-sponsor">INCEPTION 42</span>
+      </div>
+      <div class="copilot-pill-subtitle">Ask Directives &bull; Click to Chat &rarr;</div>
+    </div>
   </div>
 
-  <!-- Floating Sliding Copilot Drawer (Open by default) -->
-  <div id="floatingCopilotDrawer" class="copilot-drawer" style="right:0px;">
+  <!-- Floating Sliding Copilot Drawer -->
+  <div id="floatingCopilotDrawer" class="copilot-drawer" style="right:-490px;">
     <div class="copilot-drawer-header">
       <div style="display:flex; align-items:center; gap:0.6rem;">
         <span class="copilot-badge-icon">JAIS-3</span>

@@ -6191,7 +6191,13 @@ function closeFullscreenMapModal() {
 window.closeFullscreenMapModal = closeFullscreenMapModal;
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeFullscreenMapModal();
+  if (e.key === "Escape") {
+    closeFullscreenMapModal();
+    const drawer = document.getElementById("floatingCopilotDrawer");
+    if (drawer && (drawer.style.right === "0px" || getComputedStyle(drawer).right === "0px")) {
+      drawer.style.right = "-490px";
+    }
+  }
 });
 
 function setSiteFilter(filter) {
