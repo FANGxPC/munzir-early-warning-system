@@ -4462,9 +4462,12 @@ async function executeCopilotQuery(query, siteId, streamId) {
   stream.appendChild(userBubble);
 
   // Append typing indicator
+  const isFirstPrompt = !window.copilotHasQueried;
   const loadingBubble = document.createElement("div");
   loadingBubble.style.cssText = "align-self:flex-start; max-width:85%; background:#222f2b; color:#94a3b8; padding:0.6rem 0.9rem; border-radius:12px 12px 12px 0; font-size:0.8rem; border-left:3px solid #65dfcd;";
-  loadingBubble.innerHTML = `Jais Sovereign Copilot reasoning across Lakehouse state &amp; Resolution 44 codex...`;
+  loadingBubble.innerHTML = isFirstPrompt
+    ? `<span class="login-spinner" style="width:12px; height:12px; border-width:2px; display:inline-block; vertical-align:middle; margin-right:6px;"></span> <strong>Initializing Sovereign Copilot:</strong> Loading Inception 42 Jais weights &amp; warming up GPU tensors (~10–15s for first prompt)...`
+    : `<span class="login-spinner" style="width:12px; height:12px; border-width:2px; display:inline-block; vertical-align:middle; margin-right:6px;"></span> Jais Sovereign Copilot reasoning across Lakehouse state &amp; Resolution 44 codex...`;
   stream.appendChild(loadingBubble);
   stream.scrollTop = stream.scrollHeight;
 
@@ -4478,6 +4481,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
         history: (window.copilotChatHistory || []).slice(-8),
       }),
     });
+    window.copilotHasQueried = true;
 
     // Remove loading bubble
     if (loadingBubble.parentNode) loadingBubble.parentNode.removeChild(loadingBubble);
