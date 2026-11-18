@@ -4973,9 +4973,25 @@ async function loadCompoundSeasonalSeries(siteId) {
 function renderCompoundSeasonChart(records) {
   const canvas = document.getElementById("chartCompoundSeason");
   if (!canvas) return;
+
+  const tooltip = document.getElementById("compoundChartTooltip");
+  const container = canvas.parentElement;
+  const width = container.clientWidth || 800;
+  const height = 270;
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+
   const ctx = canvas.getContext("2d");
-  const width = canvas.width = canvas.parentElement.clientWidth || 600;
-  const height = canvas.height = 220;
+  if (ctx.resetTransform) {
+    ctx.resetTransform();
+  } else if (ctx.setTransform) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  ctx.scale(dpr, dpr);
 
   ctx.clearRect(0, 0, width, height);
 
@@ -4986,80 +5002,234 @@ function renderCompoundSeasonChart(records) {
     return;
   }
 
-  const paddingLeft = 45;
-  const paddingRight = 45;
-  const paddingTop = 25;
-  const paddingBottom = 30;
-  const plotWidth = width - paddingLeft - paddingRight;
-  const plotHeight = height - paddingTop - paddingBottom;
+  const padL = 52;
+  const padR = 52;
+  const padT = 28;
+  const padB = 34;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
 
   // Scales
   const maxWbgt = 48;
-  const minWbgt = 25;
+  const minWbgt = 24;
   const maxPm10 = 160;
 
   const n = records.length;
-  const xStep = plotWidth / (n - 1 || 1);
+  const xStep = plotW / (n - 1 || 1);
 
-  // Draw PM10 Amber Bars
-  const barWidth = Math.max(2, (plotWidth / n) * 0.7);
-  records.forEach((r, i) => {
-    const x = paddingLeft + (i * (plotWidth / n));
-    const h = (Math.min(r.pm10, maxPm10) / maxPm10) * plotHeight;
-    const y = paddingTop + plotHeight - h;
+  // Background Grid Lines (Horizontal)
+  const yTicks = [25, 30, 35, 40, 45];
+  yTicks.forEach(temp => {
+    const y = padT + plotH - ((temp - minWbgt) / (maxWbgt - minWbgt)) * plotH;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(padL + plotW, y);
+    ctx.stroke();
 
-    ctx.fillStyle = r.is_compound_crisis ? "rgba(245, 158, 11, 0.45)" : "rgba(245, 158, 11, 0.15)";
-    ctx.fillRect(x, y, barWidth, h);
+    // Left axis (WBGT °C)
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "10px monospace";
+    ctx.textAlign = "right";
+    ctx.fillText(`${temp}°C`, padL - 8, y + 3.5);
+
+    // Right axis (PM10 µg/m³)
+    const pmVal = Math.round(((temp - minWbgt) / (maxWbgt - minWbgt)) * maxPm10);
+    ctx.fillStyle = "#d97706";
+    ctx.textAlign = "left";
+    ctx.fillText(`${pmVal}µg`, padL + plotW + 8, y + 3.5);
   });
 
-  // Draw 32°C WBGT Danger Reference Line
-  const y32 = paddingTop + plotHeight - (((32 - minWbgt) / (maxWbgt - minWbgt)) * plotHeight);
-  ctx.strokeStyle = "rgba(239, 68, 68, 0.35)";
-  ctx.setLineDash([4, 4]);
+  // 32°C MOHRE Danger Threshold Zone & Line
+  const y32 = padT + plotH - ((32 - minWbgt) / (maxWbgt - minWbgt)) * plotH;
+  const dangerGrad = ctx.createLinearGradient(0, padT, 0, y32);
+  dangerGrad.addColorStop(0, "rgba(244, 63, 94, 0.08)");
+  dangerGrad.addColorStop(1, "rgba(244, 63, 94, 0.01)");
+  ctx.fillStyle = dangerGrad;
+  ctx.fillRect(padL, padT, plotW, y32 - padT);
+
+  ctx.strokeStyle = "rgba(248, 113, 113, 0.6)";
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 4]);
   ctx.beginPath();
-  ctx.moveTo(paddingLeft, y32);
-  ctx.lineTo(width - paddingRight, y32);
+  ctx.moveTo(padL, y32);
+  ctx.lineTo(padL + plotW, y32);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#f17971";
-  ctx.font = "10px sans-serif";
-  ctx.fillText("32°C WBGT Danger Threshold", paddingLeft + 5, y32 - 4);
 
-  // Draw WBGT Red Curve
-  ctx.strokeStyle = "#f17971";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
+  ctx.fillStyle = "#f87171";
+  ctx.font = "bold 9px monospace";
+  ctx.textAlign = "left";
+  ctx.fillText("32°C STATUTORY DANGER THRESHOLD", padL + 8, y32 - 5);
+
+  // Draw PM10 Amber Bars with Gradient & Rounded Caps
+  const barWidth = Math.max(2.5, Math.min(6, (plotW / n) * 0.75));
   records.forEach((r, i) => {
-    const x = paddingLeft + (i * xStep);
-    const y = paddingTop + plotHeight - (((Math.min(r.wbgt_max, maxWbgt) - minWbgt) / (maxWbgt - minWbgt)) * plotHeight);
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    const x = padL + (i * xStep) - (barWidth / 2);
+    const pmClamped = Math.min(r.pm10 || 0, maxPm10);
+    const barH = (pmClamped / maxPm10) * plotH;
+    const y = padT + plotH - barH;
+
+    const grad = ctx.createLinearGradient(0, y, 0, padT + plotH);
+    if (r.is_compound_crisis || (r.compound_rr && r.compound_rr >= 3.0)) {
+      grad.addColorStop(0, "#fbbf24");
+      grad.addColorStop(0.5, "rgba(245, 158, 11, 0.7)");
+      grad.addColorStop(1, "rgba(245, 158, 11, 0.15)");
+    } else {
+      grad.addColorStop(0, "rgba(245, 158, 11, 0.65)");
+      grad.addColorStop(1, "rgba(245, 158, 11, 0.08)");
+    }
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    const rad = Math.min(barWidth / 2, 2);
+    ctx.moveTo(x + rad, y);
+    ctx.lineTo(x + barWidth - rad, y);
+    ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + rad);
+    ctx.lineTo(x + barWidth, padT + plotH);
+    ctx.lineTo(x, padT + plotH);
+    ctx.lineTo(x, y + rad);
+    ctx.quadraticCurveTo(x, y, x + rad, y);
+    ctx.closePath();
+    ctx.fill();
   });
-  ctx.stroke();
 
-  // Highlight Compound Crisis Peak Points (Purple Glow)
-  records.forEach((r, i) => {
-    if (r.compound_rr >= 3.0) {
-      const x = paddingLeft + (i * xStep);
-      const y = paddingTop + plotHeight - (((Math.min(r.wbgt_max, maxWbgt) - minWbgt) / (maxWbgt - minWbgt)) * plotHeight);
+  // WBGT Spline Points
+  const wbgtPts = records.map((r, i) => {
+    const x = padL + (i * xStep);
+    const wbgtClamped = Math.max(minWbgt, Math.min(r.wbgt_max || 30, maxWbgt));
+    const y = padT + plotH - ((wbgtClamped - minWbgt) / (maxWbgt - minWbgt)) * plotH;
+    return { x, y, r };
+  });
+
+  // Area Fill under WBGT Curve
+  if (wbgtPts.length > 1) {
+    const areaGrad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+    areaGrad.addColorStop(0, "rgba(244, 63, 94, 0.22)");
+    areaGrad.addColorStop(0.5, "rgba(244, 63, 94, 0.08)");
+    areaGrad.addColorStop(1, "rgba(244, 63, 94, 0.00)");
+
+    ctx.fillStyle = areaGrad;
+    ctx.beginPath();
+    ctx.moveTo(wbgtPts[0].x, padT + plotH);
+    ctx.lineTo(wbgtPts[0].x, wbgtPts[0].y);
+    for (let i = 0; i < wbgtPts.length - 1; i++) {
+      const xc = (wbgtPts[i].x + wbgtPts[i + 1].x) / 2;
+      const yc = (wbgtPts[i].y + wbgtPts[i + 1].y) / 2;
+      ctx.quadraticCurveTo(wbgtPts[i].x, wbgtPts[i].y, xc, yc);
+    }
+    ctx.lineTo(wbgtPts[wbgtPts.length - 1].x, wbgtPts[wbgtPts.length - 1].y);
+    ctx.lineTo(wbgtPts[wbgtPts.length - 1].x, padT + plotH);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Smooth WBGT Glowing Stroke
+  ctx.save();
+  ctx.strokeStyle = "#f43f5e";
+  ctx.lineWidth = 2.4;
+  ctx.shadowColor = "rgba(244, 63, 94, 0.65)";
+  ctx.shadowBlur = 8;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(wbgtPts[0].x, wbgtPts[0].y);
+  for (let i = 0; i < wbgtPts.length - 1; i++) {
+    const xc = (wbgtPts[i].x + wbgtPts[i + 1].x) / 2;
+    const yc = (wbgtPts[i].y + wbgtPts[i + 1].y) / 2;
+    ctx.quadraticCurveTo(wbgtPts[i].x, wbgtPts[i].y, xc, yc);
+  }
+  ctx.lineTo(wbgtPts[wbgtPts.length - 1].x, wbgtPts[wbgtPts.length - 1].y);
+  ctx.stroke();
+  ctx.restore();
+
+  // Synergistic Risk Peaks (Purple Halo Nodes)
+  wbgtPts.forEach(pt => {
+    if (pt.r.compound_rr >= 3.0 || pt.r.is_compound_crisis) {
+      ctx.fillStyle = "rgba(192, 132, 252, 0.35)";
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.fillStyle = "#c084fc";
       ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, 3.5, 0, Math.PI * 2);
       ctx.fill();
+
+      ctx.strokeStyle = "#17211f";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
     }
   });
 
-  // Axes labels
+  // Month Labels along X-Axis
+  const xLabels = [
+    { idx: 0, text: "Jun 2024" },
+    { idx: Math.floor(n * 0.33), text: "Jul 2024" },
+    { idx: Math.floor(n * 0.66), text: "Aug 2024" },
+    { idx: n - 1, text: "Sep 2024" },
+  ];
   ctx.fillStyle = "#94a3b8";
   ctx.font = "10px sans-serif";
-  ctx.fillText(`${minWbgt}°C`, 5, paddingTop + plotHeight);
-  ctx.fillText(`${maxWbgt}°C`, 5, paddingTop + 10);
-  ctx.fillText("0", width - paddingRight + 5, paddingTop + plotHeight);
-  ctx.fillText(`${maxPm10}µg`, width - paddingRight + 5, paddingTop + 10);
+  xLabels.forEach(lbl => {
+    const x = padL + (lbl.idx * xStep);
+    ctx.textAlign = lbl.idx === 0 ? "left" : (lbl.idx === n - 1 ? "right" : "middle");
+    ctx.fillText(lbl.text, x, height - 10);
+  });
 
-  ctx.fillText("Jun 2024", paddingLeft, height - 10);
-  ctx.fillText("Aug 2024", paddingLeft + plotWidth * 0.5, height - 10);
-  ctx.fillText("Sep 2024", width - paddingRight - 35, height - 10);
+  // Interactive Hover & Glassmorphic Tooltip
+  if (!canvas._hasCompoundHoverListener) {
+    canvas._hasCompoundHoverListener = true;
+    canvas.addEventListener("mousemove", (e) => {
+      if (!canvas._currentRecords) return;
+      const bRect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - bRect.left;
+      const mouseY = e.clientY - bRect.top;
+
+      if (mouseX < padL || mouseX > padL + plotW) {
+        if (tooltip) tooltip.style.display = "none";
+        return;
+      }
+
+      const recs = canvas._currentRecords;
+      const step = plotW / (recs.length - 1 || 1);
+      const idx = Math.max(0, Math.min(recs.length - 1, Math.round((mouseX - padL) / step)));
+      const target = recs[idx];
+      if (!target || !tooltip) return;
+
+      const isCrisis = target.is_compound_crisis || (target.compound_rr && target.compound_rr >= 3.0);
+      const tierBadge = isCrisis ? '<span style="color:#f87171; font-weight:700;">CRITICAL COMPOUND RISK</span>' : '<span style="color:#65dfcd;">MONITORED BASELINE</span>';
+
+      tooltip.innerHTML = `
+        <div style="font-weight:700; color:#f8fafc; margin-bottom:4px; font-family:monospace;">${target.date}</div>
+        <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:2px;">
+          <span style="color:#f43f5e;">Peak WBGT:</span>
+          <b>${Number(target.wbgt_max).toFixed(1)}°C</b>
+        </div>
+        <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:2px;">
+          <span style="color:#fbbf24;">Airborne PM10:</span>
+          <b>${Number(target.pm10).toFixed(1)} µg/m³</b>
+        </div>
+        <div style="display:flex; justify-content:space-between; gap:12px; margin-bottom:4px;">
+          <span style="color:#c084fc;">Synergistic RR:</span>
+          <b>${Number(target.compound_rr || 1.0).toFixed(2)}x</b>
+        </div>
+        <div style="font-size:0.7rem; border-top:1px solid #334155; padding-top:4px;">${tierBadge}</div>
+      `;
+
+      tooltip.style.display = "block";
+      const tooltipX = Math.min(width - 180, Math.max(10, mouseX - 80));
+      const tooltipY = Math.max(10, mouseY - 90);
+      tooltip.style.left = `${tooltipX}px`;
+      tooltip.style.top = `${tooltipY}px`;
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      if (tooltip) tooltip.style.display = "none";
+    });
+  }
+  canvas._currentRecords = records;
 }
 window.renderCompoundSeasonChart = renderCompoundSeasonChart;
 

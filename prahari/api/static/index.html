@@ -2727,18 +2727,43 @@
  </div>
 
  <!-- Real-Time Seasonal Chart Card -->
- <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem;">
+ <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem; border-radius:8px;">
+ <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.85rem; border-bottom:1px solid #222f2b; padding-bottom:0.75rem; flex-wrap:wrap; gap:0.6rem;">
  <div>
- <h4 style="font-size:0.95rem; font-weight:700; color:#f8fafc; margin:0;">
- Summer 2024 Co-Occurrence Profile (Real Lakehouse Telemetry)
+ <h4 style="font-size:1rem; font-weight:700; color:#f8fafc; margin:0 0 0.35rem 0; display:flex; align-items:center; gap:0.5rem;">
+ Summer 2024 Co-Occurrence Profile &middot; 122-Day Lakehouse Telemetry
  </h4>
- <div style="font-size:0.72rem; color:#94a3b8;">Red line: Daily WBGT Max (°C) | Amber bars: Daily PM10 (µg/m³) | Purple: Synergistic Risk Peaks</div>
+ <div style="display:flex; align-items:center; gap:1.1rem; flex-wrap:wrap; font-size:0.75rem;">
+ <span style="display:inline-flex; align-items:center; gap:6px; color:#cbd5e1;">
+   <span style="display:inline-block; width:14px; height:3px; background:#f43f5e; border-radius:2px; box-shadow:0 0 6px rgba(244,63,94,0.6);"></span>
+   Daily Peak WBGT (°C)
+ </span>
+ <span style="display:inline-flex; align-items:center; gap:6px; color:#cbd5e1;">
+   <span style="display:inline-block; width:8px; height:10px; background:linear-gradient(to top, rgba(245,158,11,0.3), #f59e0b); border-radius:2px;"></span>
+   Airborne PM10 (&mu;g/m&sup3;)
+ </span>
+ <span style="display:inline-flex; align-items:center; gap:6px; color:#cbd5e1;">
+   <span style="display:inline-block; width:8px; height:8px; background:#c084fc; border-radius:50%; box-shadow:0 0 6px #c084fc;"></span>
+   Synergistic Crisis Peaks (RR &ge; 3.0x)
+ </span>
+ <span style="display:inline-flex; align-items:center; gap:6px; color:#f87171;">
+   <span style="display:inline-block; width:14px; border-top:2px dashed #f87171;"></span>
+   32&deg;C Danger Threshold
+ </span>
  </div>
- <span class="badge" style="background:rgba(101, 223, 205,0.15); color:#65dfcd; font-size:0.72rem;">122 Daily Observations</span>
  </div>
- <div style="height:220px; position:relative;">
- <canvas id="chartCompoundSeason" height="220" style="width:100%; height:100%;"></canvas>
+ <div style="display:flex; align-items:center; gap:0.5rem;">
+ <span class="badge" style="background:rgba(101, 223, 205, 0.12); color:#65dfcd; border:1px solid rgba(101, 223, 205, 0.3); font-size:0.75rem; padding:3px 8px;">
+ Lakehouse Grounded: ERA5 + OpenAQ
+ </span>
+ <span class="badge" style="background:rgba(245, 158, 11, 0.12); color:#fbbf24; border:1px solid rgba(245, 158, 11, 0.3); font-size:0.75rem; padding:3px 8px;">
+ 122 Observations
+ </span>
+ </div>
+ </div>
+ <div style="height:270px; position:relative; width:100%;">
+ <canvas id="chartCompoundSeason" style="width:100%; height:100%; display:block;"></canvas>
+ <div id="compoundChartTooltip" style="display:none; position:absolute; pointer-events:none; background:rgba(15, 23, 42, 0.94); border:1px solid #334155; border-radius:6px; padding:8px 12px; font-size:0.75rem; color:#f8fafc; box-shadow:0 10px 25px -5px rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:20; white-space:nowrap; transition:opacity 0.15s ease;"></div>
  </div>
  </div>
 
