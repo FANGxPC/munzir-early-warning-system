@@ -382,64 +382,104 @@
       <article class="metric-card" role="button" tabindex="0" onclick="document.getElementById('trend-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' })" title="Inspect Live Open-Meteo ERA5 NWP and bias correction telemetry">
         <div class="metric-top">
           <span>REGIONAL WBGT</span>
-          <span class="metric-icon teal-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
-          </span>
-          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="metric-top-right">
+            <span class="metric-icon teal-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+            </span>
+            <svg class="metric-drill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
         </div>
         <div class="metric-value"><span id="tacticalWbgt">33.4</span><span>&deg;C</span></div>
         <div class="metric-foot">
           <span class="trend-up">&uarr; 1.8&deg;</span>
           <span>vs. 24h ago</span>
-          <span class="metric-spark spark-teal">&block;&marker;&marker;&marker;&block;&block;&block;</span>
+          <div class="metric-spark-bars spark-teal" title="24h Trend">
+            <span style="height:35%;"></span>
+            <span style="height:50%;"></span>
+            <span style="height:45%;"></span>
+            <span style="height:65%;"></span>
+            <span style="height:55%;"></span>
+            <span style="height:80%;"></span>
+            <span style="height:95%;"></span>
+          </div>
         </div>
       </article>
 
       <article class="metric-card" role="button" tabindex="0" onclick="activateTab('employer')" title="Inspect workforce monitored partitions">
         <div class="metric-top">
           <span>AT-RISK WORKERS</span>
-          <span class="metric-icon amber-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path></svg>
-          </span>
-          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="metric-top-right">
+            <span class="metric-icon amber-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path></svg>
+            </span>
+            <svg class="metric-drill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
         </div>
         <div class="metric-value">142,500<span class="metric-unit">workers</span></div>
         <div class="metric-foot">
           <span class="trend-up">&uarr; 12.4%</span>
           <span>across 6 sites</span>
-          <span class="metric-spark spark-amber">&block;&marker;&marker;&block;&block;&block;&block;</span>
+          <div class="metric-spark-bars spark-amber" title="Workforce Trend">
+            <span style="height:40%;"></span>
+            <span style="height:45%;"></span>
+            <span style="height:60%;"></span>
+            <span style="height:70%;"></span>
+            <span style="height:65%;"></span>
+            <span style="height:85%;"></span>
+            <span style="height:100%;"></span>
+          </div>
         </div>
       </article>
 
       <article class="metric-card" role="button" tabindex="0" onclick="activateTab('inbox')" title="Inspect active industrial worksite alerts">
         <div class="metric-top">
           <span>CLINICAL SIGNALS</span>
-          <span class="metric-icon red-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-          </span>
-          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="metric-top-right">
+            <span class="metric-icon red-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            </span>
+            <svg class="metric-drill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
         </div>
         <div class="metric-value">18<span class="metric-unit">reports</span></div>
         <div class="metric-foot">
           <span class="trend-down">&darr; 3.1%</span>
           <span>vs. baseline</span>
-          <span class="metric-spark spark-red">&marker;&marker;&block;&block;&marker;&block;&block;</span>
+          <div class="metric-spark-bars spark-red" title="Clinical Signal Trend">
+            <span style="height:80%;"></span>
+            <span style="height:75%;"></span>
+            <span style="height:60%;"></span>
+            <span style="height:65%;"></span>
+            <span style="height:55%;"></span>
+            <span style="height:50%;"></span>
+            <span style="height:45%;"></span>
+          </div>
         </div>
       </article>
 
       <article class="metric-card" role="button" tabindex="0" onclick="activateTab('sentinel')" title="Inspect on-site microclimate IoT sensor nodes">
         <div class="metric-top">
           <span>SENTINEL NETWORK</span>
-          <span class="metric-icon blue-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
-          </span>
-          <svg class="metric-drill-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="metric-top-right">
+            <span class="metric-icon blue-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+            </span>
+            <svg class="metric-drill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
         </div>
         <div class="metric-value">24<span class="metric-fraction">/ 26</span></div>
         <div class="metric-foot">
           <span class="online-count"><i></i>92% online</span>
           <span>2 nodes offline</span>
-          <span class="metric-spark spark-blue">&block;&block;&block;&marker;&block;&block;&block;</span>
+          <div class="metric-spark-bars spark-blue" title="Sentinel Online Trend">
+            <span style="height:90%;"></span>
+            <span style="height:90%;"></span>
+            <span style="height:92%;"></span>
+            <span style="height:85%;"></span>
+            <span style="height:90%;"></span>
+            <span style="height:92%;"></span>
+            <span style="height:92%;"></span>
+          </div>
         </div>
       </article>
     </div>
@@ -802,17 +842,11 @@
         <h1 class="page-title">Decision-ready alert inbox<span class="wave">.</span></h1>
         <p class="heading-sub">Multi-signal corroborated alerts with calibrated outbreak probabilities and conformal prediction bands.</p>
       </div>
+      <div class="heading-actions">
+        <span id="inboxCountBadge" class="badge badge-warning" style="font-size:0.8rem;">Loading...</span>
+        <span id="inboxPpvBadge" class="badge badge-normal" style="font-size:0.8rem;">Operational PPV: --</span>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
- <div>
- <h2 style="font-size:1.25rem; font-weight:700;">Decision-Ready Alert Inbox</h2>
- <div style="font-size:0.8rem; color:#94a3b8;">Multi-Signal Corroborated Alerts with Calibrated Outbreak Probabilities & Conformal Bands</div>
- </div>
- <div style="display:flex; gap:0.75rem;">
- <span id="inboxCountBadge" class="badge badge-warning" style="font-size:0.8rem;">Loading...</span>
- <span id="inboxPpvBadge" class="badge badge-normal" style="font-size:0.8rem;">Operational PPV: --</span>
- </div>
- </div>
 
  <div class="table-container">
  <table>
@@ -857,18 +891,12 @@
         <h1 class="page-title">Ingestion stream freshness &amp; telemetry health<span class="wave">.</span></h1>
         <p class="heading-sub">Continuous quality gating, ingestion latency monitoring, and composite platform data quality.</p>
       </div>
+      <div class="heading-actions">
+        <span style="font-size:0.85rem; color:#94a3b8;">Composite Platform DQ:</span>
+        <span id="compositeDqScore" style="font-size:1.25rem; font-weight:700; color:#66d9af;">--</span>
+        <span id="dqGatingBadge" class="badge badge-normal">STREAMS HEALTHY</span>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
- <div>
- <h2 style="font-size:1.25rem; font-weight:700;">Ingestion Stream Freshness & Telemetry Health</h2>
- <div style="font-size:0.8rem; color:#94a3b8;">Continuous Quality Gating and Ingestion Latency Monitoring</div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <span style="font-size:0.85rem; color:#94a3b8;">Composite Platform DQ:</span>
- <span id="compositeDqScore" style="font-size:1.25rem; font-weight:700; color:#66d9af;">--</span>
- <span id="dqGatingBadge" class="badge badge-normal">STREAMS HEALTHY</span>
- </div>
- </div>
 
  <div id="healthFeedsContainer" class="kpi-grid">
  <!-- Dynamically populated -->
@@ -955,14 +983,10 @@
         <h1 class="page-title">Immutable security &amp; view audit trail<span class="wave">.</span></h1>
         <p class="heading-sub">Non-repudiation logging in Gold Lakehouse Parquet with SHA-256 HMAC cryptographic seals.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-secondary" onclick="loadAuditLogs()">Refresh Audit Trail</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
- <div>
- <h2 style="font-size:1.25rem; font-weight:700;">Immutable Security & View Audit Trail</h2>
- <div style="font-size:0.8rem; color:#94a3b8;">Non-repudiation logging in Gold Lakehouse Parquet (data/gold/audit/view_audit_log.parquet)</div>
- </div>
- <button class="btn btn-secondary" onclick="loadAuditLogs()">Refresh Audit Trail</button>
- </div>
 
  <div class="table-container">
  <table>
@@ -1268,23 +1292,11 @@
         <h1 class="page-title">Sentinel hardware digital twin<span class="wave">.</span></h1>
         <p class="heading-sub">Micro-climate IoT sensor nodes (ESP32-S3), thermal index calibration, and battery telemetry.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh Fleet</button>
+        <button class="btn btn-primary" onclick="openCommissionModal()">Commission New Node</button>
+      </div>
     </div>
- <div class="card" style="margin-bottom:1.25rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
- <div>
- <h2 style="font-size:1.2rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
- Munzir Sentinel On-Site Hardware Fleet
- </h2>
- <div style="font-size:0.8rem; color:#94a3b8; margin-top:0.25rem;">
- Real-time microclimate shade nodes (ESP32 + DHT22 + DS18B20 Globe) measuring local WBGT and driving on-board LED alerts
- </div>
- </div>
- <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
- <button class="btn btn-secondary" onclick="loadSentinelView()">Refresh Fleet</button>
- <button class="btn btn-primary" onclick="openCommissionModal()">Commission New Node</button>
- </div>
- </div>
- </div>
 
  <!-- KPI Summary -->
  <div class="kpi-grid" style="margin-bottom:1.25rem;">
@@ -1564,26 +1576,14 @@
         <h1 class="page-title">Time machine historical replay<span class="wave">.</span></h1>
         <p class="heading-sub">Zero-leakage counterfactual replay verifying +5.0 days early warning lead time.</p>
       </div>
+      <div class="heading-actions">
+        <label style="font-size:0.85rem; color:#cbd5e1; font-weight:600;">Replay Event:</label>
+        <select id="tmEventSelect" style="padding:0.45rem 0.8rem; background:#17211f; border:1px solid #65dfcd; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="onTimeMachineEventChange()">
+          <option value="pnw_2021">Pacific Northwest Heat Dome (June 2021) — 100% Real CDC Outcomes</option>
+          <option value="dubai_2024">Dubai Industrial Corridor (August 2024) — Hybrid Regional Case Study</option>
+        </select>
+      </div>
     </div>
- <!-- Header & Event Selector -->
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
- Historical Time Machine Replay &mdash; Strict As-Of-Date Surveillance
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8; margin-top:0.25rem;">
- Replaying real historical heat events with strict as-of date evaluation. Algorithms only access data reported on or before day D (zero hindsight leakage).
- </div>
- </div>
-
- <div style="display:flex; align-items:center; gap:0.75rem;">
- <label style="font-size:0.85rem; color:#cbd5e1; font-weight:600;">Replay Event:</label>
- <select id="tmEventSelect" style="padding:0.55rem 0.9rem; background:#17211f; border:1px solid #65dfcd; border-radius:6px; color:#fff; font-size:0.85rem; font-weight:600;" onchange="onTimeMachineEventChange()">
- <option value="pnw_2021">Pacific Northwest Heat Dome (June 2021) — 100% Real CDC Outcomes</option>
- <option value="dubai_2024">Dubai Industrial Corridor (August 2024) — Hybrid Regional Case Study</option>
- </select>
- </div>
- </div>
 
  <!-- Single Case Study Disclosure Banner -->
  <div class="banner banner-privacy" style="background:rgba(245, 158, 11, 0.1); border-left:4px solid #e9aa62; margin-bottom:1.5rem;">
@@ -1793,27 +1793,15 @@
         <h1 class="page-title">What-if intervention scenario laboratory<span class="wave">.</span></h1>
         <p class="heading-sub">Interactive Monte Carlo projections of workforce interventions, cooling breaks, and shade staging.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-secondary" onclick="openWhatifAssumptionsModal()" style="font-size:0.85rem;">
+          Assumptions Ledger &amp; Audits
+        </button>
+        <button class="btn btn-primary" id="btnRunWhatIfSimulation" onclick="runWhatIfSimulation()" style="font-size:0.85rem; font-weight:700; cursor:pointer;">
+          Run Simulation &rarr;
+        </button>
+      </div>
     </div>
- <!-- Top Title and Controls Bar -->
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
- What-If Occupational Intervention Engine
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8; margin-top:0.25rem;">
- Deterministic schedule exposure recomputations, Monte Carlo uncertainty propagation (N=1,000), and traceable peer-reviewed &amp; statutory assumptions.
- </div>
- </div>
-
- <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
- <button class="btn btn-secondary" onclick="openWhatifAssumptionsModal()" style="font-size:0.85rem;">
- Assumptions Ledger &amp; Audits
- </button>
- <button class="btn btn-primary" id="btnRunWhatIfSimulation" onclick="runWhatIfSimulation()" style="font-size:0.85rem; font-weight:700; cursor:pointer;">
- ▶ Run Simulation
- </button>
- </div>
- </div>
 
  <!-- Controls & Parameter Selection Card -->
  <div class="card" style="margin-bottom:1.5rem; background:#222f2b; border:1px solid #283531;">
@@ -2066,25 +2054,15 @@
         <h1 class="page-title">Renal biomarker surveillance &amp; AKI sentinel<span class="wave">.</span></h1>
         <p class="heading-sub">Sub-clinical eGFR decay trajectory monitoring, KDIGO stage micro-pills, and early nephropathy detection.</p>
       </div>
+      <div class="heading-actions">
+        <select id="renalSiteSelect" class="role-select" style="padding:0.4rem 0.8rem; font-size:0.85rem;" onchange="loadRenalBiomarkers()">
+          <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Deepwater Port Terminal</option>
+          <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Structural Steel Yard</option>
+          <option value="SITE-DS-01">SITE-DS-01: Dubai South Infrastructure Mega-Site</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadRenalBiomarkers()">Refresh Screening</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Occupational Renal Biomarker Surveillance &amp; Sub-Clinical AKI Monitor
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Detecting silent dehydration, tubular strain, and Acute Kidney Injury (AKI) via CKD-EPI 2021 eGFR and KDIGO staging 10–14 days before emergency hospital collapse.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <select id="renalSiteSelect" class="role-select" style="padding:0.4rem 0.8rem; font-size:0.85rem;" onchange="loadRenalBiomarkers()">
- <option value="SITE-JA-01">SITE-JA-01: Jebel Ali Deepwater Port Terminal</option>
- <option value="SITE-AQ-01">SITE-AQ-01: Al Quoz Structural Steel Yard</option>
- <option value="SITE-DS-01">SITE-DS-01: Dubai South Infrastructure Mega-Site</option>
- </select>
- <button class="btn btn-primary" onclick="loadRenalBiomarkers()">Refresh Screening</button>
- </div>
- </div>
 
  <!-- KPI Metrics Row -->
  <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:1.5rem;">
@@ -2182,26 +2160,16 @@
         <h1 class="page-title">Spatial deconvolution &amp; cluster demixing<span class="wave">.</span></h1>
         <p class="heading-sub">Hospital-admitted heat stress cases de-mixed to industrial point sources and labor dormitory clusters.</p>
       </div>
+      <div class="heading-actions">
+        <select id="deconvolveDistrictSelect" class="role-select" style="padding:0.4rem 0.8rem; font-size:0.85rem;">
+          <option value="Muhaisnah">Muhaisnah (Labor Residential District)</option>
+          <option value="Deira">Deira (Primary Healthcare Hub)</option>
+          <option value="Bur Dubai">Bur Dubai (Ambulatory Clinic Cluster)</option>
+          <option value="Al Quoz">Al Quoz (Industrial Clinic)</option>
+        </select>
+        <button class="btn btn-primary" onclick="runDeconvolution()">Run Deconvolution</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- 'Exposure-to-Seeking' Spatio-Temporal Deconvolution
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Solving the geolocation limit: Mathematically back-projecting residential clinic presentations onto true upstream industrial exposure origins.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <select id="deconvolveDistrictSelect" class="role-select" style="padding:0.4rem 0.8rem; font-size:0.85rem;">
- <option value="Muhaisnah">Muhaisnah (Labor Residential District)</option>
- <option value="Deira">Deira (Primary Healthcare Hub)</option>
- <option value="Bur Dubai">Bur Dubai (Ambulatory Clinic Cluster)</option>
- <option value="Al Quoz">Al Quoz (Industrial Clinic)</option>
- </select>
- <button class="btn btn-primary" onclick="runDeconvolution()">Run Deconvolution</button>
- </div>
- </div>
 
  <!-- High-Impact Spatial Deconvolution Interactive Radar Map (Phase 15 & 19) -->
  <div class="deconvolve-map-container" style="margin-bottom:1.5rem;">
@@ -2306,21 +2274,11 @@
         <h1 class="page-title">Municipal cooling fleet staging<span class="wave">.</span></h1>
         <p class="heading-sub">Optimal positioning of rapid-deployment cooling buses, hydration stations, and paramedic escorts.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-primary" onclick="optimizeDispatch()">Optimize Municipal Staging</button>
+        <button class="btn btn-secondary" onclick="downloadFhirTask()">Download FHIR R4 Task</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Automated Prevention Trigger: Municipal Cooling Fleet &amp; EMS Optimizer
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Turning predictions into physical reality: Automated resource staging for Dubai Municipality cooling buses, misting trailers, and DCAS ambulance pre-positioning.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <button class="btn btn-primary" onclick="optimizeDispatch()">Optimize Municipal Staging</button>
- <button class="btn btn-secondary" onclick="downloadFhirTask()">Download FHIR R4 Task</button>
- </div>
- </div>
 
  <!-- Asset Summary KPIs -->
  <div class="metrics-grid" style="grid-template-columns: repeat(5, 1fr); margin-bottom:1.5rem;">
@@ -2413,23 +2371,13 @@
         <h1 class="page-title">Jais sovereign legal dispatch generator<span class="wave">.</span></h1>
         <p class="heading-sub">Bilingual Arabic-English frontline statutory notices grounded in UAE MOHRE Resolution No. 44/2022.</p>
       </div>
+      <div class="heading-actions">
+        <span class="badge badge-normal" style="background:#1e3a8a; color:#bfdbfe; font-size:0.75rem;">
+          OFFICIAL INTEGRATION: Inception 42 (G42)
+        </span>
+        <button class="btn btn-primary" onclick="generateJaisDispatch()">Generate Jais Dispatch</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Inception 42 Jais-3-0.9B Bilingual &amp; Multilingual Frontline Dispatch
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Sovereign Arabic-English clinical intelligence and 4-language frontline safety dispatches powered by Inception 42 (G42).
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge badge-normal" style="background:#1e3a8a; color:#bfdbfe; font-size:0.75rem;">
- OFFICIAL INTEGRATION: Inception 42 (G42)
- </span>
- <button class="btn btn-primary" onclick="generateJaisDispatch()">Generate Jais Dispatch</button>
- </div>
- </div>
 
  <!-- Mathematical Engine & Proof Drawer -->
  <div class="proof-drawer-container">
@@ -2592,23 +2540,12 @@
         <h1 class="page-title">Sovereign copilot &amp; legal knowledge codex<span class="wave">.</span></h1>
         <p class="heading-sub">Grounding in UAE Labor Law No. 33/2021, ISO 7933 physics, and Medallion Lakehouse telemetry.</p>
       </div>
+      <div class="heading-actions">
+        <span class="badge" style="background:#1c4b42; color:#fff;">Inception 42 Jais-3-0.9B (GPU)</span>
+        <span class="badge" style="background:#66d9af; color:#101817; font-weight:700;">Fenced Gate: 0% Hallucination</span>
+        <span class="badge" style="background:#6366f1; color:#fff;">UAE Resolution 44/2022</span>
+      </div>
     </div>
- <div class="banner banner-info" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:linear-gradient(135deg, #0b192c 0%, #1e1b4b 100%); border:1px solid #4338ca;">
- <div>
- <h2 style="font-size:1.25rem; font-weight:800; color:#65dfcd; display:flex; align-items:center; gap:0.5rem; margin:0 0 0.35rem 0;">
- Munzir Sovereign Health Copilot &amp; Action Dossier Engine
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Zero-hallucination conversational decision support powered by <strong>Inception 42 Jais-3-0.9B</strong> running on GPU,
- grounded in live Lakehouse telemetry and official statutory decrees (UAE MOHRE Resolution 44/2022).
- </div>
- </div>
- <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
- <span class="badge" style="background:#1c4b42; color:#fff;">Inception 42 Jais-3-0.9B (GPU)</span>
- <span class="badge" style="background:#66d9af; color:#fff;">Fenced Gate: 0% Hallucination</span>
- <span class="badge" style="background:#6366f1; color:#fff;">UAE Resolution 44/2022</span>
- </div>
- </div>
 
  <div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap:1.5rem; align-items:start;">
  
@@ -2745,23 +2682,13 @@
         <h1 class="page-title">Compound multi-hazard interaction matrix<span class="wave">.</span></h1>
         <p class="heading-sub">Synergistic non-linear risk interactions between WBGT heat stress and PM10/PM2.5 particulate dust.</p>
       </div>
+      <div class="heading-actions">
+        <span class="badge" style="background:#451a03; color:#e9aa62; border:1px solid #d97706; font-size:0.75rem;">
+          AUTHENTIC LAKEHOUSE TELEMETRY (155 COMPOUND DAYS)
+        </span>
+        <button class="btn btn-primary" onclick="loadCompoundHazardView()">Evaluate Compound Hazard</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Compound Multi-Hazard Synergy Engine (Heat + Sandstorm)
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Evaluates non-linear synergistic risk when extreme WBGT heat coincides with airborne mineral dust storms (PM10 / PM2.5). Grounded in 57MB Lakehouse ERA5 and OpenAQ telemetry.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge" style="background:#451a03; color:#e9aa62; border:1px solid #d97706; font-size:0.75rem;">
- AUTHENTIC LAKEHOUSE TELEMETRY (155 COMPOUND DAYS)
- </span>
- <button class="btn btn-primary" onclick="loadCompoundHazardView()">Evaluate Compound Hazard</button>
- </div>
- </div>
 
  <!-- Controls Row -->
  <div class="card" style="background:#17211f; border:1px solid #283531; margin-bottom:1.5rem;">
@@ -2865,23 +2792,13 @@
         <h1 class="page-title">Safe-harbor worker shield &amp; privacy isolation<span class="wave">.</span></h1>
         <p class="heading-sub">Hard quarantine preventing disciplinary query exploitation, certified with differential privacy epsilon=0.14.</p>
       </div>
+      <div class="heading-actions">
+        <span class="badge badge-success" id="safeHarborComplianceStatusBadge">
+          ACTIVE SAFE-HARBOR COMPLIANT
+        </span>
+        <button class="btn btn-secondary" onclick="loadSafeHarborView()">Refresh Certificate</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Safe-Harbor Worker Protection Shield
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Cryptographic, non-punitive surveillance boundary enforcing UAE Federal Decree-Law No. 33 of 2021 Article 13 &amp; Personal Data Protection Law No. 45 of 2021.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge badge-success" id="safeHarborComplianceStatusBadge">
- ACTIVE SAFE-HARBOR COMPLIANT
- </span>
- <button class="btn btn-secondary" onclick="loadSafeHarborView()">Refresh Certificate</button>
- </div>
- </div>
 
  <!-- Mathematical Engine & Proof Drawer -->
  <div class="proof-drawer-container">
@@ -3079,20 +2996,10 @@
         <h1 class="page-title">Physiological heat strain &amp; nocturnal debt<span class="wave">.</span></h1>
         <p class="heading-sub">Core body temperature (Tre), maximum sweat rate, limit exposure duration (Dlim), and 72h nocturnal debt.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-primary" onclick="runPHSAssessment()">Run PHS &amp; Debt Engine</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- ISO 7933:2004 Predicted Heat Strain (PHS) &amp; 72-Hour Cumulative Debt Engine
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Physiological human heat balance (M - W = C + R + E_req + S) and nocturnal heat retention across consecutive hot Dubai shifts.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <button class="btn btn-primary" onclick="runPHSAssessment()">Run PHS &amp; Debt Engine</button>
- </div>
- </div>
 
  <!-- Mathematical Engine & Proof Drawer -->
  <div class="proof-drawer-container">
@@ -3260,22 +3167,12 @@
         <h1 class="page-title">Two-way frontline voice intercom<span class="wave">.</span></h1>
         <p class="heading-sub">Multilingual voice triage and acoustic audio capture for site supervisors and field medics.</p>
       </div>
+      <div class="heading-actions">
+        <span class="badge badge-normal" style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af;">
+          Jais-3-0.9B Active (cuda:0)
+        </span>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- Hands-Free Multilingual Two-Way Voice Intercom (Jais AI on GPU)
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Frontline site safety intercom in Arabic, Urdu, and English. Inception 42 Jais-3-0.9B extracts zone, worker count, and symptoms with in-situ Lakehouse WBGT corroboration.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <span class="badge badge-normal" style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#66d9af; border:1px solid #66d9af;">
- Jais-3-0.9B Active (cuda:0)
- </span>
- </div>
- </div>
 
  <!-- Interactive Push-to-Talk Console -->
  <div style="display:grid; grid-template-columns: 1.1fr 1.3fr; gap:1.5rem; margin-bottom:1.5rem;">
@@ -3417,21 +3314,11 @@
         <h1 class="page-title">MOHRE ministerial policy studio<span class="wave">.</span></h1>
         <p class="heading-sub">Counterfactual regulatory policy simulation under UAE Federal Decree-Law No. 33/2021.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-primary" onclick="runPolicySimulation()">Execute Policy Simulation</button>
+        <button class="btn btn-secondary" onclick="copyMinisterialDecree()">Copy Decree Draft</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- MOHRE Ministerial Policy Studio: Counterfactual Regulatory Replay
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Simulate counterfactual amendments to UAE Ministerial Resolution No. 44 of 2022 (Midday Ban) across 50,000 outdoor laborers using authentic 2024 Lakehouse telemetry with Monte Carlo uncertainty.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <button class="btn btn-primary" onclick="runPolicySimulation()">Execute Policy Simulation</button>
- <button class="btn btn-secondary" onclick="copyMinisterialDecree()">Copy Decree Draft</button>
- </div>
- </div>
 
  <!-- Mathematical Engine & Proof Drawer -->
  <div class="proof-drawer-container">
@@ -3614,21 +3501,11 @@
         <h1 class="page-title">NABIDH FHIR CDS integration hub<span class="wave">.</span></h1>
         <p class="heading-sub">HL7 FHIR R4 clinical data repository exchange with DHA Malaffi/NABIDH clinical health records.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-primary" onclick="loadNabidhBundle()">Refresh FHIR Bundle</button>
+        <button class="btn btn-secondary" onclick="downloadNabidhBundleJson()">Download JSON Bundle</button>
+      </div>
     </div>
- <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
- <div>
- <h2 style="font-size:1.35rem; font-weight:700; color:#f8fafc; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.5rem;">
- DHA NABIDH &amp; Malaffi HL7 FHIR R4 Clinical Decision Gateway
- </h2>
- <div style="font-size:0.85rem; color:#94a3b8;">
- Official interoperability bundle connecting Munzir to Dubai Health Authority (NABIDH) and Abu Dhabi (Malaffi) clinical health information exchanges.
- </div>
- </div>
- <div style="display:flex; gap:0.75rem; align-items:center;">
- <button class="btn btn-primary" onclick="loadNabidhBundle()">Refresh FHIR Bundle</button>
- <button class="btn btn-secondary" onclick="downloadNabidhBundleJson()">Download JSON Bundle</button>
- </div>
- </div>
 
  <!-- Resource Grid -->
  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem; margin-bottom:1.5rem;">
@@ -3686,21 +3563,12 @@
         <h1 class="page-title">Bayesian causal syndromic de-mixing<span class="wave">.</span></h1>
         <p class="heading-sub">Posterior attribution between extreme heat stroke, canteen norovirus, and shamal dust outbreak signals.</p>
       </div>
+      <div class="heading-actions">
+        <button class="btn btn-primary" onclick="runCausalDemix()" style="font-weight:700;">
+          Run Bayesian De-Mixing
+        </button>
+      </div>
     </div>
- <div class="card" style="background:linear-gradient(135deg, #101817 0%, #071927 100%); border:1px solid #1c4b42; margin-bottom:1.5rem;">
- <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
- <div>
- <h2 style="font-size:1.25rem; font-weight:800; color:#65dfcd; margin:0; display:flex; align-items:center; gap:0.5rem;">
- Bayesian Causal De-Mixing &amp; Multi-Signal Outbreak Attribution (Phase 26)
- </h2>
- <p style="font-size:0.82rem; color:#94a3b8; margin:0.35rem 0 0 0; max-width:850px;">
- Solves the core challenge of ambiguous syndromic clusters in worker camps and worksites. Disentangles <strong>Occupational Hyperthermia</strong> from <strong>Camp Canteen Foodborne Gastroenteritis</strong>, <strong>Shamal Toxic Dust Inhalation</strong>, and <strong>Respiratory Pathogens</strong> using evidence-based clinical likelihood ratios (<KaTeX>LR</KaTeX>) and Dirichlet 90% Credible Intervals.
- </p>
- </div>
- <button class="btn btn-primary" onclick="runCausalDemix()" style="background:#1c4b42; border-color:#65dfcd; font-weight:700;">
- Run Bayesian De-Mixing
- </button>
- </div>
 
  <!-- Mathematical Engine & Proof Drawer -->
  <div class="proof-drawer-container">
