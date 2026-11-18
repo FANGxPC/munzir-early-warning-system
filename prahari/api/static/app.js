@@ -1128,13 +1128,13 @@ async function viewEvidenceCard(alertId) {
               Decision Support What-If Simulator
             </div>
             <div style="font-size:0.9rem; font-weight:600; color:#fff; margin-top:2px;">
-              ${card.intervention_simulation.action_prompt}
+              ${card.intervention_simulation.action_prompt || 'Simulate Heat Mitigation Scenario'}
             </div>
             <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
-              Recommended Action: <b>${card.intervention_simulation.recommended_scenario}</b> | Monitored Workforce: <b>${card.intervention_simulation.workforce_size} workers</b>
+              Recommended Action: <b>${card.intervention_simulation.recommended_scenario || card.intervention_simulation.action_type || 'combined_protocol'}</b> | Monitored Workforce: <b>${card.intervention_simulation.workforce_size || 3200} workers</b>
             </div>
           </div>
-          <button class="btn btn-primary" style="background:#8b5cf6; border-color:#8b5cf6; font-size:0.8rem; font-weight:700;" onclick="switchToWhatIfSimulator('${card.intervention_simulation.target_site}', '${card.intervention_simulation.recommended_scenario}', ${card.intervention_simulation.workforce_size})">
+          <button class="btn btn-primary" style="background:#8b5cf6; border-color:#8b5cf6; font-size:0.8rem; font-weight:700;" onclick="switchToWhatIfSimulator('${card.intervention_simulation.target_site || card.geo_id || 'SITE-JA-01'}', '${card.intervention_simulation.recommended_scenario || card.intervention_simulation.action_type || 'combined_protocol'}', ${card.intervention_simulation.workforce_size || 3200})">
             Simulate Recommended Action
           </button>
         </div>
@@ -2699,13 +2699,22 @@ function switchToWhatIfSimulator(siteId, scenario, workforce) {
   const sliderWorkforce = document.getElementById("sliderWorkforce");
   const sliderWorkforceVal = document.getElementById("sliderWorkforceVal");
 
-  if (siteSelect && siteId) siteSelect.value = siteId;
-  if (scenarioSelect && scenario) scenarioSelect.value = scenario;
-  if (workforce && workforceInput) {
-    workforceInput.value = workforce;
-    if (sliderWorkforce) sliderWorkforce.value = workforce;
-    if (sliderWorkforceVal) sliderWorkforceVal.textContent = `${Number(workforce).toLocaleString()} workers`;
+  const cleanSite = (siteId && siteId !== "undefined" && siteId !== "null") ? String(siteId).trim() : "SITE-JA-01";
+  const cleanScen = (scenario && scenario !== "undefined" && scenario !== "null") ? String(scenario).trim() : "combined_protocol";
+
+  if (siteSelect) {
+    const hasOption = Array.from(siteSelect.options).some(o => o.value === cleanSite);
+    siteSelect.value = hasOption ? cleanSite : "SITE-JA-01";
   }
+  if (scenarioSelect) {
+    const hasOption = Array.from(scenarioSelect.options).some(o => o.value === cleanScen);
+    scenarioSelect.value = hasOption ? cleanScen : "combined_protocol";
+  }
+  let wf = parseInt(workforce, 10);
+  if (isNaN(wf) || wf < 50) wf = 3200;
+  if (workforceInput) workforceInput.value = wf;
+  if (sliderWorkforce) sliderWorkforce.value = wf;
+  if (sliderWorkforceVal) sliderWorkforceVal.textContent = `${wf.toLocaleString()} workers`;
 
   runWhatIfSimulation();
 }
@@ -2724,10 +2733,16 @@ async function runWhatIfSimulation() {
   const sliderShade = document.getElementById("sliderShade");
   const sliderBreak = document.getElementById("sliderBreak");
 
-  const siteId = siteSelect ? siteSelect.value : "SITE-JA-01";
-  const scenario = scenarioSelect ? scenarioSelect.value : "combined_protocol";
+  let siteId = (siteSelect && siteSelect.value) ? siteSelect.value.trim() : "SITE-JA-01";
+  if (!siteId || siteId === "undefined" || siteId === "null") siteId = "SITE-JA-01";
+  if (siteSelect && (!siteSelect.value || siteSelect.value === "undefined")) siteSelect.value = siteId;
+
+  let scenario = (scenarioSelect && scenarioSelect.value) ? scenarioSelect.value.trim() : "combined_protocol";
+  if (!scenario || scenario === "undefined" || scenario === "null") scenario = "combined_protocol";
+  if (scenarioSelect && (!scenarioSelect.value || scenarioSelect.value === "undefined")) scenarioSelect.value = scenario;
+
   let workforce = workforceInput ? parseInt(workforceInput.value, 10) : 3200;
-  if (isNaN(workforce) || workforce < 50) workforce = 50;
+  if (isNaN(workforce) || workforce < 50) workforce = 3200;
 
   const shadeDelta = sliderShade ? parseFloat(sliderShade.value) : 2.5;
   const breakExt = sliderBreak ? parseInt(sliderBreak.value, 10) : 0;

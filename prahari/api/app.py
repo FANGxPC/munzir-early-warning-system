@@ -1151,6 +1151,15 @@ def simulate_whatif(
     """
     from prahari.whatif.simulator import WhatIfSimulator
 
+    # Normalize defaults if query string passes empty or invalid values (e.g. site_id=&action=)
+    clean_site = (site_id or "").strip()
+    if not clean_site or clean_site == "undefined":
+        clean_site = "SITE-JA-01"
+
+    clean_action = (action or "").strip()
+    if not clean_action or clean_action == "undefined" or clean_action not in WhatIfSimulator.AVAILABLE_SCENARIOS:
+        clean_action = "combined_protocol"
+
     # Role gating & boundary checks
     if current_user.role == EntraRole.PUBLIC:
         raise HTTPException(
@@ -1159,13 +1168,13 @@ def simulate_whatif(
         )
 
     if current_user.role == EntraRole.EMPLOYER_SAFETY:
-        enforce_employer_privacy_boundary(current_user, target_geo_id=site_id)
+        enforce_employer_privacy_boundary(current_user, target_geo_id=clean_site)
 
     simulator = WhatIfSimulator()
     try:
         results = simulator.simulate(
-            site_id=site_id,
-            action_type=action,
+            site_id=clean_site,
+            action_type=clean_action,
             start_date=start_date,
             end_date=end_date,
             workforce_override=workforce,
