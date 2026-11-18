@@ -119,14 +119,27 @@ def enforce_employer_privacy_boundary(
 ) -> None:
     """
     Strict privacy boundary validation:
-    1. Prohibits employer_safety from accessing district clinical data.
-    2. Prohibits employer_safety from accessing sites other than their own authorized site.
-    3. Prohibits sub-site / sub-cohort parameters that could enable individual re-identification.
+    1. Prohibits sub-site / sub-cohort parameters that could enable individual re-identification (k-anonymity floor).
+    2. Prohibits employer_safety from accessing district clinical data.
+    3. Prohibits employer_safety from accessing sites other than their own authorized site.
     """
+    # Check 1: Sub-site / individual identification parameter restriction
+    # Strict k-anonymity guarantee (k >= 50): prohibited across all callers on workplace aggregated rates
+    if query_params:
+        for param in query_params.keys():
+            if param.lower() in PROHIBITED_SUBSITE_PARAMS:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=(
+                        f"Access Denied: Parameter '{param}' is strictly forbidden. Sub-site and sub-cohort "
+                        "breakdowns are prohibited to prevent worker re-identification."
+                    )
+                )
+
     if user.role != EntraRole.EMPLOYER_SAFETY:
         return
 
-    # Check 1: Clinical signal restriction
+    # Check 2: Clinical signal restriction
     if signal_type and signal_type.lower() in RESTRICTED_CLINICAL_SIGNALS:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -136,7 +149,7 @@ def enforce_employer_privacy_boundary(
             )
         )
 
-    # Check 2: Site authorization restriction
+    # Check 3: Site authorization restriction
     if target_geo_id:
         if not target_geo_id.startswith("SITE-"):
             raise HTTPException(
@@ -154,16 +167,4 @@ def enforce_employer_privacy_boundary(
                     f"not for site '{target_geo_id}'."
                 )
             )
-
-    # Check 3: Sub-site / individual identification parameter restriction
-    if query_params:
-        for param in query_params.keys():
-            if param.lower() in PROHIBITED_SUBSITE_PARAMS:
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail=(
-                        f"Access Denied: Parameter '{param}' is strictly forbidden. Sub-site and sub-cohort "
-                        "breakdowns are prohibited to prevent worker re-identification."
-                    )
-                )
 
