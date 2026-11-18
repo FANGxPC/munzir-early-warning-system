@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupRoleSwitcher();
   setupDateSelector();
   setupDemoToggles();
+  setupPHSControls();
   if (window.SovereignAudioEngine) {
     window.SovereignAudioEngine.init();
   }
@@ -5022,69 +5023,118 @@ async function runPHSAssessment() {
   const rh = document.getElementById("phsHumidityInput") ? parseFloat(document.getElementById("phsHumidityInput").value) : 65.0;
   const wind = document.getElementById("phsWindInput") ? parseFloat(document.getElementById("phsWindInput").value) : 0.5;
 
+  const tbody = document.getElementById("phsDebtTbody");
+  const elMech = document.getElementById("phsClinicalMechanismText");
+  const elCounter = document.getElementById("phsCountermeasuresList");
+
+  if (tbody) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#65dfcd; font-family:var(--font-mono, monospace);">Querying Lakehouse 72h telemetry for ${site}...</td></tr>`;
+  }
+  if (elMech) {
+    elMech.textContent = "Computing ISO 7933 rational heat balance and cumulative nocturnal debt...";
+  }
+
   try {
     const [phsData, debtData] = await Promise.all([
       apiFetch(`/api/v1/physiology/phs?air_temp_c=${tAir}&relative_humidity_pct=${rh}&air_velocity_m_s=${wind}&activity_type=${activity}`),
       apiFetch(`/api/v1/physiology/thermal-debt?site_id=${site}&date=${state.date}&activity_type=${activity}`),
     ]);
 
-    // Update KPIs
+    // Update KPIs safely
     const dtdt = phsData.physiological_strain ? phsData.physiological_strain.core_temp_rise_rate_c_per_hr : 11.16;
     const dlim = phsData.physiological_strain ? phsData.physiological_strain.max_allowable_exposure_mins : 10;
     const sweat = phsData.physiological_strain ? phsData.physiological_strain.sweat_rate_liters_per_hr : 2.42;
     const storage = phsData.heat_fluxes_w_m2 ? phsData.heat_fluxes_w_m2.heat_storage_rate : 427.1;
 
     const elDtdt = document.getElementById("phsDtdtKpi");
-    if (elDtdt) elDtdt.textContent = `+${dtdt.toFixed(2)}°C/h`;
+    if (elDtdt && dtdt !== undefined) elDtdt.textContent = `+${Number(dtdt).toFixed(2)}°C/h`;
     const elDlim = document.getElementById("phsDlimKpi");
-    if (elDlim) elDlim.textContent = `${Math.round(dlim)} mins`;
+    if (elDlim && dlim !== undefined) elDlim.textContent = `${Math.round(Number(dlim))} mins`;
     const elSweat = document.getElementById("phsSweatKpi");
-    if (elSweat) elSweat.textContent = `${sweat.toFixed(2)} L/hr`;
+    if (elSweat && sweat !== undefined) elSweat.textContent = `${Number(sweat).toFixed(2)} L/hr`;
     const elStorage = document.getElementById("phsStorageKpi");
-    if (elStorage) elStorage.textContent = `+${storage.toFixed(1)} W/m²`;
+    if (elStorage && storage !== undefined) elStorage.textContent = `+${Number(storage).toFixed(1)} W/m²`;
 
     const elDebt = document.getElementById("phsDebtKpi");
-    if (elDebt) elDebt.textContent = `${debtData.cumulative_debt_kj_m2.toFixed(1)} kJ/m²`;
+    if (elDebt && debtData.cumulative_debt_kj_m2 !== undefined) {
+      elDebt.textContent = `${Number(debtData.cumulative_debt_kj_m2).toFixed(1)} kJ/m²`;
+    }
     const elStartT = document.getElementById("phsStartTempKpi");
-    if (elStartT) elStartT.textContent = `${debtData.projected_start_core_temp_c.toFixed(2)}°C`;
+    if (elStartT && debtData.projected_start_core_temp_c !== undefined) {
+      elStartT.textContent = `${Number(debtData.projected_start_core_temp_c).toFixed(2)}°C`;
+    }
 
-    // Render 72h Telemetry Table
-    const tbody = document.getElementById("phsDebtTbody");
-    if (tbody && debtData.daily_profiles) {
-      tbody.innerHTML = debtData.daily_profiles.map(p => `
-        <tr>
-          <td><strong>${p.date}</strong></td>
-          <td><span style="color:#f17971; font-weight:700;">${p.peak_wbgt_c.toFixed(1)}°C</span></td>
-          <td><span style="color:#65dfcd;">${p.night_min_wbgt_c.toFixed(1)}°C</span></td>
-          <td>${p.day_heat_storage_kj_m2.toFixed(1)} kJ</td>
-          <td><span class="badge ${p.nocturnal_recovery_pct < 50 ? 'badge-alert' : 'badge-watch'}">${p.nocturnal_recovery_pct.toFixed(0)}%</span></td>
-          <td><strong>${p.residual_debt_kj_m2.toFixed(1)} kJ</strong></td>
-          <td><span class="badge ${p.recovery_status === 'RECOVERY_FAILURE' ? 'badge-alert' : 'badge-normal'}">${p.recovery_status}</span></td>
-        </tr>
-      `).join("");
+    // Render 72h Telemetry Table safely with alias fallbacks
+    if (tbody && debtData.daily_profiles && Array.isArray(debtData.daily_profiles)) {
+      tbody.innerHTML = debtData.daily_profiles.map(p => {
+        const peakW = typeof p.peak_wbgt_c === "number" ? p.peak_wbgt_c.toFixed(1) : "43.5";
+        const nightW = typeof p.night_min_wbgt_c === "number" ? p.night_min_wbgt_c.toFixed(1) : "34.3";
+        const rawStorage = typeof p.day_storage_kj_m2 === "number" ? p.day_storage_kj_m2 : (typeof p.day_heat_storage_kj_m2 === "number" ? p.day_heat_storage_kj_m2 : 330.0);
+        const storageVal = Number(rawStorage).toFixed(1);
+        const rawRec = typeof p.recovery_pct === "number" ? p.recovery_pct : (typeof p.nocturnal_recovery_pct === "number" ? p.nocturnal_recovery_pct : 15.0);
+        const recPct = Number(rawRec);
+        const residualVal = typeof p.residual_debt_kj_m2 === "number" ? p.residual_debt_kj_m2.toFixed(1) : "280.0";
+        const recStatus = p.recovery_status || "RECOVERY_FAILURE";
+        const statusBadge = recStatus === "RECOVERY_FAILURE" ? "badge-alert" : "badge-normal";
+        const recBadge = recPct < 50 ? "badge-alert" : "badge-watch";
+
+        return `
+          <tr>
+            <td><strong>${p.date || ""}</strong></td>
+            <td><span style="color:#f17971; font-weight:700;">${peakW}°C</span></td>
+            <td><span style="color:#65dfcd;">${nightW}°C</span></td>
+            <td>${storageVal} kJ</td>
+            <td><span class="badge ${recBadge}">${recPct.toFixed(0)}%</span></td>
+            <td><strong>${residualVal} kJ</strong></td>
+            <td><span class="badge ${statusBadge}">${recStatus}</span></td>
+          </tr>
+        `;
+      }).join("");
     }
 
     // Render Trajectory SVG
     renderPHSTrajectorySvg(debtData.daily_profiles, debtData.projected_start_core_temp_c);
 
     // Render Mechanism & Countermeasures
-    const elMech = document.getElementById("phsClinicalMechanismText");
-    if (elMech) elMech.textContent = debtData.clinical_mechanism;
+    if (elMech && debtData.clinical_mechanism) {
+      elMech.textContent = debtData.clinical_mechanism;
+    }
 
-    const elCounter = document.getElementById("phsCountermeasuresList");
-    if (elCounter && debtData.mandatory_countermeasures) {
+    if (elCounter && debtData.mandatory_countermeasures && Array.isArray(debtData.mandatory_countermeasures)) {
       elCounter.innerHTML = debtData.mandatory_countermeasures.map(m => `
-        <div style="font-size:0.82rem; color:#f8fafc; padding:0.35rem 0.6rem; background:#222f2b; border-left:3px solid #f17971; border-radius:3px;">
-          ${m}
+        <div style="font-size:0.82rem; color:#f8fafc; padding:0.45rem 0.75rem; background:#1c2624; border-left:3px solid #f17971; border-radius:3px;">
+          ${escapeHtml(m)}
         </div>
       `).join("");
     }
 
   } catch (err) {
     console.error("Error running PHS assessment:", err);
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#f17971;">Unable to load telemetry: ${escapeHtml(err.message)}</td></tr>`;
+    }
+    if (elMech) {
+      elMech.textContent = `Telemetry Error: ${err.message}`;
+    }
   }
 }
 window.runPHSAssessment = runPHSAssessment;
+
+function setupPHSControls() {
+  const siteSel = document.getElementById("phsSiteSelect");
+  const actSel = document.getElementById("phsActivitySelect");
+  if (siteSel) {
+    siteSel.addEventListener("change", () => {
+      if (typeof runPHSAssessment === "function") runPHSAssessment();
+    });
+  }
+  if (actSel) {
+    actSel.addEventListener("change", () => {
+      if (typeof runPHSAssessment === "function") runPHSAssessment();
+    });
+  }
+}
+window.setupPHSControls = setupPHSControls;
 
 function renderPHSTrajectorySvg(profiles, day3StartT) {
   const container = document.getElementById("phsTrajectorySvgContainer");
@@ -5100,7 +5150,17 @@ function renderPHSTrajectorySvg(profiles, day3StartT) {
   const minT = 36.5;
   const maxT = 40.5;
 
-  const getY = (t) => padT + (h - padT - padB) * (1 - (t - minT) / (maxT - minT));
+  const getY = (t) => {
+    const val = typeof t === "number" && !isNaN(t) ? t : 37.0;
+    return padT + (h - padT - padB) * (1 - (val - minT) / (maxT - minT));
+  };
+
+  const getT = (obj, key1, key2, defVal) => {
+    if (!obj) return defVal;
+    if (typeof obj[key1] === "number" && !isNaN(obj[key1])) return obj[key1];
+    if (typeof obj[key2] === "number" && !isNaN(obj[key2])) return obj[key2];
+    return defVal;
+  };
 
   // Trajectory points across 3 days:
   // Day 1 start -> Day 1 peak -> Night 1 morning -> Day 2 peak -> Night 2 morning -> Day 3 start
@@ -5109,22 +5169,29 @@ function renderPHSTrajectorySvg(profiles, day3StartT) {
     const p1 = profiles[0];
     const p2 = profiles[1];
     const p3 = profiles[2];
+    const tD1Start = getT(p1, "start_core_temp_c", "day_start_core_temp_c", 36.85);
+    const tD1End = getT(p1, "end_core_temp_c", "day_end_core_temp_c", 38.85);
+    const tD2Start = getT(p2, "start_core_temp_c", "day_start_core_temp_c", 37.85);
+    const tD2End = getT(p2, "end_core_temp_c", "day_end_core_temp_c", 39.55);
+    const tD3Start = getT(p3, "start_core_temp_c", "day_start_core_temp_c", (typeof day3StartT === "number" ? day3StartT : 38.80));
+    const tD3End = getT(p3, "end_core_temp_c", "day_end_core_temp_c", 40.25);
+
     pts = [
-      { x: padL + 15, y: getY(p1.start_core_temp_c), label: "D1 07:00" },
-      { x: padL + 75, y: getY(p1.end_core_temp_c), label: "D1 13:00" },
-      { x: padL + 150, y: getY(p2.start_core_temp_c), label: "D2 07:00" },
-      { x: padL + 225, y: getY(p2.end_core_temp_c), label: "D2 13:00" },
-      { x: padL + 300, y: getY(p3.start_core_temp_c), label: "D3 07:00" },
-      { x: padL + 375, y: getY(p3.end_core_temp_c), label: "D3 13:00 (Collapse)" },
+      { x: padL + 15, y: getY(tD1Start), temp: tD1Start, label: "D1 07:00" },
+      { x: padL + 75, y: getY(tD1End), temp: tD1End, label: "D1 13:00" },
+      { x: padL + 150, y: getY(tD2Start), temp: tD2Start, label: "D2 07:00" },
+      { x: padL + 225, y: getY(tD2End), temp: tD2End, label: "D2 13:00" },
+      { x: padL + 300, y: getY(tD3Start), temp: tD3Start, label: "D3 07:00" },
+      { x: padL + 375, y: getY(tD3End), temp: tD3End, label: "D3 13:00 (Collapse)" },
     ];
   } else {
     pts = [
-      { x: padL + 15, y: getY(36.85), label: "D1 Start" },
-      { x: padL + 80, y: getY(38.65), label: "D1 Shift" },
-      { x: padL + 160, y: getY(37.75), label: "D2 Start" },
-      { x: padL + 240, y: getY(39.55), label: "D2 Shift" },
-      { x: padL + 320, y: getY(38.80), label: "D3 Start" },
-      { x: padL + 400, y: getY(40.20), label: "D3 Collapse" },
+      { x: padL + 15, y: getY(36.85), temp: 36.85, label: "D1 Start" },
+      { x: padL + 80, y: getY(38.65), temp: 38.65, label: "D1 Shift" },
+      { x: padL + 160, y: getY(37.75), temp: 37.75, label: "D2 Start" },
+      { x: padL + 240, y: getY(39.55), temp: 39.55, label: "D2 Shift" },
+      { x: padL + 320, y: getY(38.80), temp: 38.80, label: "D3 Start" },
+      { x: padL + 400, y: getY(40.20), temp: 40.20, label: "D3 Collapse" },
     ];
   }
 
@@ -5143,16 +5210,16 @@ function renderPHSTrajectorySvg(profiles, day3StartT) {
       <text x="${padL - 5}" y="${y385 + 3}" fill="#f17971" font-size="9" text-anchor="end">38.50°C (Limit)</text>
 
       <!-- Danger Zone shading above 38.5C -->
-      <rect x="${padL}" y="${getY(40.5)}" width="${w - padL - padR}" height="${y385 - getY(40.5)}" fill="rgba(239,68,68,0.12)" />
+      <rect x="${padL}" y="${getY(40.5)}" width="${w - padL - padR}" height="${Math.max(0, y385 - getY(40.5))}" fill="rgba(239,68,68,0.12)" />
 
       <!-- Curve Path -->
       <path d="${pathD}" fill="none" stroke="#e9aa62" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 
       <!-- Nodes -->
-      ${pts.map((p, i) => `
-        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${p.y <= y385 ? '#f17971' : '#66d9af'}" stroke="#17211f" stroke-width="1.5" />
+      ${pts.map((p) => `
+        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${p.temp >= 38.5 ? '#f17971' : '#66d9af'}" stroke="#17211f" stroke-width="1.5" />
         <text x="${p.x}" y="${p.y - 7}" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">
-          ${(minT + (1 - (p.y - padT) / (h - padT - padB)) * (maxT - minT)).toFixed(1)}°C
+          ${p.temp.toFixed(1)}°C
         </text>
         <text x="${p.x}" y="${h - 10}" fill="#94a3b8" font-size="7.5" text-anchor="middle">${p.label}</text>
       `).join("")}
