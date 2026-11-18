@@ -5,9 +5,20 @@ Enforces Entra ID app roles, differential privacy, and occupational privacy boun
 """
 
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, List, Dict, Any
+
+# Guarantee writable scratch/cache directories for Triton, PyTorch, and Matplotlib
+os.environ.setdefault("TRITON_CACHE_DIR", "/tmp/triton")
+os.environ.setdefault("TORCH_EXTENSIONS_DIR", "/tmp/torch_extensions")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/mpl")
+for _p in ("/tmp/triton", "/tmp/torch_extensions", "/tmp/mpl"):
+    try:
+        os.makedirs(_p, exist_ok=True)
+    except OSError:
+        pass
 from fastapi import FastAPI, Depends, Query, Request, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse

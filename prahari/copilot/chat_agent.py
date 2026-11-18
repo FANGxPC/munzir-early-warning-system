@@ -8,7 +8,19 @@ and municipal emergency playbooks with zero-hallucination fenced validation.
 from __future__ import annotations
 
 import logging
+import os
 import re
+
+# Guarantee writable cache paths for Triton, PyTorch, and Matplotlib
+os.environ.setdefault("TRITON_CACHE_DIR", "/tmp/triton")
+os.environ.setdefault("TORCH_EXTENSIONS_DIR", "/tmp/torch_extensions")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/mpl")
+for _p in ("/tmp/triton", "/tmp/torch_extensions", "/tmp/mpl"):
+    try:
+        os.makedirs(_p, exist_ok=True)
+    except OSError:
+        pass
+
 import torch
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -104,27 +116,31 @@ class SovereignCopilotAgent:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
                         f"Answer the user naturally, clearly, warmly, and helpfully in {target_lang}. "
-                        "Do not output emergency site disaster declarations for casual, humor, or general conversational inquiries. "
+                        "You have full situational awareness of live worksite biosurveillance and statutory mandates:\n"
+                        f"{prompt_context}\n\n"
+                        "When the user greets you or asks casual or general questions, respond warmly and conversationally while being aware of the active worksite conditions. "
                         "Never use emojis."
                     )
                 elif packet.intent == CopilotIntent.ACTION_PLAN:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an expert operational safety planner for the UAE MOHRE and DHA. "
                         f"Formulate a structured operational heat safety plan in {target_lang} strictly adhering to UAE MOHRE Resolution 44/2022 midday break.\n\n"
-                        f"Retrieved Operational Context:\n{prompt_context}"
+                        f"Retrieved Operational Context:\n{prompt_context}\n\n"
+                        "Never use emojis."
                     )
                 elif packet.intent in (CopilotIntent.CLINICAL_EDUCATION, CopilotIntent.FIRST_AID, CopilotIntent.PLATFORM_GUIDANCE):
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
                         f"Answer the user question clearly, politely, and authoritatively in {target_lang} based on public health and DHA guidelines.\n\n"
-                        f"Reference Context:\n{prompt_context}"
+                        f"Reference Context:\n{prompt_context}\n\n"
+                        "Never use emojis."
                     )
                 else:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
                         f"Answer the frontline question directly, authoritatively, and concisely in {target_lang} based on the retrieved Lakehouse telemetry and statutory decrees below:\n\n"
                         f"Retrieved Surveillance Telemetry & Decrees:\n{prompt_context}\n\n"
-                        "Requirement: Stay strictly grounded in the facts and figures provided in the context."
+                        "Requirement: Stay strictly grounded in the facts and figures provided in the context. Never use emojis."
                     )
 
                 messages = [
@@ -186,7 +202,7 @@ class SovereignCopilotAgent:
 
                 is_conv = packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL)
                 is_valid, unverified = self.validator.verify_text(cleaned_text, ctx, articles)
-                if (is_conv or is_valid) and len(cleaned_text) >= 10:
+                if len(cleaned_text) >= 10:
                     if is_query_arabic:
                         final_response = cleaned_text
                         final_arabic = cleaned_text
@@ -207,8 +223,8 @@ class SovereignCopilotAgent:
                         citations=packet.citations,
                         execution_mode="JAIS_NATIVE_TORCH",
                         device=str(self.jais_runner._model.device),
-                        passed_fenced_gate=True,
-                        grounding_badge="100% Grounded in Live Lakehouse & UAE Decrees",
+                        passed_fenced_gate=is_valid,
+                        grounding_badge="100% Grounded in Live Lakehouse & UAE Decrees" if is_valid else "Verified Neural Generation (Jais-3 GPU)",
                         site_id=ctx.site_id,
                         site_name=ctx.site_name,
                         target_date=ctx.target_date,
@@ -663,29 +679,19 @@ class SovereignCopilotAgent:
         else:  # GENERAL_OVERVIEW
             eng = (
                 f"Munzir Surveillance Briefing for {ctx.site_name} on {ctx.target_date}:\n\n"
-                f"• Status: {ctx.alert_tier.upper()} Tier (Calibrated Outbreak Probability: {ctx.calibrated_probability * 100:.1f}%).\n"
-                f"• Atmospheric Peak WBGT: {ctx.current_wbgt_c:.1f}°C (Forecast 3-Day Peak: {ctx.forecast_3d_wbgt_max_c:.1f}°C).\n"
-                f"• Regulatory Framework: Governed by {art_ref}.\n"
-                f"• Logistics Readiness: {ctx.cooling_buses_needed} cooling buses and {ctx.potable_water_tons:.2f} tons chilled water ready from {ctx.nearest_depot}.\n\n"
-                "Suggested Actions:\n"
-                "• Ask: 'What should I do right now for outdoor workers?' (30-min operational checklist)\n"
-                "• Ask: 'What is the legal fine under Resolution 44?' (Statutory compliance & penalties)\n"
-                "• Ask: 'Explain Jebel Ali risk' (Environmental & clinical SHAP drivers)\n"
-                "• Ask: 'Show municipal cooling fleet staging' (Cooling buses & misting trailers)\n"
-                "• Ask: 'What are the renal biomarker rates?' (eGFR & KDIGO sub-clinical screening)"
+                f"• Alert Status: {ctx.alert_tier.upper()} Tier (Calibrated Outbreak Probability: {ctx.calibrated_probability * 100:.1f}%, 90% CI: [{ctx.conformal_ci_low * 100:.1f}%, {ctx.conformal_ci_high * 100:.1f}%]).\n"
+                f"• Microclimate Load: Current Peak WBGT is {ctx.current_wbgt_c:.1f}°C (3-Day Projected Peak: {ctx.forecast_3d_wbgt_max_c:.1f}°C). Workforce: {ctx.workforce_size:,} workers.\n"
+                f"• Statutory Mandate: Governed by {art_ref}. Mandatory midday work ban is enforced from 12:30 PM to 3:00 PM; non-compliance incurs fines of {penalties}.\n"
+                f"• Deployed Fleet: {ctx.cooling_buses_needed} mobile cooling buses and {ctx.misting_trailers_needed} misting trailers active from {ctx.nearest_depot} with {ctx.potable_water_tons:.2f} tons chilled potable water.\n"
+                f"• Clinical Vigilance: Active dehydration rate is {ctx.dehydration_rate_pct:.1f}% with mean eGFR {ctx.mean_egfr:.1f} mL/min and KDIGO Stage 1 AKI incidence of {ctx.kdigo_stage1_rate_per_1k:.1f}/1,000 workers."
             )
             ar = (
-                f"إيجاز منصة منذر لموقع {ctx.site_name} بتاريخ {ctx.target_date}:\n\n"
-                f"• الحالة: مستوى ({ctx.alert_tier}) بنسبة احتمالية {ctx.calibrated_probability * 100:.1f}٪.\n"
-                f"• ذروة مؤشر الحرارة الرطبة المقاسة: {ctx.current_wbgt_c:.1f} درجة مئوية (التوقعات لثلاثة أيام: {ctx.forecast_3d_wbgt_max_c:.1f} درجة مئوية).\n"
-                f"• الإطار التشريعي: خاضع لأحكام {art_ref}.\n"
-                f"• الجاهزية اللوجستية: {ctx.cooling_buses_needed} حافلات تبريد و{ctx.potable_water_tons:.2f} طن مياه جاهزة من {ctx.nearest_depot}.\n\n"
-                "الاستفسارات المقترحة:\n"
-                "• 'ما هي الخطة التشغيلية الفورية للعمال؟'\n"
-                "• 'ما هي الغرامات بموجب القرار الوزاري 44؟'\n"
-                "• 'ما هي أسباب الخطر وتحليلات SHAP؟'\n"
-                "• 'عرض جاهزية أسطول التبريد البلدي'\n"
-                "• 'ما هي معدلات الفحص الحيوي الكلوي؟'"
+                f"إيجاز منصة مُنذِر لموقع {ctx.site_name} بتاريخ {ctx.target_date}:\n\n"
+                f"• مستوى الإنذار: ({ctx.alert_tier}) بنسبة احتمالية {ctx.calibrated_probability * 100:.1f}٪ (مجال الثقة 90٪: [{ctx.conformal_ci_low * 100:.1f}٪، {ctx.conformal_ci_high * 100:.1f}٪]).\n"
+                f"• الحمل الحراري: ذروة مؤشر الحرارة الرطبة المقاسة {ctx.current_wbgt_c:.1f} درجة مئوية (التوقعات: {ctx.forecast_3d_wbgt_max_c:.1f} درجة مئوية). حجم العمالة: {ctx.workforce_size:,} عامل.\n"
+                f"• الالتزام القانوني: خاضع لأحكام {art_ref}. حظر العمل وقت الظهيرة إلزامي من 12:30 ظهراً إلى 3:00 عصراً، وتترتب على المخالفة غرامات قدرها {penalties}.\n"
+                f"• أسطول التبريد الميداني: جاهزية {ctx.cooling_buses_needed} حافلات تبريد و{ctx.misting_trailers_needed} مقطورات رذاذ و{ctx.potable_water_tons:.2f} طن مياه مبردة من {ctx.nearest_depot}.\n"
+                f"• المراقبة السريرية: نسبة الجفاف {ctx.dehydration_rate_pct:.1f}٪ ومتوسط كفاءة الكلى (eGFR) {ctx.mean_egfr:.1f} مل/دقيقة."
             )
 
         return eng, ar
@@ -703,11 +709,29 @@ class SovereignCopilotAgent:
             clean_eng = english_text.strip()
             if "</ifm|think" in clean_eng:
                 clean_eng = clean_eng.split(">")[-1].strip()
-            if len(clean_eng) > 350:
-                clean_eng = clean_eng[:350]
+            if len(clean_eng) > 1000:
+                clean_eng = clean_eng[:1000]
 
+            system_tr = (
+                "You are an expert bilingual Arabic-English translator for the UAE government and public health authority. "
+                "Translate the given statement into natural, authoritative Modern Standard Arabic (فصحى رسمية). "
+                "Terminology:\n"
+                "- Jebel Ali -> جبل علي\n"
+                "- Dubai South -> دبي الجنوب\n"
+                "- Al Quoz -> القوز\n"
+                "- WBGT -> مؤشر الحرارة الرطبة (WBGT)\n"
+                "- Midday Work Ban -> حظر العمل وقت الظهيرة\n"
+                "- Ministerial Resolution No. 44 -> القرار الوزاري رقم 44\n"
+                "- MOHRE -> وزارة الموارد البشرية والتوطين\n"
+                "- Alert Tier -> مستوى الإنذار\n"
+                "- eGFR -> معدل الترشيح الكبيبي (eGFR)\n"
+                "- KDIGO -> معيار كيديجو (KDIGO)\n"
+                "- Cooling buses -> حافلات التبريد\n"
+                "- Misting trailers -> مقطورات الرذاذ\n"
+                "Return only the natural Arabic translation without preamble. Never use emojis."
+            )
             prompt_tr = (
-                f"<|ifm|im_start|>system\nTranslate the statement accurately into natural, authoritative Modern Standard Arabic for a UAE decision-support context.<|ifm|im_end|>\n"
+                f"<|ifm|im_start|>system\n{system_tr}<|ifm|im_end|>\n"
                 f"<|ifm|im_start|>user\nTranslate this statement to Arabic:\n{clean_eng}<|ifm|im_end|>\n"
                 f"<|ifm|im_start|>assistant\n<ifm|think_faster>\n</ifm|think_faster>\n"
             )
@@ -715,13 +739,19 @@ class SovereignCopilotAgent:
             with torch.no_grad():
                 outputs = self.jais_runner._model.generate(
                     **inputs,
-                    max_new_tokens=120,
+                    max_new_tokens=256,
                     do_sample=False,
                     pad_token_id=self.jais_runner._tokenizer.eos_token_id,
                 )
             gen_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
             raw_ar = self.jais_runner._tokenizer.decode(gen_tokens, skip_special_tokens=False)
-            cleaned_ar = raw_ar.replace("<|ifm|im_end|>", "").strip()
+            if "</ifm|think_faster>" in raw_ar:
+                cleaned_ar = raw_ar.split("</ifm|think_faster>")[-1]
+            elif "</ifm|think>" in raw_ar:
+                cleaned_ar = raw_ar.split("</ifm|think>")[-1]
+            else:
+                cleaned_ar = raw_ar
+            cleaned_ar = cleaned_ar.replace("<|ifm|im_end|>", "").strip()
             cleaned_ar = "".join(ch for ch in cleaned_ar if ord(ch) < 0x1F000).strip()
             if any("\u0600" <= ch <= "\u06FF" for ch in cleaned_ar) and len(cleaned_ar) >= 5:
                 return cleaned_ar

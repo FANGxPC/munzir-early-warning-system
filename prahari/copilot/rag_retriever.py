@@ -66,60 +66,70 @@ class RetrievedContextPacket:
         )
 
     def format_compact_prompt_context(self) -> str:
-        """Formats the retrieved packet into a concise prompt (~100-140 tokens) optimized for local LLM inference."""
+        """Formats the retrieved packet into a concise prompt optimized for local LLM inference."""
+        ctx = self.live_context
+        art = self.statutory_articles[0] if self.statutory_articles else None
+        art_mandate = (
+            f"{art.instrument} {art.article_number} ({', '.join(art.mandatory_actions)}. Penalties: {art.penalties})"
+            if art
+            else "UAE MOHRE Ministerial Resolution No. 44 of 2022 (Mandatory Midday Work Ban 12:30 PM - 3:00 PM; fines AED 5,000 - 50,000)"
+        )
+
         if self.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
-            return "Munzir Sovereign Health Copilot. Conversational greeting and public health platform identity."
-        if self.intent == CopilotIntent.ACTION_PLAN:
-            ctx = self.live_context
             return (
-                f"Master Operational Heat Safety Plan for {ctx.site_name} ({ctx.site_id}). "
-                f"Peak WBGT: {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier). "
+                f"Active Worksite: {ctx.site_name} ({ctx.site_id}) on {ctx.target_date}. "
+                f"Live Thermal Status: Peak WBGT {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier, {round(ctx.calibrated_probability * 100, 1)}% risk). "
+                f"Workforce: {ctx.workforce_size:,} workers. "
+                f"Fleet Readiness: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, {ctx.potable_water_tons:.1f}t water from {ctx.nearest_depot}. "
+                f"Clinical: Mean eGFR {ctx.mean_egfr:.1f} mL/min, dehydration {ctx.dehydration_rate_pct:.1f}%, KDIGO Stage 1: {ctx.kdigo_stage1_rate_per_1k:.1f}/1,000. "
+                f"Governing Decree: {art_mandate}."
+            )
+        if self.intent == CopilotIntent.ACTION_PLAN:
+            return (
+                f"Master Operational Heat Safety Plan for {ctx.site_name} ({ctx.site_id}) on {ctx.target_date}. "
+                f"Peak WBGT: {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier, {round(ctx.calibrated_probability * 100, 1)}% risk). "
+                f"Workforce: {ctx.workforce_size:,} workers. "
                 f"Logistics readiness: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, "
-                f"{ctx.potable_water_tons} tons potable water. UAE MOHRE Resolution 44/2022 Article 1 midday ban."
+                f"{ctx.potable_water_tons:.1f} tons potable water from {ctx.nearest_depot} ({ctx.depot_transit_minutes} min transit). "
+                f"Statutory Mandate: {art_mandate}."
             )
         if self.intent == CopilotIntent.CLINICAL_EDUCATION:
-            return "Clinical thermal physiology domain: Heat strain vs stroke, hydration guidelines, WBGT index, and DHA health protection standards."
-        if self.intent == CopilotIntent.FIRST_AID:
-            return "Frontline emergency first-aid protocols: immediate shade, active cooling, hydration, recovery position, and DCAS ambulance dispatch."
-        if self.intent == CopilotIntent.PLATFORM_GUIDANCE:
-            return "Munzir Sovereign Health Early Warning Platform: 22 specialized views, Sentinel IoT hardware twins, Medallion Lakehouse telemetry, and MOHRE statutory codex."
-        if self.intent == CopilotIntent.FOLLOW_UP_ELABORATION:
-            ctx = self.live_context
             return (
-                f"Comprehensive thermal, clinical, and regulatory deep-dive for {ctx.site_name} ({ctx.site_id}). "
+                f"Clinical thermal physiology domain: Heat strain vs stroke, hydration guidelines (250 mL chilled water every 15-20 min), "
+                f"WBGT index combining ambient, humidity, radiant heat and wind (ISO 7243/7933). "
+                f"Active Site State: {ctx.site_name} (WBGT {ctx.current_wbgt_c}°C, eGFR {ctx.mean_egfr:.1f} mL/min, dehydration {ctx.dehydration_rate_pct:.1f}%)."
+            )
+        if self.intent == CopilotIntent.FIRST_AID:
+            return (
+                f"Frontline emergency first-aid protocols: immediate shade, active cooling (cold towels, ice packs to neck/armpits/groin), "
+                f"oral rehydration salts (ORS) if conscious, elevation of feet 20-30 cm, and Dubai Ambulance DCAS 998 dispatch. "
+                f"Active Site Monitored: {ctx.site_name} ({ctx.alert_tier.upper()} Tier, {ctx.workforce_size:,} workers)."
+            )
+        if self.intent == CopilotIntent.PLATFORM_GUIDANCE:
+            return (
+                f"Munzir Sovereign Health Early Warning Platform: Sentinel ESP32 IoT hardware twins, Medallion Lakehouse telemetry, "
+                f"ISO 7933 PHS thermal strain, KDIGO renal biomarker surveillance, and UAE MOHRE statutory codex. "
+                f"Active Site: {ctx.site_name} ({ctx.site_id})."
+            )
+        if self.intent == CopilotIntent.FOLLOW_UP_ELABORATION:
+            return (
+                f"Comprehensive thermal, clinical, and regulatory deep-dive for {ctx.site_name} ({ctx.site_id}) on {ctx.target_date}. "
                 f"Peak WBGT: {ctx.current_wbgt_c}°C ({ctx.alert_tier.upper()} Tier, probability {round(ctx.calibrated_probability * 100, 1)}%). "
-                f"Governed by UAE MOHRE Resolution 44/2022 Article 1 midday break. "
-                f"Logistics readiness: {ctx.cooling_buses_needed} cooling buses, {ctx.potable_water_tons} tons potable water."
+                f"Workforce: {ctx.workforce_size:,} workers. In-situ sensor delta: {ctx.microclimate_delta_c:+.1f}°C. "
+                f"Logistics: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, {ctx.potable_water_tons:.1f}t water from {ctx.nearest_depot}. "
+                f"Clinical: eGFR {ctx.mean_egfr:.1f} mL/min, dehydration {ctx.dehydration_rate_pct:.1f}%, KDIGO Stage 1: {ctx.kdigo_stage1_rate_per_1k:.1f}/1,000. "
+                f"Statutory Mandate: {art_mandate}."
             )
 
-        ctx = self.live_context
         base = (
-            f"Site: {ctx.site_name} ({ctx.site_id}). Date: {ctx.target_date}. "
-            f"Peak WBGT: {ctx.current_wbgt_c}°C. Alert Tier: {ctx.alert_tier} ({round(ctx.calibrated_probability * 100, 1)}% probability). "
-            f"3-Day WBGT Forecast Max: {ctx.forecast_3d_wbgt_max_c}°C. "
+            f"Site: {ctx.site_name} ({ctx.site_id}) on {ctx.target_date}. "
+            f"Peak WBGT: {ctx.current_wbgt_c}°C. Alert Tier: {ctx.alert_tier.upper()} ({round(ctx.calibrated_probability * 100, 1)}% probability). "
+            f"3-Day WBGT Forecast Max: {ctx.forecast_3d_wbgt_max_c}°C. Workforce: {ctx.workforce_size:,} workers. "
+            f"Primary Driver: {ctx.primary_signal_driver} (environmental SHAP={ctx.shap_attributions.get('environmental', 1.15)}, clinical SHAP={ctx.shap_attributions.get('clinical', 2.10)}). "
+            f"Fleet: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, {ctx.potable_water_tons:.1f}t water from {ctx.nearest_depot} ({ctx.depot_transit_minutes} min transit). "
+            f"Renal: {ctx.screened_workers} workers screened, mean eGFR {ctx.mean_egfr:.1f} mL/min, dehydration {ctx.dehydration_rate_pct:.1f}%, KDIGO Stage 1: {ctx.kdigo_stage1_rate_per_1k:.1f}/1,000 (+{ctx.renal_advance_lead_time_days:.1f} days lead window). "
+            f"Statutory Mandate: {art_mandate}."
         )
-        if self.intent == CopilotIntent.FLEET_LOGISTICS:
-            base += (
-                f"Fleet Staging: {ctx.cooling_buses_needed} cooling buses, {ctx.misting_trailers_needed} misting trailers, "
-                f"{ctx.potable_water_tons} tons potable water from {ctx.nearest_depot} ({ctx.depot_transit_minutes} min transit). "
-            )
-        elif self.intent == CopilotIntent.CLINICAL_RENAL:
-            base += (
-                f"Renal Biomarkers: {ctx.screened_workers} workers screened, mean eGFR: {ctx.mean_egfr} mL/min/1.73m², "
-                f"dehydration rate: {ctx.dehydration_rate_pct}%, KDIGO Stage 1: {ctx.kdigo_stage1_rate_per_1k}/1,000 workers. "
-                f"Sub-clinical advance lead time: {ctx.renal_advance_lead_time_days} days. "
-            )
-        elif self.intent == CopilotIntent.ALERT_EXPLANATION:
-            base += (
-                f"Primary Driver: {ctx.primary_signal_driver}. SHAP attributions: environmental={ctx.shap_attributions.get('environmental', 2.1)}, "
-                f"clinical={ctx.shap_attributions.get('clinical', 1.1)}, workplace={ctx.shap_attributions.get('workplace', -1.6)}. "
-            )
-        if self.statutory_articles:
-            art = self.statutory_articles[0]
-            base += (
-                f"Statutory Mandate: {art.instrument} {art.article_number} ({art.citation}): {art.title}. "
-                f"Mandatory Actions: {', '.join(art.mandatory_actions)}. Penalties: {art.penalties or 'None'}. "
-            )
         return base.strip()
 
 
@@ -156,8 +166,10 @@ class SovereignRAGRetriever:
             if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
                 return CopilotIntent.CONVERSATIONAL
 
-        if re.search(r"\b(how\s*(are\s*you|are\s*u|r\s*u|u|do\s*you\s*do|is\s*it\s*going|are\s*things|u\s*doing|you\s*doing))\b", q):
-            return CopilotIntent.CONVERSATIONAL
+        site_keywords = ["site", "jebel", "ali", "quoz", "warsan", "south", "qusais", "worker", "status", "situation", "heat", "port", "safe", "terminal"]
+        if re.search(r"\b(how\s*(are\s*you|are\s*u|r\s*u|u|do\s*you\s*do|is\s*it\s*going|u\s*doing|you\s*doing))\b", q):
+            if not any(k in q for k in site_keywords):
+                return CopilotIntent.CONVERSATIONAL
 
         conv_phrases = [
             "who are you", "what are you", "what can you do", "what do you do", "what do u do",
@@ -181,7 +193,7 @@ class SovereignRAGRetriever:
             return CopilotIntent.CONVERSATIONAL
 
         if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in conv_phrases):
-            if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
+            if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap", "site", "jebel", "ali", "quoz", "status"]):
                 return CopilotIntent.CONVERSATIONAL
 
         # 3. Contextual Follow-up & Deep-Dive Elaboration
@@ -259,15 +271,17 @@ class SovereignRAGRetriever:
             "overview", "briefing", "site briefing", "surveillance overview",
             "site overview", "status briefing", "site status", "surveillance status",
             "status of site", "current status", "daily briefing", "situation report", "sitrep",
-            "situation", "status", "update", "how is", "how are things",
+            "situation", "status", "update", "how is", "how are things", "how things look",
             "what is happening", "whats happening", "what is going on", "whats going on",
-            "condition", "conditions", "tell me about"
+            "condition", "conditions", "tell me about", "whatsa status", "whats status",
+            "what is status", "what is the status", "whats the status", "worker safety", "safe",
+            "workers safe", "current state"
         ]
-        if any(w in q for w in overview_phrases):
+        if any(w in q for w in overview_phrases) or re.search(r"\b(what('?s|sa)?\s+(the\s+)?(status|situation|condition|state|sitrep))\b", q):
             return CopilotIntent.GENERAL_OVERVIEW
 
         # Check if query references any specific site directly for situational update
-        site_names = ["jebel ali", "al quoz", "warsan", "dubai south", "al qusais", "site-ja-01", "port terminal"]
+        site_names = ["jebel ali", "al quoz", "warsan", "dubai south", "al qusais", "site-ja-01", "site-aq-01", "site-ds-01", "port terminal"]
         if any(s in q for s in site_names):
             return CopilotIntent.GENERAL_OVERVIEW
 
@@ -287,12 +301,14 @@ class SovereignRAGRetriever:
         q_lower = query.lower()
         if "jebel ali" in q_lower or "ja-01" in q_lower or "port terminal" in q_lower:
             resolved_site_id = "SITE-JA-01"
-        elif "al quoz" in q_lower or "aq-02" in q_lower:
-            resolved_site_id = "SITE-AQ-02"
+        elif "al quoz" in q_lower or "aq-01" in q_lower or "aq-02" in q_lower or "quoz" in q_lower:
+            resolved_site_id = "SITE-AQ-01"
+        elif "dubai south" in q_lower or "ds-01" in q_lower or "ds-04" in q_lower:
+            resolved_site_id = "SITE-DS-01"
         elif "warsan" in q_lower or "wn-03" in q_lower:
             resolved_site_id = "SITE-WN-03"
-        elif "dubai south" in q_lower or "ds-04" in q_lower:
-            resolved_site_id = "SITE-DS-04"
+        elif "creek" in q_lower or "cr-03" in q_lower:
+            resolved_site_id = "SITE-CR-03"
         elif "al qusais" in q_lower or "qs-05" in q_lower:
             resolved_site_id = "SITE-QS-05"
         else:

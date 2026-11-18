@@ -7,8 +7,19 @@ Integrates Inception 42's flagship sovereign Arabic-English bilingual model
 from __future__ import annotations
 
 import logging
+import os
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
+
+# Guarantee writable scratch/cache directories for Triton and PyTorch
+os.environ.setdefault("TRITON_CACHE_DIR", "/tmp/triton")
+os.environ.setdefault("TORCH_EXTENSIONS_DIR", "/tmp/torch_extensions")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/mpl")
+for _p in ("/tmp/triton", "/tmp/torch_extensions", "/tmp/mpl"):
+    try:
+        os.makedirs(_p, exist_ok=True)
+    except OSError:
+        pass
 
 logger = logging.getLogger(__name__)
 
