@@ -158,6 +158,8 @@ class SovereignCopilotAgent:
                     add_generation_prompt=True,
                     reasoning_effort="low",
                 )
+                if not prompt.endswith("</ifm|think_faster>\n"):
+                    prompt = prompt + "</ifm|think_faster>\n"
                 inputs = self.jais_runner._tokenizer(prompt, return_tensors="pt").to(self.jais_runner._model.device)
 
                 with torch.no_grad():
@@ -183,13 +185,17 @@ class SovereignCopilotAgent:
                 is_conv = packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL)
                 is_valid, unverified = self.validator.verify_text(cleaned_text, ctx, articles)
                 if (is_conv or is_valid) and len(cleaned_text) >= 10:
-                    arabic_summary = self._synthesize_arabic_answer(packet.intent, ctx, articles[0] if articles else None)
                     if is_query_arabic:
                         final_response = cleaned_text
                         final_arabic = cleaned_text
                     else:
                         final_response = cleaned_text
-                        final_arabic = arabic_summary
+                        # Genuine neural translation powered by Inception 42 Jais-3-0.9B
+                        neural_ar = self.translate_to_arabic_with_jais(cleaned_text)
+                        if neural_ar:
+                            final_arabic = neural_ar
+                        else:
+                            final_arabic = self._synthesize_arabic_answer(packet.intent, ctx, articles[0] if articles else None, query=query)
 
                     return CopilotChatResponse(
                         query=query,
@@ -693,11 +699,50 @@ class SovereignCopilotAgent:
 
         return eng, ar
 
+    def translate_to_arabic_with_jais(self, english_text: str) -> str:
+        """
+        Translates an English response into natural Modern Standard Arabic using
+        Inception 42 Jais-3-0.9B neural weights.
+        """
+        if not (self.jais_runner.try_load_model() and self.jais_runner._model is not None and self.jais_runner._tokenizer is not None):
+            return ""
+
+        try:
+            import torch
+            clean_eng = english_text.strip()
+            if "</ifm|think" in clean_eng:
+                clean_eng = clean_eng.split(">")[-1].strip()
+            if len(clean_eng) > 350:
+                clean_eng = clean_eng[:350]
+
+            prompt_tr = (
+                f"<|ifm|im_start|>system\nTranslate the statement accurately into natural, authoritative Modern Standard Arabic for a UAE decision-support context.<|ifm|im_end|>\n"
+                f"<|ifm|im_start|>user\nTranslate this statement to Arabic:\n{clean_eng}<|ifm|im_end|>\n"
+                f"<|ifm|im_start|>assistant\n<ifm|think_faster>\n</ifm|think_faster>\n"
+            )
+            inputs = self.jais_runner._tokenizer(prompt_tr, return_tensors="pt").to(self.jais_runner._model.device)
+            with torch.no_grad():
+                outputs = self.jais_runner._model.generate(
+                    **inputs,
+                    max_new_tokens=120,
+                    do_sample=False,
+                    pad_token_id=self.jais_runner._tokenizer.eos_token_id,
+                )
+            gen_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
+            raw_ar = self.jais_runner._tokenizer.decode(gen_tokens, skip_special_tokens=False)
+            cleaned_ar = raw_ar.replace("<|ifm|im_end|>", "").strip()
+            if any("\u0600" <= ch <= "\u06FF" for ch in cleaned_ar) and len(cleaned_ar) >= 5:
+                return cleaned_ar
+        except Exception as e:
+            logger.warning("Neural Arabic translation exception: %s", e)
+        return ""
+
     def _synthesize_arabic_answer(
         self,
         intent: CopilotIntent,
         ctx: LiveSiteSurveillanceContext,
         article: Optional[StatutoryArticle],
+        query: str = "",
     ) -> str:
         """Helper to generate Arabic response when native model returns English."""
         if intent == CopilotIntent.GREETING:
@@ -707,10 +752,15 @@ class SovereignCopilotAgent:
                 "كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن مستويات الخطر اللحظية، أو اشتراطات حظر العمل وقت الظهيرة، أو إجراءات الإسعاف الأولي للإجهاد الحراري."
             )
         if intent == CopilotIntent.CONVERSATIONAL:
+            q_lower = query.lower()
+            if any(w in q_lower for w in ["joke", "funny", "laugh", "نكتة"]):
+                return "لماذا فاز الفزّاع بجائزة؟ لأنه كان متميزاً في مجاله! يسعدني دائماً مساعدتكم في أي استفسار مهني أو صحي."
+            if any(w in q_lower for w in ["how u", "how are you", "كيف حالك"]):
+                return "أنا بخير والحمد لله! أعمل بكامل جاهزيتي لمتابعة مؤشرات السلامة المهنية ومساعدتك في أي استفسار."
+            if any(w in q_lower for w in ["who are you", "من أنت"]):
+                return "أنا المساعد السيادي لمنصة مُنذِر، مدعوم بنموذج Inception 42 Jais-3 للذكاء الاصطناعي لحماية صحة العمال وتقديم الدعم التشغيلي."
             return (
-                "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
-                "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
-                "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+                "أنا بخير وبكامل الجاهزية! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية ودعم القرارات الميدانية في دولة الإمارات."
             )
         if intent == CopilotIntent.CLINICAL_EDUCATION:
             return (

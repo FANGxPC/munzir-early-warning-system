@@ -4077,13 +4077,14 @@ async function executeCopilotQuery(query, siteId, streamId) {
       isSpeaking: false,
     });
 
-    const arabicDrawerHtml = (!isGreeting && hasDifferentArabic) ? `
+    const drawerLabel = isRtl ? "Certified English Translation" : "الرد السيادي المعتمد (Certified Arabic Decree)";
+    const arabicDrawerHtml = hasDifferentArabic ? `
       <div style="margin-top:0.4rem; border:1px solid #283531; border-radius:6px; background:#131c1a; overflow:hidden;">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.35rem 0.65rem; background:#1c2b27; cursor:pointer;" onclick="const d = this.nextElementSibling; d.style.display = d.style.display === 'none' ? 'block' : 'none';">
-          <span style="font-size:0.72rem; color:#65dfcd; font-weight:700;">الرد السيادي المعتمد (Certified Arabic Decree)</span>
+          <span style="font-size:0.72rem; color:#65dfcd; font-weight:700;">${drawerLabel}</span>
           <span style="font-size:0.65rem; color:#8db7a8;">Toggle &or;</span>
         </div>
-        <div style="display:none; padding:0.6rem 0.75rem; direction:rtl; text-align:right; font-family:system-ui, -apple-system, sans-serif; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-top:1px solid #283531;">
+        <div style="display:none; padding:0.6rem 0.75rem; ${isRtl ? 'direction:ltr; text-align:left;' : 'direction:rtl; text-align:right;'} font-family:system-ui, -apple-system, sans-serif; color:#e2e8f0; font-size:0.82rem; line-height:1.6; border-top:1px solid #283531;">
           ${formattedArabic}
         </div>
       </div>
