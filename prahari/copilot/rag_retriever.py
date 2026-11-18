@@ -135,16 +135,26 @@ class SovereignRAGRetriever:
         q = query.lower().strip()
 
         # 1. Polite Greetings
-        greeting_words = ["hello", "hi", "hey", "salam", "salaam", "marhaba", "welcome", "greetings", "good morning", "good afternoon", "good evening", "ahlan"]
+        greeting_words = ["hello", "hi", "hey", "salam", "salaam", "marhaba", "welcome", "greetings", "good morning", "good afternoon", "good evening", "ahlan", "good day", "morning", "evening"]
         if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in greeting_words):
             # Guard against operational queries that might happen to start with greeting
             if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
                 return CopilotIntent.GREETING
 
-        # 2. Conversational Inquiries, Gratitude & Humor
+        # 2. Conversational Inquiries, Gratitude, Slang & Humor
         joke_phrases = ["joke", "funny", "laugh", "humor", "tell me a joke", "make me laugh", "say a joke", "crack a joke", "نكتة", "مزحة"]
         if any(w in q for w in joke_phrases):
             return CopilotIntent.CONVERSATIONAL
+
+        # Hallucination & Factuality Inquiries
+        if re.search(r"hal+ucinat", q) or any(w in q for w in ["are you lying", "can i trust you", "is this real", "is this accurate", "are you accurate", "are you real", "are you fake"]):
+            return CopilotIntent.CONVERSATIONAL
+
+        # Slang & Casual Greetings
+        slang_phrases = ["yo", "yo dude", "dude", "sup", "what's up", "whats up", "hey man", "hey dude", "howdy", "hiya", "peace"]
+        if any(re.search(r"\b" + re.escape(w) + r"\b", q) for w in slang_phrases):
+            if not any(op in q for op in ["bus", "fleet", "misting", "renal", "kidney", "egfr", "resolution", "decree", "fine", "penalty", "shap"]):
+                return CopilotIntent.CONVERSATIONAL
 
         if re.search(r"\b(how\s*(are\s*you|are\s*u|r\s*u|u|do\s*you\s*do|is\s*it\s*going|are\s*things|u\s*doing|you\s*doing))\b", q):
             return CopilotIntent.CONVERSATIONAL
@@ -159,12 +169,13 @@ class SovereignRAGRetriever:
             "tell me about yourself", "who made you", "who created you", "thank you", "thanks",
             "appreciate it", "great job", "nice", "cool", "can you speak arabic", "can you speak english",
             "how do you work", "introduce yourself", "help", "how can you help", "how can you assist",
-            "what can i ask", "what can i ask you", "capabilities", "your capabilities"
+            "what can i ask", "what can i ask you", "capabilities", "your capabilities",
+            "poem", "poetry", "write a poem", "story", "tell me a story"
         ]
         conv_ar_phrases = [
             "من أنت", "ماذا تفعل", "ما هو عملك", "ما هو عملك الرئيسي", "ما هي مهامك", "ما هي وظيفتك",
             "كيف حالك", "شكر", "شكرا", "شكراً", "يعطيك العافية", "من صنعك", "ما هي منصة منذر",
-            "ما هي مميزاتك", "مساعدة", "كيف تساعدني"
+            "ما هي مميزاتك", "مساعدة", "كيف تساعدني", "هل تهلوس", "هل أنت حقيقي", "قصيدة"
         ]
         if any(w in q for w in conv_ar_phrases):
             return CopilotIntent.CONVERSATIONAL
@@ -243,7 +254,17 @@ class SovereignRAGRetriever:
         if any(w in q for w in op_phrases) or re.search(r"\b(what\s+(should|must|can)\s+(i|we)\s+do|what\s+actions?|do\s+for\s+outdoor)\b", q):
             return CopilotIntent.OPERATIONAL_INTERVENTION
 
-        return CopilotIntent.GENERAL_OVERVIEW
+        # 12. Explicit Site Surveillance Overview & Status Requests
+        overview_phrases = [
+            "overview", "briefing", "site briefing", "surveillance overview",
+            "site overview", "status briefing", "site status", "surveillance status",
+            "status of site", "current status", "daily briefing", "situation report", "sitrep"
+        ]
+        if any(w in q for w in overview_phrases):
+            return CopilotIntent.GENERAL_OVERVIEW
+
+        # 13. Default: Conversational Assistant for any open-ended normal chat
+        return CopilotIntent.CONVERSATIONAL
 
     def retrieve(
         self,
@@ -259,8 +280,12 @@ class SovereignRAGRetriever:
         augmented_query = f"{query} {intent.value}"
         articles = self.codex.search_codex(augmented_query, limit=2)
 
-        citations = [art.citation for art in articles if art.citation]
-        citations.append(f"Munzir Lakehouse Telemetry ({live_ctx.site_name}, {target_date})")
+        # Grounding citations only attached for operational / decree inquiries
+        if intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
+            citations = []
+        else:
+            citations = [art.citation for art in articles if art.citation]
+            citations.append(f"Munzir Lakehouse Telemetry ({live_ctx.site_name}, {target_date})")
 
         return RetrievedContextPacket(
             intent=intent,

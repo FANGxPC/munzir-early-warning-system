@@ -280,7 +280,23 @@ class TestSovereignCopilotAgent:
         assert "13 mobile cooling buses" not in res_how.response_text
         assert res_how.passed_fenced_gate is True
 
-        # 2. 'tell me a joke' should NOT fall back to raw surveillance statistics
+        # 2. Slang 'yo dude' should respond naturally as a friendly chatbot
+        res_yo = agent.chat("yo dude", site_id="SITE-JA-01")
+        assert res_yo.intent == "conversational"
+        assert "yo" in res_yo.response_text.lower()
+        assert "Munzir Surveillance Briefing" not in res_yo.response_text
+        assert res_yo.citations == []
+        assert res_yo.passed_fenced_gate is True
+
+        # 3. Hallucination query 'are you halllucinating ?' should explain zero-hallucination architecture
+        res_hal = agent.chat("are you halllucinating ?", site_id="SITE-JA-01")
+        assert res_hal.intent == "conversational"
+        assert "zero-hallucination" in res_hal.response_text.lower()
+        assert "Munzir Surveillance Briefing" not in res_hal.response_text
+        assert res_hal.citations == []
+        assert res_hal.passed_fenced_gate is True
+
+        # 4. 'tell me a joke' should NOT fall back to raw surveillance statistics
         res_joke = agent.chat("tell me a joke", site_id="SITE-JA-01")
         assert res_joke.intent == "conversational"
         assert "thermometers" in res_joke.response_text.lower() or "joke" in res_joke.response_text.lower()
@@ -288,6 +304,12 @@ class TestSovereignCopilotAgent:
         # Enforce zero emojis in responses
         assert not any(ord(ch) > 0x1F000 for ch in res_joke.response_text)
         assert res_joke.passed_fenced_gate is True
+
+        # 5. Explicit site briefing query should route to general_overview with surveillance stats
+        res_brief = agent.chat("give me the site briefing", site_id="SITE-JA-01")
+        assert res_brief.intent == "general_overview"
+        assert "Munzir Surveillance Briefing" in res_brief.response_text
+        assert len(res_brief.citations) > 0
 
     def test_agent_chat_main_work_and_capabilities(self):
         agent = SovereignCopilotAgent(region_key="uae")

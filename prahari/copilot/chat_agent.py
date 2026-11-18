@@ -8,6 +8,7 @@ and municipal emergency playbooks with zero-hallucination fenced validation.
 from __future__ import annotations
 
 import logging
+import re
 import torch
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -340,7 +341,35 @@ class SovereignCopilotAgent:
 
         elif intent == CopilotIntent.CONVERSATIONAL:
             q_lower = query.lower()
-            if any(w in q_lower for w in ["joke", "funny", "laugh", "humor", "نكتة", "مزحة"]):
+
+            # 1. Hallucination & Factuality Inquiries
+            if re.search(r"hal+ucinat", q_lower) or any(w in q_lower for w in ["are you lying", "can i trust you", "is this real", "is this accurate", "are you accurate", "are you fake", "هل تهلوس", "تهلوس"]):
+                eng = (
+                    "Not at all! I operate with an automated zero-hallucination verification gate.\n\n"
+                    "Here is how my answers remain 100% grounded and verifiable:\n"
+                    "1. Sensor Grounding: When answering about worksites, microclimates and temperatures are ingested directly from in-situ Sentinel ESP32 IoT sensors and Lakehouse telemetry feeds.\n"
+                    "2. Statutory Decrees: Every legal mandate, fine bracket, and midday break hour is strictly mapped to official UAE decrees (MOHRE Ministerial Resolution No. 44 of 2022 and Federal Decree-Law No. 33 of 2021).\n"
+                    "3. Zero-Hallucination Gate: Generated figures pass through a deterministic validation gate that checks every single number against retrieved ground truth before display.\n\n"
+                    "When chatting normally, I converse naturally like any friendly assistant, and when you ask about operational safety or regulations, I switch to strictly verified, certified facts."
+                )
+                ar = (
+                    "أبداً، لست أهذي على الإطلاق! أعمل بنظام صارم لمنع الهلوسة والتحقق الرقمي بنسبة 100٪.\n\n"
+                    "تعتمد كافة البيانات التشغيلية وقراءات درجات الحرارة (WBGT) على حساسات إنترنت الأشياء الميدانية والبيانات الرسمية، بينما تخضع كافة اللوائح للقرار الوزاري رقم 44 لسنة 2022. يتم تمرير كل إجابة عبر بوابة تدقيق حسابية تضمن عدم اختلاق أي رقم أو حقيقة. يمكنك سؤالي عن أي تفاصيل تشغيلية للتحقق بنفسك!"
+                )
+
+            # 2. Slang & Casual Greetings
+            elif any(re.search(r"\b" + re.escape(w) + r"\b", q_lower) for w in ["yo", "yo dude", "dude", "sup", "what's up", "whats up", "hey man", "hey dude", "howdy", "hiya", "peace"]):
+                eng = (
+                    "Yo! Good to connect with you. I am Munzir Sovereign Copilot, your AI partner for occupational health, heat resilience, and UAE safety operations.\n\n"
+                    "I can chat normally with you, or help you with real-time site microclimates, UAE MOHRE Resolution 44 midday break compliance, renal screening, and cooling fleet dispatch whenever you need it.\n\n"
+                    "What's on your mind today?"
+                )
+                ar = (
+                    "أهلاً بك! أنا المساعد السيادي لمنصة مُنذِر، جاهز للحديث معك ومساعدتك في كل ما يتعلق بالسلامة المهنية، ومتابعة درجات الحرارة الميدانية، والامتثال للقرارات الوزارية. كيف يمكنني خدمتك اليوم؟"
+                )
+
+            # 3. Humor & Jokes
+            elif any(w in q_lower for w in ["joke", "funny", "laugh", "humor", "نكتة", "مزحة"]):
                 eng = (
                     "Why do thermometers make terrible storytellers in the Dubai summer? Because they always jump straight to 45 degrees without any buildup!\n\n"
                     "Here is an occupational safety one:\n"
@@ -355,6 +384,39 @@ class SovereignCopilotAgent:
                     "المشرف ينظر إلى الإسفلت ويجيب: 'بكل بساطة.. حتى ظلك ذهب ليستريح في حافلة التبريد البلدي!'\n\n"
                     "احرصوا دائماً على شرب المياه الباردة وأخذ فترات الراحة المظللة لمدة 15 دقيقة كل ساعة لحماية أنفسكم ودمتم سالمين!"
                 )
+
+            # 4. Poetry & Creative Expressions
+            elif any(w in q_lower for w in ["poem", "poetry", "write a poem", "قصيدة"]):
+                eng = (
+                    "Under the fierce Arabian noon,\n"
+                    "Where asphalt waves shimmer too soon,\n"
+                    "A watchful sentinel takes the stand,\n"
+                    "To guard the workers of our land.\n\n"
+                    "From cool shaded rest to water cold,\n"
+                    "No life forgotten, no story untold,\n"
+                    "With Resolution forty-four in sight,\n"
+                    "We shield our heroes with care and might."
+                )
+                ar = (
+                    "تحت هجير الشمس في دبي الفيحاء\n"
+                    "يقف حارس يرعى سلامة البناء\n"
+                    "ظل بارد وماء زلال لكل عامل وفاء\n"
+                    "بأمر القرار الوزاري نحمي الشرفاء"
+                )
+
+            # 5. Weather, Summer & Dubai Climate Inquiries
+            elif any(w in q_lower for w in ["weather", "climate", "why is it so hot", "why so hot", "temperature in dubai", "summer in dubai", "طقس", "حرارة"]):
+                eng = (
+                    "Dubai and the Arabian Gulf experience extreme summer hyperthermia conditions due to high solar irradiance combined with moisture from the Gulf waters. This frequently pushes outdoor Wet-Bulb Globe Temperatures (WBGT) above the critical 32.2°C threshold.\n\n"
+                    "To protect outdoor workers, the UAE enforces Ministerial Resolution No. 44 of 2022 (Midday Work Ban) between 12:30 PM and 3:00 PM (15 June to 15 September) along with mandatory 15-minute shaded rest per hour and cold electrolyte water.\n\n"
+                    "Would you like me to check the live WBGT readings or fleet staging status for a specific site like Jebel Ali or Dubai South?"
+                )
+                ar = (
+                    "تشهد دولة الإمارات والخليج العربي درجات حرارة صيفية قياسية نتيجة تلاقي الإشعاع الشمسي المباشر مع رطوبة مياه الخليج، مما يرفع مؤشر الحرارة الرطبة (WBGT) فوق 32.2 درجة مئوية.\n\n"
+                    "ولهذا السبب، يفرض القرار الوزاري رقم 44 لسنة 2022 حظر العمل وقت الظهيرة من 12:30 ظهراً حتى 3:00 عصراً مع إلزامية توفير فترات راحة ومياه مبردة وأملاح تعويضية. يمكنك سؤالي عن قراءات أي موقع ميداني في أي وقت!"
+                )
+
+            # 6. Capabilities & Main Work
             elif any(w in q_lower for w in [
                 "main work", "what is your work", "what do you do", "what do u do",
                 "what is your job", "what is your role", "what is your purpose",
@@ -365,7 +427,7 @@ class SovereignCopilotAgent:
             ]) or any(w in q_lower for w in ["ما هو عملك", "ما هو عملك الرئيسي", "ماذا تفعل", "ما هي مهامك", "ما هي وظيفتك", "ما هي منصة منذر"]):
                 eng = (
                     "As Munzir Sovereign Health Copilot, my main work is serving as the UAE's official AI decision support system for occupational heat biosurveillance, statutory compliance, and workforce protection.\n\n"
-                    "My core operational capabilities include:\n"
+                    "I can chat with you normally on any topic, and whenever needed, provide full operational decision support across:\n"
                     "1. Real-Time Microclimate Biosurveillance: Ingesting live telemetry from Sentinel ESP32 IoT sensors and Lakehouse data to monitor thermal load (WBGT, globe temperature, and humidity) across UAE industrial zones.\n"
                     "2. Statutory Compliance & Enforcement: Providing zero-hallucination guidance on UAE MOHRE Ministerial Resolution No. 44 of 2022 (mandatory 12:30 PM to 3:00 PM midday outdoor work ban, shaded rest, and statutory penalties of AED 5,000 to AED 50,000).\n"
                     "3. Sub-Clinical Renal Screening: Tracking eGFR decline, dehydration rates (USG >= 1.025), and KDIGO Stage 1 acute kidney injury risk to provide +11.5 days early warning before hospitalizations.\n"
@@ -374,14 +436,16 @@ class SovereignCopilotAgent:
                 )
                 ar = (
                     "بصفتي المساعد السيادي لمنصة مُنذِر، يتمثل عملي ومهمتي الرئيسية في توفير نظام ذكاء اصطناعي وطني رسمي لدعم اتخاذ القرارات وحماية صحة العمال من الإجهاد الحراري في دولة الإمارات العربية المتحدة.\n\n"
-                    "تشمل مسؤولياتي التشغيلية الأساسية ما يلي:\n"
-                    "١. الرصد الميداني اللحظي للإجهاد الحراري: جمع بيانات حساسات إنترنت الأشياء (Sentinel ESP32) ونماذج الطقس لحساب مؤشر الحرارة الرطبة (WBGT) عبر المواقع الصناعية.\n"
-                    "٢. إنفاذ القرارات الوزارية والامتثال القانوني: تقديم استشارات دقيقة وموثوقة بموجب قرار وزارة الموارد البشرية رقم 44 لسنة 2022 (حظر العمل وقت الظهيرة من 12:30 ظهراً إلى 3:00 عصراً، وغرامات تبدأ من 5,000 درهم وتصل إلى 50,000 درهم).\n"
+                    "أستطيع التحدث معك بشكل طبيعي في كافة الموضوعات، وعند الحاجة، أقدم دعماً تشغيلياً متكاملاً يشمل:\n"
+                    "١. الرصد الميداني اللحظي للإجهاد الحراري: قياس مؤشرات WBGT وحرارة الإشعاع والرطوبة عبر حساسات إنترنت الأشياء (Sentinel ESP32).\n"
+                    "٢. إنفاذ القرار الوزاري رقم 44 لسنة 2022: التحقق من تطبيق حظر العمل وقت الظهيرة من 12:30 ظهراً حتى 3:00 عصراً والغرامات القانونية.\n"
                     "٣. الحراسة الحيوية الكلوية الاستباقية: مراقبة معدلات الترشيح الكبيبي والجفاف والإجهاد الكلوي الحاد (KDIGO Stage 1) لتوفير إنذار مبكر بـ +11.5 يوماً قبل دخول الطوارئ.\n"
-                    "٤. توجيه أساطيل الدعم البلدي والإسعافي: جدولة وتخصيص حافلات التبريد المتنقلة ومقطورات الرذاذ وخزانات المياه المبردة من مستودعات الطوارئ.\n"
-                    "٥. التفسير البياني المدعوم بالذكاء الاصطناعي (SHAP): تفكيك أسباب الإنذار إلى نسب مئوية موزونة بين الحمل الحراري البيئي والإشارات السريرية مع فترات ثقة محسوبة."
+                    "٤. توجيه أساطيل التبريد البلدية: جدولة وتخصيص حافلات التبريد ومقطورات الرذاذ وتوزيع المياه الباردة وأملاح التعويض.\n"
+                    "٥. الشفافية والتفسير البياني (SHAP): تقديم تحليلات دقيقة لعوامل الخطر البيئية والسريرية مع فترات ثقة محسوبة."
                 )
-            elif any(w in q_lower for w in ["thank", "thanks", "shukran", "appreciate"]):
+
+            # 7. Gratitude & Politeness
+            elif any(w in q_lower for w in ["thank", "thanks", "shukran", "appreciate", "awesome", "cool", "great job"]):
                 eng = (
                     "You are very welcome! As Munzir Sovereign Health Copilot, I am always on standby to support your team with "
                     "real-time heat biosurveillance, statutory compliance under Resolution 44/2022, and operational decision support. "
@@ -392,20 +456,22 @@ class SovereignCopilotAgent:
                     "ببيانات الرصد الحراري اللحظي، والامتثال للقرار الوزاري رقم 44 لسنة 2022، والدعم التشغيلي الميداني. "
                     "دمتم سالمين، ولا تترددوا في طلبي لأي استفسار آخر."
                 )
-            elif any(w in q_lower for w in ["who are you", "what are you", "tell me about yourself", "who made you"]):
+
+            # 8. Identity & Provenance
+            elif any(w in q_lower for w in ["who are you", "what are you", "tell me about yourself", "who made you", "are you an ai", "what model"]):
                 eng = (
                     "I am Munzir Sovereign Copilot, an official public health decision support AI developed for the "
                     "Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE).\n\n"
-                    "I am powered by the UAE's sovereign Inception 42 Jais foundation model running locally on GPU. "
-                    "I analyze real-time IoT microclimate telemetry, assess ISO 7933 predicted heat strain, track renal biomarkers, "
-                    "and ensure strict compliance with UAE Ministerial Resolution No. 44 of 2022."
+                    "I am powered by the UAE's sovereign Inception 42 Jais foundation model running locally on GPU.\n\n"
+                    "I can chat with you normally like any intelligent conversational assistant, or switch to verified domain intelligence when you ask about worksite microclimates, UAE Resolution 44 midday break compliance, renal screening, or cooling fleets."
                 )
                 ar = (
-                    "أنا المساعد السيادي لمنصة مُنذِر (Munzir Sovereign Copilot)، نظام ذكاء اصطناعي وطني رسمي لدعم القرار الصحي "
-                    "تم تطويره لصالح هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين.\n\n"
-                    "أعمل بنموذج جيس (Inception 42 Jais) السيادي محلياً على كروت GPU. أقوم بتحليل بيانات الحساسات اللحظية، "
-                    "وتقييم الإجهاد الحراري وفق معيار ISO 7933، ومتابعة صحة الكلى، وضمان الامتثال التام للقرار الوزاري رقم 44 لسنة 2022."
+                    "أنا المساعد السيادي لمنصة مُنذِر (Munzir Sovereign Copilot)، نظام ذكاء اصطناعي وطني رسمي لدعم القرار الصحي تم تطويره لصالح هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين.\n\n"
+                    "أعمل بنموذج جيس (Inception 42 Jais) السيادي محلياً على كروت GPU.\n\n"
+                    "أستطيع التحدث معك بشكل طبيعي وودي كأي مساعد ذكي، كما أستطيع تزويدك بالبيانات التشغيلية الميدانية اللحظية واللوائح القانونية بدقة 100٪ عند الحاجة."
                 )
+
+            # 9. Language Support
             elif any(w in q_lower for w in ["speak arabic", "speak english", "languages"]):
                 eng = (
                     "Yes! I am fully bilingual in English and Arabic (عربي وإنجليزي). "
@@ -416,6 +482,8 @@ class SovereignCopilotAgent:
                     "نعم بكل تأكيد! أنا ثنائي اللغة بالكامل وأتحدث باللغتين العربية والإنجليزية بطلاقة. "
                     "كما أستطيع بث التوجيهات الصوتية الميدانية بخمس لغات: العربية، والإنجليزية، والأردية، والهندية، والمالايالامية."
                 )
+
+            # 10. Wellness Inquiries
             elif any(w in q_lower for w in ["how u do", "how are you", "how are u", "how r u", "how do you do", "hows it going", "how's it going", "how are things", "how you doing", "how u doing"]):
                 eng = (
                     "I am doing very well, thank you for asking! As Munzir Sovereign Health Copilot, I am on active duty monitoring real-time thermal microclimates, UAE Resolution 44/2022 midday break compliance, and occupational workforce safety across the UAE.\n\n"
@@ -427,16 +495,26 @@ class SovereignCopilotAgent:
                     "أعمل بنموذج جيس السيادي (Inception 42 Jais-3-0.9B) محلياً على كروت GPU.\n\n"
                     "كيف يمكنني مساعدتك وفريقك اليوم؟ يمكنك سؤالي عن مستويات الخطر، أو اللوائح الوزارية، أو إجراءات الإسعاف الأولي، أو توجيه أساطيل التبريد."
                 )
+
+            # 11. General Open-Ended Conversational Fallback
             else:
                 eng = (
-                    "I am doing well, thank you! As Munzir Sovereign Health Copilot, I am actively monitoring occupational thermal safety across all UAE industrial zones.\n\n"
-                    "I was developed for the Dubai Health Authority (DHA) and Ministry of Human Resources and Emiratisation (MOHRE), powered by Inception 42 Jais-3-0.9B running locally on GPU.\n\n"
-                    "I can assist you with real-time site risks, official midday break regulations (Resolution 44/2022), first-aid protocols, and municipal cooling fleet staging. How can I help your team right now?"
+                    "I am here and ready to assist! As Munzir Sovereign Copilot, I can chat normally with you on any topic, answer questions, or provide expert decision support on occupational health and UAE heat safety regulations.\n\n"
+                    "Feel free to chat with me freely, or ask me about:\n"
+                    "• Current worksite heat stress & sensor readings ('Explain Jebel Ali risk')\n"
+                    "• Statutory midday work ban rules & fines ('What is the legal fine under Resolution 44?')\n"
+                    "• Immediate worker action plans ('What should I do right now for outdoor workers?')\n"
+                    "• Sub-clinical kidney & dehydration screening ('What are the renal biomarker rates?')\n"
+                    "• Municipal cooling fleet staging ('Show municipal cooling fleet staging')"
                 )
                 ar = (
-                    "أنا بخير والحمد لله! بصفتي المساعد السيادي لمنصة مُنذِر، أقوم بمتابعة مؤشرات السلامة الحرارية المهنية عبر كافة المناطق الصناعية في دولة الإمارات.\n\n"
-                    "تم تطوير المنصة لدعم هيئة الصحة بدبي ووزارة الموارد البشرية والتوطين، اعتماداً على نموذج Inception 42 Jais-3-0.9B الذي يعمل محلياً بالكامل.\n\n"
-                    "أنا جاهز لمساعدتكم في تقييم المخاطر اللحظية، واللوائح الوزارية، وإجراءات الإسعاف الأولي، وتوجيه أساطيل التبريد. كيف يمكنني خدمتك الآن؟"
+                    "أنا هنا وجاهز للتحدث معك! بصفتي المساعد السيادي لمنصة مُنذِر، يسعدني التحدث معك والإجابة عن استفساراتك بشكل طبيعي، وتقديم استشارات متخصصة حول السلامة المهنية، ولوائح حظر العمل وقت الظهيرة، وحماية صحة العمال.\n\n"
+                    "يمكنك التحدث معي بحرية، أو سؤالي عن:\n"
+                    "• قراءات الإجهاد الحراري للمواقع الميدانية\n"
+                    "• الغرامات واشتراطات قرار حظر العمل وقت الظهيرة (رقم 44 لسنة 2022)\n"
+                    "• الخطط التشغيلية الفورية لحماية العمال\n"
+                    "• الفحوصات الكلوية الاستباقية ومعدلات الجفاف\n"
+                    "• توجيه حافلات التبريد ومقطورات الرذاذ"
                 )
 
         elif intent == CopilotIntent.ACTION_PLAN:

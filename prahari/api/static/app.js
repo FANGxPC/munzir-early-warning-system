@@ -3818,7 +3818,7 @@ async function executeCopilotQuery(query, siteId, streamId) {
 
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.4rem; margin-top:0.35rem; padding-top:0.4rem; border-top:1px solid #222f2b;">
         <div style="font-size:0.7rem; color:#94a3b8; max-width:62%;">
-          <strong>Citations:</strong> ${escapeHtml(res.citations.slice(0, 2).join(' | '))}
+          ${(res.citations && res.citations.length > 0) ? `<strong>Citations:</strong> ${escapeHtml(res.citations.slice(0, 2).join(' | '))}` : `<strong>Mode:</strong> Sovereign Conversational Assistant`}
         </div>
         <div style="display:flex; gap:0.35rem; align-items:center;">
           ${hasDifferentArabic ? `
