@@ -517,56 +517,148 @@
 
       <!-- Regional Risk Map Panel -->
       <section class="panel map-panel" id="regional-risk-map" style="position:relative;">
-        <div class="panel-heading">
+        <div class="panel-heading" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.75rem;">
           <div>
-            <div class="section-overline">SPATIAL OVERVIEW</div>
-            <h3>Regional risk map</h3>
-          </div>
-          <div style="display:flex; gap:0.5rem; align-items:center; position:relative;">
-            <button class="map-filter" id="btnMapLayersToggle" type="button" onclick="toggleMapLayersMenu(event)" aria-haspopup="true" aria-expanded="false">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              Layers
-            </button>
-            <!-- Tactical Layers Dropdown -->
-            <div id="mapLayersDropdown" class="map-layers-menu" style="display:none;">
-              <div class="map-layers-header">Tactical GIS Layers</div>
-              <label class="layer-checkbox-row">
-                <input type="checkbox" id="layerToggleSensors" checked onchange="toggleMapLayer('sensors')">
-                <span>Biometeorology Sensor Mesh</span>
-              </label>
-              <label class="layer-checkbox-row">
-                <input type="checkbox" id="layerTogglePlume" checked onchange="toggleMapLayer('plume')">
-                <span>Thermal Inversion Heat Plume</span>
-              </label>
-              <label class="layer-checkbox-row">
-                <input type="checkbox" id="layerToggleHexes" checked onchange="toggleMapLayer('hexes')">
-                <span>H3 Res-7 Risk Hexagons</span>
-              </label>
-              <label class="layer-checkbox-row">
-                <input type="checkbox" id="layerToggleMaritime" checked onchange="toggleMapLayer('maritime')">
-                <span>Arabian Gulf Maritime Wash</span>
-              </label>
+            <div class="section-overline" style="display:flex; align-items:center; gap:6px;">
+              <span class="live-beacon-pulse"></span>
+              <span>SPATIAL BIOSURVEILLANCE &bull; UAE ARABIAN GULF</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:2px;">
+              <h3 style="margin:0;">Regional risk map</h3>
+              <span class="map-mesh-status-pill">
+                <i class="live-mesh-dot"></i>
+                <span>19 NODES GROUNDED</span>
+                <span class="mesh-sep">&bull;</span>
+                <span class="mesh-h3">H3 RES-7</span>
+              </span>
             </div>
           </div>
-        </div>
+          <div class="map-header-controls" style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <!-- View Mode Switcher -->
+            <div class="map-mode-pills" role="group" aria-label="Map display mode">
+              <button type="button" class="map-mode-pill active" id="btnModeRadar" onclick="setMapDisplayMode('radar')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                Tactical Radar
+              </button>
+              <button type="button" class="map-mode-pill" id="btnModeThermal" onclick="setMapDisplayMode('thermal')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Heat Dome
+              </button>
+            </div>
 
-        <div class="map-body" style="height:320px; min-height:320px; position:relative; overflow:hidden; border:1px solid #283531; border-radius:8px; background:#060a14;">
-          <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none; position:absolute; top:8px; left:8px; z-index:4;"></div>
-          <div id="situationSvgMap" class="map-svg-container" style="width:100%; height:100%;"></div>
-          <!-- Tactical Floating HUD Tooltip -->
-          <div id="mapHudTooltip" class="map-hud-tooltip" style="display:none;"></div>
-          <!-- Quick-Jump Site Chips -->
-          <div class="map-site-chips" style="position:absolute; bottom:10px; left:12px; display:flex; gap:6px; z-index:3;">
-            <button type="button" class="site-chip-btn active" onclick="selectGeoSite('SITE-JA-01', 'Jebel Ali Port')">Jebel Ali</button>
-            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-AQ-02', 'Al Quoz Industrial')">Al Quoz</button>
-            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-CR-03', 'Dubai Creek Harbor')">Creek</button>
-            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-DS-04', 'Dubai South Logistics')">Dubai South</button>
+            <!-- Tactical Layers Dropdown Button -->
+            <div style="position:relative;">
+              <button class="map-filter" id="btnMapLayersToggle" type="button" onclick="toggleMapLayersMenu(event)" aria-haspopup="true" aria-expanded="false">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                GIS Layers
+                <span class="layers-count-badge" id="activeLayersCountBadge">5</span>
+              </button>
+              <!-- Tactical Layers Dropdown -->
+              <div id="mapLayersDropdown" class="map-layers-menu" style="display:none;">
+                <div class="map-layers-header">
+                  <span>Tactical GIS Overlays</span>
+                  <button type="button" class="layers-reset-link" onclick="resetAllMapLayers()">Reset</button>
+                </div>
+                <label class="layer-checkbox-row">
+                  <input type="checkbox" id="layerToggleSensors" checked onchange="toggleMapLayer('sensors')">
+                  <span>Biometeorology Sensor Mesh</span>
+                </label>
+                <label class="layer-checkbox-row">
+                  <input type="checkbox" id="layerTogglePlume" checked onchange="toggleMapLayer('plume')">
+                  <span>Thermal Inversion Heat Dome</span>
+                </label>
+                <label class="layer-checkbox-row">
+                  <input type="checkbox" id="layerToggleHexes" checked onchange="toggleMapLayer('hexes')">
+                  <span>H3 Res-7 Risk Hexagons</span>
+                </label>
+                <label class="layer-checkbox-row">
+                  <input type="checkbox" id="layerToggleMaritime" checked onchange="toggleMapLayer('maritime')">
+                  <span>Arabian Gulf Maritime Wash</span>
+                </label>
+                <label class="layer-checkbox-row">
+                  <input type="checkbox" id="layerToggleCorridors" checked onchange="toggleMapLayer('corridors')">
+                  <span>Logistics Fleet Corridors (E11/E44)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Fullscreen Map Action -->
+            <button type="button" class="btn-fullscreen-map-icon" onclick="openFullscreenMapModal()" title="Expand Fullscreen Tactical Command Map">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            </button>
           </div>
         </div>
 
-        <div class="map-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span><i class="map-live-dot"></i>Live site conditions &middot; H3 Resolution 7 Grid</span>
-          <button type="button" class="btn-fullscreen-map" onclick="openFullscreenMapModal()">Full Screen Map &rarr;</button>
+        <div class="map-body tactical-map-body" id="tacticalMapBody" style="height:380px; min-height:380px; position:relative; overflow:hidden; border:1px solid #28443b; border-radius:10px; background:#050912; box-shadow: inset 0 2px 24px rgba(0,0,0,0.6);">
+          <div id="mapPrivacyNotice" class="banner banner-privacy" style="display:none; position:absolute; top:8px; left:8px; z-index:4;"></div>
+
+          <!-- Top-Left Telemetry Crosshair Overlay -->
+          <div class="map-telemetry-hud" style="position:absolute; top:12px; left:14px; z-index:3; pointer-events:none;">
+            <div class="hud-mono-tag">GEO-GRID: <span style="color:#65dfcd;">WGS84 &bull; 25.08&deg;N 55.20&deg;E</span></div>
+            <div class="hud-mono-sub">SENTINEL DUAL-CORE TELEMETRY: <span style="color:#66d9af;">100% INGESTION</span></div>
+          </div>
+
+          <!-- Top-Right Compass & Map Zoom Cluster -->
+          <div class="map-nav-cluster" style="position:absolute; top:12px; right:14px; z-index:3; display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+            <div class="map-compass-badge" title="Tactical Azimuth 000&deg;">
+              <span class="compass-n">N</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polygon points="12 2 15 11 12 9 9 11" fill="#65dfcd"></polygon><polygon points="12 22 15 13 12 15 9 13" fill="#334155"></polygon></svg>
+            </div>
+            <div class="map-zoom-buttons">
+              <button type="button" class="map-zoom-btn" onclick="zoomTacticalMap(1.2)" title="Zoom In">+</button>
+              <button type="button" class="map-zoom-btn" onclick="zoomTacticalMap(0.8)" title="Zoom Out">&minus;</button>
+              <button type="button" class="map-zoom-btn" onclick="resetTacticalMapZoom()" title="Reset View">&#x2316;</button>
+            </div>
+          </div>
+
+          <!-- Main SVG Map -->
+          <div id="situationSvgMap" class="map-svg-container" style="width:100%; height:100%;"></div>
+
+          <!-- Tactical Floating HUD Tooltip -->
+          <div id="mapHudTooltip" class="map-hud-tooltip" style="display:none;"></div>
+
+          <!-- Quick-Jump Sector Chips (Bottom-Left) -->
+          <div class="map-site-chips" style="position:absolute; bottom:12px; left:14px; display:flex; gap:6px; z-index:3; flex-wrap:wrap; max-width:85%;">
+            <button type="button" class="site-chip-btn active" onclick="selectGeoSite('SITE-JA-01', 'Jebel Ali Port')">
+              <i class="chip-pip pip-alert"></i>Jebel Ali Port
+            </button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-AQ-01', 'Al Quoz Steel')">
+              <i class="chip-pip pip-alert"></i>Al Quoz
+            </button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-DS-01', 'Dubai South')">
+              <i class="chip-pip pip-warning"></i>Dubai South
+            </button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-BB-01', 'Business Bay')">
+              <i class="chip-pip pip-watch"></i>Business Bay
+            </button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-DR-01', 'Deira')">
+              <i class="chip-pip pip-alert"></i>Deira
+            </button>
+            <button type="button" class="site-chip-btn" onclick="selectGeoSite('SITE-RK-01', 'Ras Al Khor')">
+              <i class="chip-pip pip-normal"></i>Ras Al Khor
+            </button>
+          </div>
+        </div>
+
+        <div class="map-footer tactical-map-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:0 2px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="live-dot-pulse"></span>
+            <span style="font-size:11.5px; color:#cbd5e1; font-weight:500;">
+              Live Site Conditions &bull; H3 Res-7 Grid &bull; ISO 7933 PHS Calibrated
+            </span>
+          </div>
+
+          <!-- Risk Tier Legend Swatches -->
+          <div class="map-risk-legend" style="display:flex; gap:12px; align-items:center; font-size:11px; color:#94a3b8; font-family:var(--font-mono, monospace);">
+            <span class="legend-swatch"><i style="background:#f17971; box-shadow:0 0 6px #f17971;"></i>Alert (&ge;33&deg;C)</span>
+            <span class="legend-swatch"><i style="background:#e9aa62; box-shadow:0 0 6px #e9aa62;"></i>Warning (30-33&deg;C)</span>
+            <span class="legend-swatch"><i style="background:#65dfcd; box-shadow:0 0 6px #65dfcd;"></i>Watch (28-30&deg;C)</span>
+            <span class="legend-swatch"><i style="background:#66d9af; box-shadow:0 0 6px #66d9af;"></i>Normal (&lt;28&deg;C)</span>
+          </div>
+
+          <button type="button" class="btn-fullscreen-map" onclick="openFullscreenMapModal()">
+            Full Screen Map &rarr;
+          </button>
         </div>
 
         <div id="mapGeoList" style="display:none;"></div>

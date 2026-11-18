@@ -4000,3 +4000,265 @@ input:checked + .slider:before {
   animation: dash-flow 1.5s linear infinite;
 }
 
+/* ============================================================
+   REGIONAL RISK MAP ELEVATION STYLES (TACTICAL GIS 2.0)
+   ============================================================ */
+.map-mesh-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 28, 24, 0.85);
+  border: 1px solid rgba(101, 223, 205, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono, monospace);
+  color: #65dfcd;
+  letter-spacing: 0.04em;
+}
+
+.live-mesh-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #66d9af;
+  box-shadow: 0 0 8px #66d9af;
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
+.mesh-sep {
+  color: #475569;
+}
+
+.mesh-h3 {
+  color: #cbd5e1;
+}
+
+.map-mode-pills {
+  display: inline-flex;
+  background: #08100d;
+  border: 1px solid #1f352e;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.map-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.map-mode-pill:hover {
+  color: #ffffff;
+  background: rgba(101, 223, 205, 0.1);
+}
+
+.map-mode-pill.active {
+  background: #182e28;
+  color: #65dfcd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.btn-fullscreen-map-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #0d1a16;
+  border: 1px solid #203b32;
+  border-radius: 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-fullscreen-map-icon:hover {
+  background: #19362e;
+  border-color: #65dfcd;
+  color: #65dfcd;
+}
+
+.layers-count-badge {
+  background: #133a32;
+  color: #65dfcd;
+  border-radius: 10px;
+  padding: 1px 5px;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  margin-left: 2px;
+}
+
+.layers-reset-link {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.layers-reset-link:hover {
+  color: #65dfcd;
+}
+
+.map-telemetry-hud {
+  background: rgba(6, 12, 18, 0.82);
+  border: 1px solid rgba(101, 223, 205, 0.22);
+  border-radius: 5px;
+  padding: 5px 8px;
+  backdrop-filter: blur(8px);
+}
+
+.hud-mono-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  color: #cbd5e1;
+  letter-spacing: 0.04em;
+}
+
+.hud-mono-sub {
+  font-family: var(--font-mono, monospace);
+  font-size: 8px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.map-nav-cluster {
+  pointer-events: auto;
+}
+
+.map-compass-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(6, 12, 18, 0.88);
+  border: 1px solid rgba(101, 223, 205, 0.25);
+  border-radius: 6px;
+  padding: 3px 6px;
+  backdrop-filter: blur(6px);
+}
+
+.compass-n {
+  font-size: 8px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: #65dfcd;
+  line-height: 1;
+}
+
+.map-zoom-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(6, 12, 18, 0.88);
+  border: 1px solid rgba(101, 223, 205, 0.22);
+  border-radius: 6px;
+  padding: 3px;
+  backdrop-filter: blur(6px);
+}
+
+.map-zoom-btn {
+  width: 22px;
+  height: 22px;
+  background: #0f1c18;
+  border: 1px solid #1f3830;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-zoom-btn:hover {
+  background: #1e3830;
+  border-color: #65dfcd;
+  color: #65dfcd;
+}
+
+.chip-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.pip-alert { background: #f17971; box-shadow: 0 0 6px #f17971; }
+.pip-warning { background: #e9aa62; box-shadow: 0 0 6px #e9aa62; }
+.pip-watch { background: #65dfcd; box-shadow: 0 0 6px #65dfcd; }
+.pip-normal { background: #66d9af; box-shadow: 0 0 6px #66d9af; }
+
+.legend-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.live-beacon-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #65dfcd;
+  box-shadow: 0 0 8px #65dfcd;
+  display: inline-block;
+  animation: pulse-dot 1.5s infinite ease-in-out;
+}
+
+.live-dot-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  display: inline-block;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+/* Reticle Keyframes & Target Lock */
+@keyframes reticle-pulse-ring {
+  0% { transform: scale(0.96); opacity: 0.9; }
+  50% { transform: scale(1.06); opacity: 0.5; }
+  100% { transform: scale(0.96); opacity: 0.9; }
+}
+
+.target-bracket-ring {
+  transform-origin: center;
+  animation: reticle-pulse-ring 2.4s ease-in-out infinite;
+}
+
+.site-callout-badge {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.map-node-group:hover .site-callout-badge {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+}
+

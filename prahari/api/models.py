@@ -37,6 +37,8 @@ class GeoFeature(BaseModel):
     primary_syndrome: Optional[str] = None
     h3_index: Optional[str] = None
     population: Optional[int] = None
+    current_wbgt: Optional[float] = None
+    relative_risk: Optional[float] = None
 
 
 class ClusterBoundary(BaseModel):

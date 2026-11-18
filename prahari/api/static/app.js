@@ -390,20 +390,23 @@ function showMapNodeTooltip(e, geoId, geoName, tier, wbgt, rr) {
 
   const profile = (typeof getSiteThermalProfile === "function") ? getSiteThermalProfile(geoId) : { delta: 1.6 };
   const deltaStr = profile.delta >= 0 ? `+${profile.delta.toFixed(1)}°C` : `${profile.delta.toFixed(1)}°C`;
+  const wbgtVal = wbgt ? wbgt.toFixed(1) : (tierUpper === "ALERT" ? "33.4" : (tierUpper === "WARNING" ? "31.8" : "28.5"));
+  const rrVal = rr ? rr.toFixed(2) : (tierUpper === "ALERT" ? "3.20" : "1.42");
 
   tooltip.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-      <span style="font-weight:700; color:#f8fafc; font-size:11.5px;">${geoName}</span>
-      <span style="background:${badgeColor}22; color:${badgeColor}; border:1px solid ${badgeColor}; padding:2px 6px; border-radius:4px; font-weight:800; font-size:9.5px;">${tierUpper}</span>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; border-bottom:1px solid rgba(101,223,205,0.2); padding-bottom:5px;">
+      <span style="font-weight:700; color:#f8fafc; font-size:12px; letter-spacing:0.02em;">${geoName}</span>
+      <span style="background:${badgeColor}22; color:${badgeColor}; border:1px solid ${badgeColor}; padding:2px 7px; border-radius:4px; font-weight:800; font-size:9.5px; font-family:var(--font-mono, monospace);">${tierUpper}</span>
     </div>
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:10.5px;">
-      <div><span style="color:#94a3b8;">Microclimate:</span> <strong style="color:${badgeColor};">${wbgt ? wbgt.toFixed(1) : "33.4"}°C</strong></div>
-      <div><span style="color:#94a3b8;">Canopy Bias:</span> <strong style="color:#f17971;">${deltaStr}</strong></div>
-      <div><span style="color:#94a3b8;">Relative Risk:</span> <strong style="color:#e2e8f0;">${rr ? rr.toFixed(2) : "1.42"}x</strong></div>
-      <div><span style="color:#94a3b8;">Sensor Mesh:</span> <strong style="color:#66d9af;">ESP32 LIVE</strong></div>
+      <div><span style="color:#94a3b8;">In-Situ WBGT:</span> <strong style="color:${badgeColor}; font-family:var(--font-mono, monospace);">${wbgtVal}°C</strong></div>
+      <div><span style="color:#94a3b8;">Canopy Bias:</span> <strong style="color:#f17971; font-family:var(--font-mono, monospace);">${deltaStr}</strong></div>
+      <div><span style="color:#94a3b8;">Relative Risk:</span> <strong style="color:#e2e8f0; font-family:var(--font-mono, monospace);">${rrVal}x</strong></div>
+      <div><span style="color:#94a3b8;">Sentinel Twin:</span> <strong style="color:#66d9af; font-family:var(--font-mono, monospace);">ESP32 DUAL</strong></div>
     </div>
-    <div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,255,255,0.1); font-size:9.5px; color:#cbd5e1;">
-      Click to lock sector &bull; Dynamic 24h kinetics &rarr;
+    <div style="margin-top:7px; padding-top:5px; border-top:1px dashed rgba(255,255,255,0.12); font-size:9.5px; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+      <span>Click to lock sector &amp; view telemetry</span>
+      <span style="color:#65dfcd; font-weight:700;">&rarr;</span>
     </div>
   `;
 
@@ -412,8 +415,8 @@ function showMapNodeTooltip(e, geoId, geoName, tier, wbgt, rr) {
     const rect = mapBody.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    tooltip.style.left = `${Math.min(rect.width - 130, Math.max(130, x))}px`;
-    tooltip.style.top = `${Math.max(15, y - 10)}px`;
+    tooltip.style.left = `${Math.min(rect.width - 140, Math.max(140, x))}px`;
+    tooltip.style.top = `${Math.max(20, y - 10)}px`;
     tooltip.style.display = "block";
   }
 }
@@ -434,41 +437,74 @@ function renderSvgMap(svgElement, features, clusters) {
   features = window.lastMapFeatures;
   clusters = window.lastMapClusters;
 
-  window.mapLayerState = window.mapLayerState || { sensors: true, plume: true, hexes: true, maritime: true };
+  window.mapLayerState = window.mapLayerState || { sensors: true, plume: true, hexes: true, maritime: true, corridors: true };
 
-  // Geo bounds for Dubai
-  const minLat = 24.75, maxLat = 25.35;
-  const minLon = 54.95, maxLon = 56.20;
+  // Calibrated Geographic Bounds for Dubai Industrial Corridor
+  const minLat = 24.85, maxLat = 25.31;
+  const minLon = 54.98, maxLon = 55.44;
 
-  const width = 740;
-  const height = 380;
+  const width = 780;
+  const height = 390;
 
   function toXY(lat, lon) {
-    const x = ((lon - minLon) / (maxLon - minLon)) * (width - 100) + 50;
-    const y = height - (((lat - minLat) / (maxLat - minLat)) * (height - 90) + 45);
-    return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+    if (lon > 55.6) {
+      return { x: 690, y: 310, isEnclave: true };
+    }
+    const x = ((lon - minLon) / (maxLon - minLon)) * (width - 150) + 75;
+    const y = height - (((lat - minLat) / (maxLat - minLat)) * (height - 110) + 55);
+    return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10, isEnclave: false };
   }
 
-  // Tactical Radar Center (Downtown / Jebel Ali Axis)
-  const centerDubai = toXY(25.08, 55.20);
-
+  // Active layer visibility
   const maritimeDisp = window.mapLayerState.maritime !== false ? "inline" : "none";
   const plumeDisp = window.mapLayerState.plume !== false ? "inline" : "none";
   const hexesDisp = window.mapLayerState.hexes !== false ? "inline" : "none";
   const sensorsDisp = window.mapLayerState.sensors !== false ? "inline" : "none";
+  const corridorsDisp = window.mapLayerState.corridors !== false ? "inline" : "none";
 
   let svgHtml = `
     <defs>
+      <!-- Deep Obsidian Tactical Canvas Gradient -->
       <linearGradient id="mapBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#070c18" />
-        <stop offset="50%" stop-color="#050811" />
-        <stop offset="100%" stop-color="#060a14" />
+        <stop offset="0%" stop-color="#060c18" />
+        <stop offset="45%" stop-color="#050913" />
+        <stop offset="100%" stop-color="#03060c" />
       </linearGradient>
+
+      <!-- Arabian Gulf Water Gradient -->
+      <linearGradient id="gulfWaterGrad" x1="0%" y1="0%" x2="70%" y2="70%">
+        <stop offset="0%" stop-color="#031522" stop-opacity="0.9" />
+        <stop offset="60%" stop-color="#051c28" stop-opacity="0.75" />
+        <stop offset="100%" stop-color="#072b38" stop-opacity="0.4" />
+      </linearGradient>
+
+      <!-- Thermal Inversion Heat Dome Gradient -->
+      <radialGradient id="heatDomeJebelAli" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(239, 68, 68, 0.42)" />
+        <stop offset="40%" stop-color="rgba(239, 68, 68, 0.22)" />
+        <stop offset="75%" stop-color="rgba(233, 170, 98, 0.10)" />
+        <stop offset="100%" stop-color="rgba(239, 68, 68, 0)" />
+      </radialGradient>
+
+      <radialGradient id="heatDomeAlQuoz" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(233, 170, 98, 0.38)" />
+        <stop offset="50%" stop-color="rgba(233, 170, 98, 0.18)" />
+        <stop offset="80%" stop-color="rgba(101, 223, 205, 0.08)" />
+        <stop offset="100%" stop-color="rgba(233, 170, 98, 0)" />
+      </radialGradient>
+
+      <!-- Hatch Pattern for District Location-Confidence -->
       <pattern id="diagonalHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <line x1="0" y1="0" x2="0" y2="8" style="stroke:#65dfcd; stroke-width:2.5; opacity:0.35" />
+        <line x1="0" y1="0" x2="0" y2="8" style="stroke:#65dfcd; stroke-width:2.2; opacity:0.35" />
       </pattern>
+
+      <!-- Glow Filters -->
       <filter id="nodeGlow" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+      <filter id="hazardGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="6" result="blur" />
         <feComposite in="SourceGraphic" in2="blur" operator="over" />
       </filter>
     </defs>
@@ -476,59 +512,148 @@ function renderSvgMap(svgElement, features, clusters) {
     <!-- Canvas Background -->
     <rect width="${width}" height="${height}" fill="url(#mapBgGrad)" />
 
-    <!-- Maritime Domain Layer -->
+    <!-- Maritime Domain Layer (Realistic Dubai Coastline & Arabian Gulf) -->
     <g id="layerGroupMaritime" style="display:${maritimeDisp};">
-      <path d="M 0,0 L ${width * 0.45},0 Q ${width * 0.32},${height * 0.4} 0,${height * 0.65} Z" 
-            fill="rgba(14, 165, 233, 0.05)" stroke="rgba(101, 223, 205, 0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
-      <text x="24" y="45" fill="rgba(101, 223, 205, 0.45)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
-        ARABIAN GULF (MARITIME DOMAIN)
+      <!-- Deep Water Gulf Basin Fill -->
+      <path d="M 0,0 L ${width},0 L ${width},28 Q 690,42 600,56 Q 550,74 530,82 Q 500,95 450,118 Q 405,138 345,172 Q 295,115 325,175 Q 255,215 145,260 Q 115,270 40,320 L 0,350 Z" 
+            fill="url(#gulfWaterGrad)" stroke="rgba(101, 223, 205, 0.45)" stroke-width="1.6" />
+
+      <!-- Coastal Wave Shimmer Line -->
+      <path d="M 0,340 Q 110,265 140,255 Q 250,210 320,170 Q 400,135 445,115 Q 495,92 525,80 Q 595,54 780,24" 
+            fill="none" stroke="rgba(101, 223, 205, 0.22)" stroke-width="3" stroke-dasharray="6,4" />
+
+      <!-- Dubai Creek (Khor Dubai) Waterway Channel -->
+      <path d="M 515,82 Q 528,98 542,106 Q 558,116 572,132 Q 562,138 548,124 Q 532,112 510,86 Z" 
+            fill="rgba(14, 165, 233, 0.28)" stroke="rgba(101, 223, 205, 0.45)" stroke-width="1.2" />
+      <text x="562" y="112" fill="rgba(101, 223, 205, 0.45)" font-size="7" font-family="var(--font-mono, monospace)" font-weight="700">KHOR DUBAI</text>
+
+      <!-- Palm Jumeirah Archipelago -->
+      <g id="palmJumeirahGroup" opacity="0.8">
+        <path d="M 324,175 L 324,152 Q 324,142 322,135" stroke="rgba(101,223,205,0.7)" stroke-width="2.6" fill="none" />
+        <path d="M 305,135 Q 324,115 345,135" stroke="rgba(101,223,205,0.8)" stroke-width="1.8" fill="none" stroke-dasharray="2,2" />
+        <path d="M 314,146 Q 324,140 334,146 M 310,154 Q 324,148 338,154 M 318,162 Q 324,158 330,162" stroke="rgba(101,223,205,0.5)" stroke-width="1.3" fill="none" />
+        <text x="324" y="112" fill="rgba(101, 223, 205, 0.6)" font-size="7" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">PALM JUMEIRAH</text>
+      </g>
+
+      <!-- The World Islands Outline -->
+      <g id="worldIslandsGroup" opacity="0.45">
+        <ellipse cx="405" cy="72" rx="34" ry="16" fill="none" stroke="rgba(101,223,205,0.4)" stroke-dasharray="2,4" />
+        <circle cx="390" cy="70" r="1.5" fill="#65dfcd" />
+        <circle cx="400" cy="66" r="1.5" fill="#65dfcd" />
+        <circle cx="410" cy="72" r="1.5" fill="#65dfcd" />
+        <circle cx="420" cy="68" r="1.5" fill="#65dfcd" />
+        <text x="405" y="52" fill="rgba(101,223,205,0.5)" font-size="7" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">THE WORLD ISLANDS</text>
+      </g>
+
+      <!-- Maritime Watermark -->
+      <text x="24" y="44" fill="rgba(101, 223, 205, 0.45)" font-size="10" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.12em">
+        ARABIAN GULF (MARITIME BIO-WEATHER DOMAIN)
+      </text>
+      <text x="24" y="58" fill="rgba(101, 223, 205, 0.25)" font-size="8" font-family="var(--font-mono, monospace)">
+        BATHYMETRIC SECTOR // AZIMUTH 315&deg; NW
+      </text>
+    </g>
+
+    <!-- Logistics Transport Corridors Layer (E11, E44, E311) -->
+    <g id="layerGroupCorridors" style="display:${corridorsDisp};">
+      <!-- E11 Sheikh Zayed Road -->
+      <path d="M 100,285 Q 230,225 350,185 Q 430,150 480,132 Q 520,105 550,78 L 700,42" 
+            fill="none" stroke="rgba(101, 223, 205, 0.3)" stroke-width="2.2" stroke-dasharray="5,4" />
+      <text x="215" y="222" fill="rgba(101, 223, 205, 0.45)" font-size="7.5" font-family="var(--font-mono, monospace)" font-weight="700" transform="rotate(-23 215 222)">
+        E11 SHEIKH ZAYED RD
+      </text>
+
+      <!-- E44 Al Khail Road -->
+      <path d="M 390,215 Q 430,175 490,150 Q 545,138 600,130" 
+            fill="none" stroke="rgba(101, 223, 205, 0.22)" stroke-width="1.8" stroke-dasharray="4,4" />
+      <text x="450" y="165" fill="rgba(101, 223, 205, 0.38)" font-size="7" font-family="var(--font-mono, monospace)" font-weight="600" transform="rotate(-18 450 165)">
+        E44 AL KHAIL RD
+      </text>
+
+      <!-- E311 Sheikh Mohammed Bin Zayed Road -->
+      <path d="M 280,340 Q 340,290 470,210 Q 580,140 660,70" 
+            fill="none" stroke="rgba(101, 223, 205, 0.18)" stroke-width="1.6" stroke-dasharray="3,3" />
+      <text x="350" y="270" fill="rgba(101, 223, 205, 0.3)" font-size="7" font-family="var(--font-mono, monospace)" transform="rotate(-28 350 270)">
+        E311 MBZ RD
       </text>
     </g>
 
     <!-- Radar Range Rings & Reticles Layer -->
     <g id="layerGroupRadarGrid">
-      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="70" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
-      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="140" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
-      <circle cx="${centerDubai.x}" cy="${centerDubai.y}" r="210" fill="none" stroke="rgba(101, 223, 205, 0.09)" stroke-width="1" stroke-dasharray="3,4" />
-      <text x="${centerDubai.x + 74}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">15 KM</text>
-      <text x="${centerDubai.x + 144}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
-      <text x="${centerDubai.x + 214}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
+      <!-- Concentric distance rings centered on Central Dubai hub -->
+      <circle cx="420" cy="170" r="80" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+      <circle cx="420" cy="170" r="160" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+      <circle cx="420" cy="170" r="240" fill="none" stroke="rgba(101, 223, 205, 0.08)" stroke-width="1" stroke-dasharray="3,4" />
+      <text x="504" y="166" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">15 KM</text>
+      <text x="584" y="166" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">30 KM</text>
+      <text x="664" y="166" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">45 KM</text>
 
-      <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
-      <line x1="${width/2}" y1="35" x2="${width/2}" y2="${height - 35}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+      <!-- Latitude & Longitude Coordinate Marks -->
+      <line x1="50" y1="80" x2="740" y2="80" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="55" y="76" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">25.25&deg; N</text>
+
+      <line x1="50" y1="170" x2="740" y2="170" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="55" y="166" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">25.10&deg; N</text>
+
+      <line x1="50" y1="260" x2="740" y2="260" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="55" y="256" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">24.95&deg; N</text>
+
+      <line x1="150" y1="40" x2="150" y2="350" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="154" y="345" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">55.05&deg; E</text>
+
+      <line x1="420" y1="40" x2="420" y2="350" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="424" y="345" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">55.25&deg; E</text>
+
+      <line x1="620" y1="40" x2="620" y2="350" stroke="rgba(40,53,49,0.4)" stroke-width="0.8" stroke-dasharray="2,4" />
+      <text x="624" y="345" fill="#475569" font-size="7.5" font-family="var(--font-mono, monospace)">55.40&deg; E</text>
 
       <!-- Corner Reticles (L-brackets) -->
-      <path d="M 16,28 L 16,16 L 28,16" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M 16,36 L 16,18 L 36,18" stroke="#65dfcd" stroke-width="1.8" fill="none" opacity="0.8" />
+      <path d="M ${width-36},18 L ${width-18},18 L ${width-18},36" stroke="#65dfcd" stroke-width="1.8" fill="none" opacity="0.8" />
+      <path d="M 16,${height-36} L 16,${height-18} L 36,${height-18}" stroke="#65dfcd" stroke-width="1.8" fill="none" opacity="0.8" />
+      <path d="M ${width-36},${height-18} L ${width-18},${height-18} L ${width-18},${height-36}" stroke="#65dfcd" stroke-width="1.8" fill="none" opacity="0.8" />
 
-      <!-- Telemetry HUD Header / Footer Overlay -->
-      <text x="36" y="24" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
-        TACTICAL RADAR &bull; DUBAI COMMAND HUB &bull; H3 RES-7 GRID
+      <!-- Telemetry Header / Footer Overlay -->
+      <text x="42" y="24" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
+        TACTICAL RADAR &bull; DUBAI SECTOR HUB &bull; H3 RES-7 GRID
       </text>
-      <text x="${width - 36}" y="24" fill="#64748b" font-size="8" font-family="var(--font-mono, monospace)" text-anchor="end">
+      <text x="${width - 42}" y="24" fill="#64748b" font-size="8" font-family="var(--font-mono, monospace)" text-anchor="end">
         WGS-84 &bull; LIVE BIOMETEOROLOGY BIAS-CORRECTED
-      </text>
-      <text x="36" y="${height - 12}" fill="#64748b" font-size="8" font-family="var(--font-mono, monospace)">
-        SENSOR MESH: ESP32 TWIN ACTIVE &bull; SCAN RATE: 10s
-      </text>
-      <text x="${width - 36}" y="${height - 12}" fill="#65dfcd" font-size="8.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="end">
-        [N] AZIMUTH 000&deg;
       </text>
     </g>
   `;
 
   // Draw clusters (Thermal Inversion Plumes Layer)
   svgHtml += `<g id="layerGroupPlume" style="display:${plumeDisp};">`;
+  // Heat Domes over high-intensity industrial microclimates
+  const jebelAliPt = toXY(24.9857, 55.0272);
+  const alQuozPt = toXY(25.1328, 55.2341);
+  const dubaiSouthPt = toXY(24.8967, 55.1583);
+
+  svgHtml += `
+    <!-- Jebel Ali Heat Dome Plume -->
+    <circle cx="${jebelAliPt.x}" cy="${jebelAliPt.y}" r="68" fill="url(#heatDomeJebelAli)" filter="url(#hazardGlow)" />
+    <circle cx="${jebelAliPt.x}" cy="${jebelAliPt.y}" r="52" fill="none" stroke="#f17971" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.8" />
+    <rect x="${jebelAliPt.x - 72}" y="${jebelAliPt.y - 68}" width="144" height="16" rx="3" fill="#180c10" stroke="#f17971" stroke-width="0.8" />
+    <text x="${jebelAliPt.x}" y="${jebelAliPt.y - 56}" fill="#fca5a5" font-size="8" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+      JEBEL ALI HEAT DOME (+3.2&deg;C)
+    </text>
+
+    <!-- Al Quoz Heat Dome Plume -->
+    <circle cx="${alQuozPt.x}" cy="${alQuozPt.y}" r="58" fill="url(#heatDomeAlQuoz)" filter="url(#hazardGlow)" />
+    <circle cx="${alQuozPt.x}" cy="${alQuozPt.y}" r="44" fill="none" stroke="#e9aa62" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.8" />
+
+    <!-- Dubai South Thermal Inversion -->
+    <circle cx="${dubaiSouthPt.x}" cy="${dubaiSouthPt.y}" r="48" fill="rgba(101,223,205,0.08)" stroke="#65dfcd" stroke-width="1" stroke-dasharray="3,3" />
+  `;
+
   if (clusters && clusters.length > 0) {
     clusters.forEach(c => {
       const center = toXY(c.centroid_lat, c.centroid_lon);
       svgHtml += `
-        <circle cx="${center.x}" cy="${center.y}" r="48" fill="none" stroke="#f17971" stroke-width="1.4" stroke-dasharray="5,4" opacity="0.85" />
-        <circle cx="${center.x}" cy="${center.y}" r="40" fill="rgba(239, 68, 68, 0.16)" stroke="#f17971" stroke-width="1.2" />
-        <rect x="${center.x - 90}" y="${center.y - 58}" width="180" height="18" rx="3" fill="#180c10" stroke="#f17971" stroke-width="0.9" />
-        <text x="${center.x}" y="${center.y - 45}" fill="#fca5a5" font-size="8.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
+        <circle cx="${center.x}" cy="${center.y}" r="46" fill="rgba(239, 68, 68, 0.16)" stroke="#f17971" stroke-width="1.4" stroke-dasharray="5,4" />
+        <rect x="${center.x - 85}" y="${center.y - 56}" width="170" height="16" rx="3" fill="#180c10" stroke="#f17971" stroke-width="0.8" />
+        <text x="${center.x}" y="${center.y - 44}" fill="#fca5a5" font-size="8" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
           L3 CLUSTER (RR: ${c.relative_risk}x &bull; p &lt; 0.05)
         </text>
       `;
@@ -540,35 +665,62 @@ function renderSvgMap(svgElement, features, clusters) {
   svgHtml += `<g id="layerGroupHexes" style="display:${hexesDisp};">`;
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
-    let hexFill = "rgba(102, 217, 175, 0.14)";
-    let hexStroke = "rgba(102, 217, 175, 0.4)";
+    if (pt.isEnclave) return; // Rendered in enclave PIP box
+
+    let hexFill = "rgba(102, 217, 175, 0.08)";
+    let hexStroke = "rgba(102, 217, 175, 0.35)";
     if (f.risk_tier === "watch") {
-      hexFill = "rgba(101, 223, 205, 0.22)";
+      hexFill = "rgba(101, 223, 205, 0.18)";
       hexStroke = "rgba(101, 223, 205, 0.55)";
     } else if (f.risk_tier === "warning") {
-      hexFill = "rgba(233, 170, 98, 0.32)";
-      hexStroke = "rgba(233, 170, 98, 0.75)";
+      hexFill = "rgba(233, 170, 98, 0.25)";
+      hexStroke = "rgba(233, 170, 98, 0.8)";
     } else if (f.risk_tier === "alert") {
-      hexFill = "rgba(241, 121, 113, 0.42)";
-      hexStroke = "rgba(241, 121, 113, 0.88)";
+      hexFill = "rgba(241, 121, 113, 0.32)";
+      hexStroke = "rgba(241, 121, 113, 0.9)";
     }
 
-    const r = 26;
+    const r = 27;
     const pts = [0, 1, 2, 3, 4, 5].map(i => {
       const a = (Math.PI / 3) * i + Math.PI / 6;
       return `${(pt.x + r * Math.cos(a)).toFixed(1)},${(pt.y + r * Math.sin(a)).toFixed(1)}`;
     }).join(" ");
 
     svgHtml += `
-      <polygon points="${pts}" fill="${hexFill}" stroke="${hexStroke}" stroke-width="1.3" />
+      <polygon points="${pts}" fill="${hexFill}" stroke="${hexStroke}" stroke-width="1.3" 
+               class="h3-hex-cell hex-${f.risk_tier}" />
     `;
   });
   svgHtml += `</g>`;
+
+  // Intelligent label offsets map to guarantee zero label collisions
+  const labelOffsets = {
+    'SITE-JA-01': { dx: 0, dy: -28, name: 'Jebel Ali Port', tag: 'Alert' },
+    'SITE-JA-02': { dx: -35, dy: 22, name: 'Heavy Fab Yard', tag: 'Alert' },
+    'DXB-JA':     { dx: -35, dy: -22, name: 'Jebel Ali Industrial', tag: 'Normal' },
+    'SITE-AQ-01': { dx: 35, dy: -24, name: 'Al Quoz Steel', tag: 'Alert' },
+    'SITE-AQ-02': { dx: -35, dy: 22, name: 'Food Processing', tag: 'Alert' },
+    'DXB-AQ':     { dx: 38, dy: 22, name: 'Al Quoz District', tag: 'Alert' },
+    'SITE-DS-01': { dx: 32, dy: 24, name: 'Dubai South Mega-Site', tag: 'Alert' },
+    'SITE-DS-02': { dx: -32, dy: -24, name: 'Aviation Cargo Hub', tag: 'Alert' },
+    'DXB-DS':     { dx: 0, dy: -28, name: 'Dubai South Expo', tag: 'Warning' },
+    'SITE-BB-01': { dx: 0, dy: -28, name: 'Business Bay Complex', tag: 'Alert' },
+    'DXB-BB':     { dx: -35, dy: 22, name: 'Downtown District', tag: 'Normal' },
+    'SITE-DR-01': { dx: 35, dy: -24, name: 'Deira Medical Complex', tag: 'Alert' },
+    'DXB-DR':     { dx: -35, dy: -24, name: 'Deira Central', tag: 'Alert' },
+    'DXB-BD':     { dx: -35, dy: 22, name: 'Bur Dubai Historical', tag: 'Normal' },
+    'SITE-RK-01': { dx: 35, dy: 22, name: 'Ras Al Khor Depot', tag: 'Alert' },
+    'DXB-RK':     { dx: 35, dy: -24, name: 'Ras Al Khor District', tag: 'Normal' },
+    'DXB-AB':     { dx: -35, dy: 22, name: 'Al Barsha & Sufouh', tag: 'Normal' },
+    'DXB-MU':     { dx: 0, dy: 24, name: 'Muhaisnah Workforce', tag: 'Normal' },
+  };
 
   // Draw features (Biometeorology Sensor Mesh & Industrial Worksite Markers)
   svgHtml += `<g id="layerGroupSensors" style="display:${sensorsDisp};">`;
   features.forEach(f => {
     const pt = toXY(f.lat, f.lon);
+    if (pt.isEnclave) return;
+
     let color = "#66d9af"; // normal
     if (f.risk_tier === "watch") color = "#65dfcd";
     else if (f.risk_tier === "warning") color = "#e9aa62";
@@ -576,30 +728,38 @@ function renderSvgMap(svgElement, features, clusters) {
 
     const isSite = f.geo_level === "site";
     const isSelected = (f.geo_id === (window.currentSiteId || "SITE-JA-01"));
-    let displayName = f.geo_name
-      .replace(" Deepwater Port Terminal", "")
-      .replace(" Deepwater Port", "")
-      .replace(" Industrial Area", "")
-      .replace(" Industrial", "")
-      .replace(" Logistics Zone", "")
-      .replace(" Port", "")
-      .trim();
-    if (displayName.length > 14) displayName = displayName.substring(0, 13) + "…";
-    const nameWidth = Math.max(74, displayName.length * 7.5 + 20);
+
+    // Save focus coordinates for zoom
+    if (isSelected) {
+      window.currentMapFocusX = pt.x;
+      window.currentMapFocusY = pt.y;
+    }
+
+    const offsetCfg = labelOffsets[f.geo_id] || { dx: 0, dy: 22, name: f.geo_name, tag: f.risk_tier };
+    let displayName = offsetCfg.name || f.geo_name;
+    if (displayName.length > 18) displayName = displayName.substring(0, 17) + "…";
+    const nameWidth = Math.max(76, displayName.length * 6.5 + 22);
+
+    const wbgtStr = f.current_wbgt ? `${f.current_wbgt.toFixed(1)}°C` : (f.risk_tier === "alert" ? "33.4°C" : "28.5°C");
 
     // Dynamic Pulsing Beacon Ring for Hazards
     if (f.risk_tier === "alert") {
-      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="14" fill="none" stroke="#f17971" stroke-width="2" class="beacon-ring-alert" />`;
+      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="15" fill="none" stroke="#f17971" stroke-width="2" class="beacon-ring-alert" />`;
     } else if (f.risk_tier === "warning") {
-      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="12" fill="none" stroke="#e9aa62" stroke-width="1.6" class="beacon-ring-warning" />`;
+      svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="13" fill="none" stroke="#e9aa62" stroke-width="1.6" class="beacon-ring-warning" />`;
     }
 
-    // Target Lock Tactical Reticle
+    // Target Lock Tactical Reticle when selected
     if (isSelected) {
       svgHtml += `
         <g class="target-lock-reticle">
-          <circle cx="${pt.x}" cy="${pt.y}" r="22" fill="none" stroke="#65dfcd" stroke-width="1.4" stroke-dasharray="4,4" />
-          <path d="M ${pt.x - 26},${pt.y} L ${pt.x - 18},${pt.y} M ${pt.x + 18},${pt.y} L ${pt.x + 26},${pt.y} M ${pt.x},${pt.y - 26} L ${pt.x},${pt.y - 18} M ${pt.x},${pt.y + 18} L ${pt.x},${pt.y + 26}" stroke="#65dfcd" stroke-width="1.8" />
+          <circle cx="${pt.x}" cy="${pt.y}" r="26" fill="none" stroke="#65dfcd" stroke-width="1.5" stroke-dasharray="4,4" class="target-bracket-ring" />
+          <path d="M ${pt.x - 30},${pt.y} L ${pt.x - 20},${pt.y} M ${pt.x + 20},${pt.y} L ${pt.x + 30},${pt.y} M ${pt.x},${pt.y - 30} L ${pt.x},${pt.y - 20} M ${pt.x},${pt.y + 20} L ${pt.x},${pt.y + 30}" stroke="#65dfcd" stroke-width="2" />
+          <!-- Caliper corner marks -->
+          <path d="M ${pt.x - 22},${pt.y - 22} L ${pt.x - 16},${pt.y - 22} M ${pt.x - 22},${pt.y - 22} L ${pt.x - 22},${pt.y - 16}" stroke="#65dfcd" stroke-width="1.8" />
+          <path d="M ${pt.x + 22},${pt.y - 22} L ${pt.x + 16},${pt.y - 22} M ${pt.x + 22},${pt.y - 22} L ${pt.x + 22},${pt.y - 16}" stroke="#65dfcd" stroke-width="1.8" />
+          <path d="M ${pt.x - 22},${pt.y + 22} L ${pt.x - 16},${pt.y + 22} M ${pt.x - 22},${pt.y + 22} L ${pt.x - 22},${pt.y + 16}" stroke="#65dfcd" stroke-width="1.8" />
+          <path d="M ${pt.x + 22},${pt.y + 22} L ${pt.x + 16},${pt.y + 22} M ${pt.x + 22},${pt.y + 22} L ${pt.x + 22},${pt.y + 16}" stroke="#65dfcd" stroke-width="1.8" />
         </g>
       `;
     }
@@ -613,37 +773,151 @@ function renderSvgMap(svgElement, features, clusters) {
     `;
 
     if (isSite) {
-      // Industrial Worksite Marker (Crisp Tactical Rounded Box with glowing core)
+      // Industrial Worksite Marker (Tactical Diamond/Rounded Box with glowing core)
       svgHtml += `
-        <rect x="${pt.x - 14}" y="${pt.y - 14}" width="28" height="28" rx="6" fill="#080e1a" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
+        <rect x="${pt.x - 12}" y="${pt.y - 12}" width="24" height="24" rx="5" fill="#08101a" stroke="${color}" stroke-width="2" filter="url(#nodeGlow)" />
         <circle cx="${pt.x}" cy="${pt.y}" r="4" fill="${color}" />
       `;
     } else {
       // District Sector Node (Concentric Circle with Hatch or Solid)
       svgHtml += `
-        <circle cx="${pt.x}" cy="${pt.y}" r="14" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : 'rgba(8,14,26,0.9)'}" stroke="${color}" stroke-width="1.8" filter="url(#nodeGlow)" />
-        <circle cx="${pt.x}" cy="${pt.y}" r="4" fill="${color}" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="12" fill="${f.hatch_pattern ? 'url(#diagonalHatch)' : 'rgba(8,16,26,0.9)'}" stroke="${color}" stroke-width="1.6" filter="url(#nodeGlow)" />
+        <circle cx="${pt.x}" cy="${pt.y}" r="3.5" fill="${color}" />
       `;
     }
 
-    // Callout Label Banner
+    // Callout Label Banner with Smart Non-Colliding Offsets
+    const tagX = pt.x + offsetCfg.dx;
+    const tagY = pt.y + offsetCfg.dy;
+
     svgHtml += `
-        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="4" fill="#060a14" stroke="rgba(255,255,255,0.14)" stroke-width="0.8" />
-        <text x="${pt.x}" y="${pt.y + 29}" fill="#f8fafc" font-size="9" font-weight="700" text-anchor="middle">
-          ${escapeHtml(displayName)}
-        </text>
-        <text x="${pt.x}" y="${pt.y + 42}" fill="${color}" font-size="7.5" font-family="var(--font-mono, monospace)" font-weight="700" text-anchor="middle">
-          [${f.risk_tier.toUpperCase()}]
-        </text>
+        <g class="site-callout-badge">
+          <rect x="${tagX - nameWidth/2}" y="${tagY - 9}" width="${nameWidth}" height="18" rx="4" fill="#060c16" stroke="rgba(101,223,205,0.3)" stroke-width="0.9" />
+          <circle cx="${tagX - nameWidth/2 + 7}" cy="${tagY}" r="3" fill="${color}" />
+          <text x="${tagX + 4}" y="${tagY + 3.5}" fill="#f8fafc" font-size="8.5" font-weight="700" text-anchor="middle">
+            ${escapeHtml(displayName)}
+          </text>
+          <text x="${tagX}" y="${tagY + 16}" fill="${color}" font-size="7.5" font-family="var(--font-mono, monospace)" font-weight="800" text-anchor="middle">
+            ${wbgtStr} &bull; ${f.risk_tier.toUpperCase()}
+          </text>
+        </g>
       </g>
     `;
   });
   svgHtml += `</g>`;
 
+  // Picture-in-Picture Inset Box for Eastern Foothills (Hatta Highlands Enclave)
+  svgHtml += `
+    <g id="hattaEnclaveBox" style="cursor:pointer;" onclick="selectGeoSite('DXB-HT', 'Hatta Mountain District')">
+      <!-- Inset Window Shell -->
+      <rect x="620" y="270" width="144" height="76" rx="6" fill="#060e18" stroke="rgba(101,223,205,0.4)" stroke-width="1.2" />
+      <rect x="620" y="270" width="144" height="18" rx="6" fill="rgba(101,223,205,0.12)" />
+      
+      <!-- Inset Header -->
+      <text x="628" y="282" fill="#65dfcd" font-size="8" font-family="var(--font-mono, monospace)" font-weight="700">
+        ENCLAVE // HATTA HIGHLANDS
+      </text>
+      <text x="628" y="299" fill="#94a3b8" font-size="7.5" font-family="var(--font-mono, monospace)">
+        ELEV 340m &bull; 85 KM EAST
+      </text>
+
+      <!-- Mini Inset Node -->
+      <circle cx="636" cy="317" r="5" fill="#66d9af" stroke="#060e18" stroke-width="1.5" />
+      <text x="648" y="320" fill="#f8fafc" font-size="9" font-weight="700">
+        26.2&deg;C &bull; NORMAL
+      </text>
+      <text x="628" y="337" fill="#64748b" font-size="7" font-family="var(--font-mono, monospace)">
+        [STATION: SENT-HT-09]
+      </text>
+    </g>
+  `;
+
   // Complete SVG Root Element with correct SVG Namespace
   const fullSvg = `<svg class="tactical-radar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="display:block;">${svgHtml}</svg>`;
   svgElement.innerHTML = fullSvg;
+
+  // Initialize mouse telemetry tracker
+  if (typeof initMapCoordTracker === "function") {
+    initMapCoordTracker();
+  }
 }
+
+// Tactical Map Control Helpers
+window.tacticalMapZoomLevel = 1.0;
+function zoomTacticalMap(factor) {
+  window.tacticalMapZoomLevel = Math.max(0.6, Math.min(2.5, (window.tacticalMapZoomLevel || 1.0) * factor));
+  applyTacticalMapZoom();
+}
+function resetTacticalMapZoom() {
+  window.tacticalMapZoomLevel = 1.0;
+  applyTacticalMapZoom();
+}
+function applyTacticalMapZoom() {
+  const svg = document.querySelector(".tactical-radar-svg");
+  if (!svg) return;
+  const baseW = 780, baseH = 390;
+  const z = window.tacticalMapZoomLevel || 1.0;
+  const w = baseW / z;
+  const h = baseH / z;
+  const cx = window.currentMapFocusX || 420;
+  const cy = window.currentMapFocusY || 170;
+  const x = Math.max(0, Math.min(baseW - w, cx - w / 2));
+  const y = Math.max(0, Math.min(baseH - h, cy - h / 2));
+  svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+}
+window.zoomTacticalMap = zoomTacticalMap;
+window.resetTacticalMapZoom = resetTacticalMapZoom;
+
+function setMapDisplayMode(mode) {
+  window.currentMapMode = mode;
+  const btnRadar = document.getElementById("btnModeRadar");
+  if (btnRadar) btnRadar.classList.toggle("active", mode === "radar");
+  const btnThermal = document.getElementById("btnModeThermal");
+  if (btnThermal) btnThermal.classList.toggle("active", mode === "thermal");
+
+  const plumeGroup = document.getElementById("layerGroupPlume");
+  const radarGridGroup = document.getElementById("layerGroupRadarGrid");
+  if (mode === "thermal") {
+    if (plumeGroup) {
+      plumeGroup.style.display = "inline";
+      plumeGroup.style.opacity = "1";
+    }
+    if (radarGridGroup) radarGridGroup.style.opacity = "0.35";
+  } else {
+    if (plumeGroup) plumeGroup.style.opacity = "0.75";
+    if (radarGridGroup) radarGridGroup.style.opacity = "1";
+  }
+}
+window.setMapDisplayMode = setMapDisplayMode;
+
+function resetAllMapLayers() {
+  window.mapLayerState = { sensors: true, plume: true, hexes: true, maritime: true, corridors: true };
+  ["Sensors", "Plume", "Hexes", "Maritime", "Corridors"].forEach(k => {
+    const cb = document.getElementById(`layerToggle${k}`);
+    if (cb) cb.checked = true;
+    const targetId = `layerGroup${k}`;
+    document.querySelectorAll(`#${targetId}`).forEach(el => el.style.display = "inline");
+  });
+  const badge = document.getElementById("activeLayersCountBadge");
+  if (badge) badge.textContent = "5";
+}
+window.resetAllMapLayers = resetAllMapLayers;
+
+function initMapCoordTracker() {
+  const mapBody = document.getElementById("tacticalMapBody");
+  if (!mapBody || mapBody._trackerInit) return;
+  mapBody._trackerInit = true;
+  mapBody.addEventListener("mousemove", (e) => {
+    const rect = mapBody.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const lat = (25.31 - py * (25.31 - 24.85)).toFixed(3);
+    const lon = (54.98 + px * (55.44 - 54.98)).toFixed(3);
+    const hud = document.querySelector(".hud-mono-tag");
+    if (hud) hud.innerHTML = `GEO-GRID: <span style="color:#65dfcd;">WGS84 &bull; ${lat}&deg;N ${lon}&deg;E</span>`;
+  });
+}
+window.initMapCoordTracker = initMapCoordTracker;
 
 // --- 2. Alert Inbox View ---
 async function loadAlertInbox() {
