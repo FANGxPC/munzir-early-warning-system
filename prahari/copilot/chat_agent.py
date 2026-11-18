@@ -422,23 +422,12 @@ class SovereignCopilotAgent:
 
             # 11. General Open-Ended Conversational Fallback
             else:
+                clean_q = query.strip()
                 eng = (
-                    "I am here and ready to assist! As Munzir Sovereign Copilot, I can chat normally with you on any topic, answer questions, or provide expert decision support on occupational health and UAE heat safety regulations.\n\n"
-                    "Feel free to chat with me freely, or ask me about:\n"
-                    "• Current worksite heat stress & sensor readings ('Explain Jebel Ali risk')\n"
-                    "• Statutory midday work ban rules & fines ('What is the legal fine under Resolution 44?')\n"
-                    "• Immediate worker action plans ('What should I do right now for outdoor workers?')\n"
-                    "• Sub-clinical kidney & dehydration screening ('What are the renal biomarker rates?')\n"
-                    "• Municipal cooling fleet staging ('Show municipal cooling fleet staging')"
+                    f"I understand your query regarding '{clean_q}'. As Munzir Sovereign Copilot, I provide conversational decision support and real-time public health surveillance across UAE industrial zones under Ministerial Resolution No. 44 of 2022. Please let me know how I can assist with specific site telemetry, regulatory compliance, or worker safety directives."
                 )
                 ar = (
-                    "أنا هنا وجاهز للتحدث معك! بصفتي المساعد السيادي لمنصة مُنذِر، يسعدني التحدث معك والإجابة عن استفساراتك بشكل طبيعي، وتقديم استشارات متخصصة حول السلامة المهنية، ولوائح حظر العمل وقت الظهيرة، وحماية صحة العمال.\n\n"
-                    "يمكنك التحدث معي بحرية، أو سؤالي عن:\n"
-                    "• قراءات الإجهاد الحراري للمواقع الميدانية\n"
-                    "• الغرامات واشتراطات قرار حظر العمل وقت الظهيرة (رقم 44 لسنة 2022)\n"
-                    "• الخطط التشغيلية الفورية لحماية العمال\n"
-                    "• الفحوصات الكلوية الاستباقية ومعدلات الجفاف\n"
-                    "• توجيه حافلات التبريد ومقطورات الرذاذ"
+                    f"أهلاً بك! بصفتي المساعد السيادي لمنصة مُنذِر، يسعدني الإجابة على استفسارك حول '{clean_q}'. أقدم دعماً تشغيلياً لحظياً لمتابعة السلامة الحرارية للعمال وتطبيق القرارات الوزارية الرسمية بدولة الإمارات."
                 )
 
         elif intent == CopilotIntent.ACTION_PLAN:

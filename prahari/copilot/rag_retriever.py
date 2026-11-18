@@ -258,9 +258,17 @@ class SovereignRAGRetriever:
         overview_phrases = [
             "overview", "briefing", "site briefing", "surveillance overview",
             "site overview", "status briefing", "site status", "surveillance status",
-            "status of site", "current status", "daily briefing", "situation report", "sitrep"
+            "status of site", "current status", "daily briefing", "situation report", "sitrep",
+            "situation", "status", "update", "how is", "how are things",
+            "what is happening", "whats happening", "what is going on", "whats going on",
+            "condition", "conditions", "tell me about"
         ]
         if any(w in q for w in overview_phrases):
+            return CopilotIntent.GENERAL_OVERVIEW
+
+        # Check if query references any specific site directly for situational update
+        site_names = ["jebel ali", "al quoz", "warsan", "dubai south", "al qusais", "site-ja-01", "port terminal"]
+        if any(s in q for s in site_names):
             return CopilotIntent.GENERAL_OVERVIEW
 
         # 13. Default: Conversational Assistant for any open-ended normal chat
@@ -274,7 +282,23 @@ class SovereignRAGRetriever:
     ) -> RetrievedContextPacket:
         """Performs tri-vector retrieval across live state and statutory codex."""
         intent = self.classify_intent(query)
-        live_ctx = self.context_builder.build_site_context(site_id=site_id, target_date=target_date)
+
+        # Resolve target site from query if explicitly mentioned
+        q_lower = query.lower()
+        if "jebel ali" in q_lower or "ja-01" in q_lower or "port terminal" in q_lower:
+            resolved_site_id = "SITE-JA-01"
+        elif "al quoz" in q_lower or "aq-02" in q_lower:
+            resolved_site_id = "SITE-AQ-02"
+        elif "warsan" in q_lower or "wn-03" in q_lower:
+            resolved_site_id = "SITE-WN-03"
+        elif "dubai south" in q_lower or "ds-04" in q_lower:
+            resolved_site_id = "SITE-DS-04"
+        elif "al qusais" in q_lower or "qs-05" in q_lower:
+            resolved_site_id = "SITE-QS-05"
+        else:
+            resolved_site_id = site_id or "SITE-JA-01"
+
+        live_ctx = self.context_builder.build_site_context(site_id=resolved_site_id, target_date=target_date)
 
         # Retrieve relevant statutory articles based on query + intent
         augmented_query = f"{query} {intent.value}"
@@ -290,7 +314,7 @@ class SovereignRAGRetriever:
         return RetrievedContextPacket(
             intent=intent,
             user_query=query,
-            target_site_id=site_id,
+            target_site_id=resolved_site_id,
             target_site_name=live_ctx.site_name,
             live_context=live_ctx,
             statutory_articles=articles,
