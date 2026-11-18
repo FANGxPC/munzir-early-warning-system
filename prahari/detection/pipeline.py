@@ -330,47 +330,6 @@ class DetectionPipeline:
                     return loaded
             except Exception as e:
                 logger.warning("Failed loading cached alerts from %s: %s", latest_json, e)
-
-        # Fallback to gold parquet archives if date is not in alerts_latest.json
-        try:
-            for pfile in sorted(self.gold_alerts_dir.glob("alerts_*.parquet"), reverse=True):
-                df = pd.read_parquet(pfile)
-                if "obs_date" in df.columns:
-                    if start_date:
-                        df = df[df["obs_date"] >= start_date]
-                    if end_date:
-                        df = df[df["obs_date"] <= end_date]
-                if not df.empty:
-                    loaded = []
-                    for _, row in df.iterrows():
-                        d = row.to_dict()
-                        if isinstance(d.get("severity"), str):
-                            d["severity"] = AlertSeverity(d["severity"])
-                        if isinstance(d.get("geo_ids"), str):
-                            try:
-                                d["geo_ids"] = json.loads(d["geo_ids"])
-                            except Exception:
-                                pass
-                        elif hasattr(d.get("geo_ids"), "tolist"):
-                            d["geo_ids"] = d["geo_ids"].tolist()
-                        if isinstance(d.get("signal_contributions"), str):
-                            try:
-                                d["signal_contributions"] = json.loads(d["signal_contributions"])
-                            except Exception:
-                                pass
-                        valid_keys = {
-                            "alert_id", "incident_id", "alert_type", "severity",
-                            "probability", "ci_low", "ci_high", "geo_ids", "obs_date",
-                            "signal_contributions", "dq_status", "owner_role",
-                            "recommended_action", "is_suppressed_decoy"
-                        }
-                        cleaned = {k: v for k, v in d.items() if k in valid_keys}
-                        loaded.append(PrahariAlert(**cleaned))
-                    if loaded:
-                        return loaded
-        except Exception as e:
-            logger.warning("Failed loading alerts from parquet archives: %s", e)
-
         return []
 
     def build_training_dataset(

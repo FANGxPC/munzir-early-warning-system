@@ -130,8 +130,6 @@ class MapLayerService:
             prob = alert_info.probability if alert_info else 0.04
             syndrome = alert_info.alert_type if alert_info else None
             h3_idx = h3.latlng_to_cell(dist["lat"], dist["lon"], H3_RES_DETECTION)
-            wbgt_estimate = 33.4 if risk_tier == "alert" else (31.8 if risk_tier == "warning" else (29.5 if risk_tier == "watch" else 26.2))
-            rr_val = round(float(getattr(alert_info, "l3_relative_risk", 3.2 if risk_tier == "alert" else (2.1 if risk_tier == "warning" else 1.4))), 2) if alert_info else 1.05
 
             features.append(GeoFeature(
                 geo_id=dist["id"],
@@ -146,8 +144,6 @@ class MapLayerService:
                 primary_syndrome=syndrome,
                 h3_index=h3_idx,
                 population=dist.get("population", 200000),
-                current_wbgt=wbgt_estimate,
-                relative_risk=rr_val,
             ))
 
         # 2. Worksites (exact location confidence, solid rendering)
@@ -157,8 +153,6 @@ class MapLayerService:
             prob = alert_info.probability if alert_info else 0.02
             syndrome = alert_info.alert_type if alert_info else None
             h3_idx = h3.latlng_to_cell(site["lat"], site["lon"], H3_RES_DETECTION)
-            wbgt_estimate = 33.4 if risk_tier == "alert" else (31.8 if risk_tier == "warning" else (29.5 if risk_tier == "watch" else 26.5))
-            rr_val = round(float(getattr(alert_info, "l3_relative_risk", 3.4 if risk_tier == "alert" else (2.2 if risk_tier == "warning" else 1.5))), 2) if alert_info else 1.05
 
             features.append(GeoFeature(
                 geo_id=site["id"],
@@ -173,8 +167,6 @@ class MapLayerService:
                 primary_syndrome=syndrome,
                 h3_index=h3_idx,
                 population=site.get("workforce", 1500),
-                current_wbgt=wbgt_estimate,
-                relative_risk=rr_val,
             ))
 
         # 3. Prospective Space-Time Clusters (L3)
