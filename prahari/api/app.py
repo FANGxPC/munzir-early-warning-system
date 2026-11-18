@@ -1256,29 +1256,37 @@ def get_renal_screening_cohort(
             import pyarrow.parquet as pq
             table = pq.read_table(renal_parquet).to_pandas()
             sub = table[table["site_id"] == site_id]
-            if sub.empty:
-                sub = table
-            sub = sub.iloc[:cohort_size]
-            for _, r in sub.iterrows():
-                obs_list.append(
-                    RenalObservation(
-                        worker_cohort_id=str(r["worker_cohort_id"]),
-                        site_id=str(r["site_id"]),
-                        observation_date=str(r["observation_date"]),
-                        serum_creatinine_mg_dl=float(r["serum_creatinine_mg_dl"]),
-                        serum_creatinine_baseline_mg_dl=float(r["serum_creatinine_baseline_mg_dl"]),
-                        age=int(r["age"]),
-                        is_female=bool(r["is_female"]),
-                        blood_urea_nitrogen_mg_dl=float(r["blood_urea_nitrogen_mg_dl"]),
-                        urine_specific_gravity=float(r["urine_specific_gravity"]),
+            if not sub.empty:
+                sub = sub.iloc[:cohort_size]
+                for _, r in sub.iterrows():
+                    obs_list.append(
+                        RenalObservation(
+                            worker_cohort_id=str(r["worker_cohort_id"]),
+                            site_id=str(r["site_id"]),
+                            observation_date=str(r["observation_date"]),
+                            serum_creatinine_mg_dl=float(r["serum_creatinine_mg_dl"]),
+                            serum_creatinine_baseline_mg_dl=float(r["serum_creatinine_baseline_mg_dl"]),
+                            age=int(r["age"]),
+                            is_female=bool(r["is_female"]),
+                            blood_urea_nitrogen_mg_dl=float(r["blood_urea_nitrogen_mg_dl"]),
+                            urine_specific_gravity=float(r["urine_specific_gravity"]),
+                        )
                     )
-                )
         except Exception as e:
             logger.debug("Failed reading renal_biomarkers.parquet: %s", e)
 
-    # 2. Resilient fallback if table absent
+    # 2. Resilient fallback if table absent or site not present in static parquet
     if not obs_list:
-        stress_pct = min(0.35, max(0.10, (actual_hours / 320.0) * 0.25))
+        site_profiles = {
+            "SITE-JA-01": {"stress_pct": 0.25, "heat_mult": 1.05},
+            "SITE-AQ-01": {"stress_pct": 0.20, "heat_mult": 0.95},
+            "SITE-DS-01": {"stress_pct": 0.38, "heat_mult": 1.25},
+            "SITE-RK-01": {"stress_pct": 0.16, "heat_mult": 0.85},
+            "SITE-BB-01": {"stress_pct": 0.12, "heat_mult": 0.75},
+        }
+        prof = site_profiles.get(site_id, {"stress_pct": 0.25, "heat_mult": 1.0})
+        base_stress = prof["stress_pct"]
+        stress_pct = min(0.48, max(0.10, base_stress * (actual_hours / 65.0) * prof["heat_mult"]))
         stressed_threshold = max(1, int(cohort_size * stress_pct))
         import numpy as np
         rng = np.random.RandomState(abs(hash(f"{site_id}-{actual_hours}")) % 10000)
@@ -1287,7 +1295,7 @@ def get_renal_screening_cohort(
             baseline_cr = round(float(np.clip(rng.normal(0.92, 0.10), 0.70, 1.25)), 2)
             is_stressed = (i < stressed_threshold)
             if is_stressed:
-                heat_factor = min(2.0, max(0.8, actual_hours / 65.0))
+                heat_factor = min(2.0, max(0.8, (actual_hours / 65.0) * prof["heat_mult"]))
                 acute_rise = float(rng.uniform(0.35, 0.75) * heat_factor)
                 cr = round(baseline_cr + acute_rise, 2)
                 usg = round(float(np.clip(rng.normal(1.027, 0.003), 1.022, 1.034)), 3)
@@ -1313,6 +1321,39 @@ def get_renal_screening_cohort(
     summary = aggregate_cohort_renal_health(obs_list, min_cohort_size=50)
     alert = evaluate_renal_environmental_coupling(summary, cumulative_wbgt_32_hours_14d=actual_hours)
 
+    lead_time = float(alert.estimated_lead_time_days or 11.5)
+    current_egfr = float(summary.mean_egfr)
+    current_dehyd = float(summary.pct_dehydrated)
+
+    # Generate 14-day dynamic trajectory progression tailored to this site
+    days = [-14.0, -12.0, -round(lead_time, 1), -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0]
+    days = sorted(list(set(days)))
+
+    egfr_traj = []
+    dehyd_traj = []
+    for d in days:
+        if d <= -lead_time:
+            progress = (d - (-14.0)) / max(0.1, (-lead_time - (-14.0)))
+            progress = max(0.0, min(1.0, progress))
+            e_val = 106.0 - progress * (106.0 - current_egfr)
+            d_val = 4.2 + progress * (current_dehyd - 4.2)
+        else:
+            progress = (d - (-lead_time)) / max(0.1, (2.0 - (-lead_time)))
+            progress = max(0.0, min(1.0, progress))
+            e_val = current_egfr - progress * (current_egfr - 48.0)
+            d_val = current_dehyd + progress * (65.0 - current_dehyd)
+        egfr_traj.append(round(e_val, 1))
+        dehyd_traj.append(round(d_val, 1))
+
+    trajectory_data = {
+        "days": days,
+        "egfr": egfr_traj,
+        "dehydration_pct": dehyd_traj,
+        "lead_time_days": lead_time,
+        "trigger_egfr": current_egfr,
+        "trigger_dehydration_pct": current_dehyd,
+    }
+
     return JSONResponse(
         content={
             "cohort_summary": {
@@ -1336,6 +1377,7 @@ def get_renal_screening_cohort(
                 "clinical_mechanism": alert.clinical_mechanism,
                 "recommended_action": alert.recommended_action,
             },
+            "trajectory": trajectory_data,
         }
     )
 

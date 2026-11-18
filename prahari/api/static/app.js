@@ -3463,6 +3463,7 @@ async function loadRenalBiomarkers() {
     const data = await apiFetch(`/api/v1/renal/screening?site_id=${siteId}&cumulative_wbgt_hours=65.0`);
     const c = data.cohort_summary;
     const a = data.coupling_alert;
+    const traj = data.trajectory;
 
     const elEgfr = document.getElementById("renalMeanEgfr");
     if (elEgfr) elEgfr.textContent = `${c.mean_egfr_ml_min} mL/min`;
@@ -3479,6 +3480,16 @@ async function loadRenalBiomarkers() {
     const elLead = document.getElementById("renalLeadTimeVal");
     if (elLead) elLead.textContent = `+${a.estimated_lead_time_days}d`;
 
+    const elEarlyPill = document.getElementById("renalEarlyWindowPill");
+    if (elEarlyPill) {
+      elEarlyPill.textContent = `Munzir Early Window: +${a.estimated_lead_time_days || 11.5} Days`;
+    }
+
+    const elTitle = document.getElementById("renalTrajectoryTitle");
+    if (elTitle) {
+      elTitle.innerHTML = `Sub-Clinical Renal Strain Trajectory &amp; ${a.estimated_lead_time_days || 11.5}-Day Advance Lead Window`;
+    }
+
     const elMech = document.getElementById("renalMechanismText");
     if (elMech) elMech.textContent = a.clinical_mechanism;
 
@@ -3492,13 +3503,13 @@ async function loadRenalBiomarkers() {
     }
 
     // High-Impact WOW Visual: Dual-Axis Biological Trajectory Curve
-    renderRenalTrajectoryChart(c, a);
+    renderRenalTrajectoryChart(c, a, traj);
   } catch (err) {
     console.warn("Failed to load renal biomarkers:", err);
   }
 }
 
-function renderRenalTrajectoryChart(cohort, alert) {
+function renderRenalTrajectoryChart(cohort, alert, trajectory) {
   const container = document.getElementById("renalTrajectorySvgContainer");
   if (!container) return;
 
@@ -3511,9 +3522,49 @@ function renderRenalTrajectoryChart(cohort, alert) {
   const chartW = w - padL - padR;
   const chartH = h - padT - padB;
 
-  const days = [-14, -12, -11.5, -10, -8, -6, -4, -2, 0, 2];
-  const egfrData = [106, 102, 97.7, 92, 86, 78, 68, 59, 52, 48];
-  const usgDehydData = [4.2, 8.5, 21.7, 26.0, 31.5, 38.0, 44.5, 51.0, 58.0, 62.0];
+  const leadTime = (trajectory && typeof trajectory.lead_time_days === "number")
+    ? trajectory.lead_time_days
+    : (alert && typeof alert.estimated_lead_time_days === "number" ? alert.estimated_lead_time_days : 11.5);
+
+  let days = (trajectory && Array.isArray(trajectory.days))
+    ? trajectory.days
+    : [-14, -12, -Number(leadTime.toFixed(1)), -10, -8, -6, -4, -2, 0, 2];
+
+  let egfrData = trajectory && Array.isArray(trajectory.egfr) ? trajectory.egfr : null;
+  let usgDehydData = trajectory && Array.isArray(trajectory.dehydration_pct) ? trajectory.dehydration_pct : null;
+
+  const curEgfr = (trajectory && typeof trajectory.trigger_egfr === "number")
+    ? trajectory.trigger_egfr
+    : (cohort && typeof cohort.mean_egfr_ml_min === "number" ? cohort.mean_egfr_ml_min : 95.9);
+
+  const curDehyd = (trajectory && typeof trajectory.trigger_dehydration_pct === "number")
+    ? trajectory.trigger_dehydration_pct
+    : (cohort && typeof cohort.pct_dehydrated === "number" ? cohort.pct_dehydrated : 25.0);
+
+  if (!egfrData || !usgDehydData) {
+    egfrData = days.map(d => {
+      if (d <= -leadTime) {
+        const prog = (d - (-14)) / Math.max(0.1, (-leadTime - (-14)));
+        const clamped = Math.max(0, Math.min(1, prog));
+        return Number((106.0 - clamped * (106.0 - curEgfr)).toFixed(1));
+      } else {
+        const prog = (d - (-leadTime)) / Math.max(0.1, (2 - (-leadTime)));
+        const clamped = Math.max(0, Math.min(1, prog));
+        return Number((curEgfr - clamped * (curEgfr - 48.0)).toFixed(1));
+      }
+    });
+    usgDehydData = days.map(d => {
+      if (d <= -leadTime) {
+        const prog = (d - (-14)) / Math.max(0.1, (-leadTime - (-14)));
+        const clamped = Math.max(0, Math.min(1, prog));
+        return Number((4.2 + clamped * (curDehyd - 4.2)).toFixed(1));
+      } else {
+        const prog = (d - (-leadTime)) / Math.max(0.1, (2 - (-leadTime)));
+        const clamped = Math.max(0, Math.min(1, prog));
+        return Number((curDehyd + clamped * (65.0 - curDehyd)).toFixed(1));
+      }
+    });
+  }
 
   const minDay = -14;
   const maxDay = 2;
@@ -3527,7 +3578,7 @@ function renderRenalTrajectoryChart(cohort, alert) {
   const maxDehyd = 70;
   const getYDehyd = (val) => padT + chartH - ((val - minDehyd) / (maxDehyd - minDehyd)) * chartH;
 
-  const munzirTriggerX = getX(-11.5);
+  const munzirTriggerX = getX(-leadTime);
   const hospitalPeakX = getX(0);
 
   const egfrPts = days.map((d, i) => ({ x: getX(d), y: getYEgfr(egfrData[i]) }));
@@ -3552,14 +3603,12 @@ function renderRenalTrajectoryChart(cohort, alert) {
 
   const egfrPath = ptsToSpline(egfrPts);
   const dehydPath = ptsToSpline(dehydPts);
-  const egfrPoints = days.map((d, i) => `${getX(d)},${getYEgfr(egfrData[i])}`).join(" ");
-  const dehydPoints = days.map((d, i) => `${getX(d)},${getYDehyd(usgDehydData[i])}`).join(" ");
 
   let gridSvg = "";
   for (let d = -14; d <= 2; d += 2) {
     const x = getX(d);
     gridSvg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="#222f2b" stroke-width="1" stroke-dasharray="3,3" />`;
-    const label = d === 0 ? "Day 0 (ED Peak)" : (d === -11.5 ? "Day -11.5" : `Day ${d}`);
+    const label = d === 0 ? "Day 0 (ED Peak)" : `Day ${d}`;
     gridSvg += `<text x="${x}" y="${padT + chartH + 18}" fill="#64748b" font-size="10" text-anchor="middle" font-family="sans-serif">${label}</text>`;
   }
 
@@ -3574,6 +3623,9 @@ function renderRenalTrajectoryChart(cohort, alert) {
     gridSvg += `<text x="${padL + chartW + 8}" y="${y + 3}" fill="#e9aa62" font-size="10" text-anchor="start" font-family="sans-serif">${pct}%</text>`;
   }
 
+  const triggerYEgfr = getYEgfr(curEgfr);
+  const edPeakDehyd = usgDehydData[days.indexOf(0)] || 58.0;
+
   container.innerHTML = `
     <svg class="renal-chart-svg" viewBox="0 0 ${w} ${h}">
       <defs>
@@ -3587,8 +3639,8 @@ function renderRenalTrajectoryChart(cohort, alert) {
         </linearGradient>
       </defs>
 
-      <!-- Shaded Early Window Zone (-11.5d to 0d) -->
-      <rect x="${munzirTriggerX}" y="${padT}" width="${hospitalPeakX - munzirTriggerX}" height="${chartH}" fill="url(#earlyZoneGrad)" />
+      <!-- Shaded Early Window Zone (-leadTime to 0d) -->
+      <rect x="${munzirTriggerX}" y="${padT}" width="${Math.max(0, hospitalPeakX - munzirTriggerX)}" height="${chartH}" fill="url(#earlyZoneGrad)" />
       <!-- Hospital Surge Danger Zone (Day -2 to Day 2) -->
       <rect x="${getX(-2)}" y="${padT}" width="${getX(2) - getX(-2)}" height="${chartH}" fill="url(#dangerZoneGrad)" />
 
@@ -3600,21 +3652,21 @@ function renderRenalTrajectoryChart(cohort, alert) {
       <!-- Dehydration Surge Curve (Amber Smooth Spline) -->
       <path fill="none" stroke="#e9aa62" stroke-width="3" stroke-dasharray="6,4" stroke-linecap="round" stroke-linejoin="round" d="${dehydPath}" />
 
-      <!-- Munzir Alert Marker at Day -11.5 -->
+      <!-- Munzir Alert Marker at Day -leadTime -->
       <line x1="${munzirTriggerX}" y1="${padT - 10}" x2="${munzirTriggerX}" y2="${padT + chartH}" stroke="#66d9af" stroke-width="2" />
-      <circle cx="${munzirTriggerX}" cy="${getYEgfr(97.7)}" r="7" fill="#66d9af" stroke="#17211f" stroke-width="2" />
-      <rect x="${munzirTriggerX - 70}" y="${padT - 10}" width="140" height="20" rx="4" fill="#065f46" stroke="#66d9af" />
-      <text x="${munzirTriggerX}" y="${padT + 4}" fill="#a7f3d0" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">MUNZIR ALERT (+11.5d)</text>
+      <circle cx="${munzirTriggerX}" cy="${triggerYEgfr}" r="7" fill="#66d9af" stroke="#17211f" stroke-width="2" />
+      <rect x="${munzirTriggerX - 75}" y="${padT - 10}" width="150" height="20" rx="4" fill="#065f46" stroke="#66d9af" />
+      <text x="${munzirTriggerX}" y="${padT + 4}" fill="#a7f3d0" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">MUNZIR ALERT (+${leadTime.toFixed(1)}d)</text>
 
       <!-- Hospital Clinical Surge Marker at Day 0 -->
       <line x1="${hospitalPeakX}" y1="${padT}" x2="${hospitalPeakX}" y2="${padT + chartH}" stroke="#f17971" stroke-width="2" stroke-dasharray="4,4" />
-      <circle cx="${hospitalPeakX}" cy="${getYDehyd(58.0)}" r="7" fill="#f17971" stroke="#17211f" stroke-width="2" />
+      <circle cx="${hospitalPeakX}" cy="${getYDehyd(edPeakDehyd)}" r="7" fill="#f17971" stroke="#17211f" stroke-width="2" />
       <rect x="${hospitalPeakX - 60}" y="${padT + 40}" width="120" height="20" rx="4" fill="#7f1d1d" stroke="#f17971" />
       <text x="${hospitalPeakX}" y="${padT + 54}" fill="#fecaca" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">RETROSPECTIVE PEAK</text>
 
       <!-- Legend -->
-      <text x="${padL + 10}" y="${padT + 20}" fill="#65dfcd" font-size="11" font-weight="700" font-family="sans-serif">― Mean eGFR Decline (CKD-EPI 2021)</text>
-      <text x="${padL + 10}" y="${padT + 36}" fill="#e9aa62" font-size="11" font-weight="700" font-family="sans-serif">--- Dehydration Rate (USG ≥ 1.025)</text>
+      <text x="${padL + 10}" y="${padT + 20}" fill="#65dfcd" font-size="11" font-weight="700" font-family="sans-serif">― Mean eGFR: ${curEgfr.toFixed(1)} mL/min (CKD-EPI)</text>
+      <text x="${padL + 10}" y="${padT + 36}" fill="#e9aa62" font-size="11" font-weight="700" font-family="sans-serif">--- Dehydration Rate: ${curDehyd.toFixed(1)}% (USG ≥ 1.025)</text>
     </svg>
   `;
 }
