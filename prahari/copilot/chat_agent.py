@@ -92,90 +92,7 @@ class SovereignCopilotAgent:
         ctx = packet.live_context
         articles = packet.statutory_articles
 
-        # Check for greeting or introductory question
-        if packet.intent == CopilotIntent.GREETING:
-            is_ar = any("\u0600" <= ch <= "\u06FF" for ch in query)
-            eng_greeting = (
-                "Hello! I am Munzir Sovereign Copilot, an official public health decision support AI powered by Inception 42 Jais-3-0.9B.\n\n"
-                "I provide real-time decision support grounded in live Lakehouse telemetry and official UAE statutory decrees (MOHRE Ministerial Resolution No. 44 of 2022).\n\n"
-                "How can I assist your team today? You can ask me:\n"
-                "• \"What should I do right now for outdoor workers?\" (30-min operational checklist)\n"
-                "• \"What is the legal fine under Resolution 44?\" (Statutory compliance & penalties)\n"
-                "• \"Explain Jebel Ali risk\" (Environmental & clinical SHAP drivers)\n"
-                "• \"Show municipal cooling fleet staging\" (Cooling buses & misting trailers)\n"
-                "• \"What are the renal biomarker rates?\" (eGFR & KDIGO sub-clinical screening)"
-            )
-            ar_greeting = (
-                "مرحباً بك! أنا المساعد السيادي لمنصة منذر (Sovereign Copilot) المدعوم بنموذج Inception 42 Jais-3-0.9B.\n\n"
-                "أقدم دعماً تشغيلياً رسمياً مستنداً إلى بيانات الرصد المباشرة والقرارات الوزارية الرسمية (قرار وزارة الموارد البشرية والتوطين رقم 44 لسنة 2022).\n\n"
-                "كيف يمكنني مساعدتك اليوم؟ يمكنك سؤالي عن:\n"
-                "• الإجراءات التشغيلية العاجلة لحماية العمال خلال ۳۰ دقيقة\n"
-                "• قرارات حظر العمل وقت الظهيرة واللوائح القانونية والغرامات\n"
-                "• خطة توجيه أسطول التبريد البلدي ومقطورات الرذاذ وإسعاف دبي\n"
-                "• مؤشرات صحة الكلى المهنية والكشف المبكر عن الجفاف (eGFR / KDIGO)"
-            )
-            main_text = ar_greeting if is_ar else eng_greeting
-            return CopilotChatResponse(
-                query=query,
-                response_text=main_text,
-                arabic_translation=ar_greeting,
-                intent="greeting",
-                citations=["UAE MOHRE Ministerial Resolution No. 44 of 2022", "Federal Decree-Law No. 33 of 2021"],
-                execution_mode="JAIS_NATIVE_TORCH" if (self.jais_runner.try_load_model() and self.jais_runner._model is not None) else "JAIS_VERIFIED_TEMPLATE",
-                device=self.jais_runner._device,
-                passed_fenced_gate=True,
-                grounding_badge="Sovereign Copilot Ready",
-                site_id=ctx.site_id,
-                site_name=ctx.site_name,
-                target_date=ctx.target_date,
-            )
-
-        # 1. Immediate sovereign verified response for standard intents (zero latency, zero hallucination)
-        immediate_intents = (
-            CopilotIntent.GREETING,
-            CopilotIntent.CONVERSATIONAL,
-            CopilotIntent.ACTION_PLAN,
-            CopilotIntent.FOLLOW_UP_ELABORATION,
-            CopilotIntent.FIRST_AID,
-            CopilotIntent.CLINICAL_EDUCATION,
-            CopilotIntent.PLATFORM_GUIDANCE,
-            CopilotIntent.REGULATORY_COMPLIANCE,
-            CopilotIntent.FLEET_LOGISTICS,
-            CopilotIntent.CLINICAL_RENAL,
-            CopilotIntent.ALERT_EXPLANATION,
-            CopilotIntent.OPERATIONAL_INTERVENTION,
-            CopilotIntent.GENERAL_OVERVIEW,
-        )
-        if packet.intent in immediate_intents:
-            eng_ans, ar_ans = self._synthesize_grounded_answer(packet.intent, query, ctx, articles)
-            is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
-            primary_text = ar_ans if is_query_arabic else eng_ans
-            secondary_text = eng_ans if is_query_arabic else ar_ans
-            if packet.intent == CopilotIntent.ACTION_PLAN:
-                mode = "JAIS_SOVEREIGN_PLANNER"
-            elif packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
-                mode = "JAIS_SOVEREIGN_CONVERSATIONAL"
-            elif self.jais_runner.try_load_model() and self.jais_runner._model is not None:
-                mode = "JAIS_NATIVE_TORCH"
-            else:
-                mode = "JAIS_VERIFIED_TEMPLATE"
-
-            return CopilotChatResponse(
-                query=query,
-                response_text=primary_text,
-                arabic_translation=secondary_text,
-                intent=packet.intent.value,
-                citations=packet.citations,
-                execution_mode=mode,
-                device=self.jais_runner._device,
-                passed_fenced_gate=True,
-                grounding_badge="100% Grounded in Live Lakehouse & UAE Decrees",
-                site_id=ctx.site_id,
-                site_name=ctx.site_name,
-                target_date=ctx.target_date,
-            )
-
-        # 2. Try Local Jais Model on GPU if loaded
+        # 1. Primary Execution Path: Native Inception 42 Jais LLM Inference on GPU
         if self.jais_runner.try_load_model() and self.jais_runner._model is not None and self.jais_runner._tokenizer is not None:
             try:
                 import torch
@@ -186,25 +103,27 @@ class SovereignCopilotAgent:
                 if packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL):
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                        f"Answer the user clearly, politely, and warmly in {target_lang}. "
-                        "Do not output emergency site disaster declarations for conversational inquiries."
+                        f"Answer the user naturally, clearly, warmly, and helpfully in {target_lang}. "
+                        "Do not output emergency site disaster declarations for casual, humor, or general conversational inquiries."
                     )
                 elif packet.intent == CopilotIntent.ACTION_PLAN:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an expert operational safety planner for the UAE MOHRE and DHA. "
-                        f"Formulate a structured 5-phase master plan in {target_lang} strictly adhering to UAE MOHRE Resolution 44/2022 midday break."
+                        f"Formulate a structured operational heat safety plan in {target_lang} strictly adhering to UAE MOHRE Resolution 44/2022 midday break.\n\n"
+                        f"Retrieved Operational Context:\n{prompt_context}"
                     )
                 elif packet.intent in (CopilotIntent.CLINICAL_EDUCATION, CopilotIntent.FIRST_AID, CopilotIntent.PLATFORM_GUIDANCE):
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                        f"Answer the user question clearly, politely, and authoritatively in {target_lang} based on public health and DHA guidelines. "
-                        "Do not output emergency site disaster declarations for educational or platform inquiries."
+                        f"Answer the user question clearly, politely, and authoritatively in {target_lang} based on public health and DHA guidelines.\n\n"
+                        f"Reference Context:\n{prompt_context}"
                     )
                 else:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
-                        f"You answer questions from frontline safety directors and epidemiologists based STRICTLY on the retrieved context in {target_lang}. "
-                        "Never invent unstated numbers, decrees, or facts."
+                        f"Answer the frontline question directly, authoritatively, and concisely in {target_lang} based on the retrieved Lakehouse telemetry and statutory decrees below:\n\n"
+                        f"Retrieved Surveillance Telemetry & Decrees:\n{prompt_context}\n\n"
+                        "Requirement: Stay strictly grounded in the facts and figures provided in the context."
                     )
 
                 messages = [
@@ -224,8 +143,8 @@ class SovereignCopilotAgent:
                                 messages.append({"role": "user", "content": c[:300]})
 
                 user_instruction = (
-                    f"{prompt_context}\n\nUser Question: {query}\n\n"
-                    f"Requirement: Answer strictly in {target_lang}. Provide an authoritative, concise response."
+                    f"User Question: {query}\n\n"
+                    f"Requirement: Answer in {target_lang}. Provide an authoritative, concise response."
                 )
                 messages.append(
                     {
@@ -244,9 +163,9 @@ class SovereignCopilotAgent:
                 with torch.no_grad():
                     outputs = self.jais_runner._model.generate(
                         **inputs,
-                        max_new_tokens=110,
+                        max_new_tokens=256,
                         do_sample=True,
-                        temperature=0.2,
+                        temperature=0.3 if packet.intent not in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL) else 0.7,
                         pad_token_id=self.jais_runner._tokenizer.eos_token_id,
                     )
                 gen_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
@@ -261,15 +180,12 @@ class SovereignCopilotAgent:
                     cleaned_text = raw_text
                 cleaned_text = cleaned_text.replace("<|ifm|im_end|>", "").strip()
 
-                is_query_arabic = any("\u0600" <= ch <= "\u06FF" for ch in query)
-                is_output_arabic = any("\u0600" <= ch <= "\u06FF" for ch in cleaned_text)
+                is_conv = packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL)
                 is_valid, unverified = self.validator.verify_text(cleaned_text, ctx, articles)
-                if is_valid and len(cleaned_text) > 30:
+                if (is_conv or is_valid) and len(cleaned_text) >= 10:
                     arabic_summary = self._synthesize_arabic_answer(packet.intent, ctx, articles[0] if articles else None)
-                    # Guarantee language consistency: if user asked in English, response_text is in English
-                    if not is_query_arabic and is_output_arabic:
-                        eng_verified, _ = self._synthesize_grounded_answer(packet.intent, query, ctx, articles)
-                        final_response = eng_verified
+                    if is_query_arabic:
+                        final_response = cleaned_text
                         final_arabic = cleaned_text
                     else:
                         final_response = cleaned_text

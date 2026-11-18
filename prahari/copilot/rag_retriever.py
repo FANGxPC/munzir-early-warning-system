@@ -237,8 +237,8 @@ class SovereignRAGRetriever:
         if any(w in q for w in ["law", "decree", "resolution", "resolution 44", "mohre", "legal", "fine", "penalty", "illegal", "midday", "ban"]):
             return CopilotIntent.REGULATORY_COMPLIANCE
 
-        # 8. Site Alert Drivers & SHAP Attributions
-        if any(w in q for w in ["why", "cause", "driver", "explain jebel ali", "explain risk", "attribution", "reason", "shap"]):
+        # 8. Site Alert Drivers, Thermal Risk & SHAP Attributions
+        if any(w in q for w in ["why", "cause", "driver", "explain jebel ali", "explain risk", "attribution", "reason", "shap", "risk", "thermal", "wbgt", "temperature", "heat stress", "hazard", "threat", "anomaly"]):
             return CopilotIntent.ALERT_EXPLANATION
 
         # 9. Municipal Cooling Fleet Logistics
