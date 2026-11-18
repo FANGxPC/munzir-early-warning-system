@@ -104,7 +104,8 @@ class SovereignCopilotAgent:
                     system_instruction = (
                         "You are Munzir Sovereign Health Copilot, an official public health decision support AI for the UAE. "
                         f"Answer the user naturally, clearly, warmly, and helpfully in {target_lang}. "
-                        "Do not output emergency site disaster declarations for casual, humor, or general conversational inquiries."
+                        "Do not output emergency site disaster declarations for casual, humor, or general conversational inquiries. "
+                        "Never use emojis."
                     )
                 elif packet.intent == CopilotIntent.ACTION_PLAN:
                     system_instruction = (
@@ -181,6 +182,7 @@ class SovereignCopilotAgent:
                 else:
                     cleaned_text = raw_text
                 cleaned_text = cleaned_text.replace("<|ifm|im_end|>", "").strip()
+                cleaned_text = "".join(ch for ch in cleaned_text if ord(ch) < 0x1F000).strip()
 
                 is_conv = packet.intent in (CopilotIntent.GREETING, CopilotIntent.CONVERSATIONAL)
                 is_valid, unverified = self.validator.verify_text(cleaned_text, ctx, articles)
@@ -731,6 +733,7 @@ class SovereignCopilotAgent:
             gen_tokens = outputs[0][inputs["input_ids"].shape[-1]:]
             raw_ar = self.jais_runner._tokenizer.decode(gen_tokens, skip_special_tokens=False)
             cleaned_ar = raw_ar.replace("<|ifm|im_end|>", "").strip()
+            cleaned_ar = "".join(ch for ch in cleaned_ar if ord(ch) < 0x1F000).strip()
             if any("\u0600" <= ch <= "\u06FF" for ch in cleaned_ar) and len(cleaned_ar) >= 5:
                 return cleaned_ar
         except Exception as e:
