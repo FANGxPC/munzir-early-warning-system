@@ -340,7 +340,9 @@ Prahari/
 ├── Makefile                       # One-touch CLI automation targets
 ├── requirements.txt               # Locked Python dependencies
 ├── .gitignore                     # Clean repository ignore matrix
-├── MUNZIR_3_MIN_CHAMPIONSHIP_PITCH_BIBLE.md # 3-Minute Championship Pitch Script
+├── PROJECT_OVERVIEW.md            # Comprehensive Project Overview
+├── Technical Documentation.pdf    # Official Publication Specification
+├── build_championship_deck.py     # Championship Slide Deck Generator
 ├── hardware/
 │   └── sentinel_node/
 │       ├── sentinel_rgb_led_node.ino # ESP32 production firmware (RGB 3-LED + BOOT)

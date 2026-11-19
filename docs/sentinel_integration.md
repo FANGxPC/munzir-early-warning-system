@@ -4,7 +4,7 @@
 > **Hardware:** ESP32 DevKit, DHT22 (Air Temp & RH), DS18B20 (Matte-Black Globe Temp), 3 R-B-G LEDs (Red, Blue, Green), BOOT Button (GPIO 0)  
 > **Firmware:** `hardware/sentinel_node/sentinel_rgb_led_node.ino` (3-LED RGB Edition)  
 > **Security Clearance:** Operational EHS & Field Surveillance  
-> **Reference Plan:** `new-PRAHARI_Sentinel_Hardware_Plan.md` & `Munzir_Sentinel_Hardware_Integration_Plan.md`
+> **Reference Plan:** `hardware/sentinel_node/README.md` & `hardware/sentinel_node/wiring_diagram.md`
 
 ---
 
