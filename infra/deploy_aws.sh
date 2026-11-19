@@ -53,8 +53,9 @@ cmd_up() {
         echo "[*] Creating Security Group: ${SECURITY_GROUP_NAME}..."
         SG_ID=$(aws ec2 create-security-group --region "${REGION}" --group-name "${SECURITY_GROUP_NAME}" --description "Munzir Early Warning System Ports 80, 8000, 22" --vpc-id "${VPC_ID}" --query "GroupId" --output text)
         
-        # Authorize Port 80 (HTTP), 8000 (API/Web), and 22 (SSH)
+        # Authorize Port 80 (HTTP), 443 (HTTPS), 8000 (API/Web), and 22 (SSH)
         aws ec2 authorize-security-group-ingress --region "${REGION}" --group-id "${SG_ID}" --protocol tcp --port 80 --cidr 0.0.0.0/0 >/dev/null
+        aws ec2 authorize-security-group-ingress --region "${REGION}" --group-id "${SG_ID}" --protocol tcp --port 443 --cidr 0.0.0.0/0 >/dev/null
         aws ec2 authorize-security-group-ingress --region "${REGION}" --group-id "${SG_ID}" --protocol tcp --port 8000 --cidr 0.0.0.0/0 >/dev/null
         aws ec2 authorize-security-group-ingress --region "${REGION}" --group-id "${SG_ID}" --protocol tcp --port 22 --cidr 0.0.0.0/0 >/dev/null
         echo "[+] Security Group created: ${SG_ID}"
