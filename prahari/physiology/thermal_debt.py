@@ -66,10 +66,14 @@ class CumulativeThermalDebtAssessment:
                     "peak_wbgt_c": round(p.peak_wbgt_c, 1),
                     "night_min_wbgt_c": round(p.night_min_wbgt_c, 1),
                     "day_storage_kj_m2": round(p.day_heat_storage_kj_m2, 1),
+                    "day_heat_storage_kj_m2": round(p.day_heat_storage_kj_m2, 1),
                     "recovery_pct": round(p.nocturnal_recovery_pct, 1),
+                    "nocturnal_recovery_pct": round(p.nocturnal_recovery_pct, 1),
                     "residual_debt_kj_m2": round(p.residual_debt_kj_m2, 1),
                     "start_core_temp_c": round(p.day_start_core_temp_c, 2),
+                    "day_start_core_temp_c": round(p.day_start_core_temp_c, 2),
                     "end_core_temp_c": round(p.day_end_core_temp_c, 2),
+                    "day_end_core_temp_c": round(p.day_end_core_temp_c, 2),
                     "recovery_status": p.recovery_status,
                 }
                 for p in self.daily_profiles

@@ -7,8 +7,19 @@ Integrates Inception 42's flagship sovereign Arabic-English bilingual model
 from __future__ import annotations
 
 import logging
+import os
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
+
+# Guarantee writable scratch/cache directories for Triton and PyTorch
+os.environ.setdefault("TRITON_CACHE_DIR", "/tmp/triton")
+os.environ.setdefault("TORCH_EXTENSIONS_DIR", "/tmp/torch_extensions")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/mpl")
+for _p in ("/tmp/triton", "/tmp/torch_extensions", "/tmp/mpl"):
+    try:
+        os.makedirs(_p, exist_ok=True)
+    except OSError:
+        pass
 
 logger = logging.getLogger(__name__)
 
@@ -70,24 +81,37 @@ class JaisInferenceRunner:
                     trust_remote_code=True,
                 )
 
-            # Check CUDA availability
+            # Check CUDA availability with automatic CPU fallback if VRAM is constrained
+            cuda_success = False
             if torch.cuda.is_available():
-                self._device = "cuda:0"
-                dtype = torch.float16
-            else:
-                self._device = "cpu"
-                dtype = torch.float32
+                try:
+                    self._device = "cuda:0"
+                    self._model = AutoModelForCausalLM.from_pretrained(
+                        self.model_id,
+                        dtype=torch.float16,
+                        device_map="auto",
+                        local_files_only=local_only,
+                        trust_remote_code=True,
+                    )
+                    self._is_loaded = True
+                    cuda_success = True
+                    logger.info("Inception 42 Jais model loaded successfully on %s", self._device)
+                    return True
+                except Exception as cuda_err:
+                    logger.warning("CUDA load failed (%s), falling back to CPU execution...", cuda_err)
 
-            self._model = AutoModelForCausalLM.from_pretrained(
-                self.model_id,
-                dtype=dtype,
-                device_map="auto" if torch.cuda.is_available() else None,
-                local_files_only=local_only,
-                trust_remote_code=True,
-            )
-            self._is_loaded = True
-            logger.info("Inception 42 Jais model loaded successfully on %s", self._device)
-            return True
+            if not cuda_success:
+                self._device = "cpu"
+                self._model = AutoModelForCausalLM.from_pretrained(
+                    self.model_id,
+                    dtype=torch.float32,
+                    device_map=None,
+                    local_files_only=local_only,
+                    trust_remote_code=True,
+                )
+                self._is_loaded = True
+                logger.info("Inception 42 Jais model loaded successfully on CPU")
+                return True
         except Exception as e:
             logger.info("Jais model weights not locally cached: %s. Using verified template engine.", e)
             self._is_loaded = False

@@ -277,9 +277,18 @@ class EvidenceCardGenerator:
         intervention_sim = {}
         if "heat" in alert.alert_type:
             action_key = "combined_protocol" if "alert" in alert.severity.value else "add_shade"
+            workforce_count = 3200
+            for s in self.region_config.get("sites", []):
+                if s.get("id") == geo_id:
+                    workforce_count = s.get("workforce", 3200)
+                    break
             intervention_sim = {
                 "action_type": action_key,
+                "target_site": geo_id,
+                "recommended_scenario": action_key,
                 "recommended_action": actions[0] if actions else "Deploy heat mitigation protocol",
+                "action_prompt": f"Simulate {action_key.replace('_', ' ').title()} for {geo_info.get('name', geo_id)}",
+                "workforce_size": workforce_count,
                 "danger_hours_averted": 79.0,
                 "projected_cases_averted_median": 60.1,
                 "projected_cases_averted_90ci": [31.9, 99.4],

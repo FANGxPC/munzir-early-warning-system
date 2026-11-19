@@ -149,6 +149,11 @@ class TestSovereignRAGRetriever:
         assert retriever.classify_intent("How many cooling buses and misting trailers are needed?") == CopilotIntent.FLEET_LOGISTICS
         assert retriever.classify_intent("What are the eGFR and KDIGO renal biomarker rates?") == CopilotIntent.CLINICAL_RENAL
         assert retriever.classify_intent("What 30-minute operational actions should I take?") == CopilotIntent.OPERATIONAL_INTERVENTION
+        assert retriever.classify_intent("hello") == CopilotIntent.GREETING
+        assert retriever.classify_intent("who are you?") == CopilotIntent.CONVERSATIONAL
+        assert retriever.classify_intent("what is heat stroke vs heat exhaustion?") == CopilotIntent.CLINICAL_EDUCATION
+        assert retriever.classify_intent("worker fainted, need first aid") == CopilotIntent.FIRST_AID
+        assert retriever.classify_intent("how do I use the sentinel hardware twin?") == CopilotIntent.PLATFORM_GUIDANCE
 
     def test_retrieval_packet_assembly(self):
         retriever = SovereignRAGRetriever(region_key="uae")
@@ -232,6 +237,137 @@ class TestSovereignCopilotAgent:
 
         assert res.intent == "regulatory_compliance"
         assert any(term in res.response_text for term in ["Resolution", "44", "القرار", "MOHRE"])
+        assert res.passed_fenced_gate is True
+
+    def test_agent_chat_conversational_greeting(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("hello", site_id="SITE-JA-01")
+
+        assert res.intent == "greeting"
+        assert len(res.response_text) >= 10
+        assert res.passed_fenced_gate is True
+        # Must not inject a false emergency site shutdown for a simple greeting
+        assert "Emergency Tier" not in res.response_text
+
+    def test_agent_chat_action_plan(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("make a plan for tomorrow", site_id="SITE-JA-01")
+
+        assert res.intent == "action_plan"
+        assert res.passed_fenced_gate is True
+        assert len(res.response_text) > 30
+        assert any(term in res.response_text.lower() for term in ["plan", "protocol", "hour", "break", "rest", "water", "shift", "resolution", "44", "worker", "heat", "phase"])
+
+    def test_agent_chat_conversational_questions(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_who = agent.chat("who are you", site_id="SITE-JA-01")
+        assert res_who.intent == "conversational"
+        assert any(term in res_who.response_text.lower() for term in ["munzir", "ai", "assistant", "help", "support"])
+        assert res_who.passed_fenced_gate is True
+
+        res_thanks = agent.chat("thank you so much", site_id="SITE-JA-01")
+        assert res_thanks.intent == "conversational"
+        assert any(term in res_thanks.response_text.lower() for term in ["welcome", "help", "thank", "pleasure", "assist"])
+        assert res_thanks.passed_fenced_gate is True
+
+    def test_agent_chat_casual_inquiry_and_humor(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+
+        # 1. Casual 'how u do' should NOT trigger 30-min operational emergency directive
+        res_how = agent.chat("how u do", site_id="SITE-JA-01")
+        assert res_how.intent == "conversational"
+        assert len(res_how.response_text) > 10
+        assert "13 mobile cooling buses" not in res_how.response_text
+        assert res_how.passed_fenced_gate is True
+
+        # 2. Slang 'yo dude' should respond naturally as a friendly chatbot
+        res_yo = agent.chat("yo dude", site_id="SITE-JA-01")
+        assert res_yo.intent == "conversational"
+        assert len(res_yo.response_text) > 5
+        assert "Munzir Surveillance Briefing" not in res_yo.response_text
+        assert res_yo.citations == []
+        assert res_yo.passed_fenced_gate is True
+
+        # 3. Hallucination query 'are you halllucinating ?' should respond naturally
+        res_hal = agent.chat("are you halllucinating ?", site_id="SITE-JA-01")
+        assert res_hal.intent == "conversational"
+        assert len(res_hal.response_text) > 10
+        assert "Munzir Surveillance Briefing" not in res_hal.response_text
+        assert res_hal.citations == []
+        assert res_hal.passed_fenced_gate is True
+
+        # 4. 'tell me a joke' should NOT fall back to raw surveillance statistics
+        res_joke = agent.chat("tell me a joke", site_id="SITE-JA-01")
+        assert res_joke.intent == "conversational"
+        assert len(res_joke.response_text) > 10
+        assert "Munzir Surveillance Briefing" not in res_joke.response_text
+        # Enforce zero emojis in responses
+        assert not any(ord(ch) > 0x1F000 for ch in res_joke.response_text)
+        assert res_joke.passed_fenced_gate is True
+
+        # 5. Explicit site briefing query should route to general_overview with surveillance stats
+        res_brief = agent.chat("give me the site briefing", site_id="SITE-JA-01")
+        assert res_brief.intent == "general_overview"
+        assert any(t in res_brief.response_text.lower() for t in ["briefing", "surveillance", "jebel ali", "wbgt", "alert", "port"])
+        assert len(res_brief.citations) > 0
+
+    def test_agent_chat_main_work_and_capabilities(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+
+        # 'what is your main work' explains agent's core responsibilities
+        res_work = agent.chat("what is your main work", site_id="SITE-JA-01")
+        assert res_work.intent == "conversational"
+        assert any(t in res_work.response_text.lower() for t in ["munzir", "health", "decision support", "public", "data", "guidance", "assist", "ai"])
+        assert res_work.passed_fenced_gate is True
+
+        res_do = agent.chat("what do you do", site_id="SITE-JA-01")
+        assert res_do.intent == "conversational"
+        assert any(t in res_do.response_text.lower() for t in ["munzir", "health", "decision support", "assist", "help", "ai"])
+
+    def test_agent_chat_shap_attribution_normalized(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_risk = agent.chat("Explain Jebel Ali risk", site_id="SITE-JA-01")
+
+        assert res_risk.intent == "alert_explanation"
+        assert res_risk.passed_fenced_gate is True
+        # Must not contain impossible unnormalized percentages > 100%
+        assert "115.0%" not in res_risk.response_text
+        assert "210.0%" not in res_risk.response_text
+        assert any(t in res_risk.response_text.lower() for t in ["jebel ali", "telemetry", "thermal", "risk", "wbgt", "protocol", "dcas", "attribution", "signal"])
+
+    def test_agent_chat_renal_cohort_percentage(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res_renal = agent.chat("what are renal biomarker rates ?", site_id="SITE-JA-01")
+
+        assert res_renal.intent == "clinical_renal"
+        assert res_renal.passed_fenced_gate is True
+        assert any(t in res_renal.response_text.lower() for t in ["renal", "kidney", "dehydration", "biomarker", "stage 1", "kdigo", "egfr", "rate"])
+
+    def test_agent_chat_clinical_first_aid(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("worker fainted, need first aid", site_id="SITE-JA-01")
+
+        assert res.intent == "first_aid"
+        assert any(term in res.response_text for term in ["Shade", "Cooling", "Hydration", "998"])
+        assert res.passed_fenced_gate is True
+
+    def test_agent_chat_follow_up_elaboration(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        res = agent.chat("tell me more abou it", site_id="SITE-JA-01")
+
+        assert res.intent == "follow_up_elaboration"
+        assert any(term in res.response_text for term in ["Microclimate", "Thermal", "WBGT", "Resolution", "44"])
+        assert res.passed_fenced_gate is True
+
+    def test_agent_chat_multi_turn_history(self):
+        agent = SovereignCopilotAgent(region_key="uae")
+        history = [
+            {"role": "user", "content": "What is the status of Jebel Ali?"},
+            {"role": "assistant", "content": "Jebel Ali is at Alert Tier with 41.3C WBGT."}
+        ]
+        res = agent.chat("tell me more about this site", site_id="SITE-JA-01", history=history)
+
+        assert res.intent == "follow_up_elaboration"
         assert res.passed_fenced_gate is True
 
 

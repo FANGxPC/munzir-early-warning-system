@@ -210,5 +210,15 @@ class ActionConfirmRequest(BaseModel):
     timestamp: Optional[str] = None
 
 
+class WhatIfSimulateRequest(BaseModel):
+    site_id: str = "SITE-JA-01"
+    action: str = "combined_protocol"
+    workforce: Optional[int] = None
+    start_date: str = "2024-06-01"
+    end_date: str = "2024-06-30"
+    shade_temp_reduction_c: Optional[float] = None
+    break_extension_minutes: Optional[int] = None
+
+
 
 

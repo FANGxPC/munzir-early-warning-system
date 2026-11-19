@@ -6,24 +6,25 @@
 
 // 1. Wi-Fi Configuration (2.4 GHz only)
 // If using phone hotspot, enable "Maximize Compatibility" / 2.4 GHz mode
-#define WIFI_SSID         "Your_WiFi_SSID"
-#define WIFI_PASSWORD     "Your_WiFi_Password"
+#define WIFI_SSID         "MOTO E13"
+#define WIFI_PASSWORD     "1234567890"
 
 // 2. Munzir Central Platform API URL
 // For local testing: "http://<YOUR_LAPTOP_IP>:8000"
 // For live Azure Container App: "https://munzir.agreeablestone-12345.uaenorth.azurecontainerapps.io"
-#define MUNZIR_API_BASE   "http://192.168.149.27:8000"
+#define MUNZIR_API_BASE   "http://192.168.195.27:8000"
 #define SENTINEL_API_KEY  "munzir_sentinel_secret_2026"
 
 // 3. Hardware Identity
 #define NODE_ID           "SENT-001"
 
-// 4. Pin Assignments (ESP32 DevKit)
-#define PIN_DHT22         4       // DHT22 Data pin
-#define PIN_DS18B20       18      // DS18B20 1-Wire Data pin (needs 4.7kΩ pull-up to 3.3V)
-#define PIN_LED_RED       25      // Red LED channel (through 220Ω resistor)
-#define PIN_LED_GREEN     26      // Green LED channel (through 220Ω resistor)
-#define PIN_LED_BLUE      27      // Blue LED channel (through 220Ω resistor)
+// 4. Pin Assignments (ESP32 DevKit - 3 Individual RGB/RBG LEDs: Red, Blue, Green)
+#define PIN_DHT22         4       // DHT22 Data pin (Keep outside in ambient shade)
+#define PIN_DS18B20       18      // DS18B20 1-Wire Data pin (Suspend in black box, needs 4.7kΩ pull-up to 3.3V)
+#define PIN_LED_RED       25      // Red LED (Alert / Immediate hazard stop) via 220Ω resistor
+#define PIN_LED_BLUE      26      // Blue LED (Warning / Caution) via 220Ω resistor
+#define PIN_LED_YELLOW    PIN_LED_BLUE // Compatibility alias
+#define PIN_LED_GREEN     27      // Green LED (Normal / Safe) via 220Ω resistor
 #define PIN_BOOT_BUTTON   0       // Built-in BOOT button (GPIO 0 on standard ESP32)
 
 // 5. LED Type Configuration

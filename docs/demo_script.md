@@ -78,13 +78,13 @@ At any point during the pitch or Q&A, click **[CHAMPIONSHIP] 3-Min Grand Jury To
 * **Visual on Screen:** Navigate to `Field Operations` -> **[TOOL] Sentinel Hardware** tab.
 * **Demonstration Action:**
   1. Point to the **Canopy Heat Bias dial**: Open-Meteo ERA5 model reports 31.8°C vs On-Site Black Globe measured at **33.4°C (+1.6°C Asphalt Heat Trap)**.
-  2. The physical ESP32 node on the table emits an **audible double-pulse warning buzzer** (`1000Hz -> 1500Hz`) and flashes its amber LED.
-  3. Presenter presses the physical **BOOT button** on the table node (or clicks `[ACTION] Press BOOT Button` in the digital twin): the buzzer mutes instantly, turning the badge green `MUTED / SILENCED`, and committing an immutable cryptographic acknowledgement into the Lakehouse.
+  2. The physical ESP32 node on the table displays active LED heat indicators (Solid Green for safe, Blue for warning, Fast Red Flash for work cessation).
+  3. Presenter presses the physical **BOOT button** on the table node (or clicks `[ACTION] Press BOOT Button` in the digital twin): the LED confirms acknowledgement with green confirmation, turning the badge green `COMPLIANT / ACKNOWLEDGED`, and committing an immutable cryptographic acknowledgement into the Lakehouse.
 * **Spoken Pitch:**
   > *"Software dashboards are useless if the safety officer is walking the container yard without a laptop. That is why we built **Munzir Sentinel** — an ultra-low-cost, solar-ready ESP32 edge node.*  
   > *While numerical satellite models report 31.8°C WBGT, on-site asphalt radiation drives the real black globe to **33.4°C**!*  
   > *Munzir applies empirical bias correction to eliminate model error. And for unsensored sites, we maintain scientific honesty by flagging them **UNVALIDATED-SPATIALLY** with widened conformal bounds.*  
-  > *When Tariq presses the physical BOOT button on the worksite, it silences the buzzer and commits an immutable cryptographic audit receipt into the Lakehouse, verifying regulatory compliance in real time."*
+  > *When Tariq presses the physical BOOT button on the worksite, it commits an immutable cryptographic audit receipt into the Lakehouse, verifying regulatory compliance in real time."*
 
 ---
 
@@ -156,8 +156,8 @@ At any point during the pitch or Q&A, click **[CHAMPIONSHIP] 3-Min Grand Jury To
 | **Header** | Hover `[ORBIT]️ NWP LIVE` seal | Verified green badge with SHA-256 telemetry seal | Direct API verification at `/api/v1/telemetry/live-verify` |
 | **00:50** | Click `Renal Biomarkers` tab | Dual-axis eGFR & dehydration trajectory; +11.5d lead time badge | Point to pre-rendered SVG curve in the card |
 | **01:30** | Click `1️⃣ Scenario 1` button | Jebel Ali turns orange; Evidence Card opens with SHAP & RACI | Click Warning badge directly in Alert Inbox |
-| **02:10** | Click `[Action] Sample Telemetry` | Physical ESP32 double-pulse buzz; amber LED blinks | Point to interactive digital twin widget on screen |
-| **02:25** | Press physical **BOOT button** | Buzzer mutes; green `MUTED` badge; compliance receipt | Click `[ACTION] Press BOOT Button` in the browser UI |
+| **02:10** | Click `Test Red Alert LED` | Physical ESP32 fast red emergency flash | Point to interactive digital twin widget on screen |
+| **02:25** | Press physical **BOOT button** | LED green confirmation; compliance receipt committed | Click `[ACTION] Press BOOT Button` in the browser UI |
 | **02:50** | Click `2️⃣ Scenario 2` button | Muhaisnah to Jebel Ali transit corridor; 95% spatial ellipse | Deconvolution runs deterministically via local API |
 | **03:05** | Click `[RESEARCH] Bayesian Causal` subtab | De-mixes 25-worker cohort (73% Heat + 27% Norovirus) | Load preset buttons directly inside view |
 | **03:30** | Click `Municipal Staging` tab | Radar view shows 5 buses, 12 trailers, water tankers, DCAS | Click `[Action] Optimize Staging` to re-render allocations |
