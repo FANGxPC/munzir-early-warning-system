@@ -1,5 +1,5 @@
-# Munzir (منذر) - Lightweight, Production Container for Azure Container Apps & App Service
-# Optimized for Azure for Students ($0 Scale-to-Zero Free Tier, <200MB RAM)
+# Munzir (منذر) - Lightweight, Production Container for Cloud & Edge Deployment (AWS Free Tier / Azure / Docker)
+# Optimized for AWS Free Tier EC2 (t2.micro / t3.micro) & Container Services (<200MB RAM)
 
 FROM python:3.10-slim AS builder
 
@@ -32,7 +32,6 @@ COPY config/ /app/config/
 COPY data/ /app/data/
 COPY docs/ /app/docs/
 COPY validation/ /app/validation/
-COPY munzir_policy_brief.md /app/munzir_policy_brief.md
 
 # Non-root security user
 RUN useradd -m -u 1000 munziruser && \
