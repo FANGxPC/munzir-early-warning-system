@@ -5,7 +5,7 @@ Tests for L1 Aberration Detection Layer (CDC EARS C1-C3 and Farrington-Flexible)
 import pytest
 import numpy as np
 import pandas as pd
-from prahari.detection.l1_aberration import EARSDetector, FarringtonDetector, L1AberrationDetector, L1Result
+from munzir.detection.l1_aberration import EARSDetector, FarringtonDetector, L1AberrationDetector, L1Result
 
 
 def test_ears_c1_baseline():

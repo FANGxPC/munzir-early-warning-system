@@ -1,7 +1,7 @@
 # Munzir (منذر) — Frontend UI/UX Skeleton & Component Architecture Guide
 
 > **Document Purpose:** Complete visual wireframe, DOM skeleton, button placement, navigation hierarchy, and component placement reference for AI agents, developers, and designers working on the Munzir frontend.  
-> **Source Files:** [`prahari/api/static/index.html`](../prahari/api/static/index.html), [`prahari/api/static/app.js`](../prahari/api/static/app.js), [`prahari/api/static/styles.css`](../prahari/api/static/styles.css)  
+> **Source Files:** [`munzir/api/static/index.html`](../munzir/api/static/index.html), [`munzir/api/static/app.js`](../munzir/api/static/app.js), [`munzir/api/static/styles.css`](../munzir/api/static/styles.css)  
 > **Platform Aesthetic:** High-contrast, dark-mode Palantir Foundry / Defense Command Console (`#070c18` background, `#0b1120` cards, `#38bdf8` tactical cyan, strictly 0 emojis).
 
 ---

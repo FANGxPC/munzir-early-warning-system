@@ -3,12 +3,12 @@ Tests for ISO 7933:2004 Predicted Heat Strain & Nocturnal Thermal Debt Engine (P
 """
 
 import math
-from prahari.physiology.iso7933_phs import (
+from munzir.physiology.iso7933_phs import (
     ISO7933PredictedHeatStrainEngine,
     METABOLIC_PROFILES,
     WorkerPhysicalProfile,
 )
-from prahari.physiology.thermal_debt import ThermalDebtAccumulator
+from munzir.physiology.thermal_debt import ThermalDebtAccumulator
 
 
 def test_saturation_vapor_pressure_magnus():

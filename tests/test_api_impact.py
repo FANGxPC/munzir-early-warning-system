@@ -1,9 +1,9 @@
 """
-API Integration Tests for PRAHARI Health & Resilience Impact Model Endpoints (Phase 7)
+API Integration Tests for MUNZIR Health & Resilience Impact Model Endpoints (Phase 7)
 """
 
 from fastapi.testclient import TestClient
-from prahari.api.app import app
+from munzir.api.app import app
 
 client = TestClient(app)
 

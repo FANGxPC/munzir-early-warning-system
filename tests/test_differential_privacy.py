@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from prahari.harmonisation.differential_privacy import DifferentialPrivacyEngine
+from munzir.harmonisation.differential_privacy import DifferentialPrivacyEngine
 
 
 def test_differential_privacy_count_release():

@@ -3,7 +3,7 @@ Tests for Phase 14: Occupational Renal Biomarker Surveillance & Sub-Clinical AKI
 """
 
 import pytest
-from prahari.biomarkers.renal_engine import (
+from munzir.biomarkers.renal_engine import (
     CohortRenalSummary,
     RenalAssessment,
     RenalObservation,
@@ -13,7 +13,7 @@ from prahari.biomarkers.renal_engine import (
     compute_ckd_epi_2021_egfr,
     compute_hydration_index,
 )
-from prahari.detection.l2_renal import evaluate_renal_environmental_coupling
+from munzir.detection.l2_renal import evaluate_renal_environmental_coupling
 
 
 def test_ckd_epi_2021_standard_benchmarks():

@@ -1,7 +1,7 @@
 """Unit tests for small-cell suppression, complementary masking, and algebraic privacy."""
 
-from prahari.models.canonical import SilverSignalObservation
-from prahari.harmonisation.suppression import (
+from munzir.models.canonical import SilverSignalObservation
+from munzir.harmonisation.suppression import (
     apply_small_cell_suppression,
     apply_complementary_suppression,
     SuppressionEngine,

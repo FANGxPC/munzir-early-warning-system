@@ -16,19 +16,19 @@ import numpy as np
 from datetime import datetime
 from fastapi.testclient import TestClient
 
-from prahari.config import WORKPLACE_MIN_GROUP_SIZE, SMALL_CELL_K
-from prahari.whatif.config import (
+from munzir.config import WORKPLACE_MIN_GROUP_SIZE, SMALL_CELL_K
+from munzir.whatif.config import (
     load_assumptions_config,
     get_unverified_assumptions,
 )
-from prahari.whatif.exposure import (
+from munzir.whatif.exposure import (
     WorkSchedule,
     ExposureCalculator,
 )
-from prahari.whatif.monte_carlo import MonteCarloInterventionSimulator
-from prahari.whatif.sensitivity import TornadoSensitivityAnalyzer
-from prahari.whatif.simulator import WhatIfSimulator
-from prahari.api.app import app
+from munzir.whatif.monte_carlo import MonteCarloInterventionSimulator
+from munzir.whatif.sensitivity import TornadoSensitivityAnalyzer
+from munzir.whatif.simulator import WhatIfSimulator
+from munzir.api.app import app
 
 
 # --- Test 1: Hand-Checkable Deterministic Exposure Recomputation ---

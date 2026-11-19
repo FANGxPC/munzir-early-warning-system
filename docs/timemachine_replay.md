@@ -111,7 +111,7 @@ make timemachine EVENT=pnw_2021
 make timemachine EVENT=dubai_2024
 
 # Direct Python CLI invocation
-./bin/py -m prahari timemachine --event pnw_2021 --out-html validation/timemachine_pnw_2021.html
+./bin/py -m munzir timemachine --event pnw_2021 --out-html validation/timemachine_pnw_2021.html
 ```
 
 ### Via Interactive Web Dashboard:

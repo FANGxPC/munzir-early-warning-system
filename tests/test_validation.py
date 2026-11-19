@@ -1,5 +1,5 @@
 """
-Phase 6 Operational Validation Test Suite for PRAHARI.
+Phase 6 Operational Validation Test Suite for MUNZIR.
 Validates:
 - Synthetic outbreak injection study (>= 100 events)
 - Rolling-origin backtest avoiding look-ahead bias
@@ -15,11 +15,11 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from prahari.validation.injection import SyntheticInjectionStudy
-from prahari.validation.baselines import FixedThresholdDetector, EarsC2Detector, BaselineBenchmarkEngine
-from prahari.validation.metrics import ValidationMetricsEngine
-from prahari.validation.real_data_check import RealDataSanityChecker
-from prahari.validation.orchestrator import ValidationOrchestrator
+from munzir.validation.injection import SyntheticInjectionStudy
+from munzir.validation.baselines import FixedThresholdDetector, EarsC2Detector, BaselineBenchmarkEngine
+from munzir.validation.metrics import ValidationMetricsEngine
+from munzir.validation.real_data_check import RealDataSanityChecker
+from munzir.validation.orchestrator import ValidationOrchestrator
 
 
 def test_injection_study_generation():
@@ -84,7 +84,7 @@ def test_metrics_engine_comparative_evaluation():
             sim_alerts.append({
                 "date": ev.start_date,
                 "geo_id": ev.target_geo_id,
-                "model": "prahari_fusion",
+                "model": "munzir_fusion",
                 "severity": "warning",
                 "probability": 0.88,
             })
@@ -193,7 +193,7 @@ def test_validation_orchestrator_end_to_end_and_report():
     CRITICAL EXIT CRITERIA TEST:
     Executes the complete operational validation study (100 injections)
     and verifies that validation/report.html is generated with validated performance:
-    - PRAHARI Lead Time advantage vs Baseline A >= 2.0 days
+    - MUNZIR Lead Time advantage vs Baseline A >= 2.0 days
     - Sensitivity >= 85%
     - Decoy suppression >= 90%
     - Brier score < 0.05

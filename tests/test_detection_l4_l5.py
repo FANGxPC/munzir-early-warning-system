@@ -5,15 +5,15 @@ Tests for L4 Multi-Signal ML Fusion and L5 Anti-Alert-Fatigue Policy Engine.
 import pytest
 import numpy as np
 import pandas as pd
-from prahari.detection.l4_fusion import (
+from munzir.detection.l4_fusion import (
     L4FusionModel,
     FusionFeatureExtractor,
     FusionPrediction,
     FEATURE_NAMES,
 )
-from prahari.detection.l5_policy import (
+from munzir.detection.l5_policy import (
     L5AlertPolicyEngine,
-    PrahariAlert,
+    MunzirAlert,
     AlertSeverity,
 )
 

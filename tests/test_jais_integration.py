@@ -2,9 +2,9 @@
 Tests for Phase 17: Inception 42 Jais-3-0.9B & Multilingual Frontline Dispatch Engine.
 """
 
-from prahari.llm.fenced_validator import FencedHallucinationGate
-from prahari.llm.jais_runner import JaisInferenceRunner
-from prahari.llm.multilingual_dispatch import generate_multilingual_dispatch
+from munzir.llm.fenced_validator import FencedHallucinationGate
+from munzir.llm.jais_runner import JaisInferenceRunner
+from munzir.llm.multilingual_dispatch import generate_multilingual_dispatch
 
 
 def test_fenced_hallucination_gate_valid():

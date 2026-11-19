@@ -39,79 +39,79 @@ help:
 	@echo "  make clean             : Clean local test caches"
 
 backfill:
-	$(PYTHON) -m prahari backfill --years 3.0 --region uae --seed 42
+	$(PYTHON) -m munzir backfill --years 3.0 --region uae --seed 42
 
 backfill-quick:
-	$(PYTHON) -m prahari backfill --years 1.0 --region uae --seed 42
+	$(PYTHON) -m munzir backfill --years 1.0 --region uae --seed 42
 
 ingest-real:
-	$(PYTHON) -m prahari ingest-real --region uae
+	$(PYTHON) -m munzir ingest-real --region uae
 
 clinical-profile:
-	$(PYTHON) -m prahari clinical-profile --hazard heat --severity alert --wbgt 34.0
+	$(PYTHON) -m munzir clinical-profile --hazard heat --severity alert --wbgt 34.0
 
 harmonise:
-	$(PYTHON) -m prahari harmonise --region uae
+	$(PYTHON) -m munzir harmonise --region uae
 
 inspect-silver:
-	$(PYTHON) -m prahari inspect-silver
+	$(PYTHON) -m munzir inspect-silver
 
 dp-release:
-	$(PYTHON) -m prahari dp-release --epsilon 1.0
+	$(PYTHON) -m munzir dp-release --epsilon 1.0
 
 test-privacy:
 	$(PYTHON) -m pytest tests/test_silver_store.py tests/test_spatial.py tests/test_suppression.py tests/test_differential_privacy.py -v
 
 train-fusion:
-	$(PYTHON) -m prahari train-fusion --start-date 2024-01-01 --end-date 2026-12-31 --split-date 2026-01-01 --step-days 2
+	$(PYTHON) -m munzir train-fusion --start-date 2024-01-01 --end-date 2026-12-31 --split-date 2026-01-01 --step-days 2
 
 detect:
-	$(PYTHON) -m prahari detect --start-date 2024-01-01 --end-date 2026-10-31
+	$(PYTHON) -m munzir detect --start-date 2024-01-01 --end-date 2026-10-31
 
 evaluate-detection:
-	$(PYTHON) -m prahari detect --start-date 2024-01-01 --end-date 2026-10-31 --evaluate
+	$(PYTHON) -m munzir detect --start-date 2024-01-01 --end-date 2026-10-31 --evaluate
 
 test-detection:
 	$(PYTHON) -m pytest tests/test_detection_*.py -v
 
 playbooks:
-	$(PYTHON) -m prahari playbooks
+	$(PYTHON) -m munzir playbooks
 
 evidence-card:
-	$(PYTHON) -m prahari evidence-card --date 2025-08-20 --geo SITE-JA-01
+	$(PYTHON) -m munzir evidence-card --date 2025-08-20 --geo SITE-JA-01
 
 test-decision:
 	$(PYTHON) -m pytest tests/test_playbook_engine.py tests/test_evidence_card.py tests/test_acknowledgement.py tests/test_narrative.py -v
 
 serve:
-	$(PYTHON) -m prahari serve --host 0.0.0.0 --port 8000
+	$(PYTHON) -m munzir serve --host 0.0.0.0 --port 8000
 
 test-api:
 	$(PYTHON) -m pytest tests/test_api_*.py -v
 
 validate:
-	$(PYTHON) -m prahari validate --seed $(or $(SEED),42) --n-injections 100 --out-dir validation
+	$(PYTHON) -m munzir validate --seed $(or $(SEED),42) --n-injections 100 --out-dir validation
 
 test-validation:
 	$(PYTHON) -m pytest tests/test_validation.py -v
 
 impact:
-	$(PYTHON) -m prahari impact --workforce 50000 --export-policy
+	$(PYTHON) -m munzir impact --workforce 50000 --export-policy
 
 test-impact:
 	$(PYTHON) -m pytest tests/test_impact_model.py tests/test_api_impact.py -v
 
 governance:
-	$(PYTHON) -m prahari governance
+	$(PYTHON) -m munzir governance
 
 test-governance:
 	$(PYTHON) -m pytest tests/test_responsible_ai_governance.py -v
 
 fhir-export:
-	$(PYTHON) -m prahari fhir-export --out fhir_surveillance_bundle.json
+	$(PYTHON) -m munzir fhir-export --out fhir_surveillance_bundle.json
 
 drift-check:
-	$(PYTHON) -m prahari drift-check
+	$(PYTHON) -m munzir drift-check
 
 test-interop:
 	$(PYTHON) -m pytest tests/test_interop.py -v
@@ -123,61 +123,61 @@ sentinel-replay:
 	$(PYTHON) hardware/replay/replay_trace.py --api-url http://localhost:8000
 
 run-daily:
-	$(PYTHON) -m prahari run-daily --region uae
+	$(PYTHON) -m munzir run-daily --region uae
 
 train-nlp:
-	$(PYTHON) -m prahari train-nlp
+	$(PYTHON) -m munzir train-nlp
 
 inspect:
-	$(PYTHON) -m prahari inspect
+	$(PYTHON) -m munzir inspect
 
 timemachine:
-	$(PYTHON) -m prahari timemachine --event $(or $(EVENT),pnw_2021)
+	$(PYTHON) -m munzir timemachine --event $(or $(EVENT),pnw_2021)
 
 test-timemachine:
 	$(PYTHON) -m pytest tests/test_timemachine.py -v
 
 biascorrect:
-	$(PYTHON) -m prahari biascorrect --site $(or $(SITE),SITE-JA-01) --folds $(or $(FOLDS),5)
+	$(PYTHON) -m munzir biascorrect --site $(or $(SITE),SITE-JA-01) --folds $(or $(FOLDS),5)
 
 test-biascorrect:
 	$(PYTHON) -m pytest tests/test_bias_correction.py -v
 
 whatif:
-	$(PYTHON) -m prahari whatif --site $(or $(SITE),SITE-JA-01) --action $(or $(ACTION),combined_protocol) --workforce $(or $(WORKFORCE),3200)
+	$(PYTHON) -m munzir whatif --site $(or $(SITE),SITE-JA-01) --action $(or $(ACTION),combined_protocol) --workforce $(or $(WORKFORCE),3200)
 
 test-whatif:
 	$(PYTHON) -m pytest tests/test_whatif.py -v
 
 renal-scan:
-	$(PYTHON) -m prahari renal-scan --site $(or $(SITE),SITE-JA-01) --cumulative-wbgt $(or $(WBGT_HOURS),65.0)
+	$(PYTHON) -m munzir renal-scan --site $(or $(SITE),SITE-JA-01) --cumulative-wbgt $(or $(WBGT_HOURS),65.0)
 
 test-renal:
 	$(PYTHON) -m pytest tests/test_biomarkers.py -v
 
 deconvolve:
-	$(PYTHON) -m prahari deconvolve --district $(or $(DISTRICT),Muhaisnah) --cases $(or $(CASES),45)
+	$(PYTHON) -m munzir deconvolve --district $(or $(DISTRICT),Muhaisnah) --cases $(or $(CASES),45)
 
 test-deconvolve:
 	$(PYTHON) -m pytest tests/test_deconvolution.py -v
 
 dispatch:
-	$(PYTHON) -m prahari dispatch --site $(or $(SITE),SITE-JA-01) --workforce $(or $(WORKFORCE),1200)
+	$(PYTHON) -m munzir dispatch --site $(or $(SITE),SITE-JA-01) --workforce $(or $(WORKFORCE),1200)
 
 test-dispatch:
 	$(PYTHON) -m pytest tests/test_dispatch_optimizer.py -v
 
 jais-dispatch:
-	$(PYTHON) -m prahari jais-dispatch --site $(or $(SITE),SITE-JA-01) --tier $(or $(TIER),Warning)
+	$(PYTHON) -m munzir jais-dispatch --site $(or $(SITE),SITE-JA-01) --tier $(or $(TIER),Warning)
 
 test-jais:
 	$(PYTHON) -m pytest tests/test_jais_integration.py -v
 
 copilot:
-	$(PYTHON) -m prahari copilot --query "$(or $(QUERY),What should I do right now for outdoor workers?)" --site $(or $(SITE),SITE-JA-01)
+	$(PYTHON) -m munzir copilot --query "$(or $(QUERY),What should I do right now for outdoor workers?)" --site $(or $(SITE),SITE-JA-01)
 
 dossier:
-	$(PYTHON) -m prahari dossier --site $(or $(SITE),SITE-JA-01) --export $(or $(EXPORT),terminal)
+	$(PYTHON) -m munzir dossier --site $(or $(SITE),SITE-JA-01) --export $(or $(EXPORT),terminal)
 
 test-copilot:
 	$(PYTHON) -m pytest tests/test_copilot.py -v

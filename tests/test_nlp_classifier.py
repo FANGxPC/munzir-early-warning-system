@@ -2,8 +2,8 @@
 
 import tempfile
 from pathlib import Path
-from prahari.nlp.anonymizer import sanitize_incident_narrative
-from prahari.nlp.classifier import IncidentClassifier
+from munzir.nlp.anonymizer import sanitize_incident_narrative
+from munzir.nlp.classifier import IncidentClassifier
 
 
 def test_pii_anonymization():

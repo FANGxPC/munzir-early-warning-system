@@ -1,17 +1,17 @@
 """
-Unit & Integration Tests for PRAHARI Health & Resilience Impact Model (Phase 7)
+Unit & Integration Tests for MUNZIR Health & Resilience Impact Model (Phase 7)
 """
 
 import pytest
-from prahari.impact.models import (
+from munzir.impact.models import (
     WorkforceAssumptions,
     EconomicAssumptions,
     ClinicalAssumptions,
     DetectionPerformanceParams,
     ImpactCalculatorRequest,
 )
-from prahari.impact.calculator import HealthResilienceImpactCalculator
-from prahari.impact.policy_report import DistrictPolicyEvidenceGenerator
+from munzir.impact.calculator import HealthResilienceImpactCalculator
+from munzir.impact.policy_report import DistrictPolicyEvidenceGenerator
 
 
 def test_default_assumptions_integrity():

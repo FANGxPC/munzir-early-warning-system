@@ -49,7 +49,7 @@ Munzir is deployed on Microsoft Azure using a cloud-native, serverless, and cont
 
 ### 2. Passwordless Managed Identity
 - **System-Assigned Managed Identity:** The Azure Container App and Azure Functions communicate with downstream cloud resources (PostgreSQL Flexible Server, Azure Storage Lakehouse, Key Vault) using Azure AD Managed Identities.
-- **No Database Passwords in Transit:** Authentication between the application container and PostgreSQL uses Azure AD access tokens generated on-the-fly (`prahari-app@tenant`).
+- **No Database Passwords in Transit:** Authentication between the application container and PostgreSQL uses Azure AD access tokens generated on-the-fly (`munzir-app@tenant`).
 
 ---
 

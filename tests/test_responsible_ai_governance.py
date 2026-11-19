@@ -1,5 +1,5 @@
 """
-Unit & Integration Tests for PRAHARI Responsible AI, Safety & Governance (Phase 8)
+Unit & Integration Tests for MUNZIR Responsible AI, Safety & Governance (Phase 8)
 Verifies:
   1. Complete documentation pack integrity (Model card, datasheets, TRIPOD+AI, DPIA, limitations).
   2. Runtime safety controls: alert caps, corroboration rules, DQ gating.
@@ -12,7 +12,7 @@ Verifies:
 from pathlib import Path
 import pytest
 
-from prahari.governance.safety_monitor import GovernanceSafetyMonitor, GovernanceScorecard
+from munzir.governance.safety_monitor import GovernanceSafetyMonitor, GovernanceScorecard
 
 
 @pytest.fixture
@@ -196,7 +196,7 @@ def test_fenced_llm_zero_hallucination_gate(monitor):
 
     # Valid narrative: uses only evidence numbers or permitted calendar years
     valid_text = (
-        "In 2025, PRAHARI observed 48.0 cases vs 32.5 expected with 3.4 days lead time and 92.5% sensitivity."
+        "In 2025, MUNZIR observed 48.0 cases vs 32.5 expected with 3.4 days lead time and 92.5% sensitivity."
     )
     is_valid, msg = monitor.verify_fenced_narrative(valid_text, evidence_numbers)
     assert is_valid is True

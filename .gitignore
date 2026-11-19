@@ -11,7 +11,7 @@ __pycache__/
 /data/*
 !/data/timemachine/
 !/data/timemachine/**
-!prahari/ingestion/data/
+!munzir/ingestion/data/
 *.parquet
 
 # Distribution / packaging

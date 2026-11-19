@@ -3,7 +3,7 @@ Tests for Phase 15: 'Exposure-to-Seeking' Spatio-Temporal Deconvolution Engine.
 """
 
 import math
-from prahari.spatial.deconvolution import (
+from munzir.spatial.deconvolution import (
     ClinicalSeekingCluster,
     compute_haversine_distance_km,
     deconvolve_seeking_cluster,

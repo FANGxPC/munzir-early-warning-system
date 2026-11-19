@@ -1,6 +1,6 @@
 """Unit tests for Spatial Hierarchy Mapping and H3 Hexagonal Indexing."""
 
-from prahari.harmonisation.spatial import SpatialHierarchyMapper, get_h3_index, get_h3_neighbors
+from munzir.harmonisation.spatial import SpatialHierarchyMapper, get_h3_index, get_h3_neighbors
 
 
 def test_h3_indexing():

@@ -4,14 +4,14 @@ Verifies deterministic synthesis, number verification gate, and hallucination fa
 """
 
 import pytest
-from prahari.detection.l5_policy import PrahariAlert, AlertSeverity
-from prahari.decision.playbook_engine import Playbook, PlaybookTrigger
-from prahari.decision.narrative import NarrativeGenerator, extract_numbers_from_obj
+from munzir.detection.l5_policy import MunzirAlert, AlertSeverity
+from munzir.decision.playbook_engine import Playbook, PlaybookTrigger
+from munzir.decision.narrative import NarrativeGenerator, extract_numbers_from_obj
 
 
 def test_deterministic_template_generation():
     """Verify clean deterministic narrative generation containing exact alert facts."""
-    alert = PrahariAlert(
+    alert = MunzirAlert(
         alert_id="ALT-HEAT-101",
         incident_id="INC-20250820-JA",
         alert_type="heat_cluster",
@@ -53,7 +53,7 @@ def test_deterministic_template_generation():
 
 def test_fenced_llm_verification_accepts_clean_text():
     """Verify that a candidate narrative containing only verified numbers is accepted."""
-    alert = PrahariAlert(
+    alert = MunzirAlert(
         probability=0.95,
         ci_low=0.85,
         ci_high=1.0,
@@ -88,7 +88,7 @@ def test_fenced_llm_verification_rejects_hallucinated_numbers_and_falls_back():
     If candidate narrative invents numbers not present in the input JSON,
     it MUST be rejected and fall back safely to the deterministic template.
     """
-    alert = PrahariAlert(
+    alert = MunzirAlert(
         probability=0.90,
         ci_low=0.80,
         ci_high=1.00,

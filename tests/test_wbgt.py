@@ -2,7 +2,7 @@
 
 import pandas as pd
 import pytest
-from prahari.ingestion.wbgt import (
+from munzir.ingestion.wbgt import (
     compute_stull_wet_bulb,
     compute_globe_temperature,
     compute_wbgt_outdoor,

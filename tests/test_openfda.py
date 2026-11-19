@@ -7,10 +7,10 @@ and Evidence Card integration.
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.ingestion.openfda import OpenFDAClient, ClinicalVulnerabilityEngine
-from prahari.detection.l5_policy import PrahariAlert, AlertSeverity
-from prahari.decision.evidence_card import EvidenceCardGenerator
-from prahari.api.app import app
+from munzir.ingestion.openfda import OpenFDAClient, ClinicalVulnerabilityEngine
+from munzir.detection.l5_policy import MunzirAlert, AlertSeverity
+from munzir.decision.evidence_card import EvidenceCardGenerator
+from munzir.api.app import app
 
 
 def test_openfda_curated_dataset():
@@ -71,7 +71,7 @@ def test_clinical_vulnerability_engine_respiratory():
 def test_evidence_card_includes_clinical_vulnerability():
     """Verify that generated Evidence Cards contain the openFDA pharmacological profile."""
     generator = EvidenceCardGenerator()
-    alert = PrahariAlert(
+    alert = MunzirAlert(
         alert_id="ALT-TEST-CLINICAL",
         alert_type="heat_cluster",
         severity=AlertSeverity.WARNING,

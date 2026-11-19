@@ -42,7 +42,7 @@ Incoming Telemetry
   1. Conformal prediction uncertainty interval $[P_{\text{lower}}, P_{\text{upper}}]$ is automatically widened.
   2. Maximum alert severity is strictly capped at *Watch* (preventing *Alert* or *Warning* triggering).
   3. UI injects a prominent `LOW_DATA_QUALITY` warning badge.
-- **Verification:** [`test_missing_data_demo_toggle_resilience`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_api_views.py).
+- **Verification:** [`test_missing_data_demo_toggle_resilience`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_api_views.py).
 
 ---
 
@@ -50,7 +50,7 @@ Incoming Telemetry
 - **Objective:** Eliminate single-sensor noise and sensor-specific false positives.
 - **Enforcement Rule:** A single elevated signal (e.g. thermal spike alone without absence surge, or isolated hospital clinical spike without occupational or pharmacy signal) **can never trigger a Warning or Alert**.
 - **Severity Cap:** Single-signal aberrations are hard-capped at the *Watch* advisory tier. Upgrades to *Warning* require $\ge 2$ mutually corroborating signals across materially different data sources.
-- **Verification:** [`test_detection_l4_l5.py`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_detection_l4_l5.py).
+- **Verification:** [`test_detection_l4_l5.py`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_detection_l4_l5.py).
 
 ---
 
@@ -60,7 +60,7 @@ Incoming Telemetry
   - Maximum **1 active Alert** per district at any time (multi-day surges are merged into an active cluster incident).
   - Maximum **3 Warning alerts per week** per district.
   - Excess alerts are consolidated into a daily surveillance digest rather than triggering push notifications.
-- **Verification:** [`test_safety_monitor_alert_caps`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_responsible_ai_governance.py).
+- **Verification:** [`test_safety_monitor_alert_caps`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_responsible_ai_governance.py).
 
 ---
 
@@ -71,7 +71,7 @@ Incoming Telemetry
   2. If runtime feature schema mismatch occurs, or
   3. If inference execution raises an exception:
   The pipeline **automatically rolls back to CDC EARS C2 baseline aberration detection**, sets `is_fallback_mode=True`, logs the incident to the immutable security audit log, and continues generating baseline aberration alerts without service interruption.
-- **Verification:** [`test_safety_monitor_ml_health_check_and_ears_rollback`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_responsible_ai_governance.py).
+- **Verification:** [`test_safety_monitor_ml_health_check_and_ears_rollback`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_responsible_ai_governance.py).
 
 ---
 
@@ -80,7 +80,7 @@ Incoming Telemetry
 - **Enforcement Rule:** All narrative generation runs through a two-stage verification barrier:
   1. **Strict Regex Numerical Extraction:** Extracts all numbers from the LLM narrative and verifies they match the ground-truth values in the structured Evidence Card.
   2. **Deterministic Fallback:** If any discrepancy, phantom number, or LLM hallucination is detected, the LLM output is rejected and replaced with the deterministic string template.
-- **Verification:** [`test_narrative.py`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_narrative.py).
+- **Verification:** [`test_narrative.py`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_narrative.py).
 
 ---
 
@@ -90,7 +90,7 @@ Incoming Telemetry
   - Alerts can only transition from `PENDING` to `ACKNOWLEDGED`, `ACTED`, or `DISMISSED` via an authenticated human officer.
   - If an alert is `DISMISSED`, the officer is legally required to select a structured operational reason (`benign_local_event`, `data_artefact_backlog`, `already_managed_duplicate`, `false_positive_noise`).
   - Every review action is signed with the user ID, timestamp, and client IP into an append-only Gold Parquet log (`data/gold/audit/view_audit_log.parquet`).
-- **Verification:** [`test_acknowledgement.py`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_acknowledgement.py).
+- **Verification:** [`test_acknowledgement.py`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_acknowledgement.py).
 
 ---
 
@@ -101,5 +101,5 @@ Incoming Telemetry
   - Minimum worksite cohort $N \ge 50$; rate-only views per 1,000 workers.
   - Prohibition of sub-site gang breakdowns or individual worker lists.
   - Entra ID RBAC blocking employers from viewing clinical syndromic data (HTTP 403).
-- **Verification:** [`test_api_rbac_privacy.py`](file:///home/fang/Downloads/Dubai-Hackathon/Prahari/tests/test_api_rbac_privacy.py).
+- **Verification:** [`test_api_rbac_privacy.py`](file:///home/fang/Downloads/Dubai-Hackathon/Munzir/tests/test_api_rbac_privacy.py).
 

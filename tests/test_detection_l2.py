@@ -6,7 +6,7 @@ Distinguishes environmental/weather-explained surges from unexplained outbreak e
 import pytest
 import numpy as np
 import pandas as pd
-from prahari.detection.l2_exposure import L2ExposureBaselineModel, L2ResidualResult
+from munzir.detection.l2_exposure import L2ExposureBaselineModel, L2ResidualResult
 
 
 def test_l2_environment_explained_surge():

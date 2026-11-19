@@ -2,11 +2,11 @@
 Tests for Phase 16: Automated Municipal Cooling Fleet & EMS Pre-Staging Optimizer.
 """
 
-from prahari.decision.dispatch_manifest import (
+from munzir.decision.dispatch_manifest import (
     export_dispatch_fhir_r4_task,
     format_dispatch_markdown_brief,
 )
-from prahari.decision.dispatch_optimizer import (
+from munzir.decision.dispatch_optimizer import (
     DUBAI_MUNICIPAL_DEPOTS,
     DispatchRequest,
     optimize_municipal_dispatch,

@@ -8,9 +8,9 @@ from pathlib import Path
 import pytest
 import pandas as pd
 
-from prahari.ingestion.cdc_syndromic import CDCSyndromicIngestor
-from prahari.models.canonical import SignalObservation
-from prahari.storage.bronze_store import BronzeStore
+from munzir.ingestion.cdc_syndromic import CDCSyndromicIngestor
+from munzir.models.canonical import SignalObservation
+from munzir.storage.bronze_store import BronzeStore
 
 
 def test_cdc_syndromic_generation_and_storage(tmp_path):

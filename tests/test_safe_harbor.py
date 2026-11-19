@@ -6,8 +6,8 @@ and small-cell suppression under UAE Federal Decree-Law No. 33 of 2021 Article 1
 
 import pytest
 from fastapi.testclient import TestClient
-from prahari.api.app import app
-from prahari.privacy.safe_harbor import SafeHarborComplianceEngine
+from munzir.api.app import app
+from munzir.privacy.safe_harbor import SafeHarborComplianceEngine
 
 client = TestClient(app)
 

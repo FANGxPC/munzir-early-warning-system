@@ -10,18 +10,18 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.api.app import app
-from prahari.cli.main import cmd_timemachine
-from prahari.timemachine.config import load_sources_config
-from prahari.timemachine.data_loader import (
+from munzir.api.app import app
+from munzir.cli.main import cmd_timemachine
+from munzir.timemachine.config import load_sources_config
+from munzir.timemachine.data_loader import (
     get_data_as_of,
     generate_reported_vintages,
     LeakageError,
     AsOfSnapshot,
 )
-from prahari.timemachine.detector import TimeMachineDetector
-from prahari.timemachine.engine import TimeMachineEngine
-from prahari.timemachine.metrics import compute_replay_metrics
+from munzir.timemachine.detector import TimeMachineDetector
+from munzir.timemachine.engine import TimeMachineEngine
+from munzir.timemachine.metrics import compute_replay_metrics
 
 
 def test_sources_configuration_integrity():

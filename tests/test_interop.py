@@ -9,17 +9,17 @@ import pytest
 import numpy as np
 from fastapi.testclient import TestClient
 
-from prahari.detection.l5_policy import PrahariAlert, AlertSeverity
-from prahari.models.canonical import SignalObservation
-from prahari.interop.fhir_adapter import FHIRSurveillanceAdapter
-from prahari.interop.sftp_csv import SFTPCSVAdapter
-from prahari.interop.drift_monitor import ModelDriftMonitor, DriftReport
-from prahari.api.app import app
+from munzir.detection.l5_policy import MunzirAlert, AlertSeverity
+from munzir.models.canonical import SignalObservation
+from munzir.interop.fhir_adapter import FHIRSurveillanceAdapter
+from munzir.interop.sftp_csv import SFTPCSVAdapter
+from munzir.interop.drift_monitor import ModelDriftMonitor, DriftReport
+from munzir.api.app import app
 
 
 @pytest.fixture
-def sample_alert() -> PrahariAlert:
-    return PrahariAlert(
+def sample_alert() -> MunzirAlert:
+    return MunzirAlert(
         alert_id="ALT-TST001",
         alert_type="heat_cluster",
         severity=AlertSeverity.WARNING,

@@ -1,9 +1,9 @@
 """Tests for Health & Workplace Simulator and Ground Truth Event injection."""
 
-from prahari.config import get_region_config
-from prahari.models.canonical import SignalObservation
-from prahari.simulator.events import InjectedScenarioCatalog
-from prahari.simulator.generator import HealthWorkplaceSimulator
+from munzir.config import get_region_config
+from munzir.models.canonical import SignalObservation
+from munzir.simulator.events import InjectedScenarioCatalog
+from munzir.simulator.generator import HealthWorkplaceSimulator
 
 
 def test_injected_scenarios_generation():

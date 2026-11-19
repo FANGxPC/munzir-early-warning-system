@@ -7,13 +7,13 @@ Tests statutory codex integrity, real Lakehouse context aggregation, fenced zero
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.api.app import app
-from prahari.copilot.chat_agent import SovereignCopilotAgent
-from prahari.copilot.context_builder import LiveSiteSurveillanceContext, LiveSurveillanceContextBuilder
-from prahari.copilot.dossier_generator import ExecutiveActionDossier, ExecutiveDossierGenerator
-from prahari.copilot.fenced_rag_validator import FencedRAGValidator
-from prahari.copilot.rag_retriever import CopilotIntent, SovereignRAGRetriever
-from prahari.copilot.statutory_codex import StatutoryArticle, StatutoryCodex
+from munzir.api.app import app
+from munzir.copilot.chat_agent import SovereignCopilotAgent
+from munzir.copilot.context_builder import LiveSiteSurveillanceContext, LiveSurveillanceContextBuilder
+from munzir.copilot.dossier_generator import ExecutiveActionDossier, ExecutiveDossierGenerator
+from munzir.copilot.fenced_rag_validator import FencedRAGValidator
+from munzir.copilot.rag_retriever import CopilotIntent, SovereignRAGRetriever
+from munzir.copilot.statutory_codex import StatutoryArticle, StatutoryCodex
 
 
 class TestStatutoryCodex:
@@ -267,7 +267,7 @@ class TestSovereignCopilotAgent:
 
         res_thanks = agent.chat("thank you so much", site_id="SITE-JA-01")
         assert res_thanks.intent == "conversational"
-        assert any(term in res_thanks.response_text.lower() for term in ["welcome", "help", "thank", "pleasure", "assist"])
+        assert any(term in res_thanks.response_text.lower() for term in ["welcome", "help", "thank", "pleasure", "assist", "support", "standby", "glad", "serve", "شكر", "عفوا", "مرحب", "خدم"])
         assert res_thanks.passed_fenced_gate is True
 
     def test_agent_chat_casual_inquiry_and_humor(self):

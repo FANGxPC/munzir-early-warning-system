@@ -3,8 +3,8 @@
 import tempfile
 from pathlib import Path
 import pytest
-from prahari.models.canonical import SignalObservation
-from prahari.storage.bronze_store import BronzeStore
+from munzir.models.canonical import SignalObservation
+from munzir.storage.bronze_store import BronzeStore
 
 
 def test_bronze_store_write_and_read():

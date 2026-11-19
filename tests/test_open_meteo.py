@@ -2,7 +2,7 @@
 
 import tempfile
 from pathlib import Path
-from prahari.ingestion.open_meteo import OpenMeteoClient, ingest_environmental_data
+from munzir.ingestion.open_meteo import OpenMeteoClient, ingest_environmental_data
 
 
 def test_open_meteo_client_offline_synthesis():

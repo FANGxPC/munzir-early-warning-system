@@ -1,5 +1,5 @@
 """
-Phase 5 Privacy & RBAC Test Suite for PRAHARI.
+Phase 5 Privacy & RBAC Test Suite for MUNZIR.
 Validates strict Entra ID role boundaries and tests the essential Phase 5 exit criteria:
 "logging in as employer_safety cannot reach district clinical data or any sub-site breakdown (tested)."
 """
@@ -7,8 +7,8 @@ Validates strict Entra ID role boundaries and tests the essential Phase 5 exit c
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.api.app import app
-from prahari.api.rbac import EntraRole
+from munzir.api.app import app
+from munzir.api.rbac import EntraRole
 
 
 @pytest.fixture
@@ -137,7 +137,7 @@ def test_workplace_minimum_group_size_suppression(client):
     """
     If a worksite cohort is small (N < 50), rates must be suppressed.
     """
-    from prahari.api.employer_service import EmployerSafetyService
+    from munzir.api.employer_service import EmployerSafetyService
     svc = EmployerSafetyService()
     # Temporarily simulate a tiny sub-site with 25 workers
     svc.sites_by_id["SITE-TINY"] = {

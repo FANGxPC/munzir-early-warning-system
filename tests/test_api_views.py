@@ -1,5 +1,5 @@
 """
-Phase 5 API Views & Feature Test Suite for PRAHARI.
+Phase 5 API Views & Feature Test Suite for MUNZIR.
 Validates Situation Map, Alert Inbox, Evidence Card latency SLA (< 2.0s),
 Human-in-the-loop acknowledgement, Missing-Data demo control, and Audit Logging.
 """
@@ -8,7 +8,7 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.api.app import app
+from munzir.api.app import app
 
 
 @pytest.fixture
@@ -202,7 +202,7 @@ def test_static_index_html_serving(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "Munzir" in response.text or "PRAHARI" in response.text
+    assert "Munzir" in response.text or "MUNZIR" in response.text
     assert "Situation Map" in response.text
     assert "Alert Inbox" in response.text
     assert "Employer Safety View" in response.text

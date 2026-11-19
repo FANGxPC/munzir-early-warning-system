@@ -6,7 +6,7 @@
 [![Championship Suite](https://img.shields.io/badge/Championship%20Tests-85%20Passing-blue?style=flat-square)](tests/)
 [![Sovereign LLM](https://img.shields.io/badge/Inception%2042-Jais--3--0.9B%20GPU-purple?style=flat-square)](https://huggingface.co/inception42/Jais-3-0.9B-Chat)
 [![Standards](https://img.shields.io/badge/HL7%20FHIR-R4%20Native%20NABIDH-orange?style=flat-square)](fhir_surveillance_bundle.json)
-[![Privacy Shield](https://img.shields.io/badge/Safe--Harbor-UAE%20Decree%2033%20Art.%2013-red?style=flat-square)](prahari/privacy/safe_harbor.py)
+[![Privacy Shield](https://img.shields.io/badge/Safe--Harbor-UAE%20Decree%2033%20Art.%2013-red?style=flat-square)](munzir/privacy/safe_harbor.py)
 [![Cloud Cost](https://img.shields.io/badge/Azure%20Container%20Apps-$0.00%20Idle-brightgreen?style=flat-square)](docs/azure_student_deployment.md)
 [![Hardware Edge](https://img.shields.io/badge/Sentinel%20IoT-ESP32%20Dual--Core-teal?style=flat-square)](hardware/sentinel_node/)
 
@@ -334,7 +334,7 @@ The repository contains 258 fully automated unit, integration, and security test
 ## 10. Repository Directory Structure
 
 ```
-Prahari/
+Munzir/
 ├── Dockerfile                     # Multi-stage CPU-optimized production container
 ├── docker-compose.yml             # Local single-command containerized execution
 ├── Makefile                       # One-touch CLI automation targets
@@ -350,7 +350,7 @@ Prahari/
 ├── infra/
 │   ├── deploy_student.sh          # Azure Container Apps $0.00 student deployment script
 │   └── main.bicep                 # Infrastructure-as-Code Azure template
-├── prahari/
+├── munzir/
 │   ├── api/
 │   │   ├── app.py                 # FastAPI backend application
 │   │   ├── static/

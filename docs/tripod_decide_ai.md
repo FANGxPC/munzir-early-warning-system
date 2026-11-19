@@ -17,19 +17,19 @@ Munzir adheres to the TRIPOD+AI reporting guidelines for clinical and population
 | **3a** | **Background** | Clinical and public health rationale for the prediction model. | Explains the shift from retrospective syndromic surveillance to prospective exposure-aware early warning. | `Munzir_Prototype_Implementation_Plan.md` |
 | **3b** | **Objectives** | Explicit statement of intended use and target decision makers. | Surveillance officers (DHA), labor inspectors (MOHRE), and site safety managers. | `docs/model_card.md`, `playbooks/` |
 | **4** | **Data Source** | Describe data sources, origin, collection procedures, and dates. | Open-Meteo, OpenAQ, DHA syndromic simulator, MOHRE workplace absence registry (2024–2026). | `docs/datasheets/` |
-| **5** | **Participants / Units** | Describe the target population, geographic coverage, and eligibility. | Monitored districts across Dubai and Northern Emirates; minimum worksite cohort $N \ge 50$. | `prahari/api/employer_service.py` |
-| **6a** | **Outcome Definition** | Explicit epidemiological surge criteria and operational definitions. | True positive outbreak: $\ge 2.0\times$ baseline surge within a 3-day temporal window. | `prahari/validation/injection.py` |
-| **6b** | **Blinding** | Assessment of outcome without knowledge of predictor values. | Rolling-origin backtest respects simulated reporting delays without future look-ahead. | `prahari/validation/backtest.py` |
-| **7a** | **Predictors** | List and define all candidate predictors and feature engineering. | 38 engineered features spanning L1 aberration, L2 exposure lags, L3 spatial scan, and DQ telemetry. | `prahari/detection/l4_fusion.py` |
-| **7b** | **Predictor Handling** | Describe transformation, standardization, and missing value handling. | Robust median imputation; missing feed penalty flags; conformal interval widening. | `prahari/detection/pipeline.py` |
+| **5** | **Participants / Units** | Describe the target population, geographic coverage, and eligibility. | Monitored districts across Dubai and Northern Emirates; minimum worksite cohort $N \ge 50$. | `munzir/api/employer_service.py` |
+| **6a** | **Outcome Definition** | Explicit epidemiological surge criteria and operational definitions. | True positive outbreak: $\ge 2.0\times$ baseline surge within a 3-day temporal window. | `munzir/validation/injection.py` |
+| **6b** | **Blinding** | Assessment of outcome without knowledge of predictor values. | Rolling-origin backtest respects simulated reporting delays without future look-ahead. | `munzir/validation/backtest.py` |
+| **7a** | **Predictors** | List and define all candidate predictors and feature engineering. | 38 engineered features spanning L1 aberration, L2 exposure lags, L3 spatial scan, and DQ telemetry. | `munzir/detection/l4_fusion.py` |
+| **7b** | **Predictor Handling** | Describe transformation, standardization, and missing value handling. | Robust median imputation; missing feed penalty flags; conformal interval widening. | `munzir/detection/pipeline.py` |
 | **8** | **Sample Size** | Justify sample size and number of outcome events. | 166,000+ hourly/daily records; 100+ synthetic outbreak events injected across parameters. | `tests/test_validation.py` |
-| **9** | **Missing Data** | Details on missing data patterns and sensitivity analysis. | Missing-input ablation study evaluating 30% and 60% feed dropout with DQ gating. | `prahari/validation/metrics.py` |
-| **10a** | **Model Building** | Detail ML architecture, hyperparameter selection, and validation split. | LightGBM with time-based temporal split ($\le 2025$ train, $2026$ validation). | `prahari/detection/l4_fusion.py` |
-| **10b** | **Calibration** | Detail method used to calibrate predicted probabilities. | Isotonic regression post-processing yielding Brier score of 0.012. | `prahari/validation/metrics.py` |
-| **10c** | **Uncertainty** | Quantify prediction interval and epistemic uncertainty. | MAPIE Inductive Conformal Prediction (90% non-parametric coverage band). | `prahari/detection/l4_fusion.py` |
+| **9** | **Missing Data** | Details on missing data patterns and sensitivity analysis. | Missing-input ablation study evaluating 30% and 60% feed dropout with DQ gating. | `munzir/validation/metrics.py` |
+| **10a** | **Model Building** | Detail ML architecture, hyperparameter selection, and validation split. | LightGBM with time-based temporal split ($\le 2025$ train, $2026$ validation). | `munzir/detection/l4_fusion.py` |
+| **10b** | **Calibration** | Detail method used to calibrate predicted probabilities. | Isotonic regression post-processing yielding Brier score of 0.012. | `munzir/validation/metrics.py` |
+| **10c** | **Uncertainty** | Quantify prediction interval and epistemic uncertainty. | MAPIE Inductive Conformal Prediction (90% non-parametric coverage band). | `munzir/detection/l4_fusion.py` |
 | **11** | **Evaluation Metrics** | Report discrimination, calibration, timeliness, and clinical utility. | AMOC curves, lead time (+3.4d), sensitivity (92.5%), PPV (86.4%), false alarm rate (0.32/mo). | `validation/report.html` |
 | **12** | **Subgroup Analysis** | Evaluate fairness and performance parity across demographic subgroups. | Disaggregated evaluation across Urban (91.8%), Industrial (93.5%), and Rural (90.0%). | `docs/model_card.md` Section 6 |
-| **13** | **Interpretation** | Feature attribution and explainability method. | TreeSHAP grouped into 5 operational domains (`clinical`, `workplace`, `environmental`, etc.). | `prahari/decision/evidence_card.py` |
+| **13** | **Interpretation** | Feature attribution and explainability method. | TreeSHAP grouped into 5 operational domains (`clinical`, `workplace`, `environmental`, etc.). | `munzir/decision/evidence_card.py` |
 
 ---
 

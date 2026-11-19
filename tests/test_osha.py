@@ -7,9 +7,9 @@ from pathlib import Path
 import pytest
 import pandas as pd
 
-from prahari.ingestion.osha import OSHAIncidentIngestor, DEFAULT_OSHA_DATA_PATH
-from prahari.storage.bronze_store import BronzeStore
-from prahari.nlp.anonymizer import sanitize_incident_narrative
+from munzir.ingestion.osha import OSHAIncidentIngestor, DEFAULT_OSHA_DATA_PATH
+from munzir.storage.bronze_store import BronzeStore
+from munzir.nlp.anonymizer import sanitize_incident_narrative
 
 
 def test_osha_data_file_exists():

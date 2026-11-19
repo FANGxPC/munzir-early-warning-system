@@ -5,8 +5,8 @@ Verifies that each flagship scenario produces a complete Evidence Card in < 2.0 
 
 import pytest
 import time
-from prahari.detection.l5_policy import PrahariAlert, AlertSeverity
-from prahari.decision.evidence_card import EvidenceCardGenerator, EvidenceCard
+from munzir.detection.l5_policy import MunzirAlert, AlertSeverity
+from munzir.decision.evidence_card import EvidenceCardGenerator, EvidenceCard
 
 
 def test_evidence_card_generation_latency_exit_criteria():
@@ -18,7 +18,7 @@ def test_evidence_card_generation_latency_exit_criteria():
     generator = EvidenceCardGenerator()
 
     # Flagship 1: Worksite heat hazard
-    alert_heat = PrahariAlert(
+    alert_heat = MunzirAlert(
         alert_type="heat_cluster",
         severity=AlertSeverity.WARNING,
         probability=0.96,
@@ -41,7 +41,7 @@ def test_evidence_card_generation_latency_exit_criteria():
     assert card_heat.primary_driver_group in ["environmental", "clinical", "workplace"]
 
     # Flagship 2: District respiratory surge
-    alert_resp = PrahariAlert(
+    alert_resp = MunzirAlert(
         alert_type="respiratory_surge",
         severity=AlertSeverity.WARNING,
         probability=0.93,
@@ -62,7 +62,7 @@ def test_evidence_card_generation_latency_exit_criteria():
     assert len(card_resp.citations) >= 1
 
     # Flagship 3: Facility infectious cluster
-    alert_inf = PrahariAlert(
+    alert_inf = MunzirAlert(
         alert_type="infectious_cluster",
         severity=AlertSeverity.ALERT,
         probability=0.97,
@@ -86,7 +86,7 @@ def test_evidence_card_generation_latency_exit_criteria():
 def test_evidence_card_serializability():
     """Verify that EvidenceCard converts to a clean dictionary suitable for REST API responses."""
     generator = EvidenceCardGenerator()
-    alert = PrahariAlert(
+    alert = MunzirAlert(
         alert_type="heat_cluster",
         severity=AlertSeverity.WARNING,
         probability=0.88,

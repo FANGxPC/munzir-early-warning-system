@@ -5,8 +5,8 @@ Tests for L3 Prospective Space-Time Cluster Scan (Kulldorff-style over H3 cells)
 import pytest
 import numpy as np
 import pandas as pd
-from prahari.detection.l3_spacetime import ProspectiveSpaceTimeScan, L3ClusterResult
-from prahari.harmonisation.spatial import get_h3_index
+from munzir.detection.l3_spacetime import ProspectiveSpaceTimeScan, L3ClusterResult
+from munzir.harmonisation.spatial import get_h3_index
 
 
 def test_l3_cluster_detection_significant():

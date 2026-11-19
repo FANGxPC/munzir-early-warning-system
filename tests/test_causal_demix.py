@@ -3,7 +3,7 @@ Automated Unit Tests for Bayesian Causal De-Mixing & Multi-Signal Outbreak Attri
 """
 
 import pytest
-from prahari.detection.causal_engine import (
+from munzir.detection.causal_engine import (
     BayesianCausalDeMixingEngine,
     CausalDeMixingResult,
     CausalEtiologyPosterior,

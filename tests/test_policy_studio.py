@@ -2,7 +2,7 @@
 Tests for MOHRE Ministerial Policy Studio & Regulatory Counterfactual Engine (Phase 24).
 """
 
-from prahari.whatif.ministerial_studio import (
+from munzir.whatif.ministerial_studio import (
     MinisterialPolicyParameters,
     MinisterialPolicyStudioEngine,
     PolicySimulationResult,

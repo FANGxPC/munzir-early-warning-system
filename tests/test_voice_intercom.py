@@ -2,7 +2,7 @@
 Tests for Hands-Free Multilingual Two-Way Voice Intercom (Phase 23).
 """
 
-from prahari.llm.voice_intercom import (
+from munzir.llm.voice_intercom import (
     TwoWayVoiceIntercomEngine,
     VoiceIntercomRequest,
     VoiceIntercomResponse,
@@ -89,7 +89,7 @@ def test_voice_intercom_to_dict_serialization():
 def test_voice_intercom_api_endpoint_aliases():
     """Verifies that the FastAPI voice-intercom endpoint supports transcript aliases."""
     from fastapi.testclient import TestClient
-    from prahari.api.app import app
+    from munzir.api.app import app
 
     client = TestClient(app)
 

@@ -5,7 +5,7 @@ Renal Biomarkers, Spatio-Temporal Deconvolution, Municipal Dispatch, and Incepti
 
 import pytest
 from fastapi.testclient import TestClient
-from prahari.api.app import app
+from munzir.api.app import app
 
 client = TestClient(app)
 

@@ -3,9 +3,9 @@
 import tempfile
 from pathlib import Path
 import pytest
-from prahari.models.canonical import SilverSignalObservation
-from prahari.storage.silver_store import SilverStore
-from prahari.harmonisation.workplace import WorkplaceGovernanceEngine, MANDATORY_WORKPLACE_BANNER
+from munzir.models.canonical import SilverSignalObservation
+from munzir.storage.silver_store import SilverStore
+from munzir.harmonisation.workplace import WorkplaceGovernanceEngine, MANDATORY_WORKPLACE_BANNER
 
 
 def test_silver_store_write_and_query():

@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Responsible AI Governance Scorecard
         run: |
-          python -m prahari governance
+          python -m munzir governance
 
       - name: Run Test Suites
         run: |

@@ -26,7 +26,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
 # Copy application source code, playbooks, configuration, and pre-computed lakehouse data
-COPY prahari/ /app/prahari/
+COPY munzir/ /app/munzir/
 COPY playbooks/ /app/playbooks/
 COPY config/ /app/config/
 COPY data/ /app/data/
@@ -35,9 +35,9 @@ COPY validation/ /app/validation/
 COPY munzir_policy_brief.md /app/munzir_policy_brief.md
 
 # Non-root security user
-RUN useradd -m -u 1000 prahariuser && \
-    chown -R prahariuser:prahariuser /app
-USER prahariuser
+RUN useradd -m -u 1000 munziruser && \
+    chown -R munziruser:munziruser /app
+USER munziruser
 
 # Health check for Azure Container Apps
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
@@ -46,5 +46,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 EXPOSE 8000
 
 # Launch FastAPI with production uvicorn worker
-CMD ["python3", "-m", "uvicorn", "prahari.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python3", "-m", "uvicorn", "munzir.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
 

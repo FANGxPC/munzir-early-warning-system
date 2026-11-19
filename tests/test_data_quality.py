@@ -1,7 +1,7 @@
 """Tests for Data Quality scoring and backlog artefact detection."""
 
-from prahari.models.canonical import SignalObservation
-from prahari.ingestion.data_quality import DataQualityScorer
+from munzir.models.canonical import SignalObservation
+from munzir.ingestion.data_quality import DataQualityScorer
 
 
 def test_data_quality_scoring():

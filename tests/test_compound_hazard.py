@@ -6,8 +6,8 @@ and airborne particulate dust storms (PM10/PM2.5) using real Lakehouse telemetry
 
 import pytest
 from fastapi.testclient import TestClient
-from prahari.api.app import app
-from prahari.hazard.compound_engine import CompoundHazardEngine
+from munzir.api.app import app
+from munzir.hazard.compound_engine import CompoundHazardEngine
 
 client = TestClient(app)
 

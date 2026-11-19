@@ -4,7 +4,7 @@ Tests for Human-in-the-Loop Acknowledgement and Operational Audit Logging (Phase
 
 import pytest
 from pathlib import Path
-from prahari.decision.acknowledgement import (
+from munzir.decision.acknowledgement import (
     AcknowledgementManager,
     AlertStatus,
     AcknowledgementRecord,

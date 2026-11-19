@@ -5,8 +5,8 @@ Verifies YAML playbook schema loading, trigger matching, and proportionality enf
 
 import pytest
 from pathlib import Path
-from prahari.detection.l5_policy import AlertSeverity
-from prahari.decision.playbook_engine import PlaybookEngine, Playbook, TIER_HIERARCHY
+from munzir.detection.l5_policy import AlertSeverity
+from munzir.decision.playbook_engine import PlaybookEngine, Playbook, TIER_HIERARCHY
 
 
 def test_playbook_engine_loads_all_yaml_files():

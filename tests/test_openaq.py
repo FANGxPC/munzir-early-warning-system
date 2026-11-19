@@ -2,7 +2,7 @@
 
 import tempfile
 from pathlib import Path
-from prahari.ingestion.openaq import OpenAQClient, ingest_openaq_stations
+from munzir.ingestion.openaq import OpenAQClient, ingest_openaq_stations
 
 
 def test_openaq_station_synthesis():

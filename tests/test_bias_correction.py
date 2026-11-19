@@ -16,22 +16,22 @@ import pandas as pd
 from datetime import datetime, timedelta
 from fastapi.testclient import TestClient
 
-from prahari.bias_correction.config import (
+from munzir.bias_correction.config import (
     SANITY_BOUNDS,
     HUMIDITY_REGIMES,
     UNSENSORED_SITE_PENALTY_MULTIPLIER,
     load_sources_config,
 )
-from prahari.bias_correction.sanity import SensorSanityFilter
-from prahari.bias_correction.evaluator import BiasEvaluator
-from prahari.bias_correction.model import (
+from munzir.bias_correction.sanity import SensorSanityFilter
+from munzir.bias_correction.evaluator import BiasEvaluator
+from munzir.bias_correction.model import (
     MicroclimateBiasCorrectionModel,
     evaluate_time_blocked_cv,
     evaluate_leave_one_sensor_out,
 )
-from prahari.bias_correction.data_loader import SentinelDataLoader
-from prahari.bias_correction.engine import BiasCorrectionEngine
-from prahari.api.app import app
+from munzir.bias_correction.data_loader import SentinelDataLoader
+from munzir.bias_correction.engine import BiasCorrectionEngine
+from munzir.api.app import app
 
 
 # --- 1. Synthetic Known-Bias Recovery Test ---

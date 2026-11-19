@@ -9,19 +9,19 @@ from datetime import datetime, timezone, timedelta
 import pytest
 from fastapi.testclient import TestClient
 
-from prahari.config import (
+from munzir.config import (
     SENTINEL_LOCATION_EXACT_THRESHOLD_M,
     SENTINEL_LOCATION_INFERRED_THRESHOLD_M,
 )
-from prahari.models.canonical import (
+from munzir.models.canonical import (
     SentinelUpload,
     SentinelUploadResponse,
     SentinelCommission,
     SentinelNodeStatus,
 )
-from prahari.ingestion.sentinel_ingest import SentinelIngestionEngine
-from prahari.ingestion.data_quality import DataQualityScorer
-from prahari.api.app import app
+from munzir.ingestion.sentinel_ingest import SentinelIngestionEngine
+from munzir.ingestion.data_quality import DataQualityScorer
+from munzir.api.app import app
 
 
 @pytest.fixture

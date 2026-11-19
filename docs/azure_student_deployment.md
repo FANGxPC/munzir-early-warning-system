@@ -34,7 +34,7 @@ Inception 42 is the premier UAE sovereign foundational AI creator. Munzir integr
    - Unlike 7B or 70B parameter models, `Jais-3-0.9B` has only 900 million parameters (~1.8 GB in float16, ~900 MB in 8-bit quantized mode).
    - In standard CPU containers with 1.0 vCPU and 2.0 GiB RAM, Jais can run on CPU without requiring an NVIDIA GPU VM.
 
-2. **Dual-Execution Sovereign Engine (`prahari/llm/jais_runner.py`):**
+2. **Dual-Execution Sovereign Engine (`munzir/llm/jais_runner.py`):**
    - **Mode 1 (`JAIS_VERIFIED_TEMPLATE`)**: The default cloud container mode. It compiles Inception 42's exact instruction-tuned chat template alongside our **Fenced Zero-Hallucination Gate**. It generates fully formatted, culturally authentic Arabic and Urdu dispatches with 100% verified ground-truth values in **<10 milliseconds**, consuming only **120 MB RAM**.
    - **Mode 2 (`JAIS_NATIVE_TORCH`)**: Used on machines with PyTorch/GPU available (such as your local presentation laptop during the live pitch stage).
    - Both modes produce identical, mathematically verified clinical and occupational dispatches citing Inception 42 and UAE Ministerial Resolution 44 of 2022.

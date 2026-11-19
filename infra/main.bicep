@@ -58,7 +58,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
     template: {
       containers: [
         {
-          name: 'prahari-surveillance-engine'
+          name: 'munzir-surveillance-engine'
           image: containerImage
           resources: {
             cpu: json('0.5')

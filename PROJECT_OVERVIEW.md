@@ -1,7 +1,7 @@
 # Munzir (منذر) — Complete Project Guide & Architectural Explainer
 
 > **Platform Name:** Munzir (منذر) *(Arabic for "The Warner")*  
-> **Original Code Name:** PRAHARI  
+> **Original Code Name:** MUNZIR  
 > **Domain:** Population & Occupational Health Early-Warning & Climate Resilience  
 > **Target Region:** Dubai & Northern Emirates (UAE) + Tamil Nadu (India)  
 > **Status:** Production-Ready Prototype (25 Phases Complete, 246/246 Passing Tests, ISO 7933 PHS Rational Heat Balance, Hands-Free Two-Way Voice Intercom on GPU, MOHRE Ministerial Policy Studio, DHA NABIDH FHIR CDS Gateway, Safe-Harbor Re-Identification Auditor, Inception 42 Jais Sovereign Copilot, Sentinel Hardware & Executive Command Center UI/UX Integrated)

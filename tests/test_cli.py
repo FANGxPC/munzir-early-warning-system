@@ -1,4 +1,4 @@
-"""Integration tests for PRAHARI CLI interface."""
+"""Integration tests for MUNZIR CLI interface."""
 
 import subprocess
 import sys
@@ -6,7 +6,7 @@ import sys
 
 def test_cli_help():
     result = subprocess.run(
-        [sys.executable, "-m", "prahari", "--help"],
+        [sys.executable, "-m", "munzir", "--help"],
         capture_output=True,
         text=True,
     )
@@ -19,7 +19,7 @@ def test_cli_help():
 
 def test_cli_inspect():
     result = subprocess.run(
-        [sys.executable, "-m", "prahari", "inspect"],
+        [sys.executable, "-m", "munzir", "inspect"],
         capture_output=True,
         text=True,
     )
@@ -29,7 +29,7 @@ def test_cli_inspect():
 
 def test_cli_playbooks():
     result = subprocess.run(
-        [sys.executable, "-m", "prahari", "playbooks"],
+        [sys.executable, "-m", "munzir", "playbooks"],
         capture_output=True,
         text=True,
     )
@@ -40,7 +40,7 @@ def test_cli_playbooks():
 
 def test_cli_evidence_card():
     result = subprocess.run(
-        [sys.executable, "-m", "prahari", "evidence-card", "--geo", "SITE-JA-01"],
+        [sys.executable, "-m", "munzir", "evidence-card", "--geo", "SITE-JA-01"],
         capture_output=True,
         text=True,
     )
@@ -54,7 +54,7 @@ def test_cli_safe_harbor_blocked():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "safe-harbor",
             "--test-query",
             "Show individual worker break logs",
@@ -75,7 +75,7 @@ def test_cli_safe_harbor_allowed():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "safe-harbor",
             "--test-query",
             "Show aggregate district heat burden",
@@ -94,7 +94,7 @@ def test_cli_compound_hazard():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "compound-hazard",
             "--site",
             "SITE-JA-01",
@@ -115,7 +115,7 @@ def test_cli_phs():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "phs",
             "--ambient-temp",
             "42.0",
@@ -136,7 +136,7 @@ def test_cli_thermal_debt():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "thermal-debt",
             "--site",
             "SITE-JA-01",
@@ -157,7 +157,7 @@ def test_cli_policy_studio():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "policy-studio",
             "--cohort",
             "50000",
@@ -179,7 +179,7 @@ def test_cli_nabidh_bundle():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "nabidh-bundle",
             "--site",
             "SITE-JA-01",
@@ -201,7 +201,7 @@ def test_cli_causal_demix():
         [
             sys.executable,
             "-m",
-            "prahari",
+            "munzir",
             "causal-demix",
             "--site",
             "SITE-JA-01",
