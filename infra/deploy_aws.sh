@@ -69,14 +69,15 @@ cmd_up() {
         --query "sort_by(Images, &CreationDate)[-1].ImageId" --output text)
     echo "[+] Target AMI: ${AMI_ID}"
 
-    # 4. Launch EC2 Free Tier Instance
-    echo "[*] Launching Free Tier EC2 instance (${INSTANCE_TYPE})..."
+    # 4. Launch EC2 Free Tier Instance with 20 GB Free Tier EBS Volume
+    echo "[*] Launching Free Tier EC2 instance (${INSTANCE_TYPE}, 20 GB gp3)..."
     INSTANCE_ID=$(aws ec2 run-instances \
         --region "${REGION}" \
         --image-id "${AMI_ID}" \
         --instance-type "${INSTANCE_TYPE}" \
         --security-group-ids "${SG_ID}" \
         --user-data "file://${USER_DATA_PATH}" \
+        --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":20,"VolumeType":"gp3","DeleteOnTermination":true}}]' \
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${INSTANCE_NAME}},{Key=Project,Value=Munzir}]" \
         --query "Instances[0].InstanceId" --output text)
     echo "[+] Instance Created: ${INSTANCE_ID}"

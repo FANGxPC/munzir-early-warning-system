@@ -15,9 +15,9 @@ systemctl start docker
 systemctl enable docker
 usermod -aG docker ubuntu || true
 
-echo "[2/5] Creating 1.5 GB swap file to prevent OOM on 1 GB RAM t2.micro..."
+echo "[2/5] Creating 2.0 GB swap file to prevent OOM on 1 GB RAM t3.micro..."
 if [ ! -f /swapfile ]; then
-    fallocate -l 1536M /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=1536
+    fallocate -l 2048M /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
     chmod 600 /swapfile
     mkswap /swapfile
     swapon /swapfile
