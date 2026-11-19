@@ -1,8 +1,25 @@
 # AWS Free Tier Deployment Guide
 
 **Platform:** Munzir (منذر) Sovereign Early Warning Platform  
-**Target Tier:** AWS Free Tier (12 Months Free: 750 Hours/Month of EC2 `t2.micro` or `t3.micro`)  
-**Monthly Operating Cost:** **$0.00 / month** (100% within free allowance)
+**Target Tier:** AWS Free Tier (12 Months Free: 750 Hours/Month of EC2 `t3.micro`)  
+**Target Region:** Asia Pacific - Mumbai (`ap-south-1`)  
+**Monthly Operating Cost:** **$0.00 / month** (100% within free allowance)  
+
+---
+
+## Live Deployment Status (Active)
+
+| Property | Value |
+| :--- | :--- |
+| **Region** | `ap-south-1` (Mumbai, India) |
+| **Instance ID** | `i-05f213a1b98dac150` |
+| **Instance Type** | `t3.micro` (Free Tier Eligible) |
+| **Public IPv4** | `13.203.154.72` |
+| **Web Dashboard (Port 80)** | [http://13.203.154.72](http://13.203.154.72) |
+| **FastAPI Swagger Docs (Port 8000)** | [http://13.203.154.72:8000/docs](http://13.203.154.72:8000/docs) |
+| **Health & Feed Status Endpoint** | [http://13.203.154.72:8000/api/v1/health/feeds](http://13.203.154.72:8000/api/v1/health/feeds) |
+| **OpenAQ API Integration** | Connected (`OPENAQ_API_KEY` active) |
+| **Monthly Cost** | **$0.00** |
 
 ---
 
