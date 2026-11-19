@@ -15,6 +15,8 @@ services:
       - PORT=8000
       - MUNZIR_ENV=production
       - PYTHONUNBUFFERED=1
+      - OPENAQ_API_KEY=${OPENAQ_API_KEY:-7d3d5a3165c2aebbc4573b32a0f7d68d599b2318d63d5143140006b5c5f350f3}
+      - SENTINEL_API_KEY=${SENTINEL_API_KEY:-munzir_sentinel_secret_2026}
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/feeds')"]
       interval: 30s

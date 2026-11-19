@@ -68,6 +68,15 @@ DEPLOY_DIR="/home/ubuntu/munzir-platform"
 rm -rf "${DEPLOY_DIR}"
 git clone https://github.com/FANGxPC/munzir-early-warning-system.git "${DEPLOY_DIR}"
 cd "${DEPLOY_DIR}"
+
+cat << 'ENVEOF' > "${DEPLOY_DIR}/.env"
+OPENAQ_API_KEY=7d3d5a3165c2aebbc4573b32a0f7d68d599b2318d63d5143140006b5c5f350f3
+SENTINEL_API_KEY=munzir_sentinel_secret_2026
+PORT=8000
+HOST=0.0.0.0
+MUNZIR_ENV=production
+ENVEOF
+
 chown -R ubuntu:ubuntu "${DEPLOY_DIR}"
 docker compose up -d --build
 ```
@@ -107,3 +116,4 @@ To terminate the instance and stop all services:
 ```bash
 ./infra/deploy_aws.sh down
 ```
+

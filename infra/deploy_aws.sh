@@ -122,3 +122,4 @@ case "${1:-up}" in
     down)   cmd_down ;;
     *)      echo "Usage: $0 {up|status|down}" ; exit 1 ;;
 esac
+

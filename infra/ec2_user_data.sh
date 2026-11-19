@@ -29,9 +29,20 @@ DEPLOY_DIR="/home/ubuntu/munzir-platform"
 rm -rf "${DEPLOY_DIR}"
 git clone https://github.com/FANGxPC/munzir-early-warning-system.git "${DEPLOY_DIR}"
 cd "${DEPLOY_DIR}"
+
+echo "[3.5/5] Generating live .env configuration (OpenAQ & Sentinel API)..."
+cat << 'ENVEOF' > "${DEPLOY_DIR}/.env"
+OPENAQ_API_KEY=7d3d5a3165c2aebbc4573b32a0f7d68d599b2318d63d5143140006b5c5f350f3
+SENTINEL_API_KEY=munzir_sentinel_secret_2026
+PORT=8000
+HOST=0.0.0.0
+MUNZIR_ENV=production
+ENVEOF
+
 chown -R ubuntu:ubuntu "${DEPLOY_DIR}"
 
 echo "[4/5] Building and launching container on ports 80 & 8000..."
 docker compose up -d --build
 
 echo "[5/5] Munzir deployed successfully!"
+
