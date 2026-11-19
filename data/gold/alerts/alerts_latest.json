@@ -1,0 +1,314 @@
+[
+  {
+    "alert_id": "ALT-EFF23F84",
+    "incident_id": "INC-20240715-SITE-AQ-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-AQ-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 2.111,
+      "workplace": -0.811,
+      "environmental": 1.073,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.404
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-2C4F45E3",
+    "incident_id": "INC-20240715-SITE-BB-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-BB-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.909,
+      "workplace": 0.774,
+      "environmental": 1.055,
+      "spatiotemporal": 0.0,
+      "data_quality": -0.87
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-3CDE9CA3",
+    "incident_id": "INC-20240715-SITE-DR-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-DR-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.033,
+      "workplace": 0.823,
+      "environmental": 1.054,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.172
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-ABA96BFE",
+    "incident_id": "INC-20240715-SITE-DS-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-DS-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 2.306,
+      "workplace": 0.701,
+      "environmental": 0.358,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.474
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-ABC81D25",
+    "incident_id": "INC-20240715-SITE-DS-02",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-DS-02"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.045,
+      "workplace": -1.644,
+      "environmental": 2.574,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.86
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-B95506BD",
+    "incident_id": "INC-20240715-SITE-JA-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-JA-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 2.096,
+      "workplace": -0.978,
+      "environmental": 1.151,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.664
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-67B3E0B5",
+    "incident_id": "INC-20240715-SITE-JA-02",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-JA-02"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.659,
+      "workplace": -0.67,
+      "environmental": 0.531,
+      "spatiotemporal": 0.0,
+      "data_quality": -0.531
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-3186BFC7",
+    "incident_id": "INC-20240715-SITE-RK-01",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-RK-01"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.792,
+      "workplace": -0.057,
+      "environmental": 0.919,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.576
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-046BD7E2",
+    "incident_id": "INC-20240715-DXB-AB",
+    "alert_type": "respiratory_surge",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "DXB-AB"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.023,
+      "workplace": 0.812,
+      "environmental": 0.427,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.63
+    },
+    "dq_status": "healthy",
+    "owner_role": "District Health Officer",
+    "recommended_action": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-3F65065D",
+    "incident_id": "INC-20240715-DXB-AQ",
+    "alert_type": "infectious_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "DXB-AQ"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.117,
+      "workplace": 0.844,
+      "environmental": -0.276,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.503
+    },
+    "dq_status": "healthy",
+    "owner_role": "District Surveillance Officer (Rapid Response Team)",
+    "recommended_action": "Contact facility occupational nurse, initiate active syndromic case finding, test water tank",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-F5573E26",
+    "incident_id": "INC-20240715-DXB-JA",
+    "alert_type": "respiratory_surge",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "DXB-JA"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.116,
+      "workplace": 0.782,
+      "environmental": 0.686,
+      "spatiotemporal": 0.0,
+      "data_quality": 0.558
+    },
+    "dq_status": "healthy",
+    "owner_role": "District Health Officer",
+    "recommended_action": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-1824143E",
+    "incident_id": "INC-20240715-DXB-MU",
+    "alert_type": "respiratory_surge",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "DXB-MU"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 0.864,
+      "workplace": 0.785,
+      "environmental": 0.413,
+      "spatiotemporal": 0.0,
+      "data_quality": -0.351
+    },
+    "dq_status": "healthy",
+    "owner_role": "District Health Officer",
+    "recommended_action": "Issue public respiratory advisory, distribute N95 masks to outdoor laborers, prepare clinic nebulizer surge",
+    "is_suppressed_decoy": false
+  },
+  {
+    "alert_id": "ALT-3CC84D9C",
+    "incident_id": "INC-20240715-SITE-AQ-02",
+    "alert_type": "heat_cluster",
+    "severity": "warning",
+    "probability": 1.0,
+    "ci_low": 0.88,
+    "ci_high": 1.0,
+    "geo_ids": [
+      "SITE-AQ-02"
+    ],
+    "obs_date": "2024-07-15",
+    "signal_contributions": {
+      "clinical": 1.824,
+      "workplace": 0.819,
+      "environmental": 0.189,
+      "spatiotemporal": 0.0,
+      "data_quality": -0.917
+    },
+    "dq_status": "healthy",
+    "owner_role": "Site Safety Officer",
+    "recommended_action": "Issue site heat advisory, enforce hydration breaks every 30 minutes, buddy system",
+    "is_suppressed_decoy": false
+  }
+]

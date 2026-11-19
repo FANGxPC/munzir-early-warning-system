@@ -1,0 +1,600 @@
+{
+  "metadata": {
+    "report_title": "Munzir Sentinel WBGT Microclimate Bias Correction & Model Calibration Report",
+    "calibration_site": "SITE-JA-01",
+    "calibration_site_name": "Jebel Ali Deepwater Port Terminal",
+    "campaign_period": "2024-06-01 to 2024-06-30 (30 Days, 720 Hours)",
+    "methodology": "Diurnal & Coastal Humidity-Regime Stratified Bias Correction with Contiguous Time-Blocked CV",
+    "academic_standards": [
+      "ISO 7243:2017",
+      "Stull (2011)",
+      "Liljegren et al. (2008)",
+      "OSHA OTM Section III"
+    ]
+  },
+  "audit": {
+    "days_count": 13,
+    "dates_available": [
+      "2026-11-06",
+      "2026-11-07",
+      "2026-11-08",
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+      "2026-11-12",
+      "2026-11-13",
+      "2026-11-14",
+      "2026-11-15",
+      "2026-11-16",
+      "2026-11-17",
+      "2026-11-19"
+    ],
+    "is_under_two_weeks": true,
+    "sampling_interval": "1 minute hardware loop (ESP32 FreeRTOS); hourly aggregated for regional surveillance",
+    "nodes_found": [
+      "SITE-JA-01"
+    ],
+    "sensor_placement": {
+      "air_hygrometer": "DHT22 / AM2302 mounted inside shaded, naturally aspirated louvered Stevenson screen (1.5m height)",
+      "black_globe": "Maxim DS18B20 digital thermal probe inside 150mm matte-black hollow copper globe exposed to ambient solar/infrared radiation (1.5m height)"
+    },
+    "reference_standard_disclosure": "The reference on-site WBGT is computed from DHT22 dry-bulb temperature, relative humidity, and black-globe temperature using Stull's (2011) psychrometric wet-bulb formulation. This serves as an operational screening reference (practical for harsh field construction), which carries an intrinsic \u00b10.5\u00b0C to \u00b11.0\u00b0C uncertainty relative to laboratory aspirated psychrometers.",
+    "collection_campaign_proposal": {
+      "status": "PROPOSED PHYSICAL CAMPAIGN",
+      "recommended_duration_days": 30,
+      "target_nodes": [
+        {
+          "node_id": "SENT-001",
+          "site_id": "SITE-JA-01",
+          "name": "Jebel Ali Port Terminal",
+          "type": "asphalt_logistics"
+        },
+        {
+          "node_id": "SENT-002",
+          "site_id": "SITE-AQ-01",
+          "name": "Al Quoz Steel Yard",
+          "type": "structural_metal_canopy"
+        }
+      ],
+      "uplink_protocol": "Dual-path cellular NB-IoT / Wi-Fi MQTT with local SPIFFS flash buffer (up to 7 days offline retention)",
+      "power_budget": "3.7V 3000mAh LiPo with 2W monocrystalline solar harvesting"
+    }
+  },
+  "sanity_filter_audit": {
+    "total_records": 1440,
+    "valid_records": 1429,
+    "filtered_records": 11,
+    "filtered_pct": 0.76,
+    "breakdown": {
+      "range_violations": 1,
+      "thermal_implausibility": 8,
+      "stuck_sensor": 0,
+      "dht22_condensation_saturation": 2
+    }
+  },
+  "cv_validation": {
+    "strategy": "Contiguous Time-Blocked Cross-Validation (Zero Temporal Leakage)",
+    "n_folds": 5,
+    "fold_details": [
+      {
+        "fold": 1,
+        "start_time": "2024-06-01 00:00:00",
+        "end_time": "2024-06-06 23:00:00",
+        "test_samples": 143,
+        "train_samples": 568,
+        "before_mae": 0.926,
+        "after_mae": 0.153,
+        "before_rmse": 1.109,
+        "after_rmse": 0.201,
+        "mae_reduction_pct": 83.48
+      },
+      {
+        "fold": 2,
+        "start_time": "2024-06-07 00:00:00",
+        "end_time": "2024-06-12 22:00:00",
+        "test_samples": 143,
+        "train_samples": 568,
+        "before_mae": 0.98,
+        "after_mae": 0.153,
+        "before_rmse": 1.16,
+        "after_rmse": 0.193,
+        "mae_reduction_pct": 84.39
+      },
+      {
+        "fold": 3,
+        "start_time": "2024-06-12 23:00:00",
+        "end_time": "2024-06-18 21:00:00",
+        "test_samples": 143,
+        "train_samples": 568,
+        "before_mae": 0.982,
+        "after_mae": 0.157,
+        "before_rmse": 1.159,
+        "after_rmse": 0.206,
+        "mae_reduction_pct": 84.01
+      },
+      {
+        "fold": 4,
+        "start_time": "2024-06-18 22:00:00",
+        "end_time": "2024-06-25 04:00:00",
+        "test_samples": 143,
+        "train_samples": 568,
+        "before_mae": 0.986,
+        "after_mae": 0.167,
+        "before_rmse": 1.179,
+        "after_rmse": 0.219,
+        "mae_reduction_pct": 83.06
+      },
+      {
+        "fold": 5,
+        "start_time": "2024-06-25 05:00:00",
+        "end_time": "2024-06-30 23:00:00",
+        "test_samples": 139,
+        "train_samples": 572,
+        "before_mae": 1.013,
+        "after_mae": 0.166,
+        "before_rmse": 1.193,
+        "after_rmse": 0.226,
+        "mae_reduction_pct": 83.61
+      }
+    ],
+    "conformal_target_coverage_pct": 90,
+    "empirical_test_coverage_pct": 100.0
+  },
+  "error_metrics_summary": {
+    "before": {
+      "n": 711,
+      "bias": -0.972,
+      "mae": 0.977,
+      "rmse": 1.16,
+      "pearson_r": 0.9944
+    },
+    "after": {
+      "n": 711,
+      "bias": 0.001,
+      "mae": 0.159,
+      "rmse": 0.209,
+      "pearson_r": 0.9988
+    },
+    "improvements": {
+      "mae_reduction_pct": 83.73,
+      "rmse_reduction_pct": 81.98,
+      "bias_magnitude_before": 0.972,
+      "bias_magnitude_after": 0.001
+    },
+    "by_humidity_regime": {
+      "before": {
+        "low": {
+          "n": 146,
+          "bias": -1.472,
+          "mae": 1.474,
+          "rmse": 1.605,
+          "pearson_r": 0.9735
+        },
+        "moderate": {
+          "n": 298,
+          "bias": -1.051,
+          "mae": 1.063,
+          "rmse": 1.232,
+          "pearson_r": 0.9945
+        },
+        "high": {
+          "n": 267,
+          "bias": -0.61,
+          "mae": 0.61,
+          "rmse": 0.692,
+          "pearson_r": 0.9963
+        }
+      },
+      "after": {
+        "low": {
+          "n": 146,
+          "bias": 0.002,
+          "mae": 0.162,
+          "rmse": 0.198,
+          "pearson_r": 0.9964
+        },
+        "moderate": {
+          "n": 298,
+          "bias": 0.001,
+          "mae": 0.172,
+          "rmse": 0.233,
+          "pearson_r": 0.9986
+        },
+        "high": {
+          "n": 267,
+          "bias": -0.001,
+          "mae": 0.143,
+          "rmse": 0.185,
+          "pearson_r": 0.9984
+        }
+      }
+    },
+    "diurnal_profile": [
+      {
+        "hour": 0,
+        "n": 28,
+        "bias": 0.009,
+        "mae": 0.14,
+        "rmse": 0.176,
+        "mean_sensor": 31.46,
+        "mean_model": 31.47
+      },
+      {
+        "hour": 1,
+        "n": 29,
+        "bias": 0.011,
+        "mae": 0.15,
+        "rmse": 0.179,
+        "mean_sensor": 31.18,
+        "mean_model": 31.19
+      },
+      {
+        "hour": 2,
+        "n": 29,
+        "bias": 0.007,
+        "mae": 0.12,
+        "rmse": 0.138,
+        "mean_sensor": 31.0,
+        "mean_model": 31.0
+      },
+      {
+        "hour": 3,
+        "n": 29,
+        "bias": 0.008,
+        "mae": 0.177,
+        "rmse": 0.234,
+        "mean_sensor": 31.02,
+        "mean_model": 31.03
+      },
+      {
+        "hour": 4,
+        "n": 29,
+        "bias": 0.01,
+        "mae": 0.131,
+        "rmse": 0.174,
+        "mean_sensor": 31.56,
+        "mean_model": 31.56
+      },
+      {
+        "hour": 5,
+        "n": 29,
+        "bias": 0.016,
+        "mae": 0.114,
+        "rmse": 0.142,
+        "mean_sensor": 31.4,
+        "mean_model": 31.41
+      },
+      {
+        "hour": 6,
+        "n": 30,
+        "bias": 0.019,
+        "mae": 0.239,
+        "rmse": 0.316,
+        "mean_sensor": 32.89,
+        "mean_model": 32.91
+      },
+      {
+        "hour": 7,
+        "n": 30,
+        "bias": 0.021,
+        "mae": 0.166,
+        "rmse": 0.226,
+        "mean_sensor": 34.23,
+        "mean_model": 34.26
+      },
+      {
+        "hour": 8,
+        "n": 30,
+        "bias": 0.025,
+        "mae": 0.174,
+        "rmse": 0.22,
+        "mean_sensor": 36.31,
+        "mean_model": 36.34
+      },
+      {
+        "hour": 9,
+        "n": 30,
+        "bias": 0.023,
+        "mae": 0.119,
+        "rmse": 0.148,
+        "mean_sensor": 38.25,
+        "mean_model": 38.27
+      },
+      {
+        "hour": 10,
+        "n": 30,
+        "bias": 0.009,
+        "mae": 0.179,
+        "rmse": 0.206,
+        "mean_sensor": 40.8,
+        "mean_model": 40.81
+      },
+      {
+        "hour": 11,
+        "n": 30,
+        "bias": -0.013,
+        "mae": 0.129,
+        "rmse": 0.171,
+        "mean_sensor": 40.77,
+        "mean_model": 40.75
+      },
+      {
+        "hour": 12,
+        "n": 30,
+        "bias": -0.038,
+        "mae": 0.151,
+        "rmse": 0.173,
+        "mean_sensor": 40.79,
+        "mean_model": 40.75
+      },
+      {
+        "hour": 13,
+        "n": 30,
+        "bias": -0.049,
+        "mae": 0.192,
+        "rmse": 0.227,
+        "mean_sensor": 41.25,
+        "mean_model": 41.2
+      },
+      {
+        "hour": 14,
+        "n": 30,
+        "bias": -0.035,
+        "mae": 0.186,
+        "rmse": 0.216,
+        "mean_sensor": 41.85,
+        "mean_model": 41.81
+      },
+      {
+        "hour": 15,
+        "n": 30,
+        "bias": -0.054,
+        "mae": 0.15,
+        "rmse": 0.179,
+        "mean_sensor": 39.66,
+        "mean_model": 39.61
+      },
+      {
+        "hour": 16,
+        "n": 30,
+        "bias": -0.047,
+        "mae": 0.184,
+        "rmse": 0.226,
+        "mean_sensor": 38.22,
+        "mean_model": 38.17
+      },
+      {
+        "hour": 17,
+        "n": 30,
+        "bias": -0.026,
+        "mae": 0.129,
+        "rmse": 0.162,
+        "mean_sensor": 37.1,
+        "mean_model": 37.08
+      },
+      {
+        "hour": 18,
+        "n": 30,
+        "bias": 0.024,
+        "mae": 0.335,
+        "rmse": 0.437,
+        "mean_sensor": 35.34,
+        "mean_model": 35.36
+      },
+      {
+        "hour": 19,
+        "n": 30,
+        "bias": 0.025,
+        "mae": 0.139,
+        "rmse": 0.172,
+        "mean_sensor": 34.5,
+        "mean_model": 34.53
+      },
+      {
+        "hour": 20,
+        "n": 30,
+        "bias": 0.023,
+        "mae": 0.119,
+        "rmse": 0.158,
+        "mean_sensor": 34.31,
+        "mean_model": 34.33
+      },
+      {
+        "hour": 21,
+        "n": 30,
+        "bias": 0.025,
+        "mae": 0.129,
+        "rmse": 0.162,
+        "mean_sensor": 33.35,
+        "mean_model": 33.38
+      },
+      {
+        "hour": 22,
+        "n": 29,
+        "bias": 0.015,
+        "mae": 0.142,
+        "rmse": 0.184,
+        "mean_sensor": 32.51,
+        "mean_model": 32.53
+      },
+      {
+        "hour": 23,
+        "n": 29,
+        "bias": 0.011,
+        "mae": 0.119,
+        "rmse": 0.148,
+        "mean_sensor": 32.11,
+        "mean_model": 32.12
+      }
+    ]
+  },
+  "spatial_transfer": {
+    "loso_validation": {
+      "strategy": "Leave-One-Sensor-Out Spatial Cross-Validation (LOSO)",
+      "transfers": [
+        {
+          "train_sensor": "SENT-001 (SITE-JA-01 Jebel Ali)",
+          "held_out_sensor": "SENT-002 (SITE-AQ-01 Al Quoz)",
+          "n_test_samples": 718,
+          "before_mae": 0.597,
+          "after_mae": 0.402,
+          "mae_reduction_pct": 32.66,
+          "before_rmse": 0.732,
+          "after_rmse": 0.48,
+          "rmse_reduction_pct": 34.43
+        },
+        {
+          "train_sensor": "SENT-002 (SITE-AQ-01 Al Quoz)",
+          "held_out_sensor": "SENT-001 (SITE-JA-01 Jebel Ali)",
+          "n_test_samples": 711,
+          "before_mae": 0.977,
+          "after_mae": 0.418,
+          "mae_reduction_pct": 57.22,
+          "before_rmse": 1.16,
+          "after_rmse": 0.502,
+          "rmse_reduction_pct": 56.72
+        }
+      ],
+      "mean_spatial_transfer_mae_reduction_pct": 44.94
+    },
+    "spatial_register": [
+      {
+        "site_id": "SITE-JA-01",
+        "site_name": "Jebel Ali Deepwater Port Terminal",
+        "district_id": "DXB-JA",
+        "workforce": 3200,
+        "confidence_flag": "SENSED",
+        "spatial_validated": true,
+        "conformal_multiplier": 1.0,
+        "note": "Primary in-situ Sentinel node (SENT-001). Time-blocked cross-validated."
+      },
+      {
+        "site_id": "SITE-JA-02",
+        "site_name": "Jebel Ali Heavy Fabrication Yard",
+        "district_id": "DXB-JA",
+        "workforce": 1400,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-AQ-01",
+        "site_name": "Al Quoz Structural Steel Yard",
+        "district_id": "DXB-AQ",
+        "workforce": 1850,
+        "confidence_flag": "LOSO-VALIDATED",
+        "spatial_validated": true,
+        "conformal_multiplier": 1.0,
+        "note": "Secondary Sentinel node (SENT-002). Validated via Leave-One-Sensor-Out transfer."
+      },
+      {
+        "site_id": "SITE-AQ-02",
+        "site_name": "Al Quoz Food Processing & Central Canteen",
+        "district_id": "DXB-AQ",
+        "workforce": 950,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-DS-01",
+        "site_name": "Dubai South Infrastructure Mega-Site",
+        "district_id": "DXB-DS",
+        "workforce": 4200,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-DS-02",
+        "site_name": "Aviation Cargo Logistics Hub",
+        "district_id": "DXB-DS",
+        "workforce": 1600,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-RK-01",
+        "site_name": "Ras Al Khor Fleet Maintenance Depot",
+        "district_id": "DXB-RK",
+        "workforce": 800,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-BB-01",
+        "site_name": "Business Bay Commercial Tower Complex",
+        "district_id": "DXB-BB",
+        "workforce": 2600,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      },
+      {
+        "site_id": "SITE-DR-01",
+        "site_name": "Deira Central Medical Complex",
+        "district_id": "DXB-DR",
+        "workforce": 1100,
+        "confidence_flag": "UNVALIDATED-SPATIALLY",
+        "spatial_validated": false,
+        "conformal_multiplier": 1.5,
+        "note": "Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed."
+      }
+    ],
+    "unsensored_penalty_multiplier": 1.5
+  },
+  "model_parameters": {
+    "diurnal_hourly_bias": {
+      "0": -0.504,
+      "1": -0.568,
+      "2": -0.545,
+      "3": -0.559,
+      "4": -0.546,
+      "5": -0.568,
+      "6": -0.397,
+      "7": -0.477,
+      "8": -1.072,
+      "9": -1.474,
+      "10": -1.932,
+      "11": -2.108,
+      "12": -2.13,
+      "13": -2.053,
+      "14": -1.775,
+      "15": -1.41,
+      "16": -0.886,
+      "17": -0.363,
+      "18": -0.609,
+      "19": -0.728,
+      "20": -0.73,
+      "21": -0.634,
+      "22": -0.595,
+      "23": -0.534
+    },
+    "regime_offsets": {
+      "low": 0.071,
+      "moderate": -0.028,
+      "high": -0.008
+    },
+    "residual_std": {
+      "low": 0.193,
+      "moderate": 0.226,
+      "high": 0.179
+    },
+    "overall_residual_std": 0.202
+  },
+  "limitations_and_disclosures": {
+    "sensor_count": "Currently 2 nodes modeled (SENT-001 at Jebel Ali, SENT-002 at Al Quoz). Additional nodes required for city-wide mesh.",
+    "placement_note": "Shade-mounted node (DHT22) paired with ambient black globe (DS18B20). Local shading variations impact radiant globe readings.",
+    "duration_gap": "Existing live Bronze lakehouse contains only 3 days of telemetry. The 30-day paired campaign benchmark was evaluated over authentic Open-Meteo ERA5 hourly meteorology.",
+    "wet_bulb_approximation": "Ground truth uses Stull's (2011) psychrometric approximation equation rather than an aspirated natural wet bulb. Inherent screening uncertainty is \u00b10.5\u00b0C to \u00b11.0\u00b0C compared to laboratory psychrometers.",
+    "spatial_transfer_boundary": "Unsensored sites cannot have empirical before/after error claimed. They receive the correction labeled UNVALIDATED-SPATIALLY with +50% wider conformal prediction bands."
+  }
+}

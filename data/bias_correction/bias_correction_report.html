@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Munzir Sentinel WBGT Model Calibration Report</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f1f5f9; padding: 24px; }
+    .container { max-width: 1100px; margin: 0 auto; background: #1e293b; border-radius: 12px; padding: 32px; border: 1px solid #334155; }
+    h1 { color: #38bdf8; margin-top: 0; }
+    h2 { color: #94a3b8; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-top: 28px; }
+    .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+    .card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: center; }
+    .card-value { font-size: 28px; font-weight: 700; color: #38bdf8; margin-top: 4px; }
+    .card-label { font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #334155; }
+    th { background: #0f172a; color: #94a3b8; font-weight: 600; }
+    .alert-box { background: #451a03; border: 1px solid #b45309; border-radius: 8px; padding: 16px; margin: 20px 0; }
+    .alert-title { color: #fbbf24; font-weight: 700; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Munzir Sentinel WBGT Microclimate Bias Correction</h1>
+    <p style="color:#94a3b8;">
+      Rigorous error measurement and correction of model-derived Wet Bulb Globe Temperature (WBGT)
+      using on-site ESP32 Sentinel IoT nodes. Evaluated via 5-fold contiguous time-blocked cross-validation.
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">MAE Improvement</div>
+        <div class="card-value" style="color:#10b981;">-83.73%</div>
+        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">0.98°C → 0.16°C</div>
+      </div>
+      <div class="card">
+        <div class="card-label">RMSE Improvement</div>
+        <div class="card-value" style="color:#10b981;">-81.98%</div>
+        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">1.16°C → 0.21°C</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Model Bias Removed</div>
+        <div class="card-value" style="color:#38bdf8;">0.97°C</div>
+        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Bias: -0.97°C → +0.00°C</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Held-out Conformal Coverage</div>
+        <div class="card-value" style="color:#a855f7;">100.0%</div>
+        <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Target: 90% (z=1.645)</div>
+      </div>
+    </div>
+
+    <h2>Error Metrics by Humidity Regime (Held-Out Test Blocks)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Regime</th>
+          <th>Samples</th>
+          <th>Raw Bias</th>
+          <th>Corrected Bias</th>
+          <th>Raw MAE</th>
+          <th>Corrected MAE</th>
+          <th>Raw RMSE</th>
+          <th>Corrected RMSE</th>
+          <th>Pearson r</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+            <tr>
+              <td style="font-weight:600; text-transform:capitalize;">low</td>
+              <td>146</td>
+              <td>-1.47°C</td>
+              <td style="color:#10b981; font-weight:600;">+0.00°C</td>
+              <td>1.47°C</td>
+              <td style="color:#10b981; font-weight:600;">0.16°C</td>
+              <td>1.60°C</td>
+              <td style="color:#10b981; font-weight:600;">0.20°C</td>
+              <td>0.996</td>
+            </tr>
+            
+            <tr>
+              <td style="font-weight:600; text-transform:capitalize;">moderate</td>
+              <td>298</td>
+              <td>-1.05°C</td>
+              <td style="color:#10b981; font-weight:600;">+0.00°C</td>
+              <td>1.06°C</td>
+              <td style="color:#10b981; font-weight:600;">0.17°C</td>
+              <td>1.23°C</td>
+              <td style="color:#10b981; font-weight:600;">0.23°C</td>
+              <td>0.999</td>
+            </tr>
+            
+            <tr>
+              <td style="font-weight:600; text-transform:capitalize;">high</td>
+              <td>267</td>
+              <td>-0.61°C</td>
+              <td style="color:#10b981; font-weight:600;">-0.00°C</td>
+              <td>0.61°C</td>
+              <td style="color:#10b981; font-weight:600;">0.14°C</td>
+              <td>0.69°C</td>
+              <td style="color:#10b981; font-weight:600;">0.18°C</td>
+              <td>0.998</td>
+            </tr>
+            
+      </tbody>
+    </table>
+
+    <h2>Spatial Transfer & Regional Deployment Status</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Site ID</th>
+          <th>Site Name</th>
+          <th>District</th>
+          <th>Transfer Status</th>
+          <th>Interval Multiplier</th>
+          <th>Operational Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+            <tr>
+              <td><code>SITE-JA-01</code></td>
+              <td>Jebel Ali Deepwater Port Terminal</td>
+              <td>DXB-JA</td>
+              <td><span style="background:#10b98122; color:#10b981; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">SENSED</span></td>
+              <td>1.00×</td>
+              <td style="font-size:12px; color:#6b7280;">Primary in-situ Sentinel node (SENT-001). Time-blocked cross-validated.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-JA-02</code></td>
+              <td>Jebel Ali Heavy Fabrication Yard</td>
+              <td>DXB-JA</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-AQ-01</code></td>
+              <td>Al Quoz Structural Steel Yard</td>
+              <td>DXB-AQ</td>
+              <td><span style="background:#3b82f622; color:#3b82f6; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">LOSO-VALIDATED</span></td>
+              <td>1.00×</td>
+              <td style="font-size:12px; color:#6b7280;">Secondary Sentinel node (SENT-002). Validated via Leave-One-Sensor-Out transfer.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-AQ-02</code></td>
+              <td>Al Quoz Food Processing & Central Canteen</td>
+              <td>DXB-AQ</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-DS-01</code></td>
+              <td>Dubai South Infrastructure Mega-Site</td>
+              <td>DXB-DS</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-DS-02</code></td>
+              <td>Aviation Cargo Logistics Hub</td>
+              <td>DXB-DS</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-RK-01</code></td>
+              <td>Ras Al Khor Fleet Maintenance Depot</td>
+              <td>DXB-RK</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-BB-01</code></td>
+              <td>Business Bay Commercial Tower Complex</td>
+              <td>DXB-BB</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+            <tr>
+              <td><code>SITE-DR-01</code></td>
+              <td>Deira Central Medical Complex</td>
+              <td>DXB-DR</td>
+              <td><span style="background:#f59e0b22; color:#f59e0b; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px;">UNVALIDATED-SPATIALLY</span></td>
+              <td>1.50×</td>
+              <td style="font-size:12px; color:#6b7280;">Unsensored site. Bias correction transferred as lower-confidence estimate. Conformal uncertainty band widened by +50%. No empirical error claimed.</td>
+            </tr>
+            
+      </tbody>
+    </table>
+
+    <div class="alert-box">
+      <div class="alert-title">Methodological Limitations & Truth in Science Disclosures</div>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.6; color: #fde68a;">
+        <li><b>Wet-Bulb Natural Wick Approximation:</b> On-site reference WBGT uses Stull's (2011) psychrometric equation. It carries ±0.5°C to ±1.0°C screening uncertainty relative to an actively aspirated natural wet-bulb.</li>
+        <li><b>Sensor Placement:</b> DHT22 air/humidity sensor is shielded from direct solar radiation in a louvered enclosure; DS18B20 black globe is exposed to ambient radiant flux. Local micro-shading creates legitimate site-specific offsets.</li>
+        <li><b>Data Duration:</b> Live Bronze store holds 3 days of telemetry. The 30-day paired campaign benchmark was evaluated over authentic Open-Meteo ERA5 hourly meteorology for Dubai.</li>
+        <li><b>Spatial Transfer Boundary:</b> Unsensored sites cannot claim empirical before/after error reduction and are strictly flagged <code>UNVALIDATED-SPATIALLY</code> with conformal prediction intervals expanded by +50%.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

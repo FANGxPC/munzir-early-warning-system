@@ -1,0 +1,56 @@
+[
+  {
+    "node_id": "SENT-001",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 50.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  },
+  {
+    "node_id": "SENT-TEST-01",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 15.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  },
+  {
+    "node_id": "SENT-E2E-01",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 12.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  },
+  {
+    "node_id": "SENT-AUDIT-01",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 15.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  },
+  {
+    "node_id": "SENT-TEST-99",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 15.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  },
+  {
+    "node_id": "SENT-396",
+    "site_id": "SITE-JA-01",
+    "latitude": 24.992,
+    "longitude": 55.041,
+    "accuracy_m": 50.0,
+    "method": "browser_geolocation",
+    "indoor_mode": false
+  }
+]

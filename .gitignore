@@ -11,8 +11,18 @@ __pycache__/
 /data/*
 !/data/timemachine/
 !/data/timemachine/**
+!/data/gold/
+!/data/gold/**
+!/data/sentinel_telemetry/
+!/data/sentinel_telemetry/**
+!/data/bias_correction/
+!/data/bias_correction/**
+!/data/silver/
+!/data/silver/**
 !munzir/ingestion/data/
 *.parquet
+!/data/gold/**/*.parquet
+!/data/silver/observations/**/2025-08-*.parquet
 
 # Distribution / packaging
 build/
