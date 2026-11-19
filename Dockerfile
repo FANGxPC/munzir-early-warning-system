@@ -18,6 +18,11 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Final Runtime Image
 FROM python:3.10-slim
 
+# Install OpenMP runtime required by LightGBM and ML models
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Copy installed Python packages from builder directly to standard /usr/local
