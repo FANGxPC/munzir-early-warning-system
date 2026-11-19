@@ -21,14 +21,13 @@
 
 If you use the AWS Web Management Console:
 
-### Step 1: Launch an EC2 Instance
-1. Sign in to the [AWS Management Console](https://console.aws.amazon.com/ec2).
-2. Ensure your region is set to **US East (N. Virginia) `us-east-1`** or your preferred region.
-3. Click **Launch Instance**.
-4. Configure the settings:
+### Step 1: Launch an EC2 Instance in Mumbai
+1. Sign in directly to: 👉 **[AWS EC2 Mumbai Launch Console](https://ap-south-1.console.aws.amazon.com/ec2/home?region=ap-south-1#LaunchInstances:)**
+2. Confirm that the top-right region dropdown shows **Asia Pacific (Mumbai) `ap-south-1`**.
+3. Configure the settings:
    - **Name:** `munzir-platform`
    - **Application and OS Images:** **Ubuntu 22.04 LTS (HVM)** *(Free tier eligible)*.
-   - **Instance Type:** **`t2.micro`** (1 vCPU, 1 GiB Memory, *Free tier eligible*).
+   - **Instance Type:** **`t2.micro`** (1 vCPU, 1 GiB Memory, *Free tier eligible* in Mumbai).
    - **Key pair (login):** Select *Proceed without a key pair* (or select your existing key pair if you want SSH access).
 
 ### Step 2: Configure Network & Security Group
