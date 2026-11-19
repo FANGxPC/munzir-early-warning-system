@@ -217,10 +217,10 @@ function updateStoryBanner(beatIndex) {
 }
 window.updateStoryBanner = updateStoryBanner;
 
-function stepStoryBeat(dir) {}
+function stepStoryBeat(dir) { }
 window.stepStoryBeat = stepStoryBeat;
 
-function triggerJudgeStory(scenarioIndex) {}
+function triggerJudgeStory(scenarioIndex) { }
 window.triggerJudgeStory = triggerJudgeStory;
 
 function setupRoleSwitcher() {
@@ -298,7 +298,7 @@ async function loadSituationMap() {
 
   try {
     const data = await apiFetch(`/api/v1/map/layers?date=${state.date}`);
-    
+
     // Privacy banner
     if (noticeBox) {
       if (data.privacy_notice) {
@@ -316,7 +316,7 @@ async function loadSituationMap() {
       card.id = `geoCard-${feat.geo_id}`;
       card.className = `geo-item-card risk-${feat.risk_tier.toLowerCase()} ${feat.hatch_pattern ? 'hatch-pattern' : ''}`;
       card.onclick = () => selectGeoSite(feat.geo_id);
-      
+
       const badgeClass = `badge-${feat.risk_tier.toLowerCase()}`;
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -495,14 +495,14 @@ function renderSvgMap(svgElement, features, clusters) {
       <text x="${centerDubai.x + 144}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">30 KM</text>
       <text x="${centerDubai.x + 214}" y="${centerDubai.y - 4}" fill="#475569" font-size="8" font-family="var(--font-mono, monospace)">45 KM</text>
 
-      <line x1="50" y1="${height/2}" x2="${width - 50}" y2="${height/2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
-      <line x1="${width/2}" y1="35" x2="${width/2}" y2="${height - 35}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+      <line x1="50" y1="${height / 2}" x2="${width - 50}" y2="${height / 2}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
+      <line x1="${width / 2}" y1="35" x2="${width / 2}" y2="${height - 35}" stroke="#222f2b" stroke-width="0.8" stroke-dasharray="2,3" />
 
       <!-- Corner Reticles (L-brackets) -->
       <path d="M 16,28 L 16,16 L 28,16" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M ${width-28},16 L ${width-16},16 L ${width-16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M 16,${height-28} L 16,${height-16} L 28,${height-16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
-      <path d="M ${width-28},${height-16} L ${width-16},${height-16} L ${width-16},${height-28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M ${width - 28},16 L ${width - 16},16 L ${width - 16},28" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M 16,${height - 28} L 16,${height - 16} L 28,${height - 16}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
+      <path d="M ${width - 28},${height - 16} L ${width - 16},${height - 16} L ${width - 16},${height - 28}" stroke="#65dfcd" stroke-width="1.5" fill="none" opacity="0.65" />
 
       <!-- Telemetry HUD Header / Footer Overlay -->
       <text x="36" y="24" fill="#65dfcd" font-size="9" font-family="var(--font-mono, monospace)" font-weight="700" letter-spacing="0.05em">
@@ -629,7 +629,7 @@ function renderSvgMap(svgElement, features, clusters) {
 
     // Callout Label Banner
     svgHtml += `
-        <rect x="${pt.x - nameWidth/2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="4" fill="#060a14" stroke="rgba(255,255,255,0.14)" stroke-width="0.8" />
+        <rect x="${pt.x - nameWidth / 2}" y="${pt.y + 16}" width="${nameWidth}" height="18" rx="4" fill="#060a14" stroke="rgba(255,255,255,0.14)" stroke-width="0.8" />
         <text x="${pt.x}" y="${pt.y + 29}" fill="#f8fafc" font-size="9" font-weight="700" text-anchor="middle">
           ${escapeHtml(displayName)}
         </text>
@@ -671,7 +671,7 @@ async function loadAlertInbox() {
     data.alerts.forEach(a => {
       const tr = document.createElement("tr");
       const tierBadge = `badge-${a.alert_tier.toLowerCase()}`;
-      
+
       let statusBadge = "badge-gray";
       if (a.status === "ACKNOWLEDGED") statusBadge = "badge-watch";
       else if (a.status === "ACTED") statusBadge = "badge-normal";
@@ -683,7 +683,7 @@ async function loadAlertInbox() {
         <td>${a.geo_name}<br><span style="font-size:0.75rem;color:#94a3b8;">${a.geo_id}</span></td>
         <td>
           <b>${(a.calibrated_probability * 100).toFixed(1)}%</b>
-          <div style="font-size:0.7rem;color:#94a3b8;">90% CI: [${(a.conformal_interval[0]*100).toFixed(0)}%, ${(a.conformal_interval[1]*100).toFixed(0)}%]</div>
+          <div style="font-size:0.7rem;color:#94a3b8;">90% CI: [${(a.conformal_interval[0] * 100).toFixed(0)}%, ${(a.conformal_interval[1] * 100).toFixed(0)}%]</div>
         </td>
         <td><span class="badge badge-gray">${a.dq_badge}</span></td>
         <td><span style="font-size:0.8rem;color:#e2e8f0;">${a.primary_owner}</span></td>
@@ -1078,9 +1078,9 @@ async function viewEvidenceCard(alertId) {
         </p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
           ${(card.clinical_vulnerability.high_risk_classes || card.clinical_vulnerability.high_risk_drug_classes || []).slice(0, 4).map(c => {
-            const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
-            const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
-            return `
+      const lvl = (c.hazard_level || c.risk_level || 'warning').toUpperCase();
+      const guidance = c.clinical_guidance || c.clinical_mitigation_action || '';
+      return `
             <div style="background:#131c1a; padding:0.6rem; border-radius:6px; font-size:0.8rem; border:1px solid #222f2b;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="color:#f472b6; font-weight:700;">${c.class_name}</span>
@@ -1091,7 +1091,7 @@ async function viewEvidenceCard(alertId) {
               <div style="color:#65dfcd; font-size:0.72rem; margin-top:3px; font-style:italic;">Guidance: ${guidance}</div>
             </div>
             `;
-          }).join("")}
+    }).join("")}
         </div>
       </div>
       ` : ''}
@@ -1980,9 +1980,9 @@ async function loadPolicyEvidence() {
         <td>${d.midday_high_heat_days} days</td>
         <td>
           ${isSuppressed
-            ? '<span class="badge badge-gray" title="Small-cell suppression applied (<=10)">≤ 10 (Suppressed)</span>'
-            : `<strong style="color:#65dfcd;">${d.attributable_heat_stress_cases_suppressed} cases</strong>`
-          }
+          ? '<span class="badge badge-gray" title="Small-cell suppression applied (<=10)">≤ 10 (Suppressed)</span>'
+          : `<strong style="color:#65dfcd;">${d.attributable_heat_stress_cases_suppressed} cases</strong>`
+        }
         </td>
         <td><span class="badge badge-normal">DP Laplace ε=1.0</span></td>
       `;
@@ -2032,7 +2032,7 @@ async function exportPolicyMarkdown() {
     const text = await apiFetch(`/api/v1/impact/policy-report/markdown?month=${encodeURIComponent(month)}`, {
       headers: { "Accept": "text/markdown" },
     });
-    
+
     // Create download trigger
     const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -2082,7 +2082,7 @@ async function loadSentinelView(isSilent = false) {
       const mWbgt = 31.8; // Open-Meteo ERA5 reference
       const delta = sWbgt - mWbgt;
       const deltaSign = delta >= 0 ? `+${delta.toFixed(1)}` : `${delta.toFixed(1)}`;
-      
+
       const elTwinModel = document.getElementById("twinModelWbgt");
       const elTwinSensor = document.getElementById("twinSensorWbgt");
       const elTwinBias = document.getElementById("twinBiasDelta");
@@ -2112,7 +2112,7 @@ async function loadSentinelView(isSilent = false) {
     // Render Table Rows
     tbody.innerHTML = nodes.map(node => {
       const isOnline = node.is_online;
-      const statusBadge = isOnline 
+      const statusBadge = isOnline
         ? `<span class="badge badge-normal" style="background:#065f46; color:#34d399;">ONLINE</span>`
         : `<span class="badge badge-alert" style="background:#7f1d1d; color:#f87171;">OFFLINE</span>`;
 
@@ -2874,8 +2874,8 @@ function renderTimeMachineTimeline(selectedIndex) {
     const bracketY = 40;
     svg += `
       <path d="M ${xAlert} ${bracketY} L ${xAlert} ${bracketY - 8} L ${xPeak} ${bracketY - 8} L ${xPeak} ${bracketY}" fill="none" stroke="#34d399" stroke-width="2"/>
-      <rect x="${(xAlert + xPeak)/2 - 50}" y="${bracketY - 20}" width="100" height="18" fill="#065f46" rx="4"/>
-      <text x="${(xAlert + xPeak)/2}" y="${bracketY - 7}" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">+${metrics.lead_time_vs_peak_days} DAYS LEAD TIME</text>
+      <rect x="${(xAlert + xPeak) / 2 - 50}" y="${bracketY - 20}" width="100" height="18" fill="#065f46" rx="4"/>
+      <text x="${(xAlert + xPeak) / 2}" y="${bracketY - 7}" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">+${metrics.lead_time_vs_peak_days} DAYS LEAD TIME</text>
     `;
   }
 
@@ -2893,7 +2893,7 @@ function renderTimeMachineTimeline(selectedIndex) {
         </defs>
         <rect x="${curX}" y="20" width="${rightW}" height="160" fill="url(#hatch)" opacity="0.6"/>
         <rect x="${curX}" y="20" width="${rightW}" height="160" fill="rgba(15, 23, 42, 0.4)"/>
-        <text x="${curX + rightW/2}" y="100" fill="#64748b" font-size="11" font-weight="bold" text-anchor="middle" letter-spacing="1">
+        <text x="${curX + rightW / 2}" y="100" fill="#64748b" font-size="11" font-weight="bold" text-anchor="middle" letter-spacing="1">
           DATA NOT YET REPORTED (HIDDEN AS OF D)
         </text>
       `;
@@ -2940,7 +2940,7 @@ function onWhatifSiteChange() {
   const workforceInput = document.getElementById("whatifWorkforceInput");
   const sliderWorkforce = document.getElementById("sliderWorkforce");
   const sliderWorkforceVal = document.getElementById("sliderWorkforceVal");
-  
+
   if (!siteSelect || !workforceInput) return;
 
   const siteWorkforces = {
@@ -3112,7 +3112,7 @@ async function runWhatIfSimulation() {
 
   try {
     const url = `/api/v1/whatif/simulate?site_id=${encodeURIComponent(siteId)}&action=${encodeURIComponent(scenario)}&workforce=${workforce}&shade_temp_reduction_c=${shadeDelta}&break_extension_minutes=${breakExt}`;
-    
+
     let data;
     try {
       const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
@@ -3761,7 +3761,7 @@ async function runDeconvolution() {
 
   try {
     const data = await apiFetch(`/api/v1/spatial/deconvolve?clinic_district=${district}&case_count=45&mean_lag_hours=6.5`);
-    
+
     if (tbody) {
       tbody.innerHTML = data.candidates.map(c => `
         <tr style="border-bottom:1px solid #222f2b;">
@@ -4290,7 +4290,7 @@ async function simulateWhatsAppAction(actionType) {
 
   try {
     const alertId = (currentJaisCard && currentJaisCard.alert_id) ? currentJaisCard.alert_id : "ALT-SITE-JA-01-001";
-    
+
     // 1. Send action confirm to Phase 28 Lakehouse endpoint
     const confirmRes = await apiFetch("/api/v1/intercom/action-confirm", {
       method: "POST",
@@ -5636,7 +5636,7 @@ function togglePushToTalk() {
     } catch (e) {
       try {
         intercomRecognition.stop();
-      } catch (err) {}
+      } catch (err) { }
     }
   } else {
     const input = document.getElementById("voiceTranscriptInput");
@@ -5901,7 +5901,7 @@ async function runPolicySimulation() {
     if (elBcr) elBcr.textContent = `${bcr.toFixed(2)}x ROI`;
     const elCi = document.getElementById("wfCiText");
     if (elCi && ci.length >= 2) {
-      elCi.textContent = `90% CI: AED ${(ci[0]/1e6).toFixed(2)}M – AED ${(ci[1]/1e6).toFixed(2)}M`;
+      elCi.textContent = `90% CI: AED ${(ci[0] / 1e6).toFixed(2)}M – AED ${(ci[1] / 1e6).toFixed(2)}M`;
     }
 
     const elDecree = document.getElementById("policyDecreeText");
@@ -6609,21 +6609,21 @@ function closeLakehouseInspectorModal() { closeSystemDossierModal(); }
 function closeCudaInspectorModal() { closeSystemDossierModal(); }
 function closeTestIntegrityModal() { closeSystemDossierModal(); }
 
-window.openInnovationsMatrixModal = function() { openSystemDossierModal("models"); };
+window.openInnovationsMatrixModal = function () { openSystemDossierModal("models"); };
 window.closeInnovationsMatrixModal = closeInnovationsMatrixModal;
-window.openSystemArchitectureModal = function() { openSystemDossierModal("arch"); };
+window.openSystemArchitectureModal = function () { openSystemDossierModal("arch"); };
 window.closeSystemArchitectureModal = closeSystemArchitectureModal;
-window.openLakehouseInspectorModal = function() { openSystemDossierModal("lakehouse"); };
+window.openLakehouseInspectorModal = function () { openSystemDossierModal("lakehouse"); };
 window.closeLakehouseInspectorModal = closeLakehouseInspectorModal;
-window.openLakehouseInspectionModal = function() { openSystemDossierModal("lakehouse"); };
+window.openLakehouseInspectionModal = function () { openSystemDossierModal("lakehouse"); };
 window.closeLakehouseInspectionModal = closeLakehouseInspectorModal;
-window.openCudaInspectorModal = function() { openSystemDossierModal("ai"); };
+window.openCudaInspectorModal = function () { openSystemDossierModal("ai"); };
 window.closeCudaInspectorModal = closeCudaInspectorModal;
-window.openCudaInspectionModal = function() { openSystemDossierModal("ai"); };
+window.openCudaInspectionModal = function () { openSystemDossierModal("ai"); };
 window.closeCudaInspectionModal = closeCudaInspectorModal;
-window.openTestIntegrityModal = function() { openSystemDossierModal("audit"); };
+window.openTestIntegrityModal = function () { openSystemDossierModal("audit"); };
 window.closeTestIntegrityModal = closeTestIntegrityModal;
-window.openZeroMockAuditModal = function() { openSystemDossierModal("audit"); };
+window.openZeroMockAuditModal = function () { openSystemDossierModal("audit"); };
 window.closeZeroMockAuditModal = closeZeroMockAuditModal;
 
 function ensureProofDrawerOpen(drawerId) {
@@ -6846,13 +6846,13 @@ function renderDynamicTrendChart(range, siteId) {
     labels = ["12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "Now"];
     currentReading = baseW;
     changeText = `${isUp ? '&uarr;' : '&darr;'} ${(Math.abs(profile.delta)).toFixed(1)}&deg; <small>from previous 24 hours</small>`;
-    
+
     for (let i = 0; i < count; i++) {
       const hour = i;
       const diurnalFactor = -Math.cos(((hour - 4) / 24) * 2 * Math.PI);
       const wbgt = baseW - 3.2 + (diurnalFactor + 1) * 2.1 + (Math.sin(i * 1.5) * 0.25);
       const model = wbgt - profile.delta + (Math.cos(i * 0.8) * 0.2);
-      
+
       const hr12 = hour === 0 ? "12 AM" : (hour === 12 ? "12 PM" : (hour > 12 ? `${hour - 12} PM` : `${hour} AM`));
       const coordsWbgt = toSvgCoords(wbgt, i, count);
       const coordsModel = toSvgCoords(model, i, count);
@@ -7203,12 +7203,12 @@ function showToast(message, type = "normal") {
 
   const toast = document.createElement("div");
   toast.className = `executive-toast ${type === "warning" ? "toast-warning" : type === "error" ? "toast-error" : ""}`;
-  
-  const icon = type === "error" 
+
+  const icon = type === "error"
     ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f17971" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
     : type === "warning"
-    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e9aa62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
-    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#65dfcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e9aa62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+      : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#65dfcd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 
   toast.innerHTML = `
     <div>${icon}</div>
