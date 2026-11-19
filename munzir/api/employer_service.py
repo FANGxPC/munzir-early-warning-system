@@ -67,15 +67,18 @@ class EmployerSafetyService:
         else:
             # Query observations for this site and date
             df_obs = self.silver_store.read_observations(start_date=target_date, end_date=target_date)
-            site_obs = df_obs[df_obs["geo_id"] == site_id] if not df_obs.empty else df_obs
+            site_obs = df_obs[df_obs["geo_id"] == site_id] if not df_obs.empty and "geo_id" in df_obs.columns else pd.DataFrame()
 
-            # Sickness absence count
-            abs_row = site_obs[site_obs["signal_type"] == "absence_heat"]
-            abs_count = float(abs_row["value"].values[0]) if not abs_row.empty else 12.0
+            # Sickness absence and incident counts with robust column fallback
+            if not site_obs.empty and "signal_type" in site_obs.columns:
+                abs_row = site_obs[site_obs["signal_type"] == "absence_heat"]
+                abs_count = float(abs_row["value"].values[0]) if not abs_row.empty and "value" in abs_row.columns else 12.0
 
-            # Incident count
-            inc_row = site_obs[site_obs["signal_type"] == "clinical_heat"]
-            inc_count = float(inc_row["value"].values[0]) if not inc_row.empty else 3.0
+                inc_row = site_obs[site_obs["signal_type"] == "clinical_heat"]
+                inc_count = float(inc_row["value"].values[0]) if not inc_row.empty and "value" in inc_row.columns else 3.0
+            else:
+                abs_count = 12.0
+                inc_count = 3.0
 
             # Compute rates per 1,000 workers
             absence_rate = round((abs_count / workforce) * 1000.0, 2)
