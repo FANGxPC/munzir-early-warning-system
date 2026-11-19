@@ -342,7 +342,6 @@ Prahari/
 ├── .gitignore                     # Clean repository ignore matrix
 ├── PROJECT_OVERVIEW.md            # Comprehensive Project Overview
 ├── Technical Documentation.pdf    # Official Publication Specification
-├── build_championship_deck.py     # Championship Slide Deck Generator
 ├── hardware/
 │   └── sentinel_node/
 │       ├── sentinel_rgb_led_node.ino # ESP32 production firmware (RGB 3-LED + BOOT)
