@@ -31,6 +31,7 @@ dist/
 login-screen/
 munzir-ui-ux-sample/
 *.pdf
+!Technical Documentation.pdf
 *.pptx
 .~lock*
 ppt_assets/
