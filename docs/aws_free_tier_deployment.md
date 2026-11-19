@@ -11,13 +11,15 @@
 
 | Property | Value |
 | :--- | :--- |
+| **Official HTTPS URL (Judges)** | [https://13.203.154.72.sslip.io](https://13.203.154.72.sslip.io) |
+| **SSL / TLS Certificate** | Let's Encrypt Authority (TLS 1.3 / HTTP/2, Trusted Padlock) |
+| **HTTP to HTTPS Redirect** | Automatic 301 from `http://13.203.154.72` |
 | **Region** | `ap-south-1` (Mumbai, India) |
 | **Instance ID** | `i-05f213a1b98dac150` |
-| **Instance Type** | `t3.micro` (Free Tier Eligible) |
+| **Instance Type** | `t3.micro` (AWS Free Tier Eligible) |
 | **Public IPv4** | `13.203.154.72` |
-| **Web Dashboard (Port 80)** | [http://13.203.154.72](http://13.203.154.72) |
-| **FastAPI Swagger Docs (Port 8000)** | [http://13.203.154.72:8000/docs](http://13.203.154.72:8000/docs) |
-| **Health & Feed Status Endpoint** | [http://13.203.154.72:8000/api/v1/health/feeds](http://13.203.154.72:8000/api/v1/health/feeds) |
+| **FastAPI Swagger Docs** | [https://13.203.154.72.sslip.io/docs](https://13.203.154.72.sslip.io/docs) |
+| **Health & Feed Status Endpoint** | [https://13.203.154.72.sslip.io/api/v1/health/feeds](https://13.203.154.72.sslip.io/api/v1/health/feeds) |
 | **OpenAQ API Integration** | Connected (`OPENAQ_API_KEY` active) |
 | **Monthly Cost** | **$0.00** |
 
