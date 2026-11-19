@@ -4,10 +4,11 @@
 # Deploys on 100% Free Tier (t2.micro / t3.micro) with $0.00 Cost
 # ==============================================================================
 set -euo pipefail
+export PATH="$HOME/.local/bin:$PATH"
 
 INSTANCE_NAME="${INSTANCE_NAME:-munzir-platform}"
 REGION="${AWS_REGION:-${AWS_DEFAULT_REGION:-ap-south-1}}"
-INSTANCE_TYPE="${INSTANCE_TYPE:-t2.micro}"
+INSTANCE_TYPE="${INSTANCE_TYPE:-t3.micro}"
 SECURITY_GROUP_NAME="munzir-sg"
 USER_DATA_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ec2_user_data.sh"
 

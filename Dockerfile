@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-# Pre-install CPU-only PyTorch wheel to prevent downloading the 2.8 GB CUDA wheel
-RUN pip install --no-cache-dir --prefix=/install torch --index-url https://download.pytorch.org/whl/cpu && \
-    pip install --no-cache-dir --prefix=/install -r requirements.txt
+# Install CPU-only PyTorch and all dependencies using PyTorch extra-index-url
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir --prefix=/install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
 
 # Final Runtime Image
 FROM python:3.10-slim
