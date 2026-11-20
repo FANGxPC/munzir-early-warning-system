@@ -11,15 +11,16 @@
 
 | Property | Value |
 | :--- | :--- |
-| **Official HTTPS URL (Judges)** | [https://13.203.154.72.sslip.io](https://13.203.154.72.sslip.io) |
-| **SSL / TLS Certificate** | Let's Encrypt Authority (TLS 1.3 / HTTP/2, Trusted Padlock) |
-| **HTTP to HTTPS Redirect** | Automatic 301 from `http://13.203.154.72` |
+| **Primary Domain URL (Judges)** | [https://munzir-site.duckdns.org](https://munzir-site.duckdns.org) |
+| **Backup HTTPS URL** | [https://13.203.154.72.sslip.io](https://13.203.154.72.sslip.io) |
+| **SSL / TLS Certificate** | Let's Encrypt Authority (TLS 1.3 / HTTP/2, Valid Trusted Padlock) |
+| **HTTP to HTTPS Redirect** | Automatic 308 redirect from `http://munzir-site.duckdns.org` |
 | **Region** | `ap-south-1` (Mumbai, India) |
 | **Instance ID** | `i-05f213a1b98dac150` |
 | **Instance Type** | `t3.micro` (AWS Free Tier Eligible) |
 | **Public IPv4** | `13.203.154.72` |
-| **FastAPI Swagger Docs** | [https://13.203.154.72.sslip.io/docs](https://13.203.154.72.sslip.io/docs) |
-| **Health & Feed Status Endpoint** | [https://13.203.154.72.sslip.io/api/v1/health/feeds](https://13.203.154.72.sslip.io/api/v1/health/feeds) |
+| **FastAPI Swagger Docs** | [https://munzir-site.duckdns.org/docs](https://munzir-site.duckdns.org/docs) |
+| **Health & Feed Status Endpoint** | [https://munzir-site.duckdns.org/api/v1/health/feeds](https://munzir-site.duckdns.org/api/v1/health/feeds) |
 | **OpenAQ API Integration** | Connected (`OPENAQ_API_KEY` active) |
 | **Monthly Cost** | **$0.00** |
 

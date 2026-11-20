@@ -2,10 +2,11 @@
     email admin@munzir.ae
 }
 
-13.203.154.72.sslip.io {
+munzir-site.duckdns.org, 13.203.154.72.sslip.io {
+    header Cache-Control "no-cache, no-store, must-revalidate"
     reverse_proxy munzir:8000
 }
 
 http://13.203.154.72 {
-    redir https://13.203.154.72.sslip.io{uri} permanent
+    redir https://munzir-site.duckdns.org{uri} permanent
 }
